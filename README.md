@@ -5,7 +5,7 @@
 
 A **uni**versal **blo**ckchain **w**allet for cryptos
 
-* Handy, almost 1 click
+* Handy, almost 1-click
 * Fast and lightweight
 * Don't wait for confirmation, instant transactions
 * Multiple cryptos blockchains
@@ -13,11 +13,11 @@ A **uni**versal **blo**ckchain **w**allet for cryptos
 * Multi platforms : PC, Mac and Linux
 * Open source GPLv3
 
-The Uniblow software can also be used integrated in your services, as it provides a unified, platform agnotic and blockchain agnotic interface to manage many differents wallets. By using the wallet class, this is as simple as : `ETH_wallet = wallet("ETH")`, and you get the interface methods mentioned in the developer section below.
+The Uniblow software can also be used integrated in your services, as it provides a unified, platform agnostic and blockchain agnostic interface to manage many differents wallets. By using the wallet class, this is as simple as : `ETH_wallet = wallet("ETH")`, and you get the interface methods mentioned in the developer section below.
 
 ![Uniblow screenshot](screenshot.png)
 
-Don't expect to get complicated DeFi transactions, nor advanced settings for the fees. This software provides an easy and basic wallet, focused on universality and ease in use, as it works on multiple blockchains and platforms.
+Don't expect to make complicated DeFi transactions, nor advanced settings for the fees. This software provides an easy and basic wallet, focused on universality and ease in use, as it works on multiple blockchains and platforms.
 
 For now, works with :
 
@@ -31,7 +31,7 @@ For now, works with :
 
 Note : the BasicFile device does not provide any security to protect your private key, except the security your hard-drive computer offers for your files.
 
-In development :
+ToDo list in development :
 
 * Max transfer to send all amount
 * EOS network
