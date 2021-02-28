@@ -15,6 +15,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 
+import sys
 from io import BytesIO
 
 import wx
@@ -158,6 +159,9 @@ def set_coin(coin, network, wallet_type):
         account_id = app.wallet.get_account()
     except Exception as exc:
         warn_modal(str(exc))
+        if not getattr(sys, "frozen", False):
+            # output the exception when dev environment
+            raise exc
         return
     app.gui_panel.account_addr.SetValue(account_id)
     imgbuf = BytesIO()
@@ -239,6 +243,9 @@ def send(ev):
             tx_success(tx_info)
         except Exception as exc:
             warn_modal(str(exc))
+            if not getattr(sys, "frozen", False):
+                # output the exception when dev environment
+                raise exc
 
 
 if __name__ == "__main__":
