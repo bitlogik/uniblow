@@ -406,7 +406,7 @@ class ETH_wallet:
         INFURA_KEY = "xxx"
         if INFURA_KEY == "xxx":
             raise Exception(
-                "To use is from source, bring your own Infura key, or use etherscan_api"
+                "To use Uniblow from source, bring your own Infura key, or use etherscan_api"
             )
         self.eth = ETHwalletCore(pubkey, self.network, infura_api(INFURA_KEY, self.network))
 

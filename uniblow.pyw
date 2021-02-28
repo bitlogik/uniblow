@@ -82,7 +82,16 @@ class wallet:
 
 
 def display_balance():
-    balance = app.wallet.get_balance()
+    try:
+        balance = app.wallet.get_balance()
+    except IOError as exc:
+        erase_info()
+        err_msg = f"Network error when getting info.\nCheck your Internet connection.\n{str(exc)}"
+        warn_modal(err_msg)
+        if not getattr(sys, "frozen", False):
+            # output the exception when dev environment
+            raise exc
+        return
     app.gui_panel.balance_info.SetLabel(balance)
     bal_str = balance.split(" ")[0]
     if bal_str != "0" and bal_str != "0.0":
