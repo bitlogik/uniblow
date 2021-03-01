@@ -4,6 +4,6 @@ REM Build Uniblow exe for Windows
 RMDIR /S /Q dist
 RMDIR /S /Q build
 
-"%UserProfile%\AppData\Local\Programs\Python\Python36\Scripts\pyinstaller.exe" .\uniblow.spec
+python3 -O -m PyInstaller .\uniblow.spec
 
 PAUSE
