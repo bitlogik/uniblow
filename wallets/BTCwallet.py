@@ -297,5 +297,15 @@ class BTC_wallet:
     def transfer(self, amount, to_account, fee_priority):
         # Transfer x base unit to an account, pay
         fee_unit = self.btc.api.get_fee(fee_priority)
-        fee = int(fee_unit * 375)
+        # Approx tx "virtual" size for an average transaction :
+        #  2 inputs in the wallet format (mean coins used)
+        #  plus 1 standard output (max size) and 1 output in the wallet format (change)
+        tx_size = 374
+        if self.btc.segwit == 1:  #  P2WPKH in P2SH : -31%
+            tx_size = 259
+        if self.btc.segwit == 2:  #  P2WPKH         : -43%
+            tx_size = 211
+        fee = int(fee_unit * tx_size)
+        if fee < 375:  # set minimum for good relay
+            fee = 375
         return self.raw_tx(int(amount * BTC_units), fee, to_account)
