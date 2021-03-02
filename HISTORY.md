@@ -8,6 +8,7 @@ Uniblow version history
 * Update GUI and device loading
 * Add a password for BasicFile device key
 * Transfer all with Swipe Max button
+* Compile win binary with Python 3.8
 
 ## 0.0.1
 
