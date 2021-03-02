@@ -33,7 +33,6 @@ Note : the BasicFile device does not provide any security to protect your privat
 
 ToDo list in development :
 
-* Max transfer to send all amount
 * EOS network
 * ERC20 tokens on ETH
 * LTC, BCH, DOGE
@@ -87,5 +86,9 @@ class newCOINwallet:
 
     def transfer(self, amount, to_account, fee):
      ... transfer to pay x coin unit to an external account and return txid
+     ... fee is 0, 1 or 2 : "economic", "normal", "fast"
+    
+    def transfer_all(self, to_account, fee_priority):
+     ... transfer all the wallet to an address (minus fee)
      ... fee is 0, 1 or 2 : "economic", "normal", "fast"
 ```

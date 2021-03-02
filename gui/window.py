@@ -43,6 +43,20 @@ class TopPanel ( wx.Panel ):
 
         bSizer2 = wx.BoxSizer( wx.VERTICAL )
 
+        self.device_label = wx.StaticText( self, wx.ID_ANY, u"Device", wx.DefaultPosition, wx.DefaultSize, 0 )
+        self.device_label.Wrap( -1 )
+
+        self.device_label.SetFont( wx.Font( 11, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, False, wx.EmptyString ) )
+
+        bSizer2.Add( self.device_label, 0, wx.ALL|wx.ALIGN_CENTER_HORIZONTAL, 5 )
+
+        device_choiceChoices = []
+        self.device_choice = wx.Choice( self, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, device_choiceChoices, 0 )
+        self.device_choice.SetSelection( 0 )
+        self.device_choice.SetFont( wx.Font( 12, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, False, wx.EmptyString ) )
+
+        bSizer2.Add( self.device_choice, 0, wx.ALIGN_CENTER_HORIZONTAL|wx.BOTTOM, 20 )
+
         self.coins_label = wx.StaticText( self, wx.ID_ANY, u"Blockchain", wx.DefaultPosition, wx.DefaultSize, 0 )
         self.coins_label.Wrap( -1 )
 
@@ -92,20 +106,6 @@ class TopPanel ( wx.Panel ):
 
         bSizer2.Add( ( 220, 32), 1, wx.EXPAND, 5 )
 
-        self.device_label = wx.StaticText( self, wx.ID_ANY, u"Device", wx.DefaultPosition, wx.DefaultSize, 0 )
-        self.device_label.Wrap( -1 )
-
-        self.device_label.SetFont( wx.Font( 12, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, False, wx.EmptyString ) )
-
-        bSizer2.Add( self.device_label, 0, wx.ALL|wx.ALIGN_CENTER_HORIZONTAL, 5 )
-
-        device_choiceChoices = []
-        self.device_choice = wx.Choice( self, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, device_choiceChoices, 0 )
-        self.device_choice.SetSelection( 0 )
-        self.device_choice.SetFont( wx.Font( 12, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, False, wx.EmptyString ) )
-
-        bSizer2.Add( self.device_choice, 1, wx.ALL|wx.ALIGN_CENTER_HORIZONTAL, 5 )
-
 
         bSizer1.Add( bSizer2, 0, wx.ALIGN_CENTER_VERTICAL, 5 )
 
@@ -120,7 +120,7 @@ class TopPanel ( wx.Panel ):
 
         bSizer5.Add( self.account_label, 0, wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5 )
 
-        self.account_addr = wx.TextCtrl( self, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.Size( 508,-1 ), wx.TE_READONLY|wx.BORDER_NONE )
+        self.account_addr = wx.TextCtrl( self, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.Size( 512,-1 ), wx.TE_READONLY|wx.BORDER_NONE )
         self.account_addr.SetFont( wx.Font( 14, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, False, wx.EmptyString ) )
 
         bSizer5.Add( self.account_addr, 0, wx.ALIGN_CENTER_VERTICAL, 5 )
@@ -154,7 +154,7 @@ class TopPanel ( wx.Panel ):
 
         bSizer8 = wx.BoxSizer( wx.VERTICAL )
 
-        self.qrimg = wx.StaticBitmap( self, wx.ID_ANY, wx.NullBitmap, wx.DefaultPosition, wx.Size( 120,120 ), 0 )
+        self.qrimg = wx.StaticBitmap( self, wx.ID_ANY, wx.NullBitmap, wx.DefaultPosition, wx.Size( 140,140 ), 0 )
         bSizer8.Add( self.qrimg, 0, wx.ALIGN_RIGHT|wx.RIGHT, 50 )
 
 
@@ -172,7 +172,7 @@ class TopPanel ( wx.Panel ):
 
         bSizer4.Add( self.dest_label, 0, wx.ALL|wx.ALIGN_BOTTOM, 5 )
 
-        self.dest_addr = wx.TextCtrl( self, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.Size( 450,-1 ), 0 )
+        self.dest_addr = wx.TextCtrl( self, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.Size( 500,-1 ), 0 )
         self.dest_addr.SetFont( wx.Font( 14, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, False, wx.EmptyString ) )
 
         bSizer4.Add( self.dest_addr, 0, wx.ALL|wx.ALIGN_BOTTOM, 5 )
@@ -217,6 +217,12 @@ class TopPanel ( wx.Panel ):
         self.send_button.Enable( False )
 
         bSizer7.Add( self.send_button, 0, wx.ALL, 5 )
+
+        self.send_all = wx.Button( self, wx.ID_ANY, u"Swipe Max", wx.DefaultPosition, wx.DefaultSize, 0 )
+        self.send_all.SetFont( wx.Font( 12, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, False, wx.EmptyString ) )
+        self.send_all.Enable( False )
+
+        bSizer7.Add( self.send_all, 0, wx.ALL, 5 )
 
 
         bSizer3.Add( bSizer7, 1, wx.EXPAND, 5 )

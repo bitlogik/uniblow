@@ -399,6 +399,8 @@ class ETH_wallet:
         "Standard",
     ]
 
+    GAZ_LIMIT_SIMPLE_TX = 21000
+
     def __init__(self, network, wtype):
         self.network = ETH_wallet.networks[network].lower()
         self.current_device = BasicFile()
@@ -435,14 +437,29 @@ class ETH_wallet:
         # Get history as tx list
         raise "Not yet implemented"
 
+    def raw_tx(self, amount, gazprice, ethgazlimit, account):
+        hash_to_sign = self.eth.prepare(account, amount, gazprice, ethgazlimit)
+        tx_signature = self.current_device.sign(hash_to_sign)
+        return self.eth.send(tx_signature)
+
     def transfer(self, amount, to_account, priority_fee):
-        # Transfer x base unit to an account, pay
+        # Transfer x unit to an account, pay
+        ethgazlimit = ETH_wallet.GAZ_LIMIT_SIMPLE_TX
         if to_account.startswith("0x"):
             to_account = to_account[2:]
         ethgazprice = self.eth.api.get_fee(priority_fee)  # gwei per gaz unit
-        ethgazlimit = 30000
-        hash_to_sign = self.eth.prepare(
-            to_account, int(amount * ETH_units), ethgazprice, ethgazlimit
-        )
-        tx_signature = self.current_device.sign(hash_to_sign)
-        return self.eth.send(tx_signature)
+        return self.raw_tx(int(amount * ETH_units), ethgazprice, ethgazlimit, to_account)
+
+    def transfer_inclfee(self, amount, to_account, fee_priority):
+        # Transfer the amount in base unit minus fee, like the receiver paying the fee
+        gazlimit = ETH_wallet.GAZ_LIMIT_SIMPLE_TX
+        if to_account.startswith("0x"):
+            to_account = to_account[2:]
+        gazprice = self.eth.api.get_fee(fee_priority)
+        fee = gazlimit * gazprice
+        return self.raw_tx(amount - int(fee * 10 ** 9), gazprice, gazlimit, to_account)
+
+    def transfer_all(self, to_account, fee_priority):
+        # Transfer all the wallet to an address (minus fee)
+        all_amount = self.eth.getbalance()
+        return self.transfer_inclfee(all_amount, to_account, fee_priority)

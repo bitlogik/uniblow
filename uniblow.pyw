@@ -80,6 +80,10 @@ class wallet:
         # Transfer to pay x coin unit to an external account
         return self.coin_wallet.transfer(amount, to_account, fee_priority)
 
+    def transfer_all(self, to_account, fee_priority):
+        # Transfer all teh wallet amount to an external account
+        return self.coin_wallet.transfer_all(to_account, fee_priority)
+
 
 def display_balance():
     try:
@@ -96,14 +100,17 @@ def display_balance():
     bal_str = balance.split(" ")[0]
     if bal_str != "0" and bal_str != "0.0":
         app.gui_panel.send_button.Enable()
+        app.gui_panel.send_all.Enable()
 
 
 def erase_info():
     if hasattr(app, "balance_timer"):
         app.balance_timer.Stop()
+    app.gui_panel.send_all.Disable()
     app.gui_panel.send_button.Disable()
     app.gui_panel.network_choice.Disable()
     app.gui_panel.wallopt_choice.Disable()
+    app.gui_panel.qrimg.SetBitmap(wx.Bitmap())
     if hasattr(app, "wallet"):
         delattr(app, "wallet")
     app.gui_panel.balance_info.SetLabel("")
@@ -183,6 +190,7 @@ def set_coin(coin, network, wallet_type):
     imgqr.save(imgbuf, "PNG")
     imgbuf.seek(0)
     wxi = wx.Image(imgbuf, type=wx.BITMAP_TYPE_PNG)
+    app.gui_panel.qrimg.SetScaleMode(wx.StaticBitmap.ScaleMode.Scale_None)  # or Scale_AspectFit
     app.gui_panel.qrimg.SetBitmap(wx.Bitmap(wxi))
     app.balance_timer = display_timer()
     display_balance()
@@ -257,6 +265,24 @@ def send(ev):
                 raise exc
 
 
+def send_all(ev):
+    to = app.gui_panel.dest_addr.GetValue()
+    if not app.wallet.check_address(to):
+        warn_modal("Wrong destination account address format")
+        return
+    conf = confirm(to, "ALL")
+    if conf == wx.ID_YES:
+        fee_opt = app.gui_panel.fee_slider.GetValue()
+        try:
+            tx_info = app.wallet.transfer_all(to, fee_opt)
+            tx_success(tx_info)
+        except Exception as exc:
+            warn_modal(str(exc))
+            if not getattr(sys, "frozen", False):
+                # output the exception when dev environment
+                raise exc
+
+
 if __name__ == "__main__":
     try:
         ctypes.windll.shcore.SetProcessDpiAwareness(True)
@@ -270,6 +296,7 @@ if __name__ == "__main__":
     app.gui_panel.network_choice.Bind(wx.EVT_CHOICE, net_selected)
     app.gui_panel.wallopt_choice.Bind(wx.EVT_CHOICE, wtype_selected)
     app.gui_panel.send_button.Bind(wx.EVT_BUTTON, send)
+    app.gui_panel.send_all.Bind(wx.EVT_BUTTON, send_all)
     app.gui_panel.amount.Bind(wx.EVT_TEXT_ENTER, send)
     app.gui_panel.copy_button.Bind(wx.EVT_BUTTON, copy_account)
     app.gui_panel.fee_slider.Bind(wx.EVT_SCROLL_CHANGED, fee_changed)

@@ -294,8 +294,8 @@ class BTC_wallet:
             tx_signatures.append(asig)
         return self.btc.send(tx_signatures)
 
-    def transfer(self, amount, to_account, fee_priority):
-        # Transfer x base unit to an account, pay
+    def assess_fee(self, fee_priority):
+        # Get fee assesment for a walet tx
         fee_unit = self.btc.api.get_fee(fee_priority)
         # Approx tx "virtual" size for an average transaction :
         #  2 inputs in the wallet format (mean coins used)
@@ -308,4 +308,19 @@ class BTC_wallet:
         fee = int(fee_unit * tx_size)
         if fee < 375:  # set minimum for good relay
             fee = 375
+        return fee
+
+    def transfer(self, amount, to_account, fee_priority):
+        # Transfer x base unit to an account, pay
+        fee = self.assess_fee(fee_priority)
         return self.raw_tx(int(amount * BTC_units), fee, to_account)
+
+    def transfer_inclfee(self, amount, to_account, fee_priority):
+        # Transfer the amount in base unit minus fee, like the receiver paying the fee
+        fee = self.assess_fee(fee_priority)
+        return self.raw_tx(amount - fee, fee, to_account)
+
+    def transfer_all(self, to_account, fee_priority):
+        # Transfer all the wallet to an address (minus fee)
+        all_amount = self.btc.getbalance()
+        return self.transfer_inclfee(all_amount, to_account, fee_priority)
