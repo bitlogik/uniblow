@@ -17,7 +17,7 @@ import wx.xrc
 class TopFrame ( wx.Frame ):
 
     def __init__( self, parent ):
-        wx.Frame.__init__ ( self, parent, id = wx.ID_ANY, title = wx.EmptyString, pos = wx.DefaultPosition, size = wx.Size( 874,365 ), style = wx.DEFAULT_FRAME_STYLE|wx.TAB_TRAVERSAL )
+        wx.Frame.__init__ ( self, parent, id = wx.ID_ANY, title = wx.EmptyString, pos = wx.DefaultPosition, size = wx.Size( 890,365 ), style = wx.DEFAULT_FRAME_STYLE|wx.TAB_TRAVERSAL )
 
         self.SetSizeHints( wx.DefaultSize, wx.DefaultSize )
 
@@ -34,7 +34,7 @@ class TopFrame ( wx.Frame ):
 
 class TopPanel ( wx.Panel ):
 
-    def __init__( self, parent, id = wx.ID_ANY, pos = wx.DefaultPosition, size = wx.Size( 854,362 ), style = wx.TAB_TRAVERSAL, name = wx.EmptyString ):
+    def __init__( self, parent, id = wx.ID_ANY, pos = wx.DefaultPosition, size = wx.Size( 886,362 ), style = wx.TAB_TRAVERSAL, name = wx.EmptyString ):
         wx.Panel.__init__ ( self, parent, id = id, pos = pos, size = size, style = style, name = name )
 
         self.SetFont( wx.Font( wx.NORMAL_FONT.GetPointSize(), wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, False, wx.EmptyString ) )
@@ -121,7 +121,7 @@ class TopPanel ( wx.Panel ):
 
         bSizer5.Add( self.account_label, 0, wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5 )
 
-        self.account_addr = wx.TextCtrl( self, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.Size( 512,-1 ), wx.TE_READONLY|wx.BORDER_NONE )
+        self.account_addr = wx.TextCtrl( self, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.Size( 542,-1 ), wx.TE_READONLY|wx.BORDER_NONE )
         self.account_addr.SetFont( wx.Font( 14, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, False, wx.EmptyString ) )
 
         bSizer5.Add( self.account_addr, 0, wx.ALIGN_CENTER_VERTICAL, 5 )
