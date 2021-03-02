@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 # -*- coding: utf8 -*-
 
-# UNIBLOW ETH wallet with with BlockCypher or Infura API REST
+# UNIBLOW ETH wallet with with BlockCypher, Etherscan or Infura API REST
 # Copyright (C) 2021 BitLogiK
 
 # This program is free software: you can redistribute it and/or modify

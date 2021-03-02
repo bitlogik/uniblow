@@ -29,15 +29,15 @@ For now, works with :
 * ETH
     * mainnet, Rinkeby, Ropsten, Kovan and Goerli networks
 
-Note : the BasicFile device does not provide any security to protect your private key, except the security your hard-drive computer offers for your files.
+## Devices
 
-ToDo list in development :
+### BasicFile device
 
-* EOS network
-* ERC20 tokens on ETH
-* LTC, BCH, DOGE
-* Use win32 CNG key storage TPM as device
-* PGP device to secure with a hardware key
+The BasicFile device encrypts your private key [with a random salt using libsodium XSalsa20/Poly1305](https://libsodium.gitbook.io/doc/secret-key_cryptography/secretbox#algorithm-details), with a user chosen password, derived into the encryption key with [Argon2id (moderate settings)](https://raw.githubusercontent.com/P-H-C/phc-winner-argon2/master/argon2-specs.pdf). One can choose the standard password and a default password will be used. To do so, just left blank the password prompt input when asked the first time at device setting. Without your password, the security of the key is what your hard-drive computer offers for your files.  
+If you setup a password but forget it, there would be no way to recover your coins.
+
+Your key encrypted is stored in JSON and hex in the BasicFileWallet.key in the same folder as Uniblow. Hence the name "BasicFile" for this device.
+
 
 ## Use the GUI
 
@@ -48,13 +48,23 @@ the application.
 
 ## Development
 
+### ToDo list
+
+in development :
+
+* EOS network
+* ERC20 tokens on ETH
+* LTC, BCH, DOGE
+* Use win32 CNG key storage TPM as device
+* PGP device to secure with a hardware key
+
 ### Use it from source
 
 * For the GUI, [install wxPython 4](https://wxpython.org/pages/downloads/) with your system binaries wheels.
     * Windows and MacOS: Use `pip3 install -U wxPython`
     * Linux : use your package manager, as `apt-get install python3-wxgtk4.0`
-* Install dependencies
-    * `python3 -m pip install -U cryptography ecdsa pysha3 qrcode`
+* Install this package and its dependencies
+    * `python3 -m pip install .`
 * For ETH, put your Infura key in ETHwallet, or use the EtherscanAPI
 
 ### Add more cryptos
