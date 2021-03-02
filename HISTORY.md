@@ -1,14 +1,14 @@
 
-Uniblow version history
+Uniblow versions history
 
 ## 0.0.2
 
 * Fix freeze when network error
-* Assess tx size for BTC (lower when Segwit)
+* Assess tx size for BTC (lower fee when Segwit)
 * Update GUI and device loading
-* Add a password for BasicFile device key
+* Add a password for the BasicFile device key
 * Transfer all with Swipe Max button
-* Compile win binary with Python 3.8
+* Compile Windows binary with Python 3.8
 
 ## 0.0.1
 

@@ -33,7 +33,7 @@ For now, works with :
 
 ### BasicFile device
 
-The BasicFile device encrypts your private key [with a random salt using libsodium XSalsa20/Poly1305](https://libsodium.gitbook.io/doc/secret-key_cryptography/secretbox#algorithm-details), with a user chosen password, derived into the encryption key with [Argon2id (moderate settings)](https://raw.githubusercontent.com/P-H-C/phc-winner-argon2/master/argon2-specs.pdf). One can choose the standard password and a default password will be used. To do so, just left blank the password prompt input when asked the first time at device setting. Without your password, the security of the key is what your hard-drive computer offers for your files.  
+The BasicFile device encrypts your private key [with a random salt using libsodium XSalsa20/Poly1305](https://libsodium.gitbook.io/doc/secret-key_cryptography/secretbox#algorithm-details), with an encryption key derived from the user chosen password using [Argon2id (moderate settings)](https://raw.githubusercontent.com/P-H-C/phc-winner-argon2/master/argon2-specs.pdf). One can choose to use a default password. To do so, just left blank the password prompt input when asked the first time at device setting. Without your personal password, the security of the key is what your hard-drive computer offers for your files.  
 If you setup a password but forget it, there would be no way to recover your coins.
 
 Your key encrypted is stored in JSON and hex in the BasicFileWallet.key in the same folder as Uniblow. Hence the name "BasicFile" for this device.
@@ -43,16 +43,16 @@ Your key encrypted is stored in JSON and hex in the BasicFileWallet.key in the s
 
 * Download the Uniblow binary in Github releases
 
-To increase security, the Windows exe releases are [signed with our Extended Validation certificate](https://en.wikipedia.org/wiki/Code_signing#Extended_validation_(EV)_code_signing), bringing even greater confidence in the integrity of
-the application.
+To increase the security, the Windows exe releases are [signed with our Extended Validation certificate](https://en.wikipedia.org/wiki/Code_signing#Extended_validation_(EV)_code_signing), bringing even greater confidence in the integrity of the application.
 
 ## Development
 
 ### ToDo list
 
-in development :
+features in development :
 
 * EOS network
+* HD wallet device (BIP32/39/44)
 * ERC20 tokens on ETH
 * LTC, BCH, DOGE
 * Use win32 CNG key storage TPM as device
@@ -83,7 +83,7 @@ class newCOINwallet:
      ... return list of different possible account types
 
     def get_account(self):
-    ... return the account name (address or similar)
+     ... return the account name (address or similar)
 
     def get_balance(self):
      ...
