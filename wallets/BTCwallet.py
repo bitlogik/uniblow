@@ -20,7 +20,6 @@ import urllib.parse
 import urllib.request
 import re
 from .lib import cryptos
-from devices.BasicFile import BasicFile
 
 # import hashlib
 
@@ -255,8 +254,8 @@ class BTC_wallet:
         "Segwit bech32",
     ]
 
-    def __init__(self, network, wtype):
-        self.current_device = BasicFile()
+    def __init__(self, network, wtype, device):
+        self.current_device = device
         pubkey = self.current_device.get_public_key()
         network_name = self.networks[network]
         self.btc = BTCwalletCore(pubkey, network_name, wtype, blkhub_api(network_name))

@@ -20,9 +20,8 @@ from io import BytesIO
 
 import wx
 import qrcode
-
 import gui.app
-
+from devices.BasicFile import BasicFile, pwdException
 from version import VERSION
 
 SUPPORTED_COINS = [
@@ -40,6 +39,8 @@ FEES_PRORITY_TEXT = [
     "Normal fee",
     "Faster fee",
 ]
+
+DEFAULT_PASSWORD = "NoPasswd"
 
 import wallets.BTCwallet
 import wallets.ETHwallet
@@ -129,6 +130,24 @@ def warn_modal(warning_text):
     wx.MessageBox(warning_text, "Error", wx.OK | wx.ICON_WARNING, app.gui_frame)
 
 
+def get_password(newp="BadPass"):
+    input_message = "Input BasicFile wallet password\n"
+    if newp == "NewPass":
+        input_message += "If blank a default password will be used."
+    pwd_dialog = wx.PasswordEntryDialog(
+        app.gui_frame,
+        input_message,
+        caption="BasicFile wallet password",
+        defaultValue="",
+        pos=wx.DefaultPosition,
+    )
+    if pwd_dialog.ShowModal() == wx.ID_OK:
+        passval = pwd_dialog.GetValue()
+        if passval == "":
+            return DEFAULT_PASSWORD
+        return passval
+
+
 def confirm(to_addr, amount):
     conf_txt = f"Confirm this transaction ?\n{amount} {app.wallet.coin} to {to_addr}"
     confirm_modal = wx.MessageDialog(
@@ -167,11 +186,52 @@ def copy_account(ev):
         copy_result("Error")
 
 
+def device_selected(device):
+    sel_device = device.GetInt()
+    if sel_device > 0:
+        # For now, only BasicFile device
+        password_BasicFile = DEFAULT_PASSWORD
+        i = 0
+        while True:
+            i += 1
+            try:
+                device_loaded = BasicFile(password_BasicFile, i)
+                break
+            except pwdException as exc:
+                password_BasicFile = get_password(str(exc))
+                if password_BasicFile is None:
+                    app.gui_panel.devices_choice.SetSelection(0)
+                    app.gui_panel.coins_choice.Disable()
+                    return
+            except Exception as exc:
+                warn_modal(str(exc))
+                if not getattr(sys, "frozen", False):
+                    # output the exception when dev environment
+                    raise exc
+                app.gui_panel.devices_choice.SetSelection(0)
+                app.gui_panel.coins_choice.Disable()
+                return
+        app.device = device_loaded
+        if app.device.created:
+            warn_modal(f"New {DEVICES[sel_device-1]} was successfully created.")
+        app.gui_panel.coins_choice.Enable()
+        app.gui_panel.coins_choice.Hide()
+        app.gui_panel.coins_choice.ShowWithEffect(wx.SHOW_EFFECT_ROLL_TO_LEFT, 600)
+        app.gui_panel.coins_choice.SetFocus()
+    else:
+        app.gui_panel.devices_choice.SetSelection(0)
+        app.gui_panel.coins_choice.SetSelection(0)
+        app.gui_panel.coins_choice.Disable()
+        app.gui_panel.network_choice.Clear()
+        app.gui_panel.wallopt_choice.Clear()
+        erase_info()
+
+
 def set_coin(coin, network, wallet_type):
     fee_opt_sel = app.gui_panel.fee_slider.GetValue()
     app.gui_panel.fee_setting.SetLabel(FEES_PRORITY_TEXT[fee_opt_sel])
     try:
-        app.wallet = wallet(coin, network, wallet_type)
+        app.wallet = wallet(coin, network, wallet_type, app.device)
         account_id = app.wallet.get_account()
     except Exception as exc:
         warn_modal(str(exc))
@@ -292,6 +352,7 @@ if __name__ == "__main__":
 
     gui.app.start_app(app, VERSION, SUPPORTED_COINS, DEVICES)
 
+    app.gui_panel.devices_choice.Bind(wx.EVT_CHOICE, device_selected)
     app.gui_panel.coins_choice.Bind(wx.EVT_CHOICE, coin_selected)
     app.gui_panel.network_choice.Bind(wx.EVT_CHOICE, net_selected)
     app.gui_panel.wallopt_choice.Bind(wx.EVT_CHOICE, wtype_selected)

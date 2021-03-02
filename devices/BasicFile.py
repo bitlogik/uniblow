@@ -1,12 +1,37 @@
+#!/usr/bin/python3
+# -*- coding: utf8 -*-
+
+# UNIBLOW Basic File Wallet manager
+# Copyright (C) 2021 BitLogiK
+
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, version 3 of the License.
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>
+
+
+import json
 from os import path
-from secrets import randbelow
+from secrets import randbelow, token_bytes
 from cryptography.hazmat.primitives import serialization, hashes
 from cryptography.hazmat.primitives.asymmetric import ec, utils
+import nacl.exceptions
+import nacl.pwhash
+import nacl.secret
 
 CURVE_K1_ORDER = 0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEBAAEDCE6AF48A03BBFD25E8CD0364141
 EC_BYTES_SIZE = 32
 
-FILE_NAME = "SimpleDeviceWallet.key"
+FILE_NAME = "BasicFileWallet.key"
+
+
+class pwdException(nacl.exceptions.CryptoError):
+    pass
 
 
 def encode_int(intarray):
@@ -47,22 +72,57 @@ def fix_s_sig(sig):
 
 class BasicFile:
     # Using Python cryptography lib
-    def __init__(self):
-        self.open_account()
+    def __init__(self, password, itimes):
+        self.created = False
+        self.open_account(password, itimes)
 
-    def open_account(self):
+    def open_account(self, password, itimes):
         if path.isfile(FILE_NAME):
             # Open the current key from its file
-            key_file = open(FILE_NAME, "rb")
-            pvkey_int = int.from_bytes(key_file.read(), "big")
+            key_file = open(FILE_NAME, "r")
+            key_content = json.load(key_file)
+            salt = bytes.fromhex(key_content["salt"])
+            # decrypt
+            decryption_key = nacl.pwhash.argon2id.kdf(
+                nacl.secret.SecretBox.KEY_SIZE,
+                password.encode("utf8"),
+                salt,
+                opslimit=nacl.pwhash.argon2i.OPSLIMIT_MODERATE,
+                memlimit=nacl.pwhash.argon2i.MEMLIMIT_MODERATE,
+            )
+            try:
+                key_data = nacl.secret.SecretBox(decryption_key).decrypt(
+                    bytes.fromhex(key_content["keyenc"])
+                )
+            except nacl.exceptions.CryptoError:
+                raise pwdException("BadPass")
+            # load private key
+            pvkey_int = int.from_bytes(key_data, "big")
         else:
+            if password == "NoPasswd" and itimes == 1:
+                # Trigger password input in the app
+                raise pwdException("NewPass")
             # Generate a new key and save it in a file
             pvkey_int = randbelow(CURVE_K1_ORDER)
-            key_file = open(FILE_NAME, "wb")
-            key_file.write(pvkey_int.to_bytes(EC_BYTES_SIZE, byteorder="big"))
+            key_file = open(FILE_NAME, "w")
+            # Encrypt the private key
+            salt = token_bytes(nacl.pwhash.argon2i.SALTBYTES)
+            encryption_key = nacl.pwhash.argon2id.kdf(
+                nacl.secret.SecretBox.KEY_SIZE,
+                password.encode("utf8"),
+                salt,
+                opslimit=nacl.pwhash.argon2i.OPSLIMIT_MODERATE,
+                memlimit=nacl.pwhash.argon2i.MEMLIMIT_MODERATE,
+            )
+            encrypted_content = nacl.secret.SecretBox(encryption_key).encrypt(
+                pvkey_int.to_bytes(EC_BYTES_SIZE, byteorder="big"),
+                nacl.utils.random(nacl.secret.SecretBox.NONCE_SIZE),
+            )
+            # Save the encrypted data
+            json.dump({"keyenc": encrypted_content.hex(), "salt": salt.hex()}, key_file)
+            self.created = True
         key_file.close()
         self.pvkey = ec.derive_private_key(pvkey_int, ec.SECP256K1())
-        # or self.pvkey = ec.generate_private_key(ec.SECP256K1())
 
     def get_public_key(self):
         # pubkey = cryptos.coins.bitcoin.Bitcoin(testnet=True).privtopub(self.pvkey)

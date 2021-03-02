@@ -27,9 +27,10 @@ def file_path(fpath):
 
 
 def load_devices(app, devices_list):
+    app.gui_panel.devices_choice.Append("Choose your device")
     for device in devices_list:
-        app.gui_panel.device_choice.Append(device)
-    app.gui_panel.device_choice.SetSelection(0)
+        app.gui_panel.devices_choice.Append(device)
+    app.gui_panel.devices_choice.SetSelection(0)
 
 
 def load_coins_list(app, coins_list):

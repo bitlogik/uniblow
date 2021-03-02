@@ -13,7 +13,7 @@ A **uni**versal **blo**ckchain **w**allet for cryptos
 * Multi platforms : PC, Mac and Linux
 * Open source GPLv3
 
-The Uniblow software can also be used integrated in your services, as it provides a unified, platform agnostic and blockchain agnostic interface to manage many differents wallets. By using the wallet class, this is as simple as : `ETH_wallet = wallet("ETH")`, and you get the interface methods mentioned in the developer section below.
+The Uniblow software can also be used integrated in your services, as it provides a unified, platform agnostic and blockchain agnostic interface to manage many differents wallets. By using the wallet class, this is as simple as : `ETH_wallet = wallet("ETH", "mainnet", device)`, and you get the interface methods mentioned in the developer section below.
 
 ![Uniblow screenshot](screenshot.png)
 

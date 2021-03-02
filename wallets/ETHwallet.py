@@ -21,7 +21,6 @@ import ecdsa
 import time
 import urllib.parse
 import urllib.request
-from devices.BasicFile import BasicFile
 from .lib import cryptos
 
 try:
@@ -401,9 +400,9 @@ class ETH_wallet:
 
     GAZ_LIMIT_SIMPLE_TX = 21000
 
-    def __init__(self, network, wtype):
+    def __init__(self, network, wtype, device):
         self.network = ETH_wallet.networks[network].lower()
-        self.current_device = BasicFile()
+        self.current_device = device
         pubkey = self.current_device.get_public_key()
         INFURA_KEY = "xxx"
         if INFURA_KEY == "xxx":

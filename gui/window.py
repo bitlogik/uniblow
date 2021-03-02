@@ -50,12 +50,12 @@ class TopPanel ( wx.Panel ):
 
         bSizer2.Add( self.device_label, 0, wx.ALL|wx.ALIGN_CENTER_HORIZONTAL, 5 )
 
-        device_choiceChoices = []
-        self.device_choice = wx.Choice( self, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, device_choiceChoices, 0 )
-        self.device_choice.SetSelection( 0 )
-        self.device_choice.SetFont( wx.Font( 12, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, False, wx.EmptyString ) )
+        devices_choiceChoices = []
+        self.devices_choice = wx.Choice( self, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, devices_choiceChoices, 0 )
+        self.devices_choice.SetSelection( 0 )
+        self.devices_choice.SetFont( wx.Font( 12, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, False, wx.EmptyString ) )
 
-        bSizer2.Add( self.device_choice, 0, wx.ALIGN_CENTER_HORIZONTAL|wx.BOTTOM, 20 )
+        bSizer2.Add( self.devices_choice, 0, wx.ALIGN_CENTER_HORIZONTAL|wx.BOTTOM, 20 )
 
         self.coins_label = wx.StaticText( self, wx.ID_ANY, u"Blockchain", wx.DefaultPosition, wx.DefaultSize, 0 )
         self.coins_label.Wrap( -1 )
@@ -68,6 +68,7 @@ class TopPanel ( wx.Panel ):
         self.coins_choice = wx.Choice( self, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, coins_choiceChoices, 0 )
         self.coins_choice.SetSelection( 0 )
         self.coins_choice.SetFont( wx.Font( 12, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, False, wx.EmptyString ) )
+        self.coins_choice.Enable( False )
 
         bSizer2.Add( self.coins_choice, 0, wx.ALL|wx.ALIGN_CENTER_VERTICAL|wx.ALIGN_CENTER_HORIZONTAL, 5 )
 
