@@ -216,7 +216,7 @@ def device_selected(device):
             warn_modal(f"New {DEVICES[sel_device-1]} was successfully created.")
         app.gui_panel.coins_choice.Enable()
         app.gui_panel.coins_choice.Hide()
-        app.gui_panel.coins_choice.ShowWithEffect(wx.SHOW_EFFECT_ROLL_TO_LEFT, 600)
+        app.gui_panel.coins_choice.ShowWithEffect(wx.SHOW_EFFECT_ROLL_TO_RIGHT, 750)
         app.gui_panel.coins_choice.SetFocus()
     else:
         app.gui_panel.devices_choice.SetSelection(0)
