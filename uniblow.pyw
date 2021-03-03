@@ -122,6 +122,7 @@ def erase_info():
         delattr(app, "wallet")
     app.gui_panel.balance_info.SetLabel("")
     app.gui_panel.account_addr.SetLabel("")
+    app.gui_frame.Refresh()
 
 
 class display_timer(wx.Timer):
@@ -212,6 +213,7 @@ def device_selected(device):
                 if password_BasicFile is None:
                     app.gui_panel.devices_choice.SetSelection(0)
                     app.gui_panel.coins_choice.Disable()
+                    erase_info()
                     return
             except Exception as exc:
                 warn_modal(str(exc))
@@ -220,6 +222,7 @@ def device_selected(device):
                     raise exc
                 app.gui_panel.devices_choice.SetSelection(0)
                 app.gui_panel.coins_choice.Disable()
+                erase_info()
                 return
         app.device = device_loaded
         if app.device.created:
@@ -250,6 +253,7 @@ def set_coin(coin, network, wallet_type):
         if not getattr(sys, "frozen", False):
             # output the exception when dev environment
             raise exc
+        erase_info()
         return
     app.gui_panel.account_addr.SetValue(account_id)
     imgbuf = BytesIO()
