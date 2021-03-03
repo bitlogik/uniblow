@@ -1,6 +1,12 @@
 
 Uniblow versions history
 
+## 0.1.0
+
+* Change device creation modal type
+* Highlight the destination address from check
+* Copy button disable on start
+
 ## 0.0.2
 
 * Fix freeze when network error

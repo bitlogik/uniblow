@@ -51,6 +51,7 @@ To increase the security, the Windows exe releases are [signed with our Extended
 
 features in development :
 
+* Verify checksum when checking address
 * EOS network
 * HD wallet device (BIP32/39/44)
 * ERC20 tokens on ETH
