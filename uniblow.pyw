@@ -98,6 +98,7 @@ def display_balance():
             raise exc
         return
     app.gui_panel.balance_info.SetLabel(balance)
+    app.gui_panel.copy_button.Enable()
     bal_str = balance.split(" ")[0]
     if bal_str != "0" and bal_str != "0.0":
         app.gui_panel.send_button.Enable()
@@ -107,6 +108,7 @@ def display_balance():
 def erase_info():
     if hasattr(app, "balance_timer"):
         app.balance_timer.Stop()
+    app.gui_panel.copy_button.Disable()
     app.gui_panel.send_all.Disable()
     app.gui_panel.send_button.Disable()
     app.gui_panel.network_choice.Disable()
