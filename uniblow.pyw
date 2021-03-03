@@ -132,6 +132,10 @@ def warn_modal(warning_text):
     wx.MessageBox(warning_text, "Error", wx.OK | wx.ICON_WARNING, app.gui_frame)
 
 
+def info_modal(title, info_text):
+    wx.MessageBox(info_text, title, wx.OK | wx.ICON_INFORMATION, app.gui_frame)
+
+
 def get_password(newp="BadPass"):
     input_message = "Input BasicFile wallet password\n"
     if newp == "NewPass":
@@ -163,7 +167,7 @@ def confirm(to_addr, amount):
 
 
 def tx_success(message):
-    wx.MessageBox(message, "Transaction sent", wx.OK | wx.ICON_INFORMATION, app.gui_frame)
+    info_modal("Transaction sent", message)
 
 
 def copy_result(restxt):
@@ -215,7 +219,9 @@ def device_selected(device):
                 return
         app.device = device_loaded
         if app.device.created:
-            warn_modal(f"New {DEVICES[sel_device-1]} was successfully created.")
+            info_modal(
+                "Device created", f"A new {DEVICES[sel_device-1]} device was successfully created."
+            )
         app.gui_panel.coins_choice.Enable()
         app.gui_panel.coins_choice.Hide()
         app.gui_panel.coins_choice.ShowWithEffect(wx.SHOW_EFFECT_ROLL_TO_RIGHT, 750)
