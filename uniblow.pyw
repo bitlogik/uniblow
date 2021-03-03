@@ -42,6 +42,9 @@ FEES_PRORITY_TEXT = [
 
 DEFAULT_PASSWORD = "NoPasswd"
 
+GREEN_COLOR = wx.Colour(73, 172, 73)
+RED_COLOR = wx.Colour(198, 60, 60)
+
 import wallets.BTCwallet
 import wallets.ETHwallet
 
@@ -108,6 +111,7 @@ def display_balance():
 def erase_info():
     if hasattr(app, "balance_timer"):
         app.balance_timer.Stop()
+    paint_toaddr(wx.NullColour)
     app.gui_panel.copy_button.Disable()
     app.gui_panel.send_all.Disable()
     app.gui_panel.send_button.Disable()
@@ -310,6 +314,24 @@ def fee_changed(feesel):
     app.gui_panel.fee_setting.SetLabel(FEES_PRORITY_TEXT[feesel.GetSelection()])
 
 
+def paint_toaddr(color):
+    app.gui_panel.addr_panel.SetBackgroundColour(color)
+
+
+def check_addr(ev):
+    if not hasattr(app, "wallet"):
+        return
+    addr = ev.GetString()
+    if len(addr) < 10:
+        paint_toaddr(wx.NullColour)
+        return
+    if app.wallet.check_address(addr):
+        paint_toaddr(GREEN_COLOR)
+    else:
+        paint_toaddr(RED_COLOR)
+    app.gui_frame.Refresh()
+
+
 def send(ev):
     if not hasattr(app, "wallet"):
         return
@@ -370,6 +392,7 @@ if __name__ == "__main__":
     app.gui_panel.wallopt_choice.Bind(wx.EVT_CHOICE, wtype_selected)
     app.gui_panel.send_button.Bind(wx.EVT_BUTTON, send)
     app.gui_panel.send_all.Bind(wx.EVT_BUTTON, send_all)
+    app.gui_panel.dest_addr.Bind(wx.EVT_TEXT, check_addr)
     app.gui_panel.amount.Bind(wx.EVT_TEXT_ENTER, send)
     app.gui_panel.copy_button.Bind(wx.EVT_BUTTON, copy_account)
     app.gui_panel.fee_slider.Bind(wx.EVT_SCROLL_CHANGED, fee_changed)

@@ -146,6 +146,8 @@ class TopPanel ( wx.Panel ):
         bSizer6.Add( self.balance_info, 0, wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5 )
 
         self.copy_button = wx.Button( self, wx.ID_ANY, u"copy", wx.DefaultPosition, wx.DefaultSize, 0 )
+        self.copy_button.Enable( False )
+
         bSizer6.Add( self.copy_button, 0, wx.LEFT, 60 )
 
         self.copy_status = wx.StaticText( self, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, 0 )
@@ -173,10 +175,19 @@ class TopPanel ( wx.Panel ):
 
         bSizer4.Add( self.dest_label, 0, wx.ALL|wx.ALIGN_BOTTOM, 5 )
 
-        self.dest_addr = wx.TextCtrl( self, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.Size( 500,-1 ), 0 )
+        self.addr_panel = wx.Panel( self, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL )
+        bSizer11 = wx.BoxSizer( wx.HORIZONTAL )
+
+        self.dest_addr = wx.TextCtrl( self.addr_panel, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.Size( 570,-1 ), 0 )
         self.dest_addr.SetFont( wx.Font( 14, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, False, wx.EmptyString ) )
 
-        bSizer4.Add( self.dest_addr, 0, wx.ALL|wx.ALIGN_BOTTOM, 5 )
+        bSizer11.Add( self.dest_addr, 0, wx.ALIGN_BOTTOM|wx.ALL, 2 )
+
+
+        self.addr_panel.SetSizer( bSizer11 )
+        self.addr_panel.Layout()
+        bSizer11.Fit( self.addr_panel )
+        bSizer4.Add( self.addr_panel, 0, wx.ALIGN_BOTTOM, 5 )
 
 
         bSizer3.Add( bSizer4, 1, wx.EXPAND, 5 )
