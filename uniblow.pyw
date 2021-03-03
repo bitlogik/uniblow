@@ -303,6 +303,8 @@ def fee_changed(feesel):
 
 
 def send(ev):
+    if not hasattr(app, "wallet"):
+        return
     to = app.gui_panel.dest_addr.GetValue()
     if not app.wallet.check_address(to):
         warn_modal("Wrong destination account address format")
@@ -326,6 +328,8 @@ def send(ev):
 
 
 def send_all(ev):
+    if not hasattr(app, "wallet"):
+        return
     to = app.gui_panel.dest_addr.GetValue()
     if not app.wallet.check_address(to):
         warn_modal("Wrong destination account address format")
