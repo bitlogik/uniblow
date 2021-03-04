@@ -28,6 +28,8 @@ from version import VERSION
 SUPPORTED_COINS = [
     "BTC",
     "ETH",
+    "LTC",
+    "DOGE",
     # "EOS",
 ]
 
