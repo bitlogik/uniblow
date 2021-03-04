@@ -5,7 +5,7 @@ Uniblow versions history
 
 * Change device creation modal type
 * Highlight the destination address from check
-* Copy button disable on start
+* Copy button disabled on start
 
 ## 0.0.2
 

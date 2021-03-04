@@ -294,7 +294,7 @@ class BTC_wallet:
         return self.btc.send(tx_signatures)
 
     def assess_fee(self, fee_priority):
-        # Get fee assesment for a walet tx
+        # Get fee assesment for a wallet tx
         fee_unit = self.btc.api.get_fee(fee_priority)
         # Approx tx "virtual" size for an average transaction :
         #  2 inputs in the wallet format (mean coins used)
