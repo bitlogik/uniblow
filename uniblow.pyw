@@ -15,6 +15,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 
+import importlib
 import sys
 from io import BytesIO
 
@@ -45,12 +46,13 @@ DEFAULT_PASSWORD = "NoPasswd"
 GREEN_COLOR = wx.Colour(73, 172, 73)
 RED_COLOR = wx.Colour(198, 60, 60)
 
-import wallets.BTCwallet
-import wallets.ETHwallet
+wallets = {}
+for coin_lib in SUPPORTED_COINS:
+    wallets[f"{coin_lib}wallet"] = importlib.import_module(f"wallets.{coin_lib}wallet")
 
 
 def get_coin_class(coin_name):
-    return getattr(getattr(wallets, f"{coin_name}wallet"), f"{coin_name}_wallet")
+    return getattr(wallets[f"{coin_name}wallet"], f"{coin_name}_wallet")
 
 
 class wallet:
