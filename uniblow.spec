@@ -6,6 +6,7 @@ import platform
 
 current_path = os.path.dirname(os.path.abspath("uniblow.spec"))
 sys.path.append(current_path)
+from uniblow import SUPPORTED_COINS
 from version import VERSION
 
 ICON = "gui/uniblow.ico"
@@ -21,6 +22,8 @@ if os_system == "Darwin":
 plt_arch = platform.machine().lower()
 BIN_PKG_NAME = f"Uniblow-{os_platform}-{plt_arch}-{VERSION}"
 
+additional_imports = [f"wallets.{coinpkg}wallet" for coinpkg in SUPPORTED_COINS]
+
 pkgs_remove = ["sqlite3", "tcl85", "tk85", "_sqlite3", "_tkinter", "libopenblas", "libdgamln"]
 
 a = Analysis(
@@ -28,7 +31,7 @@ a = Analysis(
     pathex=[current_path],
     binaries=[],
     datas=[(ICON, "gui/")],
-    hiddenimports=[],
+    hiddenimports=additional_imports,
     hookspath=[],
     runtime_hooks=[],
     excludes=[
