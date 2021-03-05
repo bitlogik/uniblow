@@ -244,7 +244,7 @@ class LTC_wallet:
     wtypes = [
         "Legacy standard",
         "Segwit compatible",
-        "Segwit bech32",
+        # "Segwit bech32",
     ]
 
     def __init__(self, network, wtype, device):
