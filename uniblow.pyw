@@ -30,7 +30,7 @@ SUPPORTED_COINS = [
     "ETH",
     "LTC",
     "DOGE",
-    # "EOS",
+    "EOS",
 ]
 
 DEVICES = [
