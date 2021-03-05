@@ -21,8 +21,6 @@ import urllib.request
 import re
 from .lib import cryptos
 
-# import hashlib
-
 
 class sochain_api:
     def __init__(self, network):
@@ -116,7 +114,6 @@ class DOGEwalletCore:
         self.segwit = segwit_option
         # pubkey is hex compressed
         self.pubkey = pubkey
-        # PKH = CryptnoxPy.bin_hash160(bytes.fromhex(pubkey))
         if self.segwit == 0:
             self.address = cryptos.coins.dogecoin.Doge(testnet=self.testnet).pubtoaddr(self.pubkey)
         else:

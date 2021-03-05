@@ -21,8 +21,6 @@ import urllib.request
 import re
 from .lib import cryptos
 
-# import hashlib
-
 
 class blkhub_api:
     # Electra API
@@ -129,7 +127,6 @@ class BTCwalletCore:
         self.segwit = segwit_option
         # pubkey is hex compressed
         self.pubkey = pubkey
-        # PKH = CryptnoxPy.bin_hash160(bytes.fromhex(pubkey))
         if self.segwit == 0:
             self.address = cryptos.coins.bitcoin.Bitcoin(testnet=self.testnet).pubtoaddr(
                 self.pubkey
@@ -174,8 +171,6 @@ class BTCwalletCore:
         self.tx = cryptos.coins.bitcoin.Bitcoin(testnet=self.testnet).mktx(inputs, outs)
         if self.segwit == 0:
             script = cryptos.mk_pubkey_script(self.address)
-        # elif :
-        # script = cryptos.mk_scripthash_script(self.address)
         elif self.segwit == 2 or self.segwit == 1:
             script = cryptos.mk_p2wpkh_scriptcode(self.pubkey)
         else:

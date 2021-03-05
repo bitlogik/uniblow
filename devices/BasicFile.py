@@ -133,6 +133,6 @@ class BasicFile:
             .hex()
         )
 
-    def sign(self, message):
-        raw_sig = self.pvkey.sign(message, ec.ECDSA(utils.Prehashed(hashes.SHA256())))
+    def sign(self, hashed_msg):
+        raw_sig = self.pvkey.sign(hashed_msg, ec.ECDSA(utils.Prehashed(hashes.SHA256())))
         return fix_s_sig(raw_sig)
