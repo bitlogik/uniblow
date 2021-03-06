@@ -329,7 +329,7 @@ class ETHwalletCore:
     def prepare(self, toaddr, paymentvalue, gprice, glimit):
         balance = self.getbalance()
         maxspendable = balance - ((gprice * glimit) * 10 ** 9)
-        if paymentvalue > maxspendable:
+        if paymentvalue > maxspendable or paymentvalue < 0:
             raise Exception("Not enough fund for the tx")
         self.nonce = int2bytearray(self.getnonce())
         self.gasprice = int2bytearray(gprice * 10 ** 9)

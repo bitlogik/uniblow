@@ -144,7 +144,7 @@ class LTCwalletCore:
         utxos = self.getutxos()
         balance = self.balance_fmutxos(utxos)
         maxspendable = balance - fee
-        if paymentvalue > maxspendable:
+        if paymentvalue > maxspendable or paymentvalue < 0:
             raise Exception("Not enough fund for the tx")
         inputs = self.selectutxos(paymentvalue + fee, utxos)
         invalue = self.balance_fmutxos(inputs)
