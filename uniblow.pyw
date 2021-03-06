@@ -34,6 +34,7 @@ SUPPORTED_COINS = [
 
 DEVICES_LIST = [
     "BasicFile",
+    "OpenPGP",
 ]
 
 FEES_PRORITY_TEXT = [
@@ -157,11 +158,7 @@ def info_modal(title, info_text):
     wx.MessageBox(info_text, title, wx.OK | wx.ICON_INFORMATION, app.gui_frame)
 
 
-def get_password(device_name, newp="BadPass"):
-    input_message = f"Input your {device_name} wallet PIN/password\n"
-    if newp == "NewPass":
-        input_message = f"Choose your PIN/password the the {device_name} wallet\n"
-        input_message += "If blank a default PIN/password will be used."
+def get_password(device_name, input_message):
     pwd_dialog = wx.PasswordEntryDialog(
         app.gui_frame,
         input_message,
@@ -171,8 +168,6 @@ def get_password(device_name, newp="BadPass"):
     )
     if pwd_dialog.ShowModal() == wx.ID_OK:
         passval = pwd_dialog.GetValue()
-        if passval == "":
-            return DEFAULT_PASSWORD
         return passval
 
 
@@ -215,23 +210,33 @@ def copy_account(ev):
 
 
 def device_selected(device):
+    global DEFAULT_PASSWORD
     sel_device = device.GetInt()
     device_sel_name = DEVICES_LIST[sel_device - 1]
     if sel_device > 0:
         # For now, only BasicFile device
         password_BasicFile = DEFAULT_PASSWORD
+        if device_sel_name == "OpenPGP":
+            password_BasicFile = "123456"
         the_device = get_device_class(device_sel_name)
         i = 0
         while True:
             i += 1
             try:
+                pwdPIN = "password"
+                if device_sel_name == "OpenPGP":
+                    pwdPIN = "PIN3"
+                inp_message = f"Input your {device_sel_name} wallet {pwdPIN}\n"
                 if the_device.has_password:
                     device_loaded = the_device(password_BasicFile, i)
                 else:
                     device_loaded = the_device()
                 break
             except pwdException as exc:
-                password_BasicFile = get_password(device_sel_name, str(exc))
+                if str(exc) == "NewPass":
+                    inp_message = f"Choose your {pwdPIN} for the {device_sel_name} wallet\n"
+                    inp_message += "If blank a default PIN/password will be used."
+                password_BasicFile = get_password(device_sel_name, inp_message)
                 if password_BasicFile is None:
                     app.gui_panel.devices_choice.SetSelection(0)
                     app.gui_panel.coins_choice.Disable()
