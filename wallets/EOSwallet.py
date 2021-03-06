@@ -218,7 +218,7 @@ class EOS_wallet:
     def get_balance(self):
         # Get balance in base integer unit
         if not self.eos.account:
-            return "Register this publickey in an account"
+            return "Register this publickey\nin an account"
         bal_list = self.eos.getbalance()
         return bal_list[0] if len(bal_list) > 0 else "0 EOS"
 

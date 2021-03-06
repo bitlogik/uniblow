@@ -22,7 +22,6 @@ from io import BytesIO
 import wx
 import qrcode
 import gui.app
-from devices.BasicFile import BasicFile, pwdException
 from version import VERSION
 
 SUPPORTED_COINS = [
@@ -33,7 +32,7 @@ SUPPORTED_COINS = [
     "EOS",
 ]
 
-DEVICES = [
+DEVICES_LIST = [
     "BasicFile",
 ]
 
@@ -55,6 +54,19 @@ for coin_lib in SUPPORTED_COINS:
 
 def get_coin_class(coin_name):
     return getattr(wallets[f"{coin_name}wallet"], f"{coin_name}_wallet")
+
+
+devices = {}
+for device_name in DEVICES_LIST:
+    devices[device_name] = importlib.import_module(f"devices.{device_name}")
+
+
+def get_device_class(device_name):
+    global pwdException
+    device_class = getattr(devices[device_name], device_name)
+    if device_class.has_password:
+        pwdException = getattr(devices[device_name], "pwdException")
+    return device_class
 
 
 class wallet:
@@ -145,14 +157,15 @@ def info_modal(title, info_text):
     wx.MessageBox(info_text, title, wx.OK | wx.ICON_INFORMATION, app.gui_frame)
 
 
-def get_password(newp="BadPass"):
-    input_message = "Input BasicFile wallet password\n"
+def get_password(device_name, newp="BadPass"):
+    input_message = f"Input your {device_name} wallet PIN/password\n"
     if newp == "NewPass":
-        input_message += "If blank a default password will be used."
+        input_message = f"Choose your PIN/password the the {device_name} wallet\n"
+        input_message += "If blank a default PIN/password will be used."
     pwd_dialog = wx.PasswordEntryDialog(
         app.gui_frame,
         input_message,
-        caption="BasicFile wallet password",
+        caption=f"{device_name} wallet PIN/password",
         defaultValue="",
         pos=wx.DefaultPosition,
     )
@@ -203,17 +216,22 @@ def copy_account(ev):
 
 def device_selected(device):
     sel_device = device.GetInt()
+    device_sel_name = DEVICES_LIST[sel_device - 1]
     if sel_device > 0:
         # For now, only BasicFile device
         password_BasicFile = DEFAULT_PASSWORD
+        the_device = get_device_class(device_sel_name)
         i = 0
         while True:
             i += 1
             try:
-                device_loaded = BasicFile(password_BasicFile, i)
+                if the_device.has_password:
+                    device_loaded = the_device(password_BasicFile, i)
+                else:
+                    device_loaded = the_device()
                 break
             except pwdException as exc:
-                password_BasicFile = get_password(str(exc))
+                password_BasicFile = get_password(device_sel_name, str(exc))
                 if password_BasicFile is None:
                     app.gui_panel.devices_choice.SetSelection(0)
                     app.gui_panel.coins_choice.Disable()
@@ -231,7 +249,8 @@ def device_selected(device):
         app.device = device_loaded
         if app.device.created:
             info_modal(
-                "Device created", f"A new {DEVICES[sel_device-1]} device was successfully created."
+                "Device created",
+                f"A new {device_sel_name} device was successfully created.",
             )
         app.gui_panel.coins_choice.Enable()
         app.gui_panel.coins_choice.Hide()
@@ -392,7 +411,7 @@ if __name__ == "__main__":
         pass
     app = wx.App()
 
-    gui.app.start_app(app, VERSION, SUPPORTED_COINS, DEVICES)
+    gui.app.start_app(app, VERSION, SUPPORTED_COINS, DEVICES_LIST)
 
     app.gui_panel.devices_choice.Bind(wx.EVT_CHOICE, device_selected)
     app.gui_panel.coins_choice.Bind(wx.EVT_CHOICE, coin_selected)

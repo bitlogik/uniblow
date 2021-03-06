@@ -72,6 +72,10 @@ def fix_s_sig(sig):
 
 class BasicFile:
     # Using Python cryptography lib
+
+    has_password = True
+    is_HD = False
+
     def __init__(self, password, itimes):
         self.created = False
         self.open_account(password, itimes)
