@@ -239,12 +239,12 @@ def device_selected(device):
                     return
             except Exception as exc:
                 warn_modal(str(exc))
-                if not getattr(sys, "frozen", False):
-                    # output the exception when dev environment
-                    raise exc
                 app.gui_panel.devices_choice.SetSelection(0)
                 app.gui_panel.coins_choice.Disable()
                 erase_info()
+                if not getattr(sys, "frozen", False):
+                    # output the exception when dev environment
+                    raise exc
                 return
         app.device = device_loaded
         if app.device.created:
@@ -252,6 +252,8 @@ def device_selected(device):
                 "Device created",
                 f"A new {device_sel_name} device was successfully created.",
             )
+        erase_info()
+        app.gui_panel.coins_choice.SetSelection(0)
         app.gui_panel.coins_choice.Enable()
         app.gui_panel.coins_choice.Hide()
         app.gui_panel.coins_choice.ShowWithEffect(wx.SHOW_EFFECT_ROLL_TO_RIGHT, 750)
