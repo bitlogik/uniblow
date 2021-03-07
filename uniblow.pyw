@@ -120,7 +120,7 @@ def display_balance():
     app.gui_panel.balance_info.SetLabel(balance)
     app.gui_panel.copy_button.Enable()
     bal_str = balance.split(" ")[0]
-    if bal_str != "0" and bal_str != "0.0":
+    if bal_str not in ("0", "0.0") and not bal_str.startswith("Register"):
         app.gui_panel.send_button.Enable()
         app.gui_panel.send_all.Enable()
 
