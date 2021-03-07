@@ -78,6 +78,7 @@ class BasicFile:
 
     def __init__(self, password, itimes):
         self.created = False
+        self.has_hardware_button = False
         self.open_account(password, itimes)
 
     def open_account(self, password, itimes):

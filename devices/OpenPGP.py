@@ -71,6 +71,7 @@ class OpenPGP:
     def __init__(self, password, itimes):
         self.created = False
         self.PIN = password
+        self.has_hardware_button = True
         self.PGPdevice = OpenPGPpy.OpenPGPcard()
         self.open_account()
 
@@ -106,6 +107,7 @@ class OpenPGP:
             except OpenPGPpy.PGPCardException as exc:
                 if exc.sw_code != 0x6A88:  # card just doesnt support UIF ?
                     raise
+                raise Exception("This device doesn't support physical confirmation button")
             self.created = True
         try:
             self.PGPdevice.verify_pin(1, self.PIN)
