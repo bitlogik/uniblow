@@ -353,6 +353,7 @@ def paint_toaddr(color):
 
 
 def check_addr(ev):
+    ev.Skip()
     if not hasattr(app, "wallet"):
         return
     addr = ev.GetString()
@@ -366,7 +367,49 @@ def check_addr(ev):
     app.gui_frame.Refresh()
 
 
+def transfer(to, amount):
+    conf = confirm(to, amount)
+    if conf == wx.ID_YES:
+        fee_opt = app.gui_panel.fee_slider.GetValue()
+        try:
+            progress_modal = wx.ProgressDialog(
+                "Processing transaction",
+                "",
+                style=wx.PD_APP_MODAL | wx.PD_AUTO_HIDE | wx.PD_SMOOTH,
+            )
+            wx.MilliSleep(50)
+            wait_msg = "Buiding and signing the transaction"
+            if app.device.has_hardware_button:
+                wait_msg += "\nPress the button on the physical device to confirm."
+            progress_modal.Update(50, wait_msg)
+            wx.MilliSleep(250)
+            if amount == "ALL":
+                tx_info = app.wallet.transfer_all(to, fee_opt)
+            else:
+                tx_info = app.wallet.transfer(amount, to, fee_opt)
+            progress_modal.Update(100, "done")
+            wx.MilliSleep(250)
+            tx_success(tx_info)
+        except Exception as exc:
+            progress_modal.Update(100)
+            wx.MilliSleep(100)
+            progress_modal.Destroy()
+            wx.MilliSleep(100)
+            if str(exc) == "Error: 0x6600":
+                warn_modal("User button on PGP device timeout")
+            else:
+                warn_modal(str(exc))
+            wx.MilliSleep(250)
+            if not getattr(sys, "frozen", False):
+                # output the exception when dev environment
+                raise exc
+            return
+
+
 def send(ev):
+    ev.Skip()
+    if not app.gui_panel.send_button.IsEnabled():
+        return
     if not hasattr(app, "wallet"):
         return
     to = app.gui_panel.dest_addr.GetValue()
@@ -378,37 +421,18 @@ def send(ev):
     except ValueError:
         warn_modal("Unvalid amount input")
         return
-    conf = confirm(to, amount)
-    if conf == wx.ID_YES:
-        fee_opt = app.gui_panel.fee_slider.GetValue()
-        try:
-            tx_info = app.wallet.transfer(amount, to, fee_opt)
-            tx_success(tx_info)
-        except Exception as exc:
-            warn_modal(str(exc))
-            if not getattr(sys, "frozen", False):
-                # output the exception when dev environment
-                raise exc
+    transfer(to, amount)
 
 
 def send_all(ev):
+    ev.Skip()
     if not hasattr(app, "wallet"):
         return
     to = app.gui_panel.dest_addr.GetValue()
     if not app.wallet.check_address(to):
         warn_modal("Wrong destination account address format")
         return
-    conf = confirm(to, "ALL")
-    if conf == wx.ID_YES:
-        fee_opt = app.gui_panel.fee_slider.GetValue()
-        try:
-            tx_info = app.wallet.transfer_all(to, fee_opt)
-            tx_success(tx_info)
-        except Exception as exc:
-            warn_modal(str(exc))
-            if not getattr(sys, "frozen", False):
-                # output the exception when dev environment
-                raise exc
+    transfer(to, "ALL")
 
 
 if __name__ == "__main__":
