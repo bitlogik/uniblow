@@ -25,6 +25,10 @@ class pwdException(Exception):
     pass
 
 
+class NotinitException(Exception):
+    pass
+
+
 def encode_int(intarray):
     # encode a bytes array to a DER integer (bytes list)
     if intarray[0] >= 128:
@@ -66,16 +70,28 @@ class OpenPGP:
     # Using an OpenPGP device
 
     has_password = True
+    has_admin_password = True
     is_HD = False
 
-    def __init__(self, password, itimes):
+    def __init__(self):
         self.created = False
-        self.PIN = password
-        self.has_hardware_button = True
         self.PGPdevice = OpenPGPpy.OpenPGPcard()
-        self.open_account()
+        self.has_hardware_button = True
 
-    def open_account(self):
+    def __del__(self):
+        del self.PGPdevice.connection
+        del self.PGPdevice
+
+    def set_admin(self, admin_password):
+        self.PIN3 = admin_password
+        if self.PIN3 == "NoPasswd":
+            self.PIN3 = "12345678"
+        self.PGPdevice.change_pin("12345678", self.PIN3, 3)
+
+    def open_account(self, password):
+        self.PIN = password
+        if self.PIN == "NoPasswd":
+            self.PIN = "123456"
         pubkey_card = None
         try:
             pubkey_card = self.PGPdevice.get_public_key("B600")
@@ -83,32 +99,8 @@ class OpenPGP:
             # SW = 0x6581 or 0x6A88 ?
             if exc.sw_code != 0x6581 and exc.sw_code != 0x6A88:
                 raise
-        # SIGn key is not present, continue to setup this key
-        if pubkey_card is None:
-            # Setup the new device, gen a new key
-            PIN3 = "12345678"
-            try:
-                self.PGPdevice.verify_pin(3, PIN3)
-            except OpenPGPpy.PGPCardException as exc:
-                if exc.sw_code == 0x6982 or exc.sw_code == 0x6A80:
-                    raise Exception("Error: Wrong PUK")
-            # Generate in the device an EC256k1 key pair
-            try:
-                self.PGPdevice.put_data("00C1", "132B8104000A")
-            except OpenPGPpy.PGPCardException as exc:
-                if exc.sw_code == 0x6A80:
-                    raise Exception("This device is not compatible with ECDSA 256k1.") from exc
-                raise
-            # Generate key for sign
-            pubkey_card = self.PGPdevice.gen_key("B600")
-            try:
-                # Set UIF for sign : require a push button and OpenGPG v3
-                self.PGPdevice.put_data("00D6", "0120")
-            except OpenPGPpy.PGPCardException as exc:
-                if exc.sw_code != 0x6A88:  # card just doesnt support UIF ?
-                    raise
-                raise Exception("This device doesn't support physical confirmation button")
-            self.created = True
+            # SIGn key is not present
+            raise NotinitException()
         try:
             self.PGPdevice.verify_pin(1, self.PIN)
         except OpenPGPpy.PGPCardException as exc:
@@ -118,6 +110,35 @@ class OpenPGP:
                 raise Exception("Error: Incorrect PIN format")
             if exc.sw_code == 0x6983:
                 raise Exception("Error: PIN 1 is blocked")
+
+    def initialize_device(self, password):
+        self.PIN = password
+        if self.PIN == "NoPasswd":
+            self.PIN = "123456"
+        # Setup the new device, gen a new key
+        try:
+            self.PGPdevice.verify_pin(3, self.PIN3)
+            self.PGPdevice.change_pin("123456", self.PIN, 1)
+        except OpenPGPpy.PGPCardException as exc:
+            if exc.sw_code == 0x6982 or exc.sw_code == 0x6A80:
+                raise Exception("Error: Wrong admin code")
+        # Generate in the device an EC256k1 key pair
+        try:
+            self.PGPdevice.put_data("00C1", "132B8104000A")
+        except OpenPGPpy.PGPCardException as exc:
+            if exc.sw_code == 0x6A80:
+                raise Exception("This device is not compatible with ECDSA 256k1.") from exc
+            raise
+        # Generate key for sign
+        pubkey_card = self.PGPdevice.gen_key("B600")
+        try:
+            # Set UIF for sign : require a push button and OpenGPG v3
+            self.PGPdevice.put_data("00D6", "0120")
+        except OpenPGPpy.PGPCardException as exc:
+            if exc.sw_code != 0x6A88:  # card just doesnt support UIF ?
+                raise
+            raise Exception("This device doesn't support physical confirmation button")
+        self.created = True
 
     def get_public_key(self):
         pubkey_bin = self.PGPdevice.get_public_key("B600")

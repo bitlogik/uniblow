@@ -63,10 +63,11 @@ for device_name in DEVICES_LIST:
 
 
 def get_device_class(device_name):
-    global pwdException
+    global pwdException, NotinitException
     device_class = getattr(devices[device_name], device_name)
     if device_class.has_password:
         pwdException = getattr(devices[device_name], "pwdException")
+    NotinitException = getattr(devices[device_name], "NotinitException")
     return device_class
 
 
@@ -209,66 +210,108 @@ def copy_account(ev):
         copy_result("Error")
 
 
+def close_device():
+    if hasattr(app, "device"):
+        del app.device
+
+
 def device_selected(device):
     global DEFAULT_PASSWORD
+    close_device()
+    app.gui_panel.coins_choice.Disable()
+    app.gui_panel.coins_choice.SetSelection(0)
+    app.gui_panel.network_choice.Clear()
+    app.gui_panel.wallopt_choice.Clear()
+    erase_info()
     sel_device = device.GetInt()
     device_sel_name = DEVICES_LIST[sel_device - 1]
     if sel_device > 0:
-        # For now, only BasicFile device
-        password_BasicFile = DEFAULT_PASSWORD
-        if device_sel_name == "OpenPGP":
-            password_BasicFile = "123456"
+        password_default = DEFAULT_PASSWORD
         the_device = get_device_class(device_sel_name)
-        i = 0
+        try:
+            device_loaded = the_device()
+        except Exception as exc:
+            warn_modal(str(exc))
+            app.gui_panel.devices_choice.SetSelection(0)
+            if not getattr(sys, "frozen", False):
+                # output the exception when dev environment
+                raise exc
+            return
         while True:
-            i += 1
             try:
                 pwdPIN = "password"
                 if device_sel_name == "OpenPGP":
-                    pwdPIN = "PIN3"
-                inp_message = f"Input your {device_sel_name} wallet {pwdPIN}\n"
+                    pwdPIN = "PIN1"
                 if the_device.has_password:
-                    device_loaded = the_device(password_BasicFile, i)
+                    device_loaded.open_account(password_default)
                 else:
-                    device_loaded = the_device()
+                    device_loaded.open_account()
                 break
-            except pwdException as exc:
-                if str(exc) == "NewPass":
+            except NotinitException as exc:
+                if the_device.has_admin_password:
+                    set_admin_message = f"Choose your admin PIN3 for the {device_sel_name} device\n"
+                    set_admin_message += "If blank, a default admin PIN will be used."
+                    admin_password = get_password(device_sel_name, set_admin_message)
+                    if admin_password is None:
+                        app.gui_panel.devices_choice.SetSelection(0)
+                        return
+                    if admin_password == "":
+                        admin_password = DEFAULT_PASSWORD
+                    if len(admin_password) < 8:
+                        warn_modal("Admin password shall be at least 8 chars.")
+                        app.gui_panel.devices_choice.SetSelection(0)
+                        return
+                if the_device.has_password:
                     inp_message = f"Choose your {pwdPIN} for the {device_sel_name} wallet\n"
-                    inp_message += "If blank a default PIN/password will be used."
-                password_BasicFile = get_password(device_sel_name, inp_message)
-                if password_BasicFile is None:
+                    inp_message += "If blank, a default PIN/password will be used."
+                    password = get_password(device_sel_name, inp_message)
+                    if password is None:
+                        app.gui_panel.devices_choice.SetSelection(0)
+                        return
+                    if password == "":
+                        password = DEFAULT_PASSWORD
+                try:
+                    if len(password) < 6:
+                        raise Exception("PIN password shall be at least 6 chars.")
+                    if the_device.has_admin_password:
+                        device_loaded.set_admin(admin_password)
+                    if the_device.has_password:
+                        device_loaded.initialize_device(password)
+                    else:
+                        device_loaded.initialize_device()
+                    break
+                except Exception as exc:
+                    warn_modal(str(exc))
                     app.gui_panel.devices_choice.SetSelection(0)
-                    app.gui_panel.coins_choice.Disable()
-                    erase_info()
+                    if not getattr(sys, "frozen", False):
+                        # output the exception when dev environment
+                        raise exc
+                    return
+            except pwdException as exc:
+                inp_message = f"Input your {device_sel_name} wallet {pwdPIN}\n"
+                password_default = get_password(device_sel_name, inp_message)
+                if password_default is None:
+                    app.gui_panel.devices_choice.SetSelection(0)
                     return
             except Exception as exc:
                 warn_modal(str(exc))
                 app.gui_panel.devices_choice.SetSelection(0)
-                app.gui_panel.coins_choice.Disable()
-                erase_info()
                 if not getattr(sys, "frozen", False):
                     # output the exception when dev environment
                     raise exc
                 return
+        wx.MilliSleep(100)
         app.device = device_loaded
         if app.device.created:
             info_modal(
                 "Device created",
                 f"A new {device_sel_name} device was successfully created.",
             )
-        erase_info()
-        app.gui_panel.coins_choice.SetSelection(0)
         app.gui_panel.coins_choice.Enable()
         app.gui_panel.coins_choice.Hide()
         app.gui_panel.coins_choice.ShowWithEffect(wx.SHOW_EFFECT_ROLL_TO_RIGHT, 750)
         app.gui_panel.coins_choice.SetFocus()
     else:
-        app.gui_panel.devices_choice.SetSelection(0)
-        app.gui_panel.coins_choice.SetSelection(0)
-        app.gui_panel.coins_choice.Disable()
-        app.gui_panel.network_choice.Clear()
-        app.gui_panel.wallopt_choice.Clear()
         erase_info()
 
 

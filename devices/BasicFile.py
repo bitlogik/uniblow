@@ -34,6 +34,10 @@ class pwdException(nacl.exceptions.CryptoError):
     pass
 
 
+class NotinitException(Exception):
+    pass
+
+
 def encode_int(intarray):
     # encode a bytes array to a DER integer (bytes list)
     if intarray[0] >= 128:
@@ -74,14 +78,14 @@ class BasicFile:
     # Using Python cryptography lib
 
     has_password = True
+    has_admin_password = False
     is_HD = False
 
-    def __init__(self, password, itimes):
+    def __init__(self):
         self.created = False
         self.has_hardware_button = False
-        self.open_account(password, itimes)
 
-    def open_account(self, password, itimes):
+    def open_account(self, password):
         if path.isfile(FILE_NAME):
             # Open the current key from its file
             key_file = open(FILE_NAME, "r")
@@ -103,35 +107,35 @@ class BasicFile:
                 raise pwdException("BadPass")
             # load private key
             pvkey_int = int.from_bytes(key_data, "big")
+            key_file.close()
+            self.pvkey = ec.derive_private_key(pvkey_int, ec.SECP256K1())
         else:
-            if password == "NoPasswd" and itimes == 1:
-                # Trigger password input in the app
-                raise pwdException("NewPass")
-            # Generate a new key and save it in a file
-            pvkey_int = randbelow(CURVE_K1_ORDER)
-            key_file = open(FILE_NAME, "w")
-            # Encrypt the private key
-            salt = token_bytes(nacl.pwhash.argon2i.SALTBYTES)
-            encryption_key = nacl.pwhash.argon2id.kdf(
-                nacl.secret.SecretBox.KEY_SIZE,
-                password.encode("utf8"),
-                salt,
-                opslimit=nacl.pwhash.argon2i.OPSLIMIT_MODERATE,
-                memlimit=nacl.pwhash.argon2i.MEMLIMIT_MODERATE,
-            )
-            encrypted_content = nacl.secret.SecretBox(encryption_key).encrypt(
-                pvkey_int.to_bytes(EC_BYTES_SIZE, byteorder="big"),
-                nacl.utils.random(nacl.secret.SecretBox.NONCE_SIZE),
-            )
-            # Save the encrypted data
-            json.dump({"keyenc": encrypted_content.hex(), "salt": salt.hex()}, key_file)
-            self.created = True
+            raise NotinitException()
+
+    def initialize_device(self, password):
+        # Generate a new key and save it in a file
+        pvkey_int = randbelow(CURVE_K1_ORDER)
+        key_file = open(FILE_NAME, "w")
+        # Encrypt the private key
+        salt = token_bytes(nacl.pwhash.argon2i.SALTBYTES)
+        encryption_key = nacl.pwhash.argon2id.kdf(
+            nacl.secret.SecretBox.KEY_SIZE,
+            password.encode("utf8"),
+            salt,
+            opslimit=nacl.pwhash.argon2i.OPSLIMIT_MODERATE,
+            memlimit=nacl.pwhash.argon2i.MEMLIMIT_MODERATE,
+        )
+        encrypted_content = nacl.secret.SecretBox(encryption_key).encrypt(
+            pvkey_int.to_bytes(EC_BYTES_SIZE, byteorder="big"),
+            nacl.utils.random(nacl.secret.SecretBox.NONCE_SIZE),
+        )
+        # Save the encrypted data
+        json.dump({"keyenc": encrypted_content.hex(), "salt": salt.hex()}, key_file)
+        self.created = True
         key_file.close()
         self.pvkey = ec.derive_private_key(pvkey_int, ec.SECP256K1())
 
     def get_public_key(self):
-        # pubkey = cryptos.coins.bitcoin.Bitcoin(testnet=True).privtopub(self.pvkey)
-        # return cryptos.encode_pubkey(pubkey, 'hex_compressed')
         return (
             self.pvkey.public_key()
             .public_bytes(serialization.Encoding.X962, serialization.PublicFormat.CompressedPoint)
