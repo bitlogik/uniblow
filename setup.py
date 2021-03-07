@@ -33,7 +33,7 @@ setup(
         "pysha3==1.0.2",
         "qrcode==6.1",
         "PyNaCl==1.4.0",
-        "OpenPGPpy",
+        "OpenPGPpy==0.4",
     ],
     package_data={"gui": ["uniblow.ico"]},
     include_package_data=False,

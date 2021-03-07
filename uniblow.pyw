@@ -395,7 +395,7 @@ def transfer(to, amount):
             wx.MilliSleep(100)
             progress_modal.Destroy()
             wx.MilliSleep(100)
-            if str(exc) == "Error: 0x6600":
+            if str(exc) == "Error status : 0x6600":
                 warn_modal("User button on PGP device timeout")
             else:
                 warn_modal(str(exc))
