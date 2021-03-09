@@ -1,6 +1,16 @@
 
 Uniblow versions history
 
+## 0.2.0
+
+* Add DOGE
+* Add LTC
+* Add EOS
+* Detect when spending negative value
+* More abstract device
+* Modal when making a transaction
+* Add OpenPGP device
+
 ## 0.1.0
 
 * Change device creation modal type

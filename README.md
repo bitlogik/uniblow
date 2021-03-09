@@ -19,7 +19,7 @@ The Uniblow software can also be used integrated in your services, as it provide
 
 Don't expect to make complicated DeFi transactions, nor advanced settings for the fees. This software provides an easy and basic wallet, focused on universality and ease in use, as it works on multiple blockchains and platforms.
 
-For now, works with :
+Compatible with the following blockchains :
 
 * BTC
     * mainnet and testnet networks
@@ -28,6 +28,14 @@ For now, works with :
     * Full Segwit bech32
 * ETH
     * mainnet, Rinkeby, Ropsten, Kovan and Goerli networks
+* LTC
+    * mainnet and testnet networks
+    * Standard wallet
+    * Segwit P2SH compatibility
+* DOGE
+    * mainnet and testnet networks
+* EOS
+    * EOSIo and Jungle3 networks
 
 ## Devices
 
@@ -38,10 +46,22 @@ If you setup a password but forget it, there would be no way to recover your coi
 
 Your key encrypted is stored in JSON and hex in the BasicFileWallet.key in the same folder as Uniblow. Hence the name "BasicFile" for this device.
 
+### OpenPGP device
+
+Works with an OpenPGP v3 device which accepts User Interaction confirmation (button).
+
+This device type is very secure, because the signature is performed in the OpenPGP physical device, outside of the computer. Most of these devices are built with a secure element chip. The private key never escapes the hardware device boundary. Note that the drawback is that there is no easy backup of the keys, so one have to take care of not forgetting the PIN or losing the device. Some blocchain based hardware wallet offering the OpenPGP mechanism offers some link with the seed, as the Ledger Nano S/X , [see details there](https://github.com/LedgerHQ/openpgp-card-app/blob/master/doc/user/blue-app-openpgp-card.rst).
+
+For the best experience, the OpenPGP device should be in its default reset state before using it with uniblow. Uniblow asks the user to choose the admin PIN (PIN3), and the user PIN (PIN1), then it configures the device with these PINs.  
+The device can also be already configured, and has one EC256k1 key generated in the SIG key slot. Uniblow will eventually ask for the user PIN1 and use this key.
+
+Without backup, if you forget the PIN, or lost the OpenPGP device, there would be no way to recover your coins.
+
+The Yubico 5 is a recommended OpenPGP device.
 
 ## Use the GUI
 
-* Download the Uniblow binary in Github releases
+* Download the Uniblow binary [in Github releases](https://github.com/bitlogik/uniblow/releases/latest)
 
 To increase the security, the Windows exe releases are [signed with our Extended Validation certificate](https://en.wikipedia.org/wiki/Code_signing#Extended_validation_(EV)_code_signing), bringing even greater confidence in the integrity of the application.
 
@@ -52,12 +72,8 @@ To increase the security, the Windows exe releases are [signed with our Extended
 features in development :
 
 * Verify checksum when checking address
-* EOS network
 * HD wallet device (BIP32/39/44)
 * ERC20 tokens on ETH
-* LTC, BCH, DOGE
-* Use win32 CNG key storage TPM as device
-* PGP device to secure with a hardware key
 
 ### Use it from source
 
