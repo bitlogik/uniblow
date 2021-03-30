@@ -70,6 +70,18 @@ if sys.version_info.major == 3:
         checksum = bin_dbl_sha256(inp)[:4]
         return "1" * leadingzbytes + changebase(inp + checksum, 256, 58)
 
+    def headbin_to_b58check(rawdata, header):
+
+        data = header + rawdata
+        leadingzbytes = 0
+        for x in data:
+            if x != 0:
+                break
+            leadingzbytes += 1
+
+        checksum = bin_dbl_sha256(data)[:4]
+        return "1" * leadingzbytes + changebase(data + checksum, 256, 58)
+
     def bytes_to_hex_string(b):
         if isinstance(b, str):
             return b

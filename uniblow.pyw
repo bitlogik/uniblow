@@ -30,6 +30,7 @@ SUPPORTED_COINS = [
     "LTC",
     "DOGE",
     "EOS",
+    "XTZ"
 ]
 
 DEVICES_LIST = [
