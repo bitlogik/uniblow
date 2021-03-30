@@ -63,19 +63,13 @@ class RPC_api:
             req = urllib.request.Request(
                 full_url,
                 headers={"User-Agent": "Uniblow/1", "Content-Type": "application/json"},
-                data =  data,
+                data=data,
             )
             webrsp = urllib.request.urlopen(req)
-            data_resp = webrsp.read().decode("utf8").rstrip()
-            if data_resp[0] == '"' and data_resp[-1] == '"':
-                return data_resp[1:-1]
-            return data_resp
+            return json.load(webrsp)
         except Exception as exc:
             print(exc.read())
-            raise IOError(
-                "Error while processing request:\n%s"
-                % (full_url + " : " + str(params))
-            )
+            raise IOError("Error while processing request:\n%s" % (full_url + " : " + str(data)))
 
     def checkapiresp(self):
         if "error" in self.jsres:
@@ -92,11 +86,12 @@ class RPC_api:
 
     def pushtx(self, txhex):
         # req = urllib.request.Request(
-            # f"https://{self.network}-tezos.giganode.io/injection/operation?chain=main",
-            # headers={"User-Agent": "Uniblow/1", "Content-Type": "application/json"},
-            # data = ('"' + txhex + '"').encode("utf-8")
+        # f"https://{self.network}-tezos.giganode.io/injection/operation?chain=main",
+        # headers={"User-Agent": "Uniblow/1", "Content-Type": "application/json"},
+        # data = ('"' + txhex + '"').encode("utf-8")
         # )
-        return self.getData("/injection/operation?chain="+self.chainID, txhex)
+        return self.getData("/injection/operation", txhex)
+        # return self.getData(f"{RPC_api.BASE_BLOCK_URL}/helpers/preapply/operations", txhex)
 
     def get_tx_num(self, addr):
         return self.getData(f"{RPC_api.BASE_BLOCK_URL}/context/contracts/{addr}/counter")
@@ -104,33 +99,9 @@ class RPC_api:
     def get_serialtx(self, dataobj):
         # forge operation
         return self.getData(f"{RPC_api.BASE_BLOCK_URL}/helpers/forge/operations", dataobj)
-    
+
     def get_head_block(self):
         return self.getData(f"{RPC_api.BASE_BLOCK_URL}/hash")
-    
-    def get_fee(self, priority):
-        self.getData("eth_gasPrice")
-        self.checkapiresp()
-        gaz_price = int(self.getKey("result")[2:], 16) / 10 ** 9
-        if priority == 0:
-            return int(gaz_price * 0.9)
-        if priority == 1:
-            return int(gaz_price * 1.1)
-        if priority == 2:
-            return int(gaz_price * 1.6)
-        raise Exception("bad priority argument for get_fee, must be 0, 1 or 2")
-
-    def getKey(self, keychar):
-        out = self.jsres
-        path = keychar.split("/")
-        for key in path:
-            if key.isdigit():
-                key = int(key)
-            try:
-                out = out[key]
-            except:
-                out = []
-        return out
 
 
 def testaddr(xtz_addr):
@@ -147,7 +118,7 @@ class XTZwalletCore:
     def __init__(self, pubkey, network, api):
         self.pubkey = pubkey
         self.Qpub = cryptos.decode_pubkey(pubkey)
-        PUBKEY_HEADER = b"\x06\xa1\xa1" # tz2
+        PUBKEY_HEADER = b"\x06\xa1\xa1"  # tz2
         pubkey_hash = blake2b(bytes.fromhex(pubkey), 20)
         self.address = cryptos.headbin_to_b58check(pubkey_hash, PUBKEY_HEADER)
         self.api = api
@@ -170,24 +141,26 @@ class XTZwalletCore:
         maxspendable = balance - int(fee)
         if paymentvalue > maxspendable or paymentvalue < 0:
             raise Exception("Not enough fund for the tx")
-        self.nonce = self.getnonce()
+        self.nonce = str(int(self.getnonce()) + 1)
         self.fee = fee
         self.glimit = glimit
         self.value = str(int(paymentvalue))
+        curr_branch = self.getheadblock()
+        print(curr_branch)
         tx_data = {
-          "branch": self.getheadblock(),
-          "contents": [
+            "branch": curr_branch,
+            "contents": [
                 {
-                  "kind": "transaction",
-                  "source": self.address,
-                  "fee": self.fee,
-                  "counter": self.nonce,
-                  "gas_limit": self.glimit,
-                  "storage_limit": "0",
-                  "amount": self.value,
-                  "destination": toaddr
-              }
-          ]
+                    "kind": "transaction",
+                    "source": self.address,
+                    "fee": self.fee,
+                    "counter": self.nonce,
+                    "gas_limit": self.glimit,
+                    "storage_limit": "0",
+                    "amount": self.value,
+                    "destination": toaddr,
+                }
+            ],
         }
         print(tx_data)
         self.signing_tx_hex = "03" + self.getserialtx(tx_data)
@@ -203,12 +176,12 @@ class XTZwalletCore:
         s = int.from_bytes(signature_der[lenr + 6 : lenr + 6 + lens], "big")
         # # Parity recovery
         # Q = ecdsa.keys.VerifyingKey.from_public_key_recovery_with_digest(
-            # signature_der, self.datahash, ecdsa.curves.SECP256k1, sigdecode=ecdsa.util.sigdecode_der
+        # signature_der, self.datahash, ecdsa.curves.SECP256k1, sigdecode=ecdsa.util.sigdecode_der
         # )[1]
         # if Q.to_string("uncompressed") == cryptos.encode_pubkey(self.Qpub, "bin"):
-            # i = 36
+        # i = 36
         # else:
-            # i = 35
+        # i = 35
         # Signature encoding
         # v = int2bytearray(2 * self.chainID + i)
         # r = int2bytearray(r)
@@ -219,6 +192,7 @@ class XTZwalletCore:
         txhex = self.signing_tx_hex + "%064x" % r + "%064x" % s
         print(txhex)
         return "\nDONE, txID : " + self.api.pushtx(txhex)
+
 
 XTZ_units = 10 ** 6
 
