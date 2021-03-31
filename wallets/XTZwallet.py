@@ -52,6 +52,7 @@ class RPC_api:
         self.network = network
         self.url = f"https://{network}-tezos.giganode.io"
         self.chainID = self.getData("/chains/main/chain_id")
+        self.protocol = self.getData(f"{RPC_api.BASE_BLOCK_URL}/header/protocol_data")["protocol"]
 
     def getData(self, method, params=[]):
         full_url = self.url + method
@@ -60,13 +61,21 @@ class RPC_api:
                 data = None
             else:
                 data = json.dumps(params).encode("utf-8")
+            print("-> Request :")
+            print(method)
+            if data:
+                print("with data :", data)
             req = urllib.request.Request(
                 full_url,
                 headers={"User-Agent": "Uniblow/1", "Content-Type": "application/json"},
                 data=data,
             )
-            webrsp = urllib.request.urlopen(req)
-            return json.load(webrsp)
+            webrsp = urllib.request.urlopen(req, timeout=6)
+            # return json.load(webrsp)
+            resp = json.load(webrsp)
+            print("<- Response :")
+            print(resp)
+            return resp
         except Exception as exc:
             print(exc.read())
             raise IOError("Error while processing request:\n%s" % (full_url + " : " + str(data)))
@@ -84,14 +93,14 @@ class RPC_api:
         balance = int(balraw)
         return balance
 
+    def simulate_tx(self, op_tx):
+        return self.getData(f"{RPC_api.BASE_BLOCK_URL}/helpers/scripts/run_operation", op_tx)
+
+    def preapply_tx(self, op_tx):
+        return self.getData(f"{RPC_api.BASE_BLOCK_URL}/helpers/preapply/operations", op_tx)
+
     def pushtx(self, txhex):
-        # req = urllib.request.Request(
-        # f"https://{self.network}-tezos.giganode.io/injection/operation?chain=main",
-        # headers={"User-Agent": "Uniblow/1", "Content-Type": "application/json"},
-        # data = ('"' + txhex + '"').encode("utf-8")
-        # )
-        return self.getData("/injection/operation", txhex)
-        # return self.getData(f"{RPC_api.BASE_BLOCK_URL}/helpers/preapply/operations", txhex)
+        return self.getData(f"/injection/operation?chain=NetXSgo1ZT2DRUG", txhex) # tx hex
 
     def get_tx_num(self, addr):
         return self.getData(f"{RPC_api.BASE_BLOCK_URL}/context/contracts/{addr}/counter")
@@ -115,12 +124,17 @@ def testaddr(xtz_addr):
 
 
 class XTZwalletCore:
+    
+    SIG256K1_PREFIX = bytes([13, 115, 101, 19, 63])
+    ADDRESS_HEADER = b"\x06\xa1\xa1"  # tz2
+    PUBKEY_HEADER = bytes([3, 254, 226, 86])
+
     def __init__(self, pubkey, network, api):
         self.pubkey = pubkey
         self.Qpub = cryptos.decode_pubkey(pubkey)
-        PUBKEY_HEADER = b"\x06\xa1\xa1"  # tz2
+        self.pubkey_b58 = cryptos.headbin_to_b58check(bytes.fromhex(self.pubkey), XTZwalletCore.PUBKEY_HEADER)
         pubkey_hash = blake2b(bytes.fromhex(pubkey), 20)
-        self.address = cryptos.headbin_to_b58check(pubkey_hash, PUBKEY_HEADER)
+        self.address = cryptos.headbin_to_b58check(pubkey_hash, XTZwalletCore.ADDRESS_HEADER)
         self.api = api
         self.network = network
 
@@ -136,33 +150,49 @@ class XTZwalletCore:
     def getserialtx(self, dataobj):
         return self.api.get_serialtx(dataobj)
 
+    def getchainid(self):
+        return self.api.chainID
+
+    def getprotocol(self):
+        return self.api.protocol
+
     def prepare(self, toaddr, paymentvalue, fee, glimit):
         balance = self.getbalance()
         maxspendable = balance - int(fee)
         if paymentvalue > maxspendable or paymentvalue < 0:
             raise Exception("Not enough fund for the tx")
-        self.nonce = str(int(self.getnonce()) + 1)
+        self.nonce = int(self.getnonce())
         self.fee = fee
         self.glimit = glimit
         self.value = str(int(paymentvalue))
         curr_branch = self.getheadblock()
         print(curr_branch)
+        # reveal needed ? -> /context/contracts/{address}/manager_key key:
         tx_data = {
             "branch": curr_branch,
             "contents": [
                 {
+                    "kind": "reveal",
+                    "source": self.address,
+                    "fee": self.fee,
+                    "counter": str(self.nonce+1),
+                    "gas_limit": "100000",
+                    "storage_limit": "60000",
+                    "public_key": self.pubkey_b58,
+                },
+                {
                     "kind": "transaction",
                     "source": self.address,
                     "fee": self.fee,
-                    "counter": self.nonce,
+                    "counter": str(self.nonce+2),
                     "gas_limit": self.glimit,
-                    "storage_limit": "0",
+                    "storage_limit": "60000",
                     "amount": self.value,
                     "destination": toaddr,
-                }
+                },
             ],
         }
-        print(tx_data)
+        self.tx = tx_data
         self.signing_tx_hex = "03" + self.getserialtx(tx_data)
         print(self.signing_tx_hex)
         self.datahash = blake2b(bytes.fromhex(self.signing_tx_hex))
@@ -174,25 +204,29 @@ class XTZwalletCore:
         lens = int(signature_der[5 + lenr])
         r = int.from_bytes(signature_der[4 : lenr + 4], "big")
         s = int.from_bytes(signature_der[lenr + 6 : lenr + 6 + lens], "big")
-        # # Parity recovery
-        # Q = ecdsa.keys.VerifyingKey.from_public_key_recovery_with_digest(
-        # signature_der, self.datahash, ecdsa.curves.SECP256k1, sigdecode=ecdsa.util.sigdecode_der
-        # )[1]
-        # if Q.to_string("uncompressed") == cryptos.encode_pubkey(self.Qpub, "bin"):
-        # i = 36
-        # else:
-        # i = 35
-        # Signature encoding
-        # v = int2bytearray(2 * self.chainID + i)
-        # r = int2bytearray(r)
-        # s = int2bytearray(s)
-        # signature_header = bytes([13, 115, 101, 19, 63])
-        # sig_b58 = cryptos.headbin_to_b58check(r+s, signature_header)
-        # print(sig_b58)
+        # 256k1 sig prefix : [13, 115, 101, 19, 63]
+        rs_bin = signature_der[4 : lenr + 4][-32:] + signature_der[lenr + 6 : lenr + 6 + lens][-32:]
+        sig_b58 = cryptos.headbin_to_b58check(rs_bin, XTZwalletCore.SIG256K1_PREFIX)
+        
+        self.tx["signature"] = sig_b58
+        op = {"operation":self.tx}
+        op["chain_id"] = self.getchainid()
+        
+        print(self.tx)
+        print(self.api.simulate_tx(op))
+        print("-- now pre apply --")
+        self.tx["protocol"] = self.getprotocol()
+        print(self.api.preapply_tx([self.tx]))
+        
         txhex = self.signing_tx_hex + "%064x" % r + "%064x" % s
         print(txhex)
         return "\nDONE, txID : " + self.api.pushtx(txhex)
 
+# https://www.ocamlpro.com/2018/11/21/an-introduction-to-tezos-rpcs-signing-operations/
+# https://github.com/goat-systems/go-tezos/blob/800cc714fad7313e92a5068407c23e0e397f5323/keys/secp256k1.go#L71
+# https://gitlab.com/tezos/tezos/-/blob/master/docs/api/edo-openapi.json
+# https://gitlab.com/tezos/tezos/-/blob/v8-release/docs/api/rpc-openapi.json
+# https://tezos.gitlab.io/shell/rpc.html
 
 XTZ_units = 10 ** 6
 
@@ -208,7 +242,7 @@ class XTZ_wallet:
         "tz2",
     ]
 
-    GAZ_LIMIT_SIMPLE_TX = "200"
+    GAZ_LIMIT_SIMPLE_TX = "2000"
 
     def __init__(self, network, wtype, device):
         self.network = XTZ_wallet.networks[network].lower()

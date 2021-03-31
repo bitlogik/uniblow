@@ -344,7 +344,7 @@ def set_coin(coin, network, wallet_type):
     app.gui_panel.qrimg.SetBitmap(wx.Bitmap(wxi))
     app.balance_timer = display_timer()
     display_balance()
-    app.balance_timer.Start(12000)
+    app.balance_timer.Start(8000)
     app.gui_frame.Refresh()
     app.gui_frame.Update()
 
