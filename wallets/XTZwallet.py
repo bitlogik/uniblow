@@ -53,6 +53,7 @@ class RPC_api:
         self.url = f"https://{network}-tezos.giganode.io"
         self.chainID = self.getData("/chains/main/chain_id")
         self.protocol = self.getData(f"{RPC_api.BASE_BLOCK_URL}/header/protocol_data")["protocol"]
+        self.url = "https://edonet.smartpy.io"
 
     def getData(self, method, params=[]):
         full_url = self.url + method
