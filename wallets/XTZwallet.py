@@ -48,7 +48,7 @@ class RPC_api:
 
     def __init__(self, network):
         # https://mainnet-tezos.giganode.io/chains/main/blocks/head
-        #         mainnet
+        #         testnet
         self.network = network
         self.url = f"https://{network}-tezos.giganode.io"
         self.chainID = self.getData("/chains/main/chain_id")
