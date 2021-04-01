@@ -100,8 +100,7 @@ class RPC_api:
         return self.getData(f"{RPC_api.BASE_BLOCK_URL}/helpers/preapply/operations", op_tx)
 
     def pushtx(self, txhex):
-        return self.getData(f"/injection/operation?chain=main", txhex) # tx hex
-        # return self.getData(f"{RPC_api.BASE_BLOCK_URL}/helpers/preapply/operations", txhex) # ?
+        return self.getData(f"/injection/operation?chain=NetXSgo1ZT2DRUG", txhex) # tx hex
 
     def get_tx_num(self, addr):
         return self.getData(f"{RPC_api.BASE_BLOCK_URL}/context/contracts/{addr}/counter")
@@ -205,21 +204,6 @@ class XTZwalletCore:
         lens = int(signature_der[5 + lenr])
         r = int.from_bytes(signature_der[4 : lenr + 4], "big")
         s = int.from_bytes(signature_der[lenr + 6 : lenr + 6 + lens], "big")
-        # # Parity recovery
-        # Q = ecdsa.keys.VerifyingKey.from_public_key_recovery_with_digest(
-        # signature_der, self.datahash, ecdsa.curves.SECP256k1, sigdecode=ecdsa.util.sigdecode_der
-        # )[1]
-        # if Q.to_string("uncompressed") == cryptos.encode_pubkey(self.Qpub, "bin"):
-        # i = 36
-        # else:
-        # i = 35
-        # Signature encoding
-        # v = int2bytearray(2 * self.chainID + i)
-        # r = int2bytearray(r)
-        # s = int2bytearray(s)
-        # signature_header = bytes([13, 115, 101, 19, 63])
-        # sig_b58 = cryptos.headbin_to_b58check(r+s, signature_header)
-        # print(sig_b58)
         # 256k1 sig prefix : [13, 115, 101, 19, 63]
         rs_bin = signature_der[4 : lenr + 4][-32:] + signature_der[lenr + 6 : lenr + 6 + lens][-32:]
         sig_b58 = cryptos.headbin_to_b58check(rs_bin, XTZwalletCore.SIG256K1_PREFIX)
