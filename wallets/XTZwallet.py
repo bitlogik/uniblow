@@ -170,8 +170,8 @@ class XTZwalletCore:
                     "source": self.address,
                     "fee": self.fee,
                     "counter": str(self.nonce + 1),
-                    "gas_limit": "100000",
-                    "storage_limit": "60000",
+                    "gas_limit": "10000",
+                    "storage_limit": "0",
                     "public_key": self.pubkey_b58,
                 },
                 {
@@ -180,7 +180,7 @@ class XTZwalletCore:
                     "fee": self.fee,
                     "counter": str(self.nonce + 2),
                     "gas_limit": self.glimit,
-                    "storage_limit": "60000",
+                    "storage_limit": "600",
                     "amount": self.value,
                     "destination": toaddr,
                 },
@@ -237,7 +237,7 @@ class XTZ_wallet:
         "tz2",
     ]
 
-    GAZ_LIMIT_SIMPLE_TX = "2000"
+    GAZ_LIMIT_SIMPLE_TX = "1450"
 
     def __init__(self, network, wtype, device):
         self.network = XTZ_wallet.networks[network].lower()
@@ -278,7 +278,7 @@ class XTZ_wallet:
     def transfer(self, amount, to_account, priority_fee):
         # Transfer x unit to an account, pay
         ethgazlimit = XTZ_wallet.GAZ_LIMIT_SIMPLE_TX
-        ethgazprice = "50000"
+        ethgazprice = "1270"
         return self.raw_tx(int(amount * XTZ_units), ethgazprice, ethgazlimit, to_account)
 
     def transfer_inclfee(self, amount, to_account, fee_priority):
