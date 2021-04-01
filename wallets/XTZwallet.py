@@ -237,6 +237,7 @@ class XTZwalletCore:
         txhex = self.signing_tx_hex + "%064x" % r + "%064x" % s
         print(txhex)
         return "\nDONE, txID : " + self.api.pushtx(txhex)
+        # server return "Unknown branch (BKjdF8tM7TEv), cannot inject the operation."
 
 # https://www.ocamlpro.com/2018/11/21/an-introduction-to-tezos-rpcs-signing-operations/
 # https://github.com/goat-systems/go-tezos/blob/800cc714fad7313e92a5068407c23e0e397f5323/keys/secp256k1.go#L71
