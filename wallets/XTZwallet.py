@@ -80,14 +80,6 @@ class RPC_api:
             print(exc.read())
             raise IOError("Error while processing request:\n%s" % (full_url + " : " + str(data)))
 
-    def checkapiresp(self):
-        if "error" in self.jsres:
-            print(" !! ERROR :")
-            raise Exception(self.jsres["error"])
-        if "errors" in self.jsres:
-            print(" !! ERRORS :")
-            raise Exception(self.jsres["errors"])
-
     def get_balance(self, addr):
         balraw = self.getData(f"{RPC_api.BASE_BLOCK_URL}/context/contracts/{addr}/balance")
         balance = int(balraw)
@@ -100,7 +92,7 @@ class RPC_api:
         return self.getData(f"{RPC_api.BASE_BLOCK_URL}/helpers/preapply/operations", op_tx)
 
     def pushtx(self, txhex):
-        return self.getData(f"/injection/operation?chain=NetXSgo1ZT2DRUG", txhex) # tx hex
+        return self.getData(f"/injection/operation", txhex)  # ?chain=
 
     def get_tx_num(self, addr):
         return self.getData(f"{RPC_api.BASE_BLOCK_URL}/context/contracts/{addr}/counter")
@@ -124,15 +116,17 @@ def testaddr(xtz_addr):
 
 
 class XTZwalletCore:
-    
+
     SIG256K1_PREFIX = bytes([13, 115, 101, 19, 63])
-    ADDRESS_HEADER = b"\x06\xa1\xa1"  # tz2
+    ADDRESS_HEADER = bytes([6, 161, 161])  # tz2
     PUBKEY_HEADER = bytes([3, 254, 226, 86])
 
     def __init__(self, pubkey, network, api):
         self.pubkey = pubkey
         self.Qpub = cryptos.decode_pubkey(pubkey)
-        self.pubkey_b58 = cryptos.headbin_to_b58check(bytes.fromhex(self.pubkey), XTZwalletCore.PUBKEY_HEADER)
+        self.pubkey_b58 = cryptos.headbin_to_b58check(
+            bytes.fromhex(self.pubkey), XTZwalletCore.PUBKEY_HEADER
+        )
         pubkey_hash = blake2b(bytes.fromhex(pubkey), 20)
         self.address = cryptos.headbin_to_b58check(pubkey_hash, XTZwalletCore.ADDRESS_HEADER)
         self.api = api
@@ -175,7 +169,7 @@ class XTZwalletCore:
                     "kind": "reveal",
                     "source": self.address,
                     "fee": self.fee,
-                    "counter": str(self.nonce+1),
+                    "counter": str(self.nonce + 1),
                     "gas_limit": "100000",
                     "storage_limit": "60000",
                     "public_key": self.pubkey_b58,
@@ -184,7 +178,7 @@ class XTZwalletCore:
                     "kind": "transaction",
                     "source": self.address,
                     "fee": self.fee,
-                    "counter": str(self.nonce+2),
+                    "counter": str(self.nonce + 2),
                     "gas_limit": self.glimit,
                     "storage_limit": "60000",
                     "amount": self.value,
@@ -207,21 +201,22 @@ class XTZwalletCore:
         # 256k1 sig prefix : [13, 115, 101, 19, 63]
         rs_bin = signature_der[4 : lenr + 4][-32:] + signature_der[lenr + 6 : lenr + 6 + lens][-32:]
         sig_b58 = cryptos.headbin_to_b58check(rs_bin, XTZwalletCore.SIG256K1_PREFIX)
-        
+
         self.tx["signature"] = sig_b58
-        op = {"operation":self.tx}
+        op = {"operation": self.tx}
         op["chain_id"] = self.getchainid()
-        
+
         print(self.tx)
         print(self.api.simulate_tx(op))
         print("-- now pre apply --")
         self.tx["protocol"] = self.getprotocol()
         print(self.api.preapply_tx([self.tx]))
-        
+
         txhex = self.signing_tx_hex + "%064x" % r + "%064x" % s
         print(txhex)
         return "\nDONE, txID : " + self.api.pushtx(txhex)
         # server return "Unknown branch (BKjdF8tM7TEv), cannot inject the operation."
+
 
 # https://www.ocamlpro.com/2018/11/21/an-introduction-to-tezos-rpcs-signing-operations/
 # https://github.com/goat-systems/go-tezos/blob/800cc714fad7313e92a5068407c23e0e397f5323/keys/secp256k1.go#L71
