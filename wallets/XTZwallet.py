@@ -162,6 +162,7 @@ class XTZwalletCore:
         return self.api.protocol
 
     def getpublickey(self):
+        # is not revealed ?
         pkr = self.api.get_contract_key(self.address)
         if isinstance(pkr, str) and pkr.startswith("sppk"):
             return pkr
@@ -291,7 +292,7 @@ class XTZ_wallet:
 
     def check_address(self, addr_str):
         # Check if address is valid
-        # Quick check with regex, doesnt compute checksum
+        # Quick check, doesnt compute checksum
         return testaddr(addr_str)
 
     def history(self):
@@ -314,7 +315,9 @@ class XTZ_wallet:
 
     def transfer_inclfee(self, amount, to_account, fee_priority):
         # Transfer the amount in base unit minus fee, like the receiver paying the fee
-        fee = 2 * XTZ_wallet.OPERATION_FEE
+        fee = XTZ_wallet.OPERATION_FEE
+        if not self.xtz.getpublickey():
+            fee += XTZ_wallet.OPERATION_FEE
         return self.raw_tx(
             amount - fee, XTZ_wallet.OPERATION_FEE, XTZ_wallet.GAZ_LIMIT_SIMPLE_TX, to_account
         )
