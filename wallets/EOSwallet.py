@@ -51,7 +51,7 @@ class eos_api:
         if self.network == "EOSio":
             self.url = "https://eos.greymass.com"
         elif self.network == "Jungle3":
-            self.url = "https://jungle3.cryptolions.io"
+            self.url = "https://api.jungle3.alohaeos.com"
         else:
             raise Exception("Not valid EOS network")
         self.libeos = Cleos(url=self.url)
