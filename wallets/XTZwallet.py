@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 # -*- coding: utf8 -*-
 
-# UNIBLOW Tezos wallet with with Giganode API REST
+# UNIBLOW Tezos wallet with with SmartPy API REST
 # Copyright (C) 2021 BitLogiK
 
 # This program is free software: you can redistribute it and/or modify
@@ -58,10 +58,6 @@ class RPC_api:
                 data = None
             else:
                 data = json.dumps(params).encode("utf-8")
-            print("-> Request :")
-            print(method)
-            if data:
-                print("with data :", data)
             req = urllib.request.Request(
                 full_url,
                 headers={"User-Agent": "Uniblow/1", "Content-Type": "application/json"},
@@ -70,8 +66,6 @@ class RPC_api:
             webrsp = urllib.request.urlopen(req, timeout=6)
             # return json.load(webrsp)
             resp = json.load(webrsp)
-            print("<- Response :")
-            print(resp)
             return resp
         except Exception as exc:
             try:
@@ -100,7 +94,7 @@ class RPC_api:
     def pushtx(self, txhex):
         return self.getData(f"/injection/operation?chain=main", txhex)
 
-    def get_tx_num(self, addr):
+    def get_counter(self, addr):
         return self.getData(f"{RPC_api.BASE_BLOCK_URL}/context/contracts/{addr}/counter")
 
     def get_serialtx(self, dataobj):
@@ -130,7 +124,7 @@ class XTZwalletCore:
 
     SIG256K1_PREFIX = bytes([13, 115, 101, 19, 63])
     ADDRESS_HEADER = bytes([6, 161, 161])  # tz2
-    PUBKEY_HEADER = bytes([3, 254, 226, 86])
+    PUBKEY_HEADER = bytes([3, 254, 226, 86])  # sppk
 
     def __init__(self, pubkey, network, api):
         self.pubkey = pubkey
@@ -147,22 +141,10 @@ class XTZwalletCore:
         return self.api.get_balance(self.address)
 
     def getnonce(self):
-        return self.api.get_tx_num(self.address)
-
-    def getheadblock(self):
-        return self.api.get_head_block()
-
-    def getserialtx(self, dataobj):
-        return self.api.get_serialtx(dataobj)
-
-    def getchainid(self):
-        return self.api.chainID
-
-    def getprotocol(self):
-        return self.api.protocol
+        return self.api.get_counter(self.address)
 
     def getpublickey(self):
-        # is not revealed ?
+        # is revealed ?
         pkr = self.api.get_contract_key(self.address)
         if isinstance(pkr, str) and pkr.startswith("sppk"):
             return pkr
@@ -190,13 +172,13 @@ class XTZwalletCore:
         self.nonce = int(self.getnonce())
         self.glimit = glimit
         self.value = str(int(paymentvalue))
-        curr_branch = self.getheadblock()
+        curr_branch = self.api.get_head_block()
         self.operation = {
             "operation": {
                 "branch": curr_branch,
                 "contents": [],
             },
-            "chain_id": self.getchainid(),
+            "chain_id": self.api.chainID,
         }
         if not key_revealed:  # need reveal
             self.nonce += 1
@@ -223,7 +205,7 @@ class XTZwalletCore:
                 "destination": toaddr,
             }
         )
-        self.signing_tx_hex = self.getserialtx(self.operation["operation"])
+        self.signing_tx_hex = self.api.get_serialtx(self.operation["operation"])
         self.datahash = blake2b(bytes.fromhex("03" + self.signing_tx_hex))
         return self.datahash
 
@@ -235,13 +217,15 @@ class XTZwalletCore:
         s = int.from_bytes(signature_der[lenr + 6 : lenr + 6 + lens], "big")
         rs_bin = signature_der[4 : lenr + 4][-32:] + signature_der[lenr + 6 : lenr + 6 + lens][-32:]
         sig_b58 = cryptos.headbin_to_b58check(rs_bin, XTZwalletCore.SIG256K1_PREFIX)
-
         self.operation["operation"]["signature"] = sig_b58
+
+        # Simulate tx
         simu_result = self.api.simulate_tx(self.operation)
         checked_simu = self.check_operation(simu_result)
         if checked_simu:
             raise Exception(str(checked_simu))
-        self.operation["operation"]["protocol"] = self.getprotocol()
+        self.operation["operation"]["protocol"] = self.api.protocol
+        # Full test (preapply) tx
         apply_result = self.api.preapply_tx([self.operation["operation"]])
         checked_apply = self.check_operation(apply_result)
         if checked_apply:
@@ -253,7 +237,7 @@ class XTZwalletCore:
 
 XTZ_units = 1000000
 
-# Only local key for now
+
 class XTZ_wallet:
 
     networks = [
@@ -317,6 +301,7 @@ class XTZ_wallet:
         # Transfer the amount in base unit minus fee, like the receiver paying the fee
         fee = XTZ_wallet.OPERATION_FEE
         if not self.xtz.getpublickey():
+            # if not revealed
             fee += XTZ_wallet.OPERATION_FEE
         return self.raw_tx(
             amount - fee, XTZ_wallet.OPERATION_FEE, XTZ_wallet.GAZ_LIMIT_SIMPLE_TX, to_account

@@ -383,7 +383,7 @@ class ETHwalletCore:
 
 ETH_units = 10 ** 18
 
-# Only local key for now
+
 class ETH_wallet:
 
     networks = [
