@@ -115,9 +115,10 @@ class EOSwalletCore:
         return self.api.get_account(addr)
 
     def prepare(self, to_account, pay_value):
-        balance = self.getbalance()
-        # if pay_value > balance:
-        # raise Exception("Not enough fund for the tx")
+        bal_str = self.getbalance()
+        balance = float(bal_str[0][:-4]) if len(bal_str) > 0 else 0.0
+        if float(pay_value) > balance:
+            raise Exception("Not enough fund for the tx")
         if isinstance(pay_value, int) or isinstance(pay_value, float):
             qty = "%.4f %s" % (pay_value, "EOS")
         elif isinstance(pay_value, str):
@@ -218,7 +219,7 @@ class EOS_wallet:
     def get_balance(self):
         # Get balance in base integer unit
         if not self.eos.account:
-            return "Register this publickey\nin an account"
+            return "Register this publickey\nin an account, and refresh."
         bal_list = self.eos.getbalance()
         return bal_list[0] if len(bal_list) > 0 else "0 EOS"
 
