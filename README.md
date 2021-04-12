@@ -36,6 +36,9 @@ Compatible with the following blockchains :
     * mainnet and testnet networks
 * EOS
     * EOSIo and Jungle3 networks
+* XTZ
+    * tz2 wallet
+    * Main Tezos and Edo testnet networks
 
 ## Devices
 
