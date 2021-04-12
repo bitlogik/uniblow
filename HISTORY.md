@@ -9,6 +9,7 @@ Uniblow versions history
 * Improved UI check feedback
 * EOS Jungle API updated
 * EOS balance checked before sending
+* Fix HDPI capability
 
 ## 0.2.0
 
