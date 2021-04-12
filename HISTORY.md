@@ -1,6 +1,15 @@
 
 Uniblow versions history
 
+## 0.3.0
+
+* Add XTZ
+* Message modal text copiable
+* Full checksum computation
+* Improved UI check feedback
+* EOS Jungle API updated
+* EOS balance checked before sending
+
 ## 0.2.0
 
 * Add DOGE
