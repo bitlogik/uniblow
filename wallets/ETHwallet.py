@@ -25,7 +25,7 @@ from .lib import cryptos
 
 try:
     import sha3
-except:
+except Exception:
     raise Exception("Requires PySHA3 : pip3 install pysha3")
 
 
@@ -88,7 +88,7 @@ class blockcypher_api:
             )
             self.webrsc = urllib.request.urlopen(req)
             self.jsres = json.load(self.webrsc)
-        except Exception as ex:
+        except Exception:
             raise IOError(
                 "Error while processing request:\n%s" % (self.url + endpoint + "?" + params_enc)
             )
@@ -129,7 +129,7 @@ class blockcypher_api:
                 key = int(key)
             try:
                 out = out[key]
-            except:
+            except Exception:
                 out = []
         return out
 
@@ -213,7 +213,7 @@ class infura_api:
                 key = int(key)
             try:
                 out = out[key]
-            except:
+            except Exception:
                 out = []
         return out
 
@@ -245,7 +245,7 @@ class etherscan_api:
             )
             self.webrsc = urllib.request.urlopen(req)
             self.jsres = json.load(self.webrsc)
-        except Exception as ex:
+        except Exception:
             raise IOError(
                 "Error while processing request:\n%s"
                 % (self.url + "->" + parameters + " : " + str(self.params))
@@ -292,7 +292,7 @@ class etherscan_api:
                 key = int(key)
             try:
                 out = out[key]
-            except:
+            except Exception:
                 out = []
         return out
 
@@ -312,7 +312,6 @@ def format_checksum_address(addr):
             cs_address += ci.upper() if int(addr_sha3hash[idx], 16) >= 8 else ci
             continue
         cs_address += ci
-    print(cs_address)
     return cs_address
 
 
@@ -329,7 +328,7 @@ def testaddr(eth_addr):
         return False
     try:
         int(eth_addr, 16)
-    except:
+    except Exception:
         return False
     if has_checksum(eth_addr):
         return checksum_address(eth_addr)

@@ -209,7 +209,7 @@ def copy_account(ev):
             copy_result("Copied")
         else:
             copy_result("No Access")
-    except:
+    except Exception:
         copy_result("Error")
 
 
@@ -485,7 +485,7 @@ def send_all(ev):
 if __name__ == "__main__":
     try:
         ctypes.windll.shcore.SetProcessDpiAwareness(True)
-    except:
+    except Exception:
         pass
     app = wx.App()
 

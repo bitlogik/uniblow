@@ -17,8 +17,6 @@
 
 
 import json
-import ecdsa
-import time
 import urllib.parse
 import urllib.request
 from .lib import cryptos
@@ -27,7 +25,7 @@ try:
     import nacl.signing
     import nacl.encoding
     import nacl.hash
-except:
+except Exception:
     raise Exception("Requires PyNaCl : pip3 install pynacl")
 
 
@@ -70,12 +68,12 @@ class RPC_api:
         except Exception as exc:
             try:
                 err = json.load(exc)
-            except:
+            except Exception:
                 err = ""
             if err and err != []:
                 print(err)
                 key = "msg"
-                if not key in err[0]:
+                if key not in err[0]:
                     key = "id"
                 raise IOError(f"Error in the node processing :\n{err[0][key]}")
             raise IOError(f"Error while processing request :\n{full_url}:{str(data)}")
@@ -92,7 +90,7 @@ class RPC_api:
         return self.getData(f"{RPC_api.BASE_BLOCK_URL}/helpers/preapply/operations", op_tx)
 
     def pushtx(self, txhex):
-        return self.getData(f"/injection/operation?chain=main", txhex)
+        return self.getData("/injection/operation?chain=main", txhex)
 
     def get_counter(self, addr):
         return self.getData(f"{RPC_api.BASE_BLOCK_URL}/context/contracts/{addr}/counter")

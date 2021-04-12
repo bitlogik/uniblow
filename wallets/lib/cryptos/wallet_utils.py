@@ -74,7 +74,7 @@ class InvalidPassword(Exception):
 
 try:
     from Cryptodome.Cipher import AES
-except:
+except Exception:
     AES = None
 
 
@@ -93,7 +93,7 @@ def assert_bytes(*args):
     try:
         for x in args:
             assert isinstance(x, (bytes, bytearray))
-    except:
+    except Exception:
         print("assert bytes failed", list(map(type, args)))
         raise
 

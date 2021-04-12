@@ -55,7 +55,7 @@ class sochain_api:
             )
 
     def checkapiresp(self):
-        if (not "status" in self.jsres) or self.jsres["status"] != "success":
+        if ("status" not in self.jsres) or self.jsres["status"] != "success":
             print(" !! ERROR :")
             raise Exception("Error decoding the API endpoint")
 
@@ -88,7 +88,7 @@ class sochain_api:
                 key = int(key)
             try:
                 out = out[key]
-            except:
+            except Exception:
                 out = []
         return out
 
@@ -292,9 +292,9 @@ class LTC_wallet:
         #  2 inputs in the wallet format (mean coins used)
         #  plus 1 standard output (max size) and 1 output in the wallet format (change)
         tx_size = 374
-        if self.ltc.segwit == 1:  #  P2WPKH in P2SH : -31%
+        if self.ltc.segwit == 1:  # P2WPKH in P2SH : -31%
             tx_size = 259
-        if self.ltc.segwit == 2:  #  P2WPKH         : -43%
+        if self.ltc.segwit == 2:  # P2WPKH         : -43%
             tx_size = 211
         fee = int(fee_unit * tx_size)
         if fee < 375:  # set minimum for good relay

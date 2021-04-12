@@ -407,7 +407,7 @@ def bin_hash160(string):
     digest = ""
     try:
         digest = hashlib.new("ripemd160", intermed).digest()
-    except:
+    except Exception:
         digest = RIPEMD160(intermed).digest()
     return digest
 
@@ -432,7 +432,7 @@ def sha256(string):
 def bin_ripemd160(string):
     try:
         digest = hashlib.new("ripemd160", string).digest()
-    except:
+    except Exception:
         digest = RIPEMD160(string).digest()
     return digest
 
@@ -551,7 +551,7 @@ def is_privkey(priv):
     try:
         get_privkey_format(priv)
         return True
-    except:
+    except Exception:
         return False
 
 
@@ -559,7 +559,7 @@ def is_pubkey(pubkey):
     try:
         get_pubkey_format(pubkey)
         return True
-    except:
+    except Exception:
         return False
 
 

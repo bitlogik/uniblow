@@ -86,7 +86,7 @@ class blkhub_api:
                 key = int(key)
             try:
                 out = out[key]
-            except:
+            except Exception:
                 out = []
         return out
 
@@ -128,6 +128,7 @@ def testaddr(btc_addr):
     except AssertionError:
         return False
     return checked
+
 
 class BTCwalletCore:
     def __init__(self, pubkey, network_type, segwit_option, api):
@@ -304,9 +305,9 @@ class BTC_wallet:
         #  2 inputs in the wallet format (mean coins used)
         #  plus 1 standard output (max size) and 1 output in the wallet format (change)
         tx_size = 374
-        if self.btc.segwit == 1:  #  P2WPKH in P2SH : -31%
+        if self.btc.segwit == 1:  # P2WPKH in P2SH : -31%
             tx_size = 259
-        if self.btc.segwit == 2:  #  P2WPKH         : -43%
+        if self.btc.segwit == 2:  # P2WPKH         : -43%
             tx_size = 211
         fee = int(fee_unit * tx_size)
         if fee < 375:  # set minimum for good relay

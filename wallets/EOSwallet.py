@@ -22,7 +22,6 @@ import json
 import ecdsa
 import hashlib
 import re
-import time
 
 from .lib import cryptos
 from eospy.cleos import Cleos
@@ -82,7 +81,7 @@ class eos_api:
                 key = int(key)
             try:
                 out = out[key]
-            except:
+            except Exception:
                 out = []
         return out
 

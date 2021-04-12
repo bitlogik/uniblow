@@ -49,7 +49,7 @@ digestsize = 20
 
 try:
     range = xrange
-except:
+except Exception:
     pass
 
 

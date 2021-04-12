@@ -54,7 +54,7 @@ class sochain_api:
             raise IOError("Error while processing request:\n%s" % (self.url + command))
 
     def checkapiresp(self):
-        if (not "status" in self.jsres) or self.jsres["status"] != "success":
+        if ("status" not in self.jsres) or self.jsres["status"] != "success":
             print(" !! ERROR :")
             raise Exception("Error decoding the API endpoint")
 
@@ -87,7 +87,7 @@ class sochain_api:
                 key = int(key)
             try:
                 out = out[key]
-            except:
+            except Exception:
                 out = []
         return out
 

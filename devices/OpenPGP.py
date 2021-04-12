@@ -94,9 +94,8 @@ class OpenPGP:
         self.PIN = password
         if self.PIN == "NoPasswd":
             self.PIN = "123456"
-        pubkey_card = None
         try:
-            pubkey_card = self.PGPdevice.get_public_key("B600")
+            self.PGPdevice.get_public_key("B600")
         except OpenPGPpy.PGPCardException as exc:
             # SW = 0x6581 or 0x6A88 ?
             if exc.sw_code != 0x6581 and exc.sw_code != 0x6A88:
@@ -132,7 +131,7 @@ class OpenPGP:
                 raise Exception("This device is not compatible with ECDSA 256k1.") from exc
             raise
         # Generate key for sign
-        pubkey_card = self.PGPdevice.gen_key("B600")
+        self.PGPdevice.gen_key("B600")
         try:
             # Set UIF for sign : require a push button and OpenGPG v3
             self.PGPdevice.put_data("00D6", "0120")
