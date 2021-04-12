@@ -79,8 +79,10 @@ class OpenPGP:
         self.has_hardware_button = True
 
     def __del__(self):
-        del self.PGPdevice.connection
-        del self.PGPdevice
+        if hasattr(self, "PGPdevice"):
+            if hasattr(self.PGPdevice, "connection"):
+                del self.PGPdevice.connection
+            del self.PGPdevice
 
     def set_admin(self, admin_password):
         self.PIN3 = admin_password
