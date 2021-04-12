@@ -201,9 +201,11 @@ def copy_account(ev):
         return
     try:
         if wx.TheClipboard.Open():
+            wx.TheClipboard.Clear()
             account_id = app.wallet.get_account()
             wx.TheClipboard.SetData(wx.TextDataObject(account_id))
             wx.TheClipboard.Close()
+            wx.TheClipboard.Flush()
             copy_result("Copied")
         else:
             copy_result("No Access")
