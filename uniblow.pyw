@@ -153,11 +153,11 @@ class display_timer(wx.Timer):
 
 
 def warn_modal(warning_text):
-    wx.MessageBox(warning_text, "Error", wx.OK | wx.ICON_WARNING, app.gui_frame)
+    gui.app.InfoBox(warning_text, "Error", wx.OK | wx.ICON_WARNING, app.gui_frame)
 
 
 def info_modal(title, info_text):
-    wx.MessageBox(info_text, title, wx.OK | wx.ICON_INFORMATION, app.gui_frame)
+    gui.app.InfoBox(info_text, title, wx.OK | wx.ICON_INFORMATION, app.gui_frame)
 
 
 def get_password(device_name, input_message):

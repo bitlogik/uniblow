@@ -17,7 +17,34 @@
 import sys
 import os.path
 import gui.window
+import gui.infodialog
 from wx import Icon
+from wx import TextDataObject
+from wx import TheClipboard
+
+
+class InfoBox(gui.infodialog.InfoDialog):
+    def __init__(self, message, title, style, parent):
+        super().__init__(parent)
+        self.message = message
+        self.SetTitle(title)
+        self.m_textCtrl.SetBackgroundColour(self.GetBackgroundColour())
+        self.m_textCtrl.SetValue(self.message)
+        self.m_textCtrl.SelectNone()
+        self.ShowModal()
+
+    def copy_text_dialog(self, event):
+        event.Skip()
+        if TheClipboard.Open():
+            TheClipboard.Clear()
+            TheClipboard.SetData(TextDataObject(self.message))
+            TheClipboard.Close()
+            TheClipboard.Flush()
+        # else silent : no Access
+
+    def close_info(self, event):
+        event.Skip()
+        self.Destroy()
 
 
 def file_path(fpath):
