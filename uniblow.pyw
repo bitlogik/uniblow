@@ -400,11 +400,12 @@ def paint_toaddr(color):
 
 def check_addr(ev):
     ev.Skip()
+    paint_toaddr(wx.NullColour)
     if not hasattr(app, "wallet"):
         return
     addr = ev.GetString()
     if len(addr) < 10:
-        paint_toaddr(wx.NullColour)
+        app.gui_frame.Refresh()
         return
     if app.wallet.check_address(addr):
         paint_toaddr(GREEN_COLOR)

@@ -297,6 +297,30 @@ class etherscan_api:
         return out
 
 
+def has_checksum(addr):
+    # addr without 0x
+    return not addr.islower() and not addr.isupper() and not addr.isnumeric()
+
+
+def format_checksum_address(addr):
+    # Format an ETH address with checksum (without 0x)
+    addr = addr.lower()
+    addr_sha3hash = sha3.keccak_256(addr.encode("ascii")).hexdigest()
+    cs_address = ""
+    for idx, ci in enumerate(addr):
+        if ci in "abcdef":
+            cs_address += ci.upper() if int(addr_sha3hash[idx], 16) >= 8 else ci
+            continue
+        cs_address += ci
+    print(cs_address)
+    return cs_address
+
+
+def checksum_address(addr):
+    # Check address sum (without 0x)
+    return format_checksum_address(addr) == addr
+
+
 def testaddr(eth_addr):
     # Safe reading of the address format
     if eth_addr.startswith("0x"):
@@ -307,6 +331,8 @@ def testaddr(eth_addr):
         int(eth_addr, 16)
     except:
         return False
+    if has_checksum(eth_addr):
+        return checksum_address(eth_addr)
     return True
 
 
@@ -429,7 +455,6 @@ class ETH_wallet:
 
     def check_address(self, addr_str):
         # Check if address is valid
-        # Quick check with regex, doesnt compute checksum
         return testaddr(addr_str)
 
     def history(self):

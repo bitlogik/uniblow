@@ -111,11 +111,14 @@ class RPC_api:
 
 
 def testaddr(xtz_addr):
-    # Safe reading of the address format
-    # very basic check, ToDo decode base58 checksum
+    # Safe readings of the address format
     if not xtz_addr.startswith("tz"):
         return False
     if len(xtz_addr) != 36:
+        return False
+    try:
+        cryptos.b58c_to_bin(xtz_addr)
+    except AssertionError:
         return False
     return True
 
@@ -276,7 +279,6 @@ class XTZ_wallet:
 
     def check_address(self, addr_str):
         # Check if address is valid
-        # Quick check, doesnt compute checksum
         return testaddr(addr_str)
 
     def history(self):

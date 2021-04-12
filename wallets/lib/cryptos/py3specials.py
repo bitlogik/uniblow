@@ -153,9 +153,8 @@ if sys.version_info.major == 3:
     def random_string(x):
         return str(os.urandom(x))
 
-    def b58c_to_bin(inp):
+    def b58c_to_bin(inp, hashalg=bin_dbl_sha256):
         leadingzbytes = len(re.match("^1*", inp).group(0))
         data = b"\x00" * leadingzbytes + changebase(inp, 58, 256)
-        # assert bin_dbl_sha256(data[:-4])[:4] == data[-4:]
-        # return data[1:-4]
-        return data
+        assert hashalg(data[:-4])[:4] == data[-4:], "Invalid checksum"
+        return data[1:-4]

@@ -107,17 +107,27 @@ class blkhub_api:
 
 
 def testaddr(btc_addr):
-    # Safe test of the address format
+    # Safe tests of the address format
+    checked = False
     if btc_addr.startswith("1") or btc_addr.startswith("3"):
-        return re.match("^[13][a-km-zA-HJ-NP-Z1-9]{25,34}$", btc_addr) is not None
+        checked = re.match("^[13][a-km-zA-HJ-NP-Z1-9]{25,34}$", btc_addr) is not None
     elif btc_addr.startswith("n") or btc_addr.startswith("m") or btc_addr.startswith("2"):
-        return re.match("^[2nm][a-km-zA-HJ-NP-Z1-9]{25,34}$", btc_addr) is not None
+        checked = re.match("^[2nm][a-km-zA-HJ-NP-Z1-9]{25,34}$", btc_addr) is not None
     elif btc_addr.startswith("bc") or btc_addr.startswith("tb"):
-        return re.match("^(bc|tb)[01][ac-hj-np-z02-9]{8,87}$", btc_addr) is not None
+        print("SegWit detected")
+        checked = re.match("^(bc|tb)[01][ac-hj-np-z02-9]{8,87}$", btc_addr) is not None
+        if checked:
+            print("SegWit confirmed")
+        print(cryptos.segwit_addr.bech32_decode(btc_addr) != (None, None))
+        return checked and (cryptos.segwit_addr.bech32_decode(btc_addr) != (None, None))
     else:
         return False
-    return False
-
+    try:
+        if checked:
+            cryptos.b58c_to_bin(btc_addr)
+    except AssertionError:
+        return False
+    return checked
 
 class BTCwalletCore:
     def __init__(self, pubkey, network_type, segwit_option, api):
@@ -273,7 +283,6 @@ class BTC_wallet:
 
     def check_address(self, addr_str):
         # Check if address is valid
-        # Quick check with regex, doesnt compute checksum
         return testaddr(addr_str)
 
     def history(self):

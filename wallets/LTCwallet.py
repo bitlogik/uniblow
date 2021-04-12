@@ -97,16 +97,22 @@ class sochain_api:
 
 
 def testaddr(ltc_addr):
-    # Safe test of the address format
+    # Safe tests of the address format
+    checked = False
     if ltc_addr.startswith("L") or ltc_addr.startswith("M"):
-        return re.match("^[LM][a-km-zA-HJ-NP-Z1-9]{25,34}$", ltc_addr) is not None
+        checked = re.match("^[LM][a-km-zA-HJ-NP-Z1-9]{25,34}$", ltc_addr) is not None
     elif ltc_addr.startswith("m") or ltc_addr.startswith("Q"):
-        return re.match("^[mQ][a-km-zA-HJ-NP-Z1-9]{25,34}$", ltc_addr) is not None
+        checked = re.match("^[mQ][a-km-zA-HJ-NP-Z1-9]{25,34}$", ltc_addr) is not None
     elif ltc_addr.startswith("ltc") or ltc_addr.startswith("ltc"):
-        return re.match("^(ltc|ltc)[01][ac-hj-np-z02-9]{8,87}$", ltc_addr) is not None
+        checked = re.match("^(ltc|ltc)[01][ac-hj-np-z02-9]{8,87}$", ltc_addr) is not None
     else:
         return False
-    return False
+    try:
+        if checked:
+            cryptos.b58c_to_bin(ltc_addr)
+    except AssertionError:
+        return False
+    return checked
 
 
 class LTCwalletCore:
@@ -265,7 +271,6 @@ class LTC_wallet:
 
     def check_address(self, addr_str):
         # Check if address is valid
-        # Quick check with regex, doesnt compute checksum
         return testaddr(addr_str)
 
     def history(self):

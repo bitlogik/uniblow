@@ -96,14 +96,20 @@ class sochain_api:
 
 
 def testaddr(doge_addr):
-    # Safe test of the address format
+    # Safe tests of the address format
+    checked = False
     if doge_addr.startswith("D") or doge_addr.startswith("9"):
-        return re.match("^[D][a-km-zA-HJ-NP-Z1-9]{25,34}$", doge_addr) is not None
+        checked = re.match("^[D][a-km-zA-HJ-NP-Z1-9]{25,34}$", doge_addr) is not None
     elif doge_addr.startswith("m") or doge_addr.startswith("n"):
-        return re.match("^[mn][a-km-zA-HJ-NP-Z1-9]{25,34}$", doge_addr) is not None
+        checked = re.match("^[mn][a-km-zA-HJ-NP-Z1-9]{25,34}$", doge_addr) is not None
     else:
         return False
-    return False
+    try:
+        if checked:
+            cryptos.b58c_to_bin(doge_addr)
+    except AssertionError:
+        return False
+    return checked
 
 
 class DOGEwalletCore:
@@ -217,7 +223,6 @@ class DOGE_wallet:
 
     def check_address(self, addr_str):
         # Check if address is valid
-        # Quick check with regex, doesnt compute checksum
         return testaddr(addr_str)
 
     def history(self):
