@@ -64,16 +64,16 @@ for device_name in DEVICES_LIST:
     devices[device_name] = importlib.import_module(f"devices.{device_name}")
 
 
-def get_device_class(device_name):
+def get_device_class(device_str):
     global pwdException, NotinitException
-    device_class = getattr(devices[device_name], device_name)
+    device_class = getattr(devices[device_str], device_str)
     if device_class.has_password:
-        pwdException = getattr(devices[device_name], "pwdException")
-    NotinitException = getattr(devices[device_name], "NotinitException")
+        pwdException = getattr(devices[device_str], "pwdException")
+    NotinitException = getattr(devices[device_str], "NotinitException")
     return device_class
 
 
-class wallet:
+class Wallet:
     def __init__(self, coin, *options):
         self.coin = coin
         self.coin_wallet = get_coin_class(coin)(*options)
@@ -145,7 +145,7 @@ def erase_info():
     app.gui_frame.Refresh()
 
 
-class display_timer(wx.Timer):
+class DisplayTimer(wx.Timer):
     def __init__(self):
         wx.Timer.__init__(self)
 
@@ -161,11 +161,11 @@ def info_modal(title, info_text):
     gui.app.InfoBox(info_text, title, wx.OK | wx.ICON_INFORMATION, app.gui_frame)
 
 
-def get_password(device_name, input_message):
+def get_password(device_nam, input_message):
     pwd_dialog = wx.PasswordEntryDialog(
         app.gui_frame,
         input_message,
-        caption=f"{device_name} wallet PIN/password",
+        caption=f"{device_nam} wallet PIN/password",
         defaultValue="",
         pos=wx.DefaultPosition,
     )
@@ -243,9 +243,9 @@ def device_selected(device):
             return
         while True:
             try:
-                pwdPIN = "password"
+                pwd_pin = "password"
                 if device_sel_name == "OpenPGP":
-                    pwdPIN = "PIN1"
+                    pwd_pin = "PIN1"
                 if the_device.has_password:
                     device_loaded.open_account(password_default)
                 else:
@@ -266,7 +266,7 @@ def device_selected(device):
                         app.gui_panel.devices_choice.SetSelection(0)
                         return
                 if the_device.has_password:
-                    inp_message = f"Choose your {pwdPIN} for the {device_sel_name} wallet\n"
+                    inp_message = f"Choose your {pwd_pin} for the {device_sel_name} wallet\n"
                     inp_message += "If blank, a default PIN/password will be used."
                     password = get_password(device_sel_name, inp_message)
                     if password is None:
@@ -292,7 +292,7 @@ def device_selected(device):
                         raise exc
                     return
             except pwdException as exc:
-                inp_message = f"Input your {device_sel_name} wallet {pwdPIN}\n"
+                inp_message = f"Input your {device_sel_name} wallet {pwd_pin}\n"
                 password_default = get_password(device_sel_name, inp_message)
                 if password_default is None:
                     app.gui_panel.devices_choice.SetSelection(0)
@@ -323,7 +323,7 @@ def set_coin(coin, network, wallet_type):
     fee_opt_sel = app.gui_panel.fee_slider.GetValue()
     app.gui_panel.fee_setting.SetLabel(FEES_PRORITY_TEXT[fee_opt_sel])
     try:
-        app.wallet = wallet(coin, network, wallet_type, app.device)
+        app.wallet = Wallet(coin, network, wallet_type, app.device)
         account_id = app.wallet.get_account()
     except Exception as exc:
         warn_modal(str(exc))
@@ -345,7 +345,7 @@ def set_coin(coin, network, wallet_type):
     wxi = wx.Image(imgbuf, type=wx.BITMAP_TYPE_PNG)
     app.gui_panel.qrimg.SetScaleMode(wx.StaticBitmap.ScaleMode.Scale_None)  # or Scale_AspectFit
     app.gui_panel.qrimg.SetBitmap(wx.Bitmap(wxi))
-    app.balance_timer = display_timer()
+    app.balance_timer = DisplayTimer()
     display_balance()
     app.balance_timer.Start(8000)
     app.gui_frame.Refresh()
