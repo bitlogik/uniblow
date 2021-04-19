@@ -238,13 +238,6 @@ def bip39_mnemonic_to_seed(mnemonic_phrase, passphrase=""):
     return mnemonic_to_seed(mnemonic_phrase, passphrase=passphrase, passphrase_prefix=b"mnemonic")
 
 
-# The BIP39 seed is reduced to 256 bits with SHA2
-#  to become the BIP32 entropy master seed
-def cryptnox_mnemonic_to_seed(mnemonic_phrase):
-    bip39seed = bip39_mnemonic_to_seed(mnemonic_phrase)
-    return hashlib.sha256(bip39seed).digest()
-
-
 def electrum_mnemonic_to_seed(
     mnemonic_phrase,
     passphrase="",

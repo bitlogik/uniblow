@@ -203,8 +203,8 @@ def copy_account(ev):
     try:
         if wx.TheClipboard.Open():
             wx.TheClipboard.Clear()
-            account_id = app.wallet.get_account()
-            wx.TheClipboard.SetData(wx.TextDataObject(account_id))
+            addr = app.gui_panel.account_addr.GetValue()
+            wx.TheClipboard.SetData(wx.TextDataObject(addr))
             wx.TheClipboard.Close()
             wx.TheClipboard.Flush()
             copy_result("Copied")
