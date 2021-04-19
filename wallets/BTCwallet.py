@@ -114,11 +114,7 @@ def testaddr(btc_addr):
     elif btc_addr.startswith("n") or btc_addr.startswith("m") or btc_addr.startswith("2"):
         checked = re.match("^[2nm][a-km-zA-HJ-NP-Z1-9]{25,34}$", btc_addr) is not None
     elif btc_addr.startswith("bc") or btc_addr.startswith("tb"):
-        print("SegWit detected")
         checked = re.match("^(bc|tb)[01][ac-hj-np-z02-9]{8,87}$", btc_addr) is not None
-        if checked:
-            print("SegWit confirmed")
-        print(cryptos.segwit_addr.bech32_decode(btc_addr) != (None, None))
         return checked and (cryptos.segwit_addr.bech32_decode(btc_addr) != (None, None))
     else:
         return False

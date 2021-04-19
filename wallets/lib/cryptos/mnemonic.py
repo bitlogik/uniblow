@@ -107,7 +107,6 @@ def normalize_text(seed):
 
 def eint_to_bytes(entint, entbits):
     a = hex(entint)[2:].rstrip("L").zfill(32)
-    print(a)
     return binascii.unhexlify(a)
 
 
