@@ -105,7 +105,7 @@ class Wallet:
         return self.coin_wallet.transfer(amount, to_account, fee_priority)
 
     def transfer_all(self, to_account, fee_priority):
-        # Transfer all teh wallet amount to an external account
+        # Transfer all the wallet amount to an external account
         return self.coin_wallet.transfer_all(to_account, fee_priority)
 
 
