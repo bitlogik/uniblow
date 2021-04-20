@@ -247,6 +247,19 @@ class LTC_wallet:
         # "Segwit bech32",
     ]
 
+    derive_paths = [
+        # mainnet
+        [
+            "m/44'/2'/0'/0/0",
+            "m/49'/2'/0'/0/0",
+        ],
+        # testnet
+        [
+            "m/44'/1'/0'/0/0",
+            "m/49'/1'/0'/0/0",
+        ],
+    ]
+
     def __init__(self, network, wtype, device):
         self.current_device = device
         pubkey = self.current_device.get_public_key()
@@ -260,6 +273,12 @@ class LTC_wallet:
     @classmethod
     def get_account_types(cls):
         return cls.wtypes
+
+    @classmethod
+    def get_path(cls, network_name, wtype):
+        # First path
+        # To be changed to the first one available, needs scanning
+        return cls.derive_paths[network_name][wtype]
 
     def get_account(self):
         # Read address to fund the wallet

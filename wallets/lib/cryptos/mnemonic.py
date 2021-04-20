@@ -23,15 +23,13 @@ from .wallet_utils import is_new_seed
 from bisect import bisect_left
 import unicodedata
 
-# RESTORE and add in spec pytinstaller
-# data_include = [
-# ('wallets/lib/cryptos/english.txt','wallets/lib/cryptos/'),
-# ]
-# a = Analysis(...
-# datas=data_include,
 
-# wordlist_english=[word.strip() for word in list(open(os.path.join(os.path.dirname(os.path.realpath(__file__)),'english.txt'),'r'))]
-wordlist_english = []
+wordlist_english = [
+    word.strip()
+    for word in list(
+        open(os.path.join(os.path.dirname(os.path.realpath(__file__)), "english.txt"), "r")
+    )
+]
 
 ELECTRUM_VERSION = "3.0.5"  # version of the client package
 PROTOCOL_VERSION = "1.1"  # protocol version requested

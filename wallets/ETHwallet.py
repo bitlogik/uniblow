@@ -423,6 +423,26 @@ class ETH_wallet:
         "Standard",
     ]
 
+    derive_paths = [
+        # mainnet
+        [
+            "m/44'/60'/0'/0/0",
+        ],
+        # testnets
+        [
+            "m/44'/1'/0'/0/0",
+        ],
+        [
+            "m/44'/1'/0'/0/0",
+        ],
+        [
+            "m/44'/1'/0'/0/0",
+        ],
+        [
+            "m/44'/1'/0'/0/0",
+        ],
+    ]
+
     GAZ_LIMIT_SIMPLE_TX = 21000
 
     def __init__(self, network, wtype, device):
@@ -443,6 +463,10 @@ class ETH_wallet:
     @classmethod
     def get_account_types(cls):
         return cls.wtypes
+
+    @classmethod
+    def get_path(cls, network_name, wtype):
+        return cls.derive_paths[network_name][wtype]
 
     def get_account(self):
         # Read address to fund the wallet

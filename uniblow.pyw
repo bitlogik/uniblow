@@ -37,6 +37,7 @@ SUPPORTED_COINS = [
 DEVICES_LIST = [
     "BasicFile",
     "OpenPGP",
+    "HDdevice",
 ]
 
 FEES_PRORITY_TEXT = [
@@ -83,6 +84,10 @@ class Wallet:
 
     def get_account_types(self):
         return self.coin_wallet.get_account_types()
+
+    def get_path(self, network, wallet_type):
+        # for HD wallet, get the right derivation path
+        return self.coin_wallet.get_path(network, wallet_type)
 
     def get_account(self):
         # Read address to fund the wallet
@@ -172,6 +177,19 @@ def get_password(device_nam, input_message):
     if pwd_dialog.ShowModal() == wx.ID_OK:
         passval = pwd_dialog.GetValue()
         return passval
+
+
+def get_mnemonic(propos):
+    mnemo_dialog = wx.TextEntryDialog(
+        app.gui_frame,
+        "Validate this proposal, or insert yours to import an existing :",
+        caption="BIP39 words mnemonic input",
+        value=propos,
+        pos=wx.DefaultPosition,
+    )
+    if mnemo_dialog.ShowModal() == wx.ID_OK:
+        mnemoval = mnemo_dialog.GetValue()
+        return mnemoval
 
 
 def confirm(to_addr, amount):
@@ -265,6 +283,10 @@ def device_selected(device):
                         warn_modal("Admin password shall be at least 8 chars.")
                         app.gui_panel.devices_choice.SetSelection(0)
                         return
+                if the_device.is_HD:
+                    # HD means also mnemonic can be imported
+                    mnemonic_proposal = device_loaded.generate_mnemonic()
+                    mnemonic = get_mnemonic(mnemonic_proposal)
                 if the_device.has_password:
                     inp_message = f"Choose your {pwd_pin} for the {device_sel_name} wallet\n"
                     inp_message += "If blank, a default PIN/password will be used."
@@ -279,7 +301,10 @@ def device_selected(device):
                         raise Exception("PIN password shall be at least 6 chars.")
                     if the_device.has_admin_password:
                         device_loaded.set_admin(admin_password)
-                    if the_device.has_password:
+                    if the_device.is_HD:
+                        device_loaded.initialize_device(password, mnemonic)
+                    # is_HD has password already
+                    elif the_device.has_password:
                         device_loaded.initialize_device(password)
                     else:
                         device_loaded.initialize_device()
@@ -323,6 +348,8 @@ def set_coin(coin, network, wallet_type):
     fee_opt_sel = app.gui_panel.fee_slider.GetValue()
     app.gui_panel.fee_setting.SetLabel(FEES_PRORITY_TEXT[fee_opt_sel])
     try:
+        if app.device.is_HD:
+            app.device.derive_key(get_coin_class(coin).get_path(network, wallet_type))
         app.wallet = Wallet(coin, network, wallet_type, app.device)
         account_id = app.wallet.get_account()
     except Exception as exc:

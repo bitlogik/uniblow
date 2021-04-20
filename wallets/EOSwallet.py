@@ -196,6 +196,17 @@ class EOS_wallet:
         "K1",
     ]
 
+    derive_paths = [
+        # mainnet
+        [
+            "m/44'/194'/0'/0/0",
+        ],
+        # testnet
+        [
+            "m/44'/1'/0'/0/0",
+        ],
+    ]
+
     def __init__(self, network, wtype, device):
         self.network = EOS_wallet.networks[network]
         self.key_type = EOS_wallet.wtypes[wtype]
@@ -210,6 +221,10 @@ class EOS_wallet:
     @classmethod
     def get_account_types(cls):
         return cls.wtypes
+
+    @classmethod
+    def get_path(cls, network_name, wtype):
+        return cls.derive_paths[network_name][wtype]
 
     def get_account(self):
         # Read account to fund the wallet

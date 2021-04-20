@@ -250,6 +250,17 @@ class XTZ_wallet:
         "tz2",
     ]
 
+    derive_paths = [
+        # mainnet
+        [
+            "m/44'/1729'/0'/0/0",
+        ],
+        # testnet
+        [
+            "m/44'/1'/0'/0/0",
+        ],
+    ]
+
     OPERATION_FEE = 400
     GAZ_LIMIT_SIMPLE_TX = "2500"
 
@@ -266,6 +277,10 @@ class XTZ_wallet:
     @classmethod
     def get_account_types(cls):
         return cls.wtypes
+
+    @classmethod
+    def get_path(cls, network_name, wtype):
+        return cls.derive_paths[network_name][wtype]
 
     def get_account(self):
         # Read address to fund the wallet
