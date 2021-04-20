@@ -285,8 +285,15 @@ def device_selected(device):
                         return
                 if the_device.is_HD:
                     # HD means also mnemonic can be imported
-                    mnemonic_proposal = device_loaded.generate_mnemonic()
-                    mnemonic = get_mnemonic(mnemonic_proposal)
+                    mnemonic = device_loaded.generate_mnemonic()  # proposal
+                    mnemonic_checked = (False, False)
+                    while mnemonic_checked != (True, True):
+                        mnemonic = get_mnemonic(mnemonic)
+                        mnemonic_checked = device_loaded.check_mnemonic(mnemonic)
+                        if not mnemonic_checked[1]:
+                            warn_modal("Some words are not part of the BIP39 English wordlist.")
+                        elif not mnemonic_checked[0]:
+                            warn_modal("The mnemonic checksum is not valid.")
                 if the_device.has_password:
                     inp_message = f"Choose your {pwd_pin} for the {device_sel_name} wallet\n"
                     inp_message += "If blank, a default PIN/password will be used."
