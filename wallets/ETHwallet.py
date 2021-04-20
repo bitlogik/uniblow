@@ -340,7 +340,7 @@ class ETHwalletCore:
         self.pubkey = pubkey
         PKH = bytes.fromhex(cryptos.decompress(pubkey))
         self.Qpub = cryptos.decode_pubkey(pubkey)
-        self.address = sha3.keccak_256(PKH[1:]).hexdigest()[-40:]
+        self.address = format_checksum_address(sha3.keccak_256(PKH[1:]).hexdigest()[-40:])
         self.api = api
         self.network = network
 
