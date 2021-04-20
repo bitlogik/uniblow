@@ -45,7 +45,7 @@
             <property name="minimum_size"></property>
             <property name="name">TopFrame</property>
             <property name="pos"></property>
-            <property name="size">890,365</property>
+            <property name="size">925,365</property>
             <property name="style">wxDEFAULT_FRAME_STYLE</property>
             <property name="subclass">; ; forward_declare</property>
             <property name="title"></property>
@@ -71,7 +71,7 @@
             <property name="minimum_size"></property>
             <property name="name">TopPanel</property>
             <property name="pos"></property>
-            <property name="size">886,362</property>
+            <property name="size">922,362</property>
             <property name="subclass">; ; forward_declare</property>
             <property name="tooltip"></property>
             <property name="window_extra_style"></property>
@@ -613,7 +613,7 @@
                         <property name="orient">wxVERTICAL</property>
                         <property name="permission">none</property>
                         <object class="sizeritem" expanded="1">
-                            <property name="border">5</property>
+                            <property name="border">3</property>
                             <property name="flag">wxEXPAND</property>
                             <property name="proportion">1</property>
                             <object class="wxBoxSizer" expanded="1">
@@ -683,9 +683,9 @@
                                     </object>
                                 </object>
                                 <object class="sizeritem" expanded="1">
-                                    <property name="border">5</property>
+                                    <property name="border">2</property>
                                     <property name="flag">wxALIGN_CENTER_VERTICAL</property>
-                                    <property name="proportion">0</property>
+                                    <property name="proportion">1</property>
                                     <object class="wxTextCtrl" expanded="1">
                                         <property name="BottomDockable">1</property>
                                         <property name="LeftDockable">1</property>
@@ -731,7 +731,7 @@
                                         <property name="pos"></property>
                                         <property name="resize">Resizable</property>
                                         <property name="show">1</property>
-                                        <property name="size">542,-1</property>
+                                        <property name="size">585,-1</property>
                                         <property name="style">wxTE_READONLY</property>
                                         <property name="subclass">; ; forward_declare</property>
                                         <property name="toolbar_pane">0</property>
