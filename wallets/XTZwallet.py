@@ -123,7 +123,7 @@ def testaddr(xtz_addr):
 
 class XTZwalletCore:
 
-    SIG256K1_PREFIX = bytes([13, 115, 101, 19, 63])
+    SIG256K1_PREFIX = bytes([13, 115, 101, 19, 63])  # spsig
     ADDRESS_HEADER = bytes([6, 161, 161])  # tz2
     PUBKEY_HEADER = bytes([3, 254, 226, 86])  # sppk
 
@@ -216,7 +216,7 @@ class XTZwalletCore:
         lens = int(signature_der[5 + lenr])
         r = int.from_bytes(signature_der[4 : lenr + 4], "big")
         s = int.from_bytes(signature_der[lenr + 6 : lenr + 6 + lens], "big")
-        rs_bin = signature_der[4 : lenr + 4][-32:] + signature_der[lenr + 6 : lenr + 6 + lens][-32:]
+        rs_bin = r.to_bytes(32, "big") + s.to_bytes(32, "big")
         sig_b58 = cryptos.headbin_to_b58check(rs_bin, XTZwalletCore.SIG256K1_PREFIX)
         self.operation["operation"]["signature"] = sig_b58
 
