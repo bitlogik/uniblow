@@ -89,6 +89,31 @@ be no way to recover your coins.
 
 The Yubico 5 is a recommended OpenPGP device.
 
+### HDdevice
+
+This wallet is compatible with BIP39/32/44 wallets. You can save 24 words when
+initializing a new one, and get back you fund later.
+
+You can also import an existing wallet from a compatible wallet, and it will use
+the funds. Note that at this stage, there is a limitation on BTC, LTC and DOGE : it
+only uses one static address for all transactions on a given blockchain. And it won't
+retrieve your money if you use an other wallet with many transactions.
+
+You can also export the saved words mnemonic in an other compatible wallet, and it
+should access and use all you funds.
+
+The HD device stores only the seed encrypted [with a random salt using libsodium
+XSalsa20/Poly1305](https://libsodium.gitbook.io/doc/secret-key_cryptography/secretbox#algorithm-details),
+using an encryption key derived from the user chosen password using [Argon2id
+(moderate settings)](https://raw.githubusercontent.com/P-H-C/phc-winner-argon2/master/argon2-specs.pdf).
+One can choose to use a default password. To do so, just left blank the password
+prompt input when asked the first time at device setting. Without your personal
+password, the security of the key is what your hard-drive computer offers for
+your files.  
+If you setup a password but forget it, there would be no way to recover your
+coins from the backup file. But you can still initialize a new HD device wallet
+with the same words mnemonic.
+
 ## Use the GUI
 
 * Download the Uniblow binary [in Github releases](https://github.com/bitlogik/uniblow/releases/latest)
