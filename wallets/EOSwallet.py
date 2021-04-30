@@ -159,7 +159,10 @@ class EOSwalletCore:
         s = int.from_bytes(signature_der[lenr + 6 : lenr + 6 + lens], "big")
         # Parity recovery
         Q = ecdsa.keys.VerifyingKey.from_public_key_recovery_with_digest(
-            signature_der, self.datahash, ecdsa.curves.SECP256k1, sigdecode=ecdsa.util.sigdecode_der
+            signature_der,
+            self.datahash,
+            ecdsa.curves.SECP256k1,
+            sigdecode=ecdsa.util.sigdecode_der,
         )[1]
         if Q.to_string("uncompressed") == cryptos.encode_pubkey(self.Qpub, "bin"):
             i = 32
@@ -242,8 +245,15 @@ class EOS_wallet:
         return testaddr(addr_str)
 
     def history(self):
-        # Get history as tx list
-        raise "Not yet implemented"
+        # Get history page
+        if self.eos.account:
+            if self.network == "EOSio":
+                EOS_EXPLORER_URL = f"https://bloks.io/account/{self.eos.account}"
+            else:
+                EOS_EXPLORER_URL = (
+                    f"https://{self.network.lower()}.bloks.io/account/{self.eos.account}"
+                )
+            return EOS_EXPLORER_URL
 
     def transfer(self, amount, to_account, priority_fee):
         # Transfer x unit to an account, pay

@@ -69,7 +69,10 @@ class blkhub_api:
         # translate inputs from blkhub to pybitcoinlib
         for utxo in addrutxos:
             selutxos.append(
-                {"value": utxo["value"], "output": utxo["txid"] + ":" + str(utxo["vout"])}
+                {
+                    "value": utxo["value"],
+                    "output": utxo["txid"] + ":" + str(utxo["vout"]),
+                }
             )
         return selutxos
 
@@ -304,8 +307,12 @@ class BTC_wallet:
         return testaddr(addr_str)
 
     def history(self):
-        # Get history as tx list
-        raise "Not yet implemented"
+        # Get history page
+        if self.btc.testnet:
+            BTC_EXPLORER_URL = f"https://blockstream.info/testnet/address/{self.btc.address}"
+        else:
+            BTC_EXPLORER_URL = f"https://blkhub.net/explorer/address/{self.btc.address}"
+        return BTC_EXPLORER_URL
 
     def raw_tx(self, amount, fee, to_account):
         hashes_to_sign = self.btc.prepare(to_account, amount, fee)

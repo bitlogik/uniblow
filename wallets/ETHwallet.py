@@ -240,7 +240,10 @@ class etherscan_api:
             time.sleep(5)
             req = urllib.request.Request(
                 self.url + "?" + params_enc,
-                headers={"User-Agent": "Mozilla/5.0", "Content-Type": "application/json"},
+                headers={
+                    "User-Agent": "Mozilla/5.0",
+                    "Content-Type": "application/json",
+                },
                 # data = json.dumps(data).encode('utf-8')
             )
             self.webrsc = urllib.request.urlopen(req)
@@ -276,7 +279,11 @@ class etherscan_api:
 
     def get_tx_num(self, addr, blocks):
         self.getData(
-            {"module": "proxy", "action": "eth_getTransactionCount", "address": "0x" + addr}
+            {
+                "module": "proxy",
+                "action": "eth_getTransactionCount",
+                "address": "0x" + addr,
+            }
         )
         self.checkapiresp()
         return int(self.getKey("result")[2:], 16)
@@ -376,7 +383,17 @@ class ETHwalletCore:
         r = int2bytearray(0)
         s = int2bytearray(0)
         signing_tx = rlp_encode(
-            [self.nonce, self.gasprice, self.startgas, self.to, self.value, self.data, v, r, s]
+            [
+                self.nonce,
+                self.gasprice,
+                self.startgas,
+                self.to,
+                self.value,
+                self.data,
+                v,
+                r,
+                s,
+            ]
         )
         self.datahash = sha3.keccak_256(signing_tx).digest()
         return self.datahash
@@ -389,7 +406,10 @@ class ETHwalletCore:
         s = int.from_bytes(signature_der[lenr + 6 : lenr + 6 + lens], "big")
         # Parity recovery
         Q = ecdsa.keys.VerifyingKey.from_public_key_recovery_with_digest(
-            signature_der, self.datahash, ecdsa.curves.SECP256k1, sigdecode=ecdsa.util.sigdecode_der
+            signature_der,
+            self.datahash,
+            ecdsa.curves.SECP256k1,
+            sigdecode=ecdsa.util.sigdecode_der,
         )[1]
         if Q.to_string("uncompressed") == cryptos.encode_pubkey(self.Qpub, "bin"):
             i = 36
@@ -400,7 +420,17 @@ class ETHwalletCore:
         r = int2bytearray(r)
         s = int2bytearray(s)
         tx_final = rlp_encode(
-            [self.nonce, self.gasprice, self.startgas, self.to, self.value, self.data, v, r, s]
+            [
+                self.nonce,
+                self.gasprice,
+                self.startgas,
+                self.to,
+                self.value,
+                self.data,
+                v,
+                r,
+                s,
+            ]
         )
         txhex = tx_final.hex()
         return "\nDONE, txID : " + self.api.pushtx(txhex)[2:]
@@ -470,7 +500,7 @@ class ETH_wallet:
 
     def get_account(self):
         # Read address to fund the wallet
-        return "0x" + self.eth.address
+        return f"0x{self.eth.address}"
 
     def get_balance(self):
         # Get balance in base integer unit
@@ -481,8 +511,12 @@ class ETH_wallet:
         return testaddr(addr_str)
 
     def history(self):
-        # Get history as tx list
-        raise "Not yet implemented"
+        # Get history page
+        if self.network == "mainnet":
+            ETH_EXPLORER_URL = f"https://etherscan.io/address/0x{self.eth.address}"
+        else:
+            ETH_EXPLORER_URL = f"https://{self.network}.etherscan.io/address/0x{self.eth.address}"
+        return ETH_EXPLORER_URL
 
     def raw_tx(self, amount, gazprice, ethgazlimit, account):
         hash_to_sign = self.eth.prepare(account, amount, gazprice, ethgazlimit)

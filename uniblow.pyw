@@ -102,7 +102,7 @@ class Wallet:
         return self.coin_wallet.check_address(addr_str)
 
     def history(self):
-        # Get history as tx list
+        # Get history page
         return self.coin_wallet.history()
 
     def transfer(self, amount, to_account, fee_priority):
@@ -126,6 +126,7 @@ def display_balance():
             raise exc
         return
     app.gui_panel.balance_info.SetLabel(balance)
+    app.gui_panel.hist_button.Enable()
     app.gui_panel.copy_button.Enable()
     bal_str = balance.split(" ")[0]
     if bal_str not in ("0", "0.0") and not bal_str.startswith("Register"):
@@ -137,6 +138,7 @@ def erase_info():
     if hasattr(app, "balance_timer"):
         app.balance_timer.Stop()
     paint_toaddr(wx.NullColour)
+    app.gui_panel.hist_button.Disable()
     app.gui_panel.copy_button.Disable()
     app.gui_panel.send_all.Disable()
     app.gui_panel.send_button.Disable()
@@ -230,6 +232,12 @@ def copy_account(ev):
             copy_result("No Access")
     except Exception:
         copy_result("Error")
+
+
+def disp_history(ev):
+    hist_url = app.wallet.history()
+    if hist_url:
+        gui.app.show_history(hist_url)
 
 
 def close_device():
@@ -534,6 +542,7 @@ if __name__ == "__main__":
     app.gui_panel.send_all.Bind(wx.EVT_BUTTON, send_all)
     app.gui_panel.dest_addr.Bind(wx.EVT_TEXT, check_addr)
     app.gui_panel.amount.Bind(wx.EVT_TEXT_ENTER, send)
+    app.gui_panel.hist_button.Bind(wx.EVT_BUTTON, disp_history)
     app.gui_panel.copy_button.Bind(wx.EVT_BUTTON, copy_account)
     app.gui_panel.fee_slider.Bind(wx.EVT_SCROLL_CHANGED, fee_changed)
 

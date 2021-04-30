@@ -243,8 +243,12 @@ class DOGE_wallet:
         return testaddr(addr_str)
 
     def history(self):
-        # Get history as tx list
-        raise "Not yet implemented"
+        # Get history page
+        if self.doge.testnet:
+            DOGE_EXPLORER_URL = f"https://sochain.com/address/DOGETEST/{self.doge.address}"
+        else:
+            DOGE_EXPLORER_URL = f"https://sochain.com/address/DOGE/{self.doge.address}"
+        return DOGE_EXPLORER_URL
 
     def raw_tx(self, amount, fee, to_account):
         hashes_to_sign = self.doge.prepare(to_account, amount, fee)

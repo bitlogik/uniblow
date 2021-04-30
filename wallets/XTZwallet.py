@@ -242,8 +242,8 @@ XTZ_units = 1000000
 class XTZ_wallet:
 
     networks = [
-        "mainnet",
-        "edonet",
+        "Mainnet",
+        "EdoNet",
     ]
 
     wtypes = [
@@ -295,8 +295,14 @@ class XTZ_wallet:
         return testaddr(addr_str)
 
     def history(self):
-        # Get history as tx list
-        raise "Not yet implemented"
+        # Get history page
+        if self.network == "mainnet":
+            XTZ_EXPLORER_URL = f"https://tzstats.com/{self.xtz.address}#transfers"
+        else:  # Edo[Net]
+            XTZ_EXPLORER_URL = (
+                f"https://{self.network[:-3]}.tzstats.com/{self.xtz.address}#transfers"
+            )
+        return XTZ_EXPLORER_URL
 
     def raw_tx(self, amount, fee, gazlimit, account):
         hash_to_sign = self.xtz.prepare(account, amount, fee, gazlimit)
@@ -319,7 +325,10 @@ class XTZ_wallet:
             # if not revealed
             fee += XTZ_wallet.OPERATION_FEE
         return self.raw_tx(
-            amount - fee, XTZ_wallet.OPERATION_FEE, XTZ_wallet.GAZ_LIMIT_SIMPLE_TX, to_account
+            amount - fee,
+            XTZ_wallet.OPERATION_FEE,
+            XTZ_wallet.GAZ_LIMIT_SIMPLE_TX,
+            to_account,
         )
 
     def transfer_all(self, to_account, fee_priority):

@@ -16,11 +16,14 @@
 
 import sys
 import os.path
-import gui.window
-import gui.infodialog
+import webbrowser
+
 from wx import Icon
 from wx import TextDataObject
 from wx import TheClipboard
+
+import gui.window
+import gui.infodialog
 
 
 class InfoBox(gui.infodialog.InfoDialog):
@@ -66,6 +69,10 @@ def load_coins_list(app, coins_list):
     for coin in coins_list:
         app.gui_panel.coins_choice.Append(coin)
     app.gui_panel.coins_choice.SetSelection(0)
+
+
+def show_history(history_url):
+    webbrowser.open(history_url, new=1, autoraise=True)
 
 
 def start_app(app, version, coins_list, devices_list):

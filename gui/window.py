@@ -145,10 +145,15 @@ class TopPanel ( wx.Panel ):
 
         bSizer6.Add( self.balance_info, 0, wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5 )
 
-        self.copy_button = wx.Button( self, wx.ID_ANY, u"copy", wx.DefaultPosition, wx.DefaultSize, 0 )
+        self.hist_button = wx.Button( self, wx.ID_ANY, u"History", wx.DefaultPosition, wx.DefaultSize, 0 )
+        self.hist_button.Enable( False )
+
+        bSizer6.Add( self.hist_button, 0, wx.BOTTOM|wx.RIGHT|wx.LEFT, 5 )
+
+        self.copy_button = wx.Button( self, wx.ID_ANY, u"Copy", wx.DefaultPosition, wx.DefaultSize, 0 )
         self.copy_button.Enable( False )
 
-        bSizer6.Add( self.copy_button, 0, wx.LEFT, 60 )
+        bSizer6.Add( self.copy_button, 0, wx.LEFT, 16 )
 
         self.copy_status = wx.StaticText( self, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, 0 )
         self.copy_status.Wrap( -1 )
