@@ -1,6 +1,13 @@
 
 Uniblow versions history
 
+## 0.4.0
+
+* Add new HD BIP32/39/44 wallet device
+* Add History button
+* Display ETH address checksummed
+* Improve XTZ signatures reliability
+
 ## 0.3.0
 
 * Add XTZ
