@@ -166,7 +166,7 @@ class newCOINwallet:
      ... return True if the address/account name is valid
     
     def history(self):
-     ... return a tx list for this account (not used for now)
+     ... return an URL string for the account details
 
     def transfer(self, amount, to_account, fee):
      ... transfer to pay x coin unit to an external account and return txid
