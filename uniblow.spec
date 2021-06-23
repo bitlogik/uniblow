@@ -28,7 +28,7 @@ additional_imports += [f"devices.{device}" for device in DEVICES_LIST]
 pkgs_remove = ["sqlite3", "tcl85", "tk85", "_sqlite3", "_tkinter", "libopenblas", "libdgamln"]
 
 a = Analysis(
-    ["uniblow.pyw"],
+    ["uniblow.py"],
     pathex=[current_path],
     binaries=[],
     datas=[(ICON, "gui/"), ("wallets/lib/cryptos/english.txt", "wallets/lib/cryptos/")],
