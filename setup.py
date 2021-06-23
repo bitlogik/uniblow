@@ -12,7 +12,7 @@ with open("README.md") as readme_file:
     readme = readme_file.read()
 
 
-pipmain(["install", "https://github.com/eosnewyork/eospy/archive/master.zip"])
+pipmain(["install", "https://github.com/eosnewyork/eospy/archive/master.zip", "--user"])
 
 setup(
     name="Uniblow",

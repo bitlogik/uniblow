@@ -136,10 +136,12 @@ Features in development :
 
 * For the GUI, [install wxPython 4](https://wxpython.org/pages/downloads/) with your system binaries wheels.
     * Windows and MacOS: Use `pip3 install -U wxPython`
-    * Linux : use your package manager, as `apt-get install python3-wxgtk4.0`
+    * For Linux : Read [LinuxDev.md](LinuxDev.md) for more details
 * Install this package and its dependencies
-    * `python3 -m pip install .`
-* For ETH, put your Infura key in ETHwallet, or use the EtherscanAPI
+    * `python3 setup.py install`
+* For ETH, put your Infura key in ETHwallet, or use the EtherscanAPI. The binaries have the InfuraKey embedded.
+* Run with `python3 uniblow.py`
+
 
 ### Add more cryptos
 
