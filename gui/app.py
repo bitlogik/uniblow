@@ -18,7 +18,7 @@ import sys
 import os.path
 import webbrowser
 
-from wx import Icon
+from wx import IconBundle
 from wx import TextDataObject
 from wx import TheClipboard
 
@@ -78,7 +78,7 @@ def show_history(history_url):
 def start_app(app, version, coins_list, devices_list):
     app.gui_frame = gui.window.TopFrame(None)
     app.gui_panel = gui.window.TopPanel(app.gui_frame)
-    app.gui_frame.SetIcon(Icon(file_path("gui/uniblow.ico")))
+    app.gui_frame.SetIcons(IconBundle(file_path("gui/uniblow.ico")))
     app.gui_frame.SetTitle(f"  Uniblow  -  {version}")
     load_coins_list(app, coins_list)
     load_devices(app, devices_list)
