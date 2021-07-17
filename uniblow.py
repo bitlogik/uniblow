@@ -29,6 +29,7 @@ SUPPORTED_COINS = [
     "BTC",
     "ETH",
     "LTC",
+    "BSC",
     "DOGE",
     "EOS",
     "XTZ",
