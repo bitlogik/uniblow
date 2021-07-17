@@ -1,7 +1,7 @@
 
 # Uniblow on Linux
 
-As Linux desktops are not very standardized among distributions, there is no yet uniblow binaries for Uniblow. The following instructions commands are given to run uniblow from the source. This can also be used for development purpose.
+As Linux desktops are not very standardized among distributions, there is no yet uniblow binaries for Linux. The following instructions commands are given to run uniblow from the source. This can also be used for development purpose.
 
 When running from the source files, for ETH, you have to put your Infura key in ETHwallet, or use the EtherscanAPI.
 
