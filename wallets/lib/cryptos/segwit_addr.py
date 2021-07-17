@@ -25,6 +25,9 @@
 
 CHARSET = "qpzry9x8gf2tvdw0s3jn54khce6mua7l"
 
+XOR_CONSTANT = 1
+# XOR_CONSTANT = 0x2bc830a3 # BIP350
+
 
 def bech32_polymod(values):
     """Internal function that computes the Bech32 checksum."""
@@ -45,13 +48,13 @@ def bech32_hrp_expand(hrp):
 
 def bech32_verify_checksum(hrp, data):
     """Verify a checksum given HRP and converted data characters."""
-    return bech32_polymod(bech32_hrp_expand(hrp) + data) == 1
+    return bech32_polymod(bech32_hrp_expand(hrp) + data) == XOR_CONSTANT
 
 
 def bech32_create_checksum(hrp, data):
     """Compute the checksum values given HRP and data."""
     values = bech32_hrp_expand(hrp) + data
-    polymod = bech32_polymod(values + [0, 0, 0, 0, 0, 0]) ^ 1
+    polymod = bech32_polymod(values + [0, 0, 0, 0, 0, 0]) ^ XOR_CONSTANT
     return [(polymod >> 5 * (5 - i)) & 31 for i in range(6)]
 
 
@@ -118,9 +121,11 @@ def decode(hrp, addr):
     return (data[0], decoded)
 
 
-def encode(hrp, witver, witprog):
-    """Encode a segwit address."""
-    ret = bech32_encode(hrp, [witver] + convertbits(witprog, 8, 5))
-    if decode(hrp, ret) == (None, None):
-        raise Exception("Bad segwit address format")
-    return ret
+def bech32_address(hrp, datahash):
+    """Encode a segwit address"""
+    return bech32_encode(hrp, convertbits(datahash, 8, 5))
+
+
+def bech32_address_btc(datahash):
+    """Encode a segwit address without witver, for altcoins"""
+    return bech32_encode("bc", [0] + convertbits(datahash, 8, 5))

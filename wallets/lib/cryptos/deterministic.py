@@ -254,11 +254,12 @@ def parse_bip32_path(path):
     patharr = []
     pathlist = path.split("/")
     for v in pathlist:
-        if not v:
+        ipath_str = v.rstrip()
+        if not ipath_str:
             continue
-        elif v[-1] in ("'H"):  # hardened path
-            v = int(v[:-1]) | 0x80000000
+        elif ipath_str[-1] in ("'H"):  # hardened path
+            ipath = int(ipath_str[:-1]) | 0x80000000
         else:  # non-hardened path
-            v = int(v) & 0x7FFFFFFF
-        patharr.append(v)
+            ipath = int(ipath_str) & 0x7FFFFFFF
+        patharr.append(ipath)
     return patharr

@@ -240,23 +240,23 @@ class BaseCoin(object):
         """
         Convert a hash to the new segwit address format outlined in BIP-0173
         """
-        return segwit_addr.encode(self.segwit_hrp, 0, hash)
+        return segwit_addr.bech32_address_btc(hash)
 
     def privtosegwit(self, privkey):
         """
-        Convert a private key to the new segwit address format outlined in BIP01743
+        Convert a private key to the new segwit address format outlined in BIP0173
         """
         return self.pubtosegwit(self.privtopub(privkey))
 
     def pubtosegwit(self, pubkey):
         """
-        Convert a public key to the new segwit address format outlined in BIP01743
+        Convert a public key to the new segwit address format outlined in BIP0173
         """
         return self.hash_to_segwit_addr(pubkey_to_hash(pubkey))
 
     def script_to_p2wsh(self, script):
         """
-        Convert a script to the new segwit address format outlined in BIP01743
+        Convert a script to the new segwit address format outlined in BIP0173
         """
         return self.hash_to_segwit_addr(sha256(safe_from_hex(script)))
 
