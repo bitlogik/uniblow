@@ -19,7 +19,6 @@
 import pytz
 import datetime as dt
 import json
-import ecdsa
 import hashlib
 import re
 
@@ -158,16 +157,9 @@ class EOSwalletCore:
         r = int.from_bytes(signature_der[4 : lenr + 4], "big")
         s = int.from_bytes(signature_der[lenr + 6 : lenr + 6 + lens], "big")
         # Parity recovery
-        Q = ecdsa.keys.VerifyingKey.from_public_key_recovery_with_digest(
-            signature_der,
-            self.datahash,
-            ecdsa.curves.SECP256k1,
-            sigdecode=ecdsa.util.sigdecode_der,
-        )[1]
-        if Q.to_string("uncompressed") == cryptos.encode_pubkey(self.Qpub, "bin"):
-            i = 32
-        else:
-            i = 31
+        i = 31
+        if cryptos.ecdsa_raw_recover(self.datahash, (i, r, s)) != self.Qpub:
+            i += 1
         # Signature encoding
         # pack
         ib = i.to_bytes(1, byteorder="big")
