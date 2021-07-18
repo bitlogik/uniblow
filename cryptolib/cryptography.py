@@ -34,11 +34,11 @@ CURVES_ORDER = {
 }
 
 
-def public_key_recover(h, r, s):
+def public_key_recover(h, r, s, par=0):
     """Recover public key from hash and signature"""
     n = CURVES_ORDER["K1"]
     # Q = (s.R - h.G) / r
-    R = ECPoint.from_x(r)
+    R = ECPoint.from_x(r, par)
     Q = inverse_mod(r, n) * R.dual_mult(-h % n, s)
     # Uncompressed format 04 X Y
     return Q.encode_output(False)

@@ -246,10 +246,14 @@ class HD_Wallet:
         self.master_node = mk
 
     @classmethod
+    def from_seed(cls, seed):
+        return cls(BIP32node.master_node(seed, "K1"))
+
+    @classmethod
     def from_mnemonic(cls, mnemonic):
         """Mnemonic to master key (BIP39)"""
         seed = mnemonic_to_seed(mnemonic)
-        return cls(BIP32node.master_node(seed, "K1"))
+        return HD_Wallet.from_seed(seed)
 
     def derive_key(self, path):
         """Derive the private key crypto object from the path string"""

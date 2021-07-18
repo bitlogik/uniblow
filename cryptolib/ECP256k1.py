@@ -155,11 +155,26 @@ class ECPoint:
         return cls(x, point_y(x, parity_hint))
 
     @classmethod
+    def from_bytes(cls, pubkey_hex):
+        return ECPoint.from_bytes(bytes.fromhex(pubkey_hex))
+
+    @classmethod
     def from_bytes(cls, bytes_data):
-        if bytes_data[0] != 4:
-            raise ValueError("Public key bytes must start with 0x04")
+        if bytes_data[0] == 4:
+            compressed = False
+            if len(bytes_data) != 65:
+                raise ValueError("Public key uncompressed must be 65 bytes long")
+        elif bytes_data[0] == 2 or bytes_data[0] == 3:
+            compressed = True
+            if len(bytes_data) != 33:
+                raise ValueError("Public key compressed must be 33 bytes long")
+        else:
+            raise ValueError("Invalid X962 public key header")
         px = int.from_bytes(bytes_data[1:33], "big")
-        py = int.from_bytes(bytes_data[33:66], "big")
+        if compressed:
+            py = point_y(px, bytes_data[0]-1)
+        else:
+            py = int.from_bytes(bytes_data[33:66], "big")
         # check y2 = x3+ax+b
         if pow(py, 2, _p) != (pow(px, 3, _p) + _b) % _p:
             raise ValueError("Public key coordinates are not on the 256k1 curve")
@@ -191,6 +206,4 @@ def point_y(px, parity_hint=0):
     # p prime => sqrt <> ^( p+1 /2 )
     # y = sqrt(x^3 + 7)
     y = pow(xcube + _b, p_p1_half, _p)
-    # As sqrt has 2 solutions,
-    #  returns always the "first" solution
-    return y if (y + parity_hint) % 2 == 0 else _p - y
+    return y if (y % 2) ^ (parity_hint % 2) else _p - y
