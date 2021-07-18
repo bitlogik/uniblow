@@ -19,7 +19,10 @@ import json
 import urllib.parse
 import urllib.request
 import re
-from .lib import cryptos
+
+import cryptolib.coins
+from cryptolib.bech32 import bech32_decode
+from cryptolib.base58 import decode_base58
 
 
 class blkhub_api:
@@ -47,9 +50,13 @@ class blkhub_api:
             if len(brep) == 64 and brep[0] != ord("{"):
                 brep = b'{"txid":"' + brep + b'"}'
             self.jsres = json.loads(brep)
+        except urllib.error.HTTPError as e:
+            print(e.read())
+            raise IOError(e)
         except urllib.error.URLError as e:
             raise IOError(e)
-        except Exception:
+        except Exception as exc:
+            print(exc.read())
             raise IOError(
                 "Error while processing request:\n%s" % (self.url + endpoint + "?" + params_enc)
             )
@@ -118,12 +125,12 @@ def testaddr(btc_addr):
         checked = re.match("^[2nm][a-km-zA-HJ-NP-Z1-9]{25,34}$", btc_addr) is not None
     elif btc_addr.startswith("bc") or btc_addr.startswith("tb"):
         checked = re.match("^(bc|tb)[01][ac-hj-np-z02-9]{8,87}$", btc_addr) is not None
-        return checked and (cryptos.segwit_addr.bech32_decode(btc_addr) != (None, None))
+        return checked and (bech32_decode(btc_addr) != (None, None))
     else:
         return False
     try:
         if checked:
-            cryptos.b58c_to_bin(btc_addr)
+            decode_base58(btc_addr)
     except AssertionError:
         return False
     return checked
@@ -138,15 +145,18 @@ class BTCwalletCore:
         # pubkey is hex compressed
         self.pubkey = pubkey
         if self.segwit == 0:
-            self.address = cryptos.coins.bitcoin.Bitcoin(testnet=self.testnet).pubtoaddr(
+            self.address = cryptolib.coins.bitcoin.Bitcoin(testnet=self.testnet).pubtoaddr(
                 self.pubkey
             )
         elif self.segwit == 1:
-            self.address = cryptos.coins.bitcoin.Bitcoin(testnet=self.testnet).pubtop2w(self.pubkey)
-        elif self.segwit == 2:
-            self.address = cryptos.coins.bitcoin.Bitcoin(testnet=self.testnet).pubtosegwit(
+            self.address = cryptolib.coins.bitcoin.Bitcoin(testnet=self.testnet).pubtop2w(
                 self.pubkey
             )
+        elif self.segwit == 2:
+            self.address = cryptolib.coins.bitcoin.Bitcoin(testnet=self.testnet).pubtosegwit(
+                self.pubkey
+            )
+            print(self.address)
         else:
             raise Exception("Not valid segwit option")
         self.api = api
@@ -178,11 +188,11 @@ class BTCwalletCore:
                 outs[-1]["segwit"] = True
             if self.segwit == 2:
                 outs[-1]["new_segwit"] = True
-        self.tx = cryptos.coins.bitcoin.Bitcoin(testnet=self.testnet).mktx(inputs, outs)
+        self.tx = cryptolib.coins.bitcoin.Bitcoin(testnet=self.testnet).mktx(inputs, outs)
         if self.segwit == 0:
-            script = cryptos.mk_pubkey_script(self.address)
+            script = cryptolib.coins.mk_pubkey_script(self.address)
         elif self.segwit == 2 or self.segwit == 1:
-            script = cryptos.mk_p2wpkh_scriptcode(self.pubkey)
+            script = cryptolib.coins.mk_p2wpkh_scriptcode(self.pubkey)
         else:
             raise Exception("Not valid segwit option")
 
@@ -192,20 +202,24 @@ class BTCwalletCore:
         datahashes = []
         for i in range(self.leninputs):
             print("\nSigning INPUT #", i)
-            signing_tx = cryptos.signature_form(self.tx, i, script, cryptos.SIGHASH_ALL)
-            datahashes.append(cryptos.bin_txhash(signing_tx, cryptos.SIGHASH_ALL))
+            signing_tx = cryptolib.coins.signature_form(
+                self.tx, i, script, cryptolib.coins.SIGHASH_ALL
+            )
+            datahashes.append(cryptolib.coins.bin_txhash(signing_tx, cryptolib.coins.SIGHASH_ALL))
         return datahashes
 
     def send(self, signatures):
         for i in range(self.leninputs):
             signature_der_hex = signatures[i].hex() + "01"
             if self.segwit == 0:
-                self.tx["ins"][i]["script"] = cryptos.serialize_script(
+                self.tx["ins"][i]["script"] = cryptolib.coins.serialize_script(
                     [signature_der_hex, self.pubkey]
                 )
             if self.segwit > 0:
                 if self.segwit == 1:
-                    self.tx["ins"][i]["script"] = cryptos.mk_p2wpkh_redeemscript(self.pubkey)
+                    self.tx["ins"][i]["script"] = cryptolib.coins.mk_p2wpkh_redeemscript(
+                        self.pubkey
+                    )
                 elif self.segwit == 2:
                     self.tx["ins"][i]["script"] = ""
                 else:
@@ -213,10 +227,12 @@ class BTCwalletCore:
                 self.tx["witness"].append(
                     {
                         "number": 2,
-                        "scriptCode": cryptos.serialize_script([signature_der_hex, self.pubkey]),
+                        "scriptCode": cryptolib.coins.serialize_script(
+                            [signature_der_hex, self.pubkey]
+                        ),
                     }
                 )
-        txhex = cryptos.serialize(self.tx)
+        txhex = cryptolib.coins.serialize(self.tx)
         return "\nDONE, txID : " + self.api.pushtx(txhex)
 
     def balance_fmutxos(self, utxos):

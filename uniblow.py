@@ -28,11 +28,11 @@ from version import VERSION
 SUPPORTED_COINS = [
     "BTC",
     "ETH",
-    "LTC",
-    "BSC",
-    "DOGE",
-    "EOS",
-    "XTZ",
+    # "LTC",
+    # "BSC",
+    # "DOGE",
+    # "EOS",
+    # "XTZ",
 ]
 
 DEVICES_LIST = [

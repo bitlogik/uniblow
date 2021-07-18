@@ -1,6 +1,9 @@
 
 Uniblow versions history
 
+## 0.4.2
+
+
 ## 0.4.0
 
 * Add new HD BIP32/39/44 wallet device

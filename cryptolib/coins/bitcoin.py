@@ -16,32 +16,30 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 from .base import BaseCoin
-from ..transaction import SIGHASH_ALL, SIGHASH_FORKID
-
-# from ..explorers import btg_explorer
-from ..main import b58check_to_bin
-from ..py3specials import bin_to_b58check
-
-FORKID_BTG = 79
 
 
-class BitcoinGold(BaseCoin):
-    coin_symbol = "btg"
-    display_name = "Bitcoin Gold"
+class Bitcoin(BaseCoin):
+    coin_symbol = "BTC"
+    display_name = "Bitcoin"
     segwit_supported = True
-    magicbyte = 38
-    script_magicbyte = 23
-    wif_prefix = 0x80
-    hd_path = 0
-    # explorer = btg_explorer
-    hashcode = SIGHASH_ALL | SIGHASH_FORKID | FORKID_BTG << 8
+    magicbyte = 0
+    script_magicbyte = 5
     segwit_hrp = "bc"
+    client_kwargs = {
+        "server_file": "bitcoin.json",
+    }
+
     testnet_overrides = {
-        "display_name": "Bitcoin Gold Testnet",
-        "coin_symbol": "tbcc",
+        "display_name": "Bitcoin Testnet",
+        "coin_symbol": "BTCTEST",
         "magicbyte": 111,
         "script_magicbyte": 196,
+        "segwit_hrp": "tb",
+        "hd_path": 1,
         "wif_prefix": 0xEF,
+        "client_kwargs": {
+            "server_file": "bitcoin_testnet.json",
+        },
         "xprv_headers": {
             "p2pkh": 0x04358394,
             "p2wpkh-p2sh": 0x044A4E28,
@@ -56,19 +54,4 @@ class BitcoinGold(BaseCoin):
             "p2wpkh": 0x043587CF,
             "p2wsh": 0x2AA7ED3,
         },
-        "hd_path": 1,
     }
-
-    def __init__(self, testnet=False, legacy=False, **kwargs):
-        super(BitcoinGold, self).__init__(testnet=testnet, **kwargs)
-        if legacy and not testnet:
-            self.magicbyte = 0
-            self.script_magicbyte = 5
-
-    def address_from_btc(self, addr):
-        pubkey_hash = b58check_to_bin(addr)
-        return bin_to_b58check(pubkey_hash, self.magicbyte)
-
-    def sh_address_from_btc(self, addr):
-        pubkey_hash = b58check_to_bin(addr)
-        return bin_to_b58check(pubkey_hash, self.script_magicbyte)

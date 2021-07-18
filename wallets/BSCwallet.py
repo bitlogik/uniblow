@@ -329,9 +329,7 @@ class BSC_wallet:
         if self.network == "mainnet":
             BSC_EXPLORER_URL = f"https://www.bscscan.com/address/0x{self.bsc.address}"
         else:
-            BSC_EXPLORER_URL = (
-                f"https://testnet.bscscan.com/address/0x{self.bsc.address}"
-            )
+            BSC_EXPLORER_URL = f"https://testnet.bscscan.com/address/0x{self.bsc.address}"
         return BSC_EXPLORER_URL
 
     def raw_tx(self, amount, gazprice, ethgazlimit, account):

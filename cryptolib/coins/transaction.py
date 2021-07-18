@@ -15,15 +15,167 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
-import binascii, re, copy
-from .main import *
-from _functools import reduce
+import binascii
+import copy
+import re
+from functools import reduce
 
-### Hex to bin converter and vice versa for objects
+from cryptolib.cryptography import Hash160, dbl_sha2
+from cryptolib.base58 import encode_base58_header, decode_base58
+
+
+string_or_bytes_types = (str, bytes)
+int_types = (int, float)
+
+
+def pubkey_to_hash(pubkey):
+    if len(pubkey) in [66, 130]:
+        return Hash160(bytes.fromhex(pubkey))
+    assert len(pubkey) in [33, 65]
+    return Hash160(pubkey)
+
+
+def pubkey_to_hash_hex(pubkey):
+    return pubkey_to_hash(pubkey).hex()
+
+
+def pubtoaddr(pubkey, magicbyte=0):
+    pubkey_hash = pubkey_to_hash(pubkey)
+    return encode_base58_header(pubkey_hash, magicbyte)
+
+
+def b58check_to_hex(data_b58):
+    return decode_base58(data_b58)[1:].hex()
+
+
+def num_to_var_int(x):
+    x = int(x)
+    if x < 253:
+        return bytes([x])
+    elif x < 65536:
+        return bytes([253]) + encode(x, 256, 2)[::-1]
+    elif x < 4294967296:
+        return bytes([254]) + encode(x, 256, 4)[::-1]
+    else:
+        return bytes([255]) + encode(x, 256, 8)[::-1]
+
+
+def hex_to_hash160(data_hex):
+    return Hash160(bytes.fromhex(data_hex)).hex()
+
+
+def dbl_sha256(data):
+    return dbl_sha2(data).hex()
+
+
+string_types = str
+string_or_bytes_types = (str, bytes)
+int_types = (int, float)
+
+code_strings = {
+    2: "01",
+    10: "0123456789",
+    16: "0123456789abcdef",
+    32: "abcdefghijklmnopqrstuvwxyz234567",
+    58: "123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz",
+    256: "".join([chr(x) for x in range(256)]),
+}
+
+
+def lpad(msg, symbol, length):
+    if len(msg) >= length:
+        return msg
+    return symbol * (length - len(msg)) + msg
+
+
+def get_code_string(base):
+    if base in code_strings:
+        return code_strings[base]
+    else:
+        raise ValueError("Invalid base!")
+
+
+def changebase(string, frm, to, minlen=0):
+    if frm == to:
+        return lpad(string, get_code_string(frm)[0], minlen)
+    return encode(decode(string, frm), to, minlen)
+
+
+def bytes_to_hex_string(b):
+    if isinstance(b, str):
+        return b
+
+    return "".join("{:02x}".format(y) for y in b)
+
+
+def safe_from_hex(s):
+    return bytes.fromhex(s)
+
+
+def from_int_representation_to_bytes(a):
+    return bytes(str(a), "utf-8")
+
+
+def from_int_to_byte(a):
+    return bytes([a])
+
+
+def from_string_to_bytes(a):
+    return a if isinstance(a, bytes) else bytes(a, "utf-8")
+
+
+def safe_hexlify(a):
+    return str(binascii.hexlify(a), "utf-8")
+
+
+def encode(val, base, minlen=0):
+    base, minlen = int(base), int(minlen)
+    code_string = get_code_string(base)
+    result_bytes = bytes()
+    while val > 0:
+        curcode = code_string[val % base]
+        result_bytes = bytes([ord(curcode)]) + result_bytes
+        val //= base
+
+    pad_size = minlen - len(result_bytes)
+
+    padding_element = b"\x00" if base == 256 else b"1" if base == 58 else b"0"
+    if pad_size > 0:
+        result_bytes = padding_element * pad_size + result_bytes
+
+    result_string = "".join([chr(y) for y in result_bytes])
+    result = result_bytes if base == 256 else result_string
+
+    return result
+
+
+def decode(string, base):
+    if base == 256 and isinstance(string, str):
+        string = bytes(bytearray.fromhex(string))
+    base = int(base)
+    code_string = get_code_string(base)
+    result = 0
+    if base == 256:
+
+        def extract(d, cs):
+            return d
+
+    else:
+
+        def extract(d, cs):
+            return cs.find(d if isinstance(d, str) else chr(d))
+
+    if base == 16:
+        string = string.lower()
+    while len(string) > 0:
+        result *= base
+        result += extract(string[0], code_string)
+        string = string[1:]
+    return result
 
 
 def json_is_base(obj, base):
-    if not is_python2 and isinstance(obj, bytes):
+    if isinstance(obj, bytes):
         return False
 
     alpha = get_code_string(base)
@@ -56,13 +208,9 @@ def json_changebase(obj, changer):
     return dict((x, json_changebase(obj[x], changer)) for x in obj)
 
 
-# Hashing transactions for signing
-
 SIGHASH_ALL = 1
 SIGHASH_NONE = 2
 SIGHASH_SINGLE = 3
-# this works like SIGHASH_ANYONECANPAY | SIGHASH_ALL, might as well make it explicit while
-# we fix the constant
 SIGHASH_ANYONECANPAY = 0x81
 SIGHASH_FORKID = 0x40
 
@@ -80,11 +228,11 @@ def encode_8_bytes(val):
 
 
 def list_to_bytes(vals):
-    return "".join(vals) if is_python2 else reduce(lambda x, y: x + y, vals, bytes())
+    return reduce(lambda x, y: x + y, vals, bytes())
 
 
 def dbl_sha256_list(vals):
-    return bin_dbl_sha256(list_to_bytes(vals))
+    return dbl_sha2(list_to_bytes(vals))
 
 
 # Transaction serialization and deserialization
@@ -109,7 +257,7 @@ def deserialize(tx):
 
     def read_var_int():
         pos[0] += 1
-        val = from_byte_to_int(tx[pos[0] - 1])
+        val = tx[pos[0] - 1]
         if val < 253:
             return val
         return read_as_int(pow(2, val - 252))
@@ -172,10 +320,7 @@ def serialize(txobj, include_witness=True):
     for inp in txobj["ins"]:
         o.append(inp["outpoint"]["hash"][::-1])
         o.append(encode_4_bytes(inp["outpoint"]["index"]))
-        o.append(
-            num_to_var_int(len(inp["script"]))
-            + (inp["script"] if inp["script"] or is_python2 else bytes())
-        )
+        o.append(num_to_var_int(len(inp["script"])) + (inp["script"] if inp["script"] else bytes()))
         o.append(encode_4_bytes(inp["sequence"]))
     o.append(num_to_var_int(len(txobj["outs"])))
     for out in txobj["outs"]:
@@ -185,7 +330,7 @@ def serialize(txobj, include_witness=True):
         for witness in txobj["witness"]:
             o.append(
                 num_to_var_int(witness["number"])
-                + (witness["scriptCode"] if witness["scriptCode"] or is_python2 else bytes())
+                + (witness["scriptCode"] if witness["scriptCode"] else bytes())
             )
     o.append(encode_4_bytes(txobj["locktime"]))
     return list_to_bytes(o)
@@ -214,10 +359,7 @@ def uahf_digest(txobj, i):
     inp = txobj["ins"][i]
     o.append(inp["outpoint"]["hash"][::-1])
     o.append(encode_4_bytes(inp["outpoint"]["index"]))
-    o.append(
-        num_to_var_int(len(inp["script"]))
-        + (inp["script"] if inp["script"] or is_python2 else bytes())
-    )
+    o.append(num_to_var_int(len(inp["script"])) + (inp["script"] if inp["script"] else bytes()))
     o.append(encode_8_bytes(inp["amount"]))
     o.append(encode_4_bytes(inp["sequence"]))
 
@@ -328,7 +470,7 @@ def txhash(tx, hashcode=None, wtxid=True):
     if hashcode:
         return dbl_sha256(from_string_to_bytes(tx) + encode(int(hashcode), 256, 4)[::-1])
     else:
-        return safe_hexlify(bin_dbl_sha256(tx)[::-1])
+        return safe_hexlify(dbl_sha2(tx)[::-1])
 
 
 def public_txhash(tx, hashcode=None):
@@ -337,23 +479,6 @@ def public_txhash(tx, hashcode=None):
 
 def bin_txhash(tx, hashcode=None):
     return binascii.unhexlify(txhash(tx, hashcode))
-
-
-def ecdsa_tx_sign(tx, priv, hashcode=SIGHASH_ALL):
-    rawsig = ecdsa_raw_sign(bin_txhash(tx, hashcode), priv)
-    return der_encode_sig(*rawsig) + encode(hashcode & 255, 16, 2)
-
-
-def ecdsa_tx_verify(tx, sig, pub, hashcode=SIGHASH_ALL):
-    return ecdsa_raw_verify(bin_txhash(tx, hashcode), der_decode_sig(sig), pub)
-
-
-def ecdsa_tx_recover(tx, sig, hashcode=SIGHASH_ALL):
-    z = bin_txhash(tx, hashcode)
-    _, r, s = der_decode_sig(sig)
-    left = ecdsa_raw_recover(z, (0, r, s))
-    right = ecdsa_raw_recover(z, (1, r, s))
-    return (encode_pubkey(left, "hex"), encode_pubkey(right, "hex"))
 
 
 # Scripts
@@ -382,7 +507,7 @@ def output_script_to_address(script, magicbyte=0):
         script = script[:-4]
     else:
         script = script[:-2]
-    return bin_to_b58check(safe_from_hex(script), magicbyte=magicbyte)
+    return encode_base58_header(safe_from_hex(script), magicbyte=magicbyte)
 
 
 def mk_p2w_scripthash_script(witver, witprog):
@@ -430,7 +555,7 @@ def deserialize_script(script):
         )
     out, pos = [], 0
     while pos < len(script):
-        code = from_byte_to_int(script[pos])
+        code = script[pos]
         if code == 0:
             out.append(None)
             pos += 1
@@ -470,27 +595,15 @@ def serialize_script_unit(unit):
             return from_int_to_byte(78) + encode(len(unit), 256, 4)[::-1] + unit
 
 
-if is_python2:
-
-    def serialize_script(script):
-        if json_is_base(script, 16):
-            return binascii.hexlify(
-                serialize_script(json_changebase(script, lambda x: binascii.unhexlify(x)))
-            )
-        return "".join(map(serialize_script_unit, script))
-
-
-else:
-
-    def serialize_script(script):
-        if json_is_base(script, 16):
-            return safe_hexlify(
-                serialize_script(json_changebase(script, lambda x: binascii.unhexlify(x)))
-            )
-        result = bytes()
-        for b in map(serialize_script_unit, script):
-            result += b if isinstance(b, bytes) else bytes(b, "utf-8")
-        return result
+def serialize_script(script):
+    if json_is_base(script, 16):
+        return safe_hexlify(
+            serialize_script(json_changebase(script, lambda x: binascii.unhexlify(x)))
+        )
+    result = bytes()
+    for b in map(serialize_script_unit, script):
+        result += b if isinstance(b, bytes) else bytes(b, "utf-8")
+    return result
 
 
 def mk_multisig_script(*args):  # [pubs],k or pub1,pub2...pub[n],M
@@ -555,22 +668,3 @@ def apply_multisignatures(txobj, i, script, *args):
 
 def is_inp(arg):
     return len(arg) > 64 or "output" in arg or "outpoint" in arg
-
-
-def select(unspent, value):
-    value = int(value)
-    high = [u for u in unspent if u["value"] >= value]
-    high.sort(key=lambda u: u["value"])
-    low = [u for u in unspent if u["value"] < value]
-    low.sort(key=lambda u: -u["value"])
-    if len(high):
-        return [high[0]]
-    i, tv = 0, 0
-    while tv < value and i < len(low):
-        tv += low[i]["value"]
-        i += 1
-    if tv < value:
-        raise Exception("Not enough funds")
-    unspents = low[:i]
-    actual_value = sum(unspent["value"] for unspent in unspents)
-    return low[:i]

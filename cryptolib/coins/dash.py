@@ -17,8 +17,6 @@
 
 from .base import BaseCoin
 
-# from ..explorers import dash_siampm
-
 
 class Dash(BaseCoin):
     coin_symbol = "DASH"
@@ -28,7 +26,6 @@ class Dash(BaseCoin):
     script_magicbyte = 16
     wif_prefix = 0xCC
     hd_path = 5
-    # explorer = dash_siampm
     testnet_overrides = {
         "display_name": "Dash Testnet",
         "coin_symbol": "DASHTEST",

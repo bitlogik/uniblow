@@ -1,4 +1,5 @@
 # -*- coding: utf8 -*-
+#
 # Copyright (c) 2017 Pieter Wuille
 # Copyright (c) 2021 BitLogiK
 #
@@ -19,8 +20,6 @@
 # LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
-
-"""Reference implementation for Bech32 and segwit addresses."""
 
 
 CHARSET = "qpzry9x8gf2tvdw0s3jn54khce6mua7l"
@@ -107,7 +106,7 @@ def convertbits(data, frombits, tobits, pad=True):
 
 
 def decode(hrp, addr):
-    """Decode a segwit address."""
+    """Decode a segwit address :(witver, data)"""
     hrpgot, data = bech32_decode(addr)
     if hrpgot != hrp:
         return (None, None)
@@ -122,10 +121,10 @@ def decode(hrp, addr):
 
 
 def bech32_address(hrp, datahash):
-    """Encode a segwit address"""
+    """Encode a segwit address without witver, for altcoins"""
     return bech32_encode(hrp, convertbits(datahash, 8, 5))
 
 
-def bech32_address_btc(datahash):
-    """Encode a segwit address without witver, for altcoins"""
-    return bech32_encode("bc", [0] + convertbits(datahash, 8, 5))
+def bech32_address_btc(datahash, hrp="bc", witver=0):
+    """Encode a segwit address"""
+    return bech32_encode(hrp, [witver] + convertbits(datahash, 8, 5))

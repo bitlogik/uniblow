@@ -17,9 +17,6 @@
 
 from .bitcoin import BaseCoin
 
-# from ..explorers import sochain
-
-
 class Doge(BaseCoin):
     coin_symbol = "DOGE"
     display_name = "Dogecoin"
@@ -28,7 +25,6 @@ class Doge(BaseCoin):
     script_magicbyte = 22
     to_wif = 0x9E
     hd_path = 3
-    # explorer = sochain
     xpriv_prefix = 0x02FACAFD
     xpub_prefix = 0x02FAC398
     testnet_overrides = {

@@ -15,15 +15,22 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
-from ..transaction import *
-from ..blocks import mk_merkle_proof
-from .. import segwit_addr
+from .transaction import *
 
-# from ..explorers import blockchain
-# from ..electrumx_client.rpc import ElectrumXClient
-from ..keystore import *
-from ..wallet import *
-from ..py3specials import *
+from cryptolib.cryptography import Hash160
+from cryptolib.bech32 import bech32_decode, bech32_address_btc, decode
+from cryptolib.base58 import encode_base58_header
+
+hash160Low = b"\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00"
+hash160High = b"\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff"
+
+
+def magicbyte_to_prefix(magicbyte):
+    first = encode_base58_header(hash160Low, magicbyte)[0]
+    last = encode_base58_header(hash160High, magicbyte)[0]
+    if first == last:
+        return (first,)
+    return (first, last)
 
 
 class BaseCoin(object):
@@ -103,46 +110,6 @@ class BaseCoin(object):
         else:
             self.script_prefixes = ()
         self.secondary_hashcode = self.secondary_hashcode or self.hashcode
-        self._rpc_client = None
-
-    @property
-    def rpc_client(self):
-        """
-        Connect to remove server
-        """
-        if not self._rpc_client:
-            self._rpc_client = self.client(**self.client_kwargs)
-        return self._rpc_client
-
-    def unspent(self, *addrs):
-        """
-        Get unspent transactions for addresses
-        """
-        return self.rpc_client.unspent(*addrs)
-
-    def history(self, *addrs, **kwargs):
-        """
-        Get transaction history for addresses
-        """
-        return self.explorer.history(*addrs, coin_symbol=self.coin_symbol)
-
-    def fetchtx(self, tx):
-        """
-        Fetch a tx from the blockchain
-        """
-        return self.explorer.fetchtx(tx, coin_symbol=self.coin_symbol)
-
-    def txinputs(self, tx):
-        """
-        Fetch inputs of a transaction on the blockchain
-        """
-        return self.explorer.txinputs(tx, coin_symbol=self.coin_symbol)
-
-    def pushtx(self, tx):
-        """
-        Push/ Broadcast a transaction to the blockchain
-        """
-        return self.explorer.pushtx(tx, coin_symbol=self.coin_symbol)
 
     def privtopub(self, privkey):
         """
@@ -161,13 +128,6 @@ class BaseCoin(object):
         Get address from a private key
         """
         return privtoaddr(privkey, magicbyte=self.magicbyte)
-
-    def electrum_address(self, masterkey, n, for_change=0):
-        """
-        For old electrum seeds
-        """
-        pubkey = electrum_pubkey(masterkey, n, for_change=for_change)
-        return self.pubtoaddr(pubkey)
 
     def is_address(self, addr):
         """
@@ -193,27 +153,27 @@ class BaseCoin(object):
         Convert an input public key hash to an address
         """
         if re.match("^[0-9a-fA-F]*$", script):
-            script = binascii.unhexlify(script)
+            script = bytes.fromhex(script)
         if script[:3] == b"\x76\xa9\x14" and script[-2:] == b"\x88\xac" and len(script) == 25:
-            return bin_to_b58check(script[3:-2], self.magicbyte)  # pubkey hash addresses
+            return encode_base58_header(script[3:-2], self.magicbyte)  # pubkey hash addresses
         else:
             # BIP0016 scripthash addresses
-            return bin_to_b58check(script[2:-1], self.script_magicbyte)
+            return encode_base58_header(script[2:-1], self.script_magicbyte)
 
     def p2sh_scriptaddr(self, script):
         """
         Convert an output p2sh script to an address
         """
         if re.match("^[0-9a-fA-F]*$", script):
-            script = binascii.unhexlify(script)
-        return hex_to_b58check(hash160(script), self.script_magicbyte)
+            script = bytes.fromhex(script)
+        return encode_base58_header(Hash160(script), self.script_magicbyte)
 
     def addrtoscript(self, addr):
         """
         Convert an output address to a script
         """
         if self.segwit_hrp:
-            witver, witprog = segwit_addr.decode(self.segwit_hrp, addr)
+            witver, witprog = decode(self.segwit_hrp, addr)
             if witprog is not None:
                 return mk_p2w_scripthash_script(witver, witprog)
         if self.is_p2sh(addr):
@@ -227,8 +187,8 @@ class BaseCoin(object):
         """
         if not self.segwit_supported:
             raise Exception("Segwit not supported for this coin")
-        compressed_pub = compress(pub)
-        return self.scripttoaddr(mk_p2wpkh_script(compressed_pub))
+        assert len(pub) in [33, 66]  # Check pubkey is compressed
+        return self.scripttoaddr(mk_p2wpkh_script(pub))
 
     def privtop2w(self, priv):
         """
@@ -238,9 +198,9 @@ class BaseCoin(object):
 
     def hash_to_segwit_addr(self, hash):
         """
-        Convert a hash to the new segwit address format outlined in BIP-0173
+        Convert a hash to the new segwit address format outlined in BIP0173
         """
-        return segwit_addr.bech32_address_btc(hash)
+        return bech32_address_btc(hash, self.segwit_hrp)
 
     def privtosegwit(self, privkey):
         """
@@ -527,15 +487,6 @@ class BaseCoin(object):
         argz = u2 + outs + [change_addr, fee]
         return self.mksend(*argz, segwit=segwit)
 
-    def block_height(self, txhash):
-        return self.explorer.block_height(txhash, coin_symbol=self.coin_symbol)
-
-    def current_block_height(self):
-        return self.explorer.current_block_height(coin_symbol=self.coin_symbol)
-
-    def block_info(self, height):
-        return self.explorer.block_info(height, coin_symbol=self.coin_symbol)
-
     def inspect(self, tx):
         if not isinstance(tx, dict):
             tx = deserialize(tx)
@@ -555,67 +506,7 @@ class BaseCoin(object):
             osum += _out["value"]
         return {"fee": isum - osum, "outs": outs, "ins": ins}
 
-    def merkle_prove(self, txhash):
-        """
-        Prove that information an explorer returns about a transaction in the blockchain is valid. Only run on a
-        tx with at least 1 confirmation.
-        """
-        blocknum = self.block_height(txhash)
-        blockinfo = self.block_info(blocknum)
-        hashes = blockinfo.pop("tx_hashes")
-        try:
-            i = hashes.index(txhash)
-        except ValueError:
-            raise Exception(
-                "Merkle proof failed because transaction %s is not part of the main chain" % txhash
-            )
-        return mk_merkle_proof(blockinfo, hashes, i)
-
     def encode_privkey(self, privkey, formt, script_type="p2pkh"):
         return encode_privkey(
             privkey, formt=formt, vbyte=self.wif_prefix + self.wif_script_types[script_type]
         )
-
-    def wallet(self, seed, passphrase=None, **kwargs):
-        if not bip39_is_checksum_valid(seed) == (True, True):
-            raise Exception("BIP39 Checksum failed. This is not a valid BIP39 seed")
-        ks = standard_from_bip39_seed(seed, passphrase, coin=self)
-        return HDWallet(ks, **kwargs)
-
-    def watch_wallet(self, xpub, **kwargs):
-        ks = from_xpub(xpub, self, "p2pkh")
-        return HDWallet(ks, **kwargs)
-
-    def p2wpkh_p2sh_wallet(self, seed, passphrase=None, **kwargs):
-        if not self.segwit_supported:
-            raise Exception("P2WPKH-P2SH segwit not enabled for this coin")
-        if not bip39_is_checksum_valid(seed) == (True, True):
-            raise Exception("BIP39 Checksum failed. This is not a valid BIP39 seed")
-        ks = p2wpkh_p2sh_from_bip39_seed(seed, passphrase, coin=self)
-        return HDWallet(ks, **kwargs)
-
-    def watch_p2wpkh_p2sh_wallet(self, xpub, **kwargs):
-        ks = from_xpub(xpub, self, "p2wpkh-p2sh")
-        return HDWallet(ks, **kwargs)
-
-    def p2wpkh_wallet(self, seed, passphrase=None, **kwargs):
-        if not bip39_is_checksum_valid(seed) == (True, True):
-            raise Exception("BIP39 Checksum failed. This is not a valid BIP39 seed")
-        ks = p2wpkh_from_bip39_seed(seed, passphrase, coin=self)
-        return HDWallet(ks, **kwargs)
-
-    def watch_p2wpkh_wallet(self, xpub, **kwargs):
-        ks = from_xpub(xpub, self, "p2wpkh")
-        return HDWallet(ks, **kwargs)
-
-    def electrum_wallet(self, seed, passphrase=None, **kwargs):
-        ks = from_electrum_seed(seed, passphrase, False, coin=self)
-        return HDWallet(ks, **kwargs)
-
-    def watch_electrum_wallet(self, xpub, **kwargs):
-        ks = from_xpub(xpub, self, "p2pkh", electrum=True)
-        return HDWallet(ks, **kwargs)
-
-    def watch_electrum_p2wpkh_wallet(self, xpub, **kwargs):
-        ks = from_xpub(xpub, self, "p2wpkh", electrum=True)
-        return HDWallet(ks, **kwargs)
