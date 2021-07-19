@@ -31,7 +31,12 @@ a = Analysis(
     ["uniblow.py"],
     pathex=[current_path],
     binaries=[],
-    datas=[(ICON, "gui/"), ("cryptolib/wordslist/english.txt", "cryptolib/wordslist/")],
+    datas=[
+        (ICON, "gui/"),
+        ("cryptolib/wordslist/english.txt", "cryptolib/wordslist/"),
+        ("gui/good.bmp", "gui/"),
+        ("gui/bad.bmp", "gui/"),
+    ],
     hiddenimports=additional_imports,
     hookspath=[],
     runtime_hooks=[],

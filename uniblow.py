@@ -23,6 +23,7 @@ from io import BytesIO
 import wx
 import qrcode
 import gui.app
+from devices.SeedWatcher import start_seedwatcher
 from version import VERSION
 
 SUPPORTED_COINS = [
@@ -36,6 +37,7 @@ SUPPORTED_COINS = [
 ]
 
 DEVICES_LIST = [
+    "SeedWatcher",
     "BasicFile",
     "OpenPGP",
     "HDdevice",
@@ -256,7 +258,11 @@ def device_selected(device):
     erase_info()
     sel_device = device.GetInt()
     device_sel_name = DEVICES_LIST[sel_device - 1]
-    if sel_device > 0:
+    if sel_device == 1:
+        # Seed Watcher
+        start_seedwatcher(app)
+    if sel_device > 1:
+        # Real keys device
         password_default = DEFAULT_PASSWORD
         the_device = get_device_class(device_sel_name)
         try:
