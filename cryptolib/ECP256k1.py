@@ -172,7 +172,7 @@ class ECPoint:
             raise ValueError("Invalid X962 public key header")
         px = int.from_bytes(bytes_data[1:33], "big")
         if compressed:
-            py = point_y(px, bytes_data[0]-1)
+            py = point_y(px, bytes_data[0] - 1)
         else:
             py = int.from_bytes(bytes_data[33:66], "big")
         # check y2 = x3+ax+b

@@ -20,12 +20,8 @@ import json
 import time
 import urllib.parse
 import urllib.request
-from .lib import cryptos
 
-try:
-    import sha3
-except Exception:
-    raise Exception("Requires PySHA3 : pip3 install pysha3")
+from cryptolib.cryptography import public_key_recover, decompress_pubkey, sha3
 
 
 def rlp_encode(input):
@@ -311,7 +307,7 @@ def has_checksum(addr):
 def format_checksum_address(addr):
     # Format an ETH address with checksum (without 0x)
     addr = addr.lower()
-    addr_sha3hash = sha3.keccak_256(addr.encode("ascii")).hexdigest()
+    addr_sha3hash = sha3(addr.encode("ascii")).hex()
     cs_address = ""
     for idx, ci in enumerate(addr):
         if ci in "abcdef":
@@ -343,10 +339,9 @@ def testaddr(eth_addr):
 
 class ETHwalletCore:
     def __init__(self, pubkey, network, api):
-        self.pubkey = pubkey
-        PKH = bytes.fromhex(cryptos.decompress(pubkey))
-        self.Qpub = cryptos.decode_pubkey(pubkey)
-        self.address = format_checksum_address(sha3.keccak_256(PKH[1:]).hexdigest()[-40:])
+        self.pubkey = decompress_pubkey(pubkey)
+        key_hash = sha3(self.pubkey[1:])
+        self.address = format_checksum_address(key_hash.hex()[-40:])
         self.api = api
         self.network = network
 
@@ -394,7 +389,7 @@ class ETHwalletCore:
                 s,
             ]
         )
-        self.datahash = sha3.keccak_256(signing_tx).digest()
+        self.datahash = sha3(signing_tx)
         return self.datahash
 
     def send(self, signature_der):
@@ -405,7 +400,8 @@ class ETHwalletCore:
         s = int.from_bytes(signature_der[lenr + 6 : lenr + 6 + lens], "big")
         # Parity recovery
         i = 35
-        if cryptos.ecdsa_raw_recover(self.datahash, (i, r, s)) != self.Qpub:
+        h = int.from_bytes(self.datahash, "big")
+        if public_key_recover(h, r, s, i) != self.pubkey:
             i += 1
         # Signature encoding
         v = int2bytearray(2 * self.chainID + i)
@@ -470,13 +466,13 @@ class ETH_wallet:
     def __init__(self, network, wtype, device):
         self.network = ETH_wallet.networks[network].lower()
         self.current_device = device
-        pubkey = self.current_device.get_public_key()
+        pubkey_hex = self.current_device.get_public_key()
         INFURA_KEY = "xxx"
         if INFURA_KEY == "xxx":
             raise Exception(
                 "To use Uniblow from source, bring your own Infura key, or use etherscan_api"
             )
-        self.eth = ETHwalletCore(pubkey, self.network, infura_api(INFURA_KEY, self.network))
+        self.eth = ETHwalletCore(pubkey_hex, self.network, infura_api(INFURA_KEY, self.network))
 
     @classmethod
     def get_networks(cls):

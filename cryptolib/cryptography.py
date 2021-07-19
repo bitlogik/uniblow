@@ -19,6 +19,11 @@ import hmac
 from os import urandom
 from secrets import randbelow
 
+try:
+    import sha3 as keccak
+except Exception:
+    raise Exception("Requires PySHA3 : pip3 install pysha3")
+
 from .ECP256k1 import ECPoint, inverse_mod
 from cryptography.hazmat import backends
 from cryptography.hazmat.primitives import serialization, hashes
@@ -32,6 +37,12 @@ CURVES_ORDER = {
     "K1": int("FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEBAAEDCE6AF48A03BBFD25E8CD0364141", 16),
     "R1": int("11579208921035624876269744694940757352999695522413576034242225906" "1068512044369"),
 }
+
+
+def decompress_pubkey(pubkey_hex_compr):
+    """From a public key X962 hex compressed to X962 bin uncompressed"""
+    ECPub = ECPoint.from_bytes(bytes.fromhex(pubkey_hex_compr))
+    return ECPub.encode_output(False)
 
 
 def public_key_recover(h, r, s, par=0):
@@ -91,6 +102,11 @@ def md160(raw_message):
     h = hashlib.new("ripemd160")
     h.update(raw_message)
     return h.digest()
+
+
+def sha3(raw_message):
+    """Keccak-256 for Ethereumn, not SHA3"""
+    return keccak.keccak_256(raw_message).digest()
 
 
 def Hash160(data):
