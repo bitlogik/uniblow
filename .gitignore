@@ -2,3 +2,4 @@
 /build
 /dist
 *.key
+package/version_info

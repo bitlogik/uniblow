@@ -1,8 +1,16 @@
 
 Uniblow versions history
 
-## 0.4.2
+## 0.5.0
 
+* Add a Seed Watcher
+* Major rewrite of the crypto libraries
+    * cleaner, smaller, more modern
+    * Using exclusively cryptography lib and Python internal
+    * Get rid of the external ecdsa lib
+    * testing
+* Add Binance Smart Chain
+* Binary detail properties added for Windows
 
 ## 0.4.0
 

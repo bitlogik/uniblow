@@ -3,22 +3,27 @@
 import os
 import sys
 import platform
+from package.build_win_verinfo import fill_version_info
 
 current_path = os.path.dirname(os.path.abspath("uniblow.spec"))
 sys.path.append(current_path)
 from uniblow import SUPPORTED_COINS, DEVICES_LIST
 from version import VERSION
 
-ICON = "gui/uniblow.ico"
+ICON = "../gui/uniblow.ico"
+FILE_DESCRIPTION = "uniblow application executable"
+COMMENTS = "universal blockchain wallet for cryptos"
 
 
 os_system = platform.system()
 if os_system == "Windows":
     os_platform = "win"
-if os_system == "Linux":
+elif os_system == "Linux":
     os_platform = "nux"
-if os_system == "Darwin":
+elif os_system == "Darwin":
     os_platform = "mac"
+else:
+    raise Exception("Unknown platform target")
 plt_arch = platform.machine().lower()
 BIN_PKG_NAME = f"Uniblow-{os_platform}-{plt_arch}-{VERSION}"
 
@@ -28,14 +33,14 @@ additional_imports += [f"devices.{device}" for device in DEVICES_LIST]
 pkgs_remove = ["sqlite3", "tcl85", "tk85", "_sqlite3", "_tkinter", "libopenblas", "libdgamln"]
 
 a = Analysis(
-    ["uniblow.py"],
+    ["../uniblow.py"],
     pathex=[current_path],
     binaries=[],
     datas=[
         (ICON, "gui/"),
-        ("cryptolib/wordslist/english.txt", "cryptolib/wordslist/"),
-        ("gui/good.bmp", "gui/"),
-        ("gui/bad.bmp", "gui/"),
+        ("../cryptolib/wordslist/english.txt", "cryptolib/wordslist/"),
+        ("../gui/good.bmp", "gui/"),
+        ("../gui/bad.bmp", "gui/"),
     ],
     hiddenimports=additional_imports,
     hookspath=[],
@@ -64,6 +69,12 @@ for pkg in pkgs_remove:
 
 pyz = PYZ(a.pure, a.zipped_data, cipher=None)
 
+if os_platform == "win":
+    fill_version_info(BIN_PKG_NAME, VERSION, FILE_DESCRIPTION, COMMENTS)
+    version_info_file = "version_info"
+else:
+    version_info_file = None
+
 exe = EXE(
     pyz,
     a.scripts,
@@ -80,4 +91,5 @@ exe = EXE(
     upx_exclude=[],
     runtime_tmpdir=None,
     console=False,
+    version=version_info_file,
 )

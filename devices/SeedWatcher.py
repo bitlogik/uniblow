@@ -1,7 +1,7 @@
 import sys
 import wx
 import gui.swgui
-
+from gui.app import file_path
 from cryptolib.HDwallet import HD_Wallet, generate_mnemonic, bip39_is_checksum_valid
 from wallets.BTCwallet import BTC_wallet
 from wallets.ETHwallet import ETH_wallet
@@ -64,8 +64,8 @@ class SeedWatcherPanel(gui.swgui.MainPanel):
         event.Skip()
 
     def initialize(self):
-        self.GOOD_BMP = wx.Bitmap("gui/good.bmp")
-        self.BAD_BMP = wx.Bitmap("gui/bad.bmp")
+        self.GOOD_BMP = wx.Bitmap(file_path("gui/good.bmp"))
+        self.BAD_BMP = wx.Bitmap(file_path("gui/bad.bmp"))
         ctab = self.m_dataViewListCtrl1
         dv1 = wx.dataview.DataViewColumn("Name", wx.dataview.DataViewTextRenderer(), 0)
         ctab.AppendColumn(dv1)
@@ -122,6 +122,7 @@ class SeedWatcherPanel(gui.swgui.MainPanel):
 
 def start_seedwatcher(app):
     app.frame_sw = SeedWatcherFrame(app.gui_frame)
+    app.frame_sw.SetIcons(wx.IconBundle(file_path("gui/uniblow.ico")))
     app.gui_panel.devices_choice.SetSelection(0)
     app.gui_frame.Hide()
     app.panel_sw = SeedWatcherPanel(app.frame_sw)
