@@ -62,7 +62,8 @@ def bip39_is_checksum_valid(mnemonic):
             return False, False
         i = i * n + k
     if words_len not in [12, 15, 18, 21, 24]:
-        raise ValueError("Mnemonic has not the right words size")
+        return False, False
+        # raise ValueError("Mnemonic has not the right words size")
     entropy = i >> checksum_length
     checksum = i % 2 ** checksum_length
     entb = entropy.to_bytes(entropy_length // 8, "big")
