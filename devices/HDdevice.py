@@ -25,10 +25,8 @@ import nacl.pwhash
 import nacl.secret
 import nacl.utils
 
-import wallets.lib
+from cryptolib.HDwallet import HD_Wallet,entropy_to_mnemonic, bip39_is_checksum_valid, mnemonic_to_seed
 
-CURVE_K1_ORDER = 0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEBAAEDCE6AF48A03BBFD25E8CD0364141
-EC_BYTES_SIZE = 32
 
 FILE_NAME = "HDseed.key"
 
@@ -39,42 +37,6 @@ class pwdException(nacl.exceptions.CryptoError):
 
 class NotinitException(Exception):
     pass
-
-
-def encode_int(intarray):
-    # encode a bytes array to a DER integer (bytes list)
-    if intarray[0] >= 128:
-        return [2, len(intarray) + 1, 0, *intarray]
-    if intarray[0] == 0:
-        return encode_int(intarray[1:])
-    return [2, len(intarray), *intarray]
-
-
-def encode_der_s(int_r, int_s):
-    # Encode raw signature R|S (2x EC size bytes) into ASN1 DER
-    # Enforce low S
-    array_r = encode_int(int_r.to_bytes(EC_BYTES_SIZE, byteorder="big"))
-    if int_s > (CURVE_K1_ORDER >> 1):
-        s_data = (CURVE_K1_ORDER - int_s).to_bytes(EC_BYTES_SIZE, byteorder="big")
-        array_s = encode_int(s_data)
-    else:
-        array_s = encode_int(int_s.to_bytes(EC_BYTES_SIZE, byteorder="big"))
-    return bytes([0x30, len(array_r) + len(array_s), *array_r, *array_s])
-
-
-def fix_s_sig(sig):
-    # DER to DER with low S
-    if sig[0] != 0x30:
-        raise Exception("Wrong signature header")
-    if sig[2] != 0x02:
-        raise Exception("Wrong signature format")
-    rlen = sig[3]
-    r_value = int.from_bytes(sig[4 : 4 + rlen], "big")
-    slen = sig[5 + rlen]
-    s_value = int.from_bytes(sig[6 + rlen : 6 + rlen + slen], "big")
-    if sig[1] != 4 + rlen + slen or len(sig) != 6 + rlen + slen:
-        raise Exception("Wrong signature encoding")
-    return encode_der_s(r_value, s_value)
 
 
 class HDdevice:
@@ -109,24 +71,24 @@ class HDdevice:
             except nacl.exceptions.CryptoError:
                 raise pwdException("BadPass")
             # Compute master key from seed
-            self.master_key = wallets.lib.cryptos.deterministic.bip32_master_key(seed)
+            self.master_node = HD_Wallet.from_seed(seed)
             key_file.close()
         else:
             raise NotinitException()
 
     def generate_mnemonic(self):
         random_entropy = nacl.utils.random(32)
-        return wallets.lib.cryptos.mnemonic.entropy_to_words(random_entropy)
+        return entropy_to_mnemonic(random_entropy)
 
     def check_mnemonic(self, mnemonic):
-        # reutrn checksum_valid, wordlist_valid (bool, bool)
-        return wallets.lib.cryptos.mnemonic.bip39_is_checksum_valid(mnemonic)
+        # return checksum_valid, wordlist_valid (bool, bool)
+        return bip39_is_checksum_valid(mnemonic)
 
     def initialize_device(self, password, mnemonic):
         # Save the seed from the mnemonic in a file
         key_file = open(FILE_NAME, "w")
         # compute the seed
-        seedg = wallets.lib.cryptos.mnemonic.mnemonic_to_seed(mnemonic)
+        seedg = mnemonic_to_seed(mnemonic)
         # Encrypt the private key
         salt = token_bytes(nacl.pwhash.argon2i.SALTBYTES)
         encryption_key = nacl.pwhash.argon2id.kdf(
@@ -144,21 +106,13 @@ class HDdevice:
         json.dump({"seed_enc": encrypted_content.hex(), "salt": salt.hex()}, key_file)
         key_file.close()
         self.created = True
-        self.master_key = wallets.lib.cryptos.deterministic.bip32_master_key(seedg)
+        self.master_node = HD_Wallet.from_seed(seedg)
 
     def derive_key(self, path):
-        pvkey_int = int(
-            wallets.lib.cryptos.deterministic.bip32_descend(self.master_key, path)[:-2], 16
-        )
-        self.pvkey = ec.derive_private_key(pvkey_int, ec.SECP256K1())
+        self.pvkey = self.master_node.derive_key(path)
 
     def get_public_key(self):
-        return (
-            self.pvkey.public_key()
-            .public_bytes(serialization.Encoding.X962, serialization.PublicFormat.CompressedPoint)
-            .hex()
-        )
+        return self.pvkey.get_public_key().hex()
 
     def sign(self, hashed_msg):
-        raw_sig = self.pvkey.sign(hashed_msg, ec.ECDSA(utils.Prehashed(hashes.SHA256())))
-        return fix_s_sig(raw_sig)
+        return self.pvkey.sign(hashed_msg)
