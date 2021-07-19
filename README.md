@@ -40,6 +40,8 @@ Compatible with the following blockchains :
     * Segwit P2SH compatibility
 * DOGE
     * mainnet and testnet networks
+* BSC
+    * mainnet and testnet networks
 * EOS
     * K1 wallet
     * EOSio and Jungle3 networks
@@ -48,6 +50,10 @@ Compatible with the following blockchains :
     * Main Tezos and Edo testnet networks
 
 ## Devices
+
+### Seed Watcher
+
+This is not a real device to handle the private keys and make transactions. It provides a window GUI to read a mnemonic seed, analyzes it, and displays the major cryptos held by this given mnemonic, with their respective balance.
 
 ### BasicFile device
 
