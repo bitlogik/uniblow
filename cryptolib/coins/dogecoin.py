@@ -17,6 +17,7 @@
 
 from .bitcoin import BaseCoin
 
+
 class Doge(BaseCoin):
     coin_symbol = "DOGE"
     display_name = "Dogecoin"
