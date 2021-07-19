@@ -321,4 +321,4 @@ def test_ycompute():
         ]
     )
     x_coord = int.from_bytes(Pub3_bin[1:33], "big")
-    assert ECP256k1.ECPoint.from_x(x_coord, 1).encode_output(False) == Pub3_bin
+    assert ECP256k1.ECPoint.from_x(x_coord, 0).encode_output(False) == Pub3_bin
