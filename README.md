@@ -55,6 +55,8 @@ Compatible with the following blockchains :
 
 This is not a real device to handle the private keys and make transactions. It provides a window GUI to read a mnemonic seed, analyzes it, and displays the major cryptos held by this given mnemonic, with their respective balance. It can also securely generate new BIP39 mnemonic seeds.
 
+Note that Seed Watcher only looks at the first address. If you used a full HD wallet for BTC, LTC or DOGE (such as Electrum), the balance could not be recomputed properly. For BTC, it looks at the SegWit/84 address.
+
 ### BasicFile device
 
 The BasicFile device encrypts your private key [with a random salt using libsodium
@@ -135,8 +137,8 @@ bringing even greater confidence in the integrity of the application.
 
 Features in development :
 
-* HD wallet device (BIP32/39/44)
-* ERC20 tokens on ETH
+* Full HD wallet device (BIP32/39/44)
+* ERC20 tokens on ETH/BSC
 
 ### Use it from source
 
