@@ -125,6 +125,7 @@ class MainPanel ( wx.Panel ):
         # Connect Events
         self.m_textCtrl_mnemo.Bind( wx.EVT_TEXT, self.mnemo_changed )
         self.m_button_gen.Bind( wx.EVT_BUTTON, self.gen_new_mnemonic )
+        self.m_dataViewListCtrl1.Bind( wx.dataview.EVT_DATAVIEW_ITEM_ACTIVATED, self.select_coin, id = wx.ID_ANY )
 
     def __del__( self ):
         pass
@@ -135,6 +136,9 @@ class MainPanel ( wx.Panel ):
         event.Skip()
 
     def gen_new_mnemonic( self, event ):
+        event.Skip()
+
+    def select_coin( self, event ):
         event.Skip()
 
 

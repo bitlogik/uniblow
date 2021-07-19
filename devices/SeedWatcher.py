@@ -72,9 +72,6 @@ class SeedWatcherPanel(gui.swgui.MainPanel):
         selnw = int(WORDSLEN_LIST[seli][:2])
         self.generate_mnemonic(selnw)
 
-    def goSweep(self, event):
-        event.Skip()
-
     def initialize(self):
         self.GOOD_BMP = wx.Bitmap(file_path("gui/good.bmp"))
         self.BAD_BMP = wx.Bitmap(file_path("gui/bad.bmp"))
@@ -128,6 +125,24 @@ class SeedWatcherPanel(gui.swgui.MainPanel):
                     print(exc)
 
         self.display_coins(coins)
+
+    def select_coin(self, event):
+        event.Skip()
+        if wx.TheClipboard.Open():
+            wx.TheClipboard.Clear()
+            sel_row = self.m_dataViewListCtrl1.ItemToRow(event.GetItem())
+            addr = self.m_dataViewListCtrl1.GetTextValue(sel_row, 1)
+            wx.TheClipboard.SetData(wx.TextDataObject(addr))
+            wx.TheClipboard.Close()
+            wx.TheClipboard.Flush()
+            copied_modal = wx.MessageDialog(
+                self,
+                f"Account address {addr}\nwas copied in the clipboard",
+                "Copied",
+                wx.STAY_ON_TOP | wx.CENTER,
+                wx.DefaultPosition,
+            )
+            copied_modal.ShowModal()
 
 
 def start_seedwatcher(app):
