@@ -19,7 +19,9 @@ import json
 import urllib.parse
 import urllib.request
 import re
-from .lib import cryptos
+
+import cryptolib.coins
+from cryptolib.base58 import decode_base58
 
 
 class sochain_api:
@@ -48,6 +50,9 @@ class sochain_api:
             if len(brep) == 64 and brep[0] != ord("{"):
                 brep = b'{"txid":"' + brep + b'"}'
             self.jsres = json.loads(brep)
+        except urllib.error.HTTPError as e:
+            print(e.read())
+            raise IOError(e)
         except urllib.error.URLError as e:
             raise IOError(e)
         except Exception:
@@ -106,7 +111,7 @@ def testaddr(doge_addr):
         return False
     try:
         if checked:
-            cryptos.b58c_to_bin(doge_addr)
+            decode_base58(doge_addr)
     except AssertionError:
         return False
     return checked
@@ -121,7 +126,9 @@ class DOGEwalletCore:
         # pubkey is hex compressed
         self.pubkey = pubkey
         if self.segwit == 0:
-            self.address = cryptos.coins.dogecoin.Doge(testnet=self.testnet).pubtoaddr(self.pubkey)
+            self.address = cryptolib.coins.dogecoin.Doge(testnet=self.testnet).pubtoaddr(
+                self.pubkey
+            )
         else:
             raise Exception("Not valid segwit option")
         self.api = api
@@ -145,8 +152,8 @@ class DOGEwalletCore:
         outs = [{"value": paymentvalue, "address": toaddr}]
         if changevalue > 0:
             outs.append({"value": changevalue, "address": self.address})
-        self.tx = cryptos.coins.dogecoin.Doge(testnet=self.testnet).mktx(inputs, outs)
-        script = cryptos.mk_pubkey_script(self.address)
+        self.tx = cryptolib.coins.dogecoin.Doge(testnet=self.testnet).mktx(inputs, outs)
+        script = cryptolib.coins.mk_pubkey_script(self.address)
 
         # Finish tx
         # Sign each input
@@ -154,15 +161,19 @@ class DOGEwalletCore:
         datahashes = []
         for i in range(self.leninputs):
             print("\nSigning INPUT #", i)
-            signing_tx = cryptos.signature_form(self.tx, i, script, cryptos.SIGHASH_ALL)
-            datahashes.append(cryptos.bin_txhash(signing_tx, cryptos.SIGHASH_ALL))
+            signing_tx = cryptolib.coins.signature_form(
+                self.tx, i, script, cryptolib.coins.SIGHASH_ALL
+            )
+            datahashes.append(cryptolib.coins.bin_txhash(signing_tx, cryptolib.coins.SIGHASH_ALL))
         return datahashes
 
     def send(self, signatures):
         for i in range(self.leninputs):
             signature_der_hex = signatures[i].hex() + "01"
-            self.tx["ins"][i]["script"] = cryptos.serialize_script([signature_der_hex, self.pubkey])
-        txhex = cryptos.serialize(self.tx)
+            self.tx["ins"][i]["script"] = cryptolib.coins.serialize_script(
+                [signature_der_hex, self.pubkey]
+            )
+        txhex = cryptolib.coins.serialize(self.tx)
         return "\nDONE, txID : " + self.api.pushtx(txhex)
 
     def balance_fmutxos(self, utxos):

@@ -19,7 +19,8 @@
 import json
 import urllib.parse
 import urllib.request
-from .lib import cryptos
+
+from cryptolib.base58 import encode_base58, decode_base58
 
 try:
     import nacl.signing
@@ -115,7 +116,7 @@ def testaddr(xtz_addr):
     if len(xtz_addr) != 36:
         return False
     try:
-        cryptos.b58c_to_bin(xtz_addr)
+        decode_base58(xtz_addr)
     except AssertionError:
         return False
     return True
@@ -129,12 +130,11 @@ class XTZwalletCore:
 
     def __init__(self, pubkey, network, api):
         self.pubkey = pubkey
-        self.Qpub = cryptos.decode_pubkey(pubkey)
-        self.pubkey_b58 = cryptos.headbin_to_b58check(
-            bytes.fromhex(self.pubkey), XTZwalletCore.PUBKEY_HEADER
+        self.pubkey_b58 = encode_base58(
+            XTZwalletCore.PUBKEY_HEADER + bytes.fromhex(self.pubkey),
         )
         pubkey_hash = blake2b(bytes.fromhex(pubkey), 20)
-        self.address = cryptos.headbin_to_b58check(pubkey_hash, XTZwalletCore.ADDRESS_HEADER)
+        self.address = encode_base58(XTZwalletCore.ADDRESS_HEADER + pubkey_hash)
         self.api = api
         self.network = network
 
@@ -217,7 +217,7 @@ class XTZwalletCore:
         r = int.from_bytes(signature_der[4 : lenr + 4], "big")
         s = int.from_bytes(signature_der[lenr + 6 : lenr + 6 + lens], "big")
         rs_bin = r.to_bytes(32, "big") + s.to_bytes(32, "big")
-        sig_b58 = cryptos.headbin_to_b58check(rs_bin, XTZwalletCore.SIG256K1_PREFIX)
+        sig_b58 = encode_base58(XTZwalletCore.SIG256K1_PREFIX + rs_bin)
         self.operation["operation"]["signature"] = sig_b58
 
         # Simulate tx

@@ -14,7 +14,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 
-from .cryptography import b58checksum
+from .cryptography import b58checksum, md160
 from math import ceil
 
 BASE58 = 58
@@ -38,6 +38,12 @@ def bin_to_base58(bin_data):
         else:
             break
     return base58
+
+
+def bin_to_base58_eos(bin_data, key_type):
+    key_type_bin = bytes(key_type, "ascii")
+    checksum_eos = md160(bin_data + key_type_bin)[:4]
+    return bin_to_base58(bin_data + checksum_eos)
 
 
 def encode_base58(bin_data):

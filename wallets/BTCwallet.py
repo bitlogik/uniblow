@@ -156,7 +156,6 @@ class BTCwalletCore:
             self.address = cryptolib.coins.bitcoin.Bitcoin(testnet=self.testnet).pubtosegwit(
                 self.pubkey
             )
-            print(self.address)
         else:
             raise Exception("Not valid segwit option")
         self.api = api

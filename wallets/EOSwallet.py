@@ -22,25 +22,16 @@ import json
 import hashlib
 import re
 
-from .lib import cryptos
+from cryptolib.base58 import bin_to_base58_eos
+from cryptolib.cryptography import public_key_recover, decompress_pubkey
+
 from eospy.cleos import Cleos
 from eospy.utils import sig_digest
 from eospy.types import EOSEncoder, Transaction
 
 
-def bin_to_b58eos(data_bin, key_type):
-    leading_bytes = 0
-    for posi in data_bin:
-        if posi != 0:
-            break
-        leading_bytes += 1
-    key_type_bin = bytes(key_type, "ascii")
-    checksum = hashlib.new("ripemd160", data_bin + key_type_bin).digest()[:4]
-    return "1" * leading_bytes + cryptos.py3specials.changebase(data_bin + checksum, 256, 58)
-
-
 def compute_eos_address(pubkey, key_type="K1"):
-    return f"PUB_{key_type}_{bin_to_b58eos(pubkey, key_type)}"
+    return f"PUB_{key_type}_{bin_to_base58_eos(pubkey, key_type)}"
 
 
 class eos_api:
@@ -99,8 +90,7 @@ account_pattern = re.compile(r"^[a-z1-5]{12}$")
 
 class EOSwalletCore:
     def __init__(self, pubkey, network, api):
-        self.pubkey = pubkey
-        self.Qpub = cryptos.decode_pubkey(pubkey)
+        self.pubkey = decompress_pubkey(pubkey)
         self.api = api
         self.address = compute_eos_address(bytes.fromhex(pubkey))
         self.account = self.getaccount(self.address)
@@ -158,7 +148,8 @@ class EOSwalletCore:
         s = int.from_bytes(signature_der[lenr + 6 : lenr + 6 + lens], "big")
         # Parity recovery
         i = 31
-        if cryptos.ecdsa_raw_recover(self.datahash, (i, r, s)) != self.Qpub:
+        h = int.from_bytes(self.datahash, "big")
+        if public_key_recover(h, r, s, i) != self.pubkey:
             i += 1
         # Signature encoding
         # pack
@@ -168,7 +159,7 @@ class EOSwalletCore:
         sig_bin = ib + rb + sb
         # encode
         sigtype = "K1"
-        signature_b58 = f"SIG_{sigtype}_{bin_to_b58eos(sig_bin, sigtype)}"
+        signature_b58 = f"SIG_{sigtype}_{bin_to_base58_eos(sig_bin, sigtype)}"
         final_tx = {
             "compression": "none",
             "transaction": self.tx_info.__dict__,
@@ -206,8 +197,8 @@ class EOS_wallet:
         self.network = EOS_wallet.networks[network]
         self.key_type = EOS_wallet.wtypes[wtype]
         self.current_device = device
-        pubkey = self.current_device.get_public_key()
-        self.eos = EOSwalletCore(pubkey, self.network, eos_api(self.network))
+        pubkey_hex = self.current_device.get_public_key()
+        self.eos = EOSwalletCore(pubkey_hex, self.network, eos_api(self.network))
 
     @classmethod
     def get_networks(cls):

@@ -19,7 +19,9 @@ import json
 import urllib.parse
 import urllib.request
 import re
-from .lib import cryptos
+
+import cryptolib.coins
+from cryptolib.base58 import decode_base58
 
 
 class sochain_api:
@@ -47,6 +49,9 @@ class sochain_api:
             if len(brep) == 64 and brep[0] != ord("{"):
                 brep = b'{"txid":"' + brep + b'"}'
             self.jsres = json.loads(brep)
+        except urllib.error.HTTPError as e:
+            print(e.read())
+            raise IOError(e)
         except urllib.error.URLError as e:
             raise IOError(e)
         except Exception:
@@ -109,7 +114,7 @@ def testaddr(ltc_addr):
         return False
     try:
         if checked:
-            cryptos.b58c_to_bin(ltc_addr)
+            decode_base58(ltc_addr)
     except AssertionError:
         return False
     return checked
@@ -124,15 +129,15 @@ class LTCwalletCore:
         # pubkey is hex compressed
         self.pubkey = pubkey
         if self.segwit == 0:
-            self.address = cryptos.coins.litecoin.Litecoin(testnet=self.testnet).pubtoaddr(
+            self.address = cryptolib.coins.litecoin.Litecoin(testnet=self.testnet).pubtoaddr(
                 self.pubkey
             )
         elif self.segwit == 1:
-            self.address = cryptos.coins.litecoin.Litecoin(testnet=self.testnet).pubtop2w(
+            self.address = cryptolib.coins.litecoin.Litecoin(testnet=self.testnet).pubtop2w(
                 self.pubkey
             )
         elif self.segwit == 2:
-            self.address = cryptos.coins.litecoin.Litecoin(testnet=self.testnet).pubtosegwit(
+            self.address = cryptolib.coins.litecoin.Litecoin(testnet=self.testnet).pubtosegwit(
                 self.pubkey
             )
         else:
@@ -166,11 +171,11 @@ class LTCwalletCore:
                 outs[-1]["segwit"] = True
             if self.segwit == 2:
                 outs[-1]["new_segwit"] = True
-        self.tx = cryptos.coins.litecoin.Litecoin(testnet=self.testnet).mktx(inputs, outs)
+        self.tx = cryptolib.coins.litecoin.Litecoin(testnet=self.testnet).mktx(inputs, outs)
         if self.segwit == 0:
-            script = cryptos.mk_pubkey_script(self.address)
+            script = cryptolib.coins.mk_pubkey_script(self.address)
         elif self.segwit == 2 or self.segwit == 1:
-            script = cryptos.mk_p2wpkh_scriptcode(self.pubkey)
+            script = cryptolib.coins.mk_p2wpkh_scriptcode(self.pubkey)
         else:
             raise Exception("Not valid segwit option")
 
@@ -180,20 +185,24 @@ class LTCwalletCore:
         datahashes = []
         for i in range(self.leninputs):
             print("\nSigning INPUT #", i)
-            signing_tx = cryptos.signature_form(self.tx, i, script, cryptos.SIGHASH_ALL)
-            datahashes.append(cryptos.bin_txhash(signing_tx, cryptos.SIGHASH_ALL))
+            signing_tx = cryptolib.coins.signature_form(
+                self.tx, i, script, cryptolib.coins.SIGHASH_ALL
+            )
+            datahashes.append(cryptolib.coins.bin_txhash(signing_tx, cryptolib.coins.SIGHASH_ALL))
         return datahashes
 
     def send(self, signatures):
         for i in range(self.leninputs):
             signature_der_hex = signatures[i].hex() + "01"
             if self.segwit == 0:
-                self.tx["ins"][i]["script"] = cryptos.serialize_script(
+                self.tx["ins"][i]["script"] = cryptolib.coins.serialize_script(
                     [signature_der_hex, self.pubkey]
                 )
             if self.segwit > 0:
                 if self.segwit == 1:
-                    self.tx["ins"][i]["script"] = cryptos.mk_p2wpkh_redeemscript(self.pubkey)
+                    self.tx["ins"][i]["script"] = cryptolib.coins.mk_p2wpkh_redeemscript(
+                        self.pubkey
+                    )
                 elif self.segwit == 2:
                     self.tx["ins"][i]["script"] = ""
                 else:
@@ -201,10 +210,12 @@ class LTCwalletCore:
                 self.tx["witness"].append(
                     {
                         "number": 2,
-                        "scriptCode": cryptos.serialize_script([signature_der_hex, self.pubkey]),
+                        "scriptCode": cryptolib.coins.serialize_script(
+                            [signature_der_hex, self.pubkey]
+                        ),
                     }
                 )
-        txhex = cryptos.serialize(self.tx)
+        txhex = cryptolib.coins.serialize(self.tx)
         return "\nDONE, txID : " + self.api.pushtx(txhex)
 
     def balance_fmutxos(self, utxos):
