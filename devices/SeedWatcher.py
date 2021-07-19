@@ -1,5 +1,3 @@
-import ctypes
-
 import sys
 import wx
 import gui.swgui
@@ -77,6 +75,7 @@ class SeedWatcherPanel(gui.swgui.MainPanel):
         dv3 = wx.dataview.DataViewColumn("Balance", wx.dataview.DataViewTextRenderer(), 2)
         ctab.AppendColumn(dv3)
 
+        # generate_mnemonic ?
         mnemonic = (
             "rabbit tilt arm protect banner ill "
             "produce vendor april bike much identify "

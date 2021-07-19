@@ -41,7 +41,7 @@ CURVES_ORDER = {
 
 def decompress_pubkey(pubkey_hex_compr):
     """From a public key X962 hex compressed to X962 bin uncompressed"""
-    ECPub = ECPoint.from_bytes(bytes.fromhex(pubkey_hex_compr))
+    ECPub = ECPoint.from_hex(pubkey_hex_compr)
     return ECPub.encode_output(False)
 
 

@@ -18,8 +18,6 @@
 import json
 from os import path
 from secrets import token_bytes
-from cryptography.hazmat.primitives import serialization, hashes
-from cryptography.hazmat.primitives.asymmetric import ec, utils
 import nacl.exceptions
 import nacl.pwhash
 import nacl.secret

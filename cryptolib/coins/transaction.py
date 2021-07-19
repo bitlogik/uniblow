@@ -542,7 +542,7 @@ def mk_p2wpkh_scriptcode(pubkey):
 
 
 def p2wpkh_nested_script(pubkey):
-    return "0014" + hash160(safe_from_hex(pubkey))
+    return "0014" + pubkey_to_hash_hex(pubkey)
 
 
 # Output script to address representation
@@ -621,29 +621,6 @@ def mk_multisig_script(*args):  # [pubs],k or pub1,pub2...pub[n],M
 
 
 # Signing and verifying
-
-
-def verify_tx_input(tx, i, script, sig, pub):
-    if re.match("^[0-9a-fA-F]*$", tx):
-        tx = binascii.unhexlify(tx)
-    if re.match("^[0-9a-fA-F]*$", script):
-        script = binascii.unhexlify(script)
-    if not re.match("^[0-9a-fA-F]*$", sig):
-        sig = safe_hexlify(sig)
-    hashcode = decode(sig[-2:], 16)
-    modtx = signature_form(tx, int(i), script, hashcode)
-    return ecdsa_tx_verify(modtx, sig, pub, hashcode)
-
-
-def multisign(tx, i, script, pk, hashcode=SIGHASH_ALL):
-    if isinstance(tx, dict):
-        tx = serialize(tx)
-    if re.match("^[0-9a-fA-F]*$", tx):
-        tx = binascii.unhexlify(tx)
-    if re.match("^[0-9a-fA-F]*$", script):
-        script = binascii.unhexlify(script)
-    modtx = signature_form(tx, i, script, hashcode)
-    return ecdsa_tx_sign(modtx, pk, hashcode)
 
 
 def apply_multisignatures(txobj, i, script, *args):

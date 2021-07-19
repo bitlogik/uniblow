@@ -19,7 +19,6 @@ import unicodedata
 
 from cryptolib.cryptography import (
     sha2,
-    Hash160,
     HMAC_SHA512,
     EC_key_pair,
     PBKDF2_SHA512,
@@ -162,17 +161,6 @@ class BIP32node:
             else:
                 key_valid = True
         return BIP32node(i, self.depth + 1, newkey, deriv[32:], self.curve, fingerprint)
-
-    def serialize_xpub(self):
-        dataout = (
-            self.vpub_bytes
-            + bytes([self.depth])
-            + self.parent_fingerprint
-            + BIP32node.ser32(self.child_number)
-            + self.chain_code
-            + privkey_to_pubkey(self.pv_key, self.curve, True)
-        )
-        return b58.b58encode_check(dataout)
 
     def __eq__(self, other):
         if not isinstance(other, BIP32node):

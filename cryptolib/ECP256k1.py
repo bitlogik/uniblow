@@ -48,13 +48,13 @@ class ECPoint:
                 return INFINITY
             else:
                 return self.double()
-        l = ((other.__y - self.__y) * inverse_mod(other.__x - self.__x, _p)) % _p
-        x3 = (l * l - self.__x - other.__x) % _p
-        return ECPoint(x3, (l * (self.__x - x3) - self.__y) % _p)
+        slope = ((other.__y - self.__y) * inverse_mod(other.__x - self.__x, _p)) % _p
+        x3 = (slope * slope - self.__x - other.__x) % _p
+        return ECPoint(x3, (slope * (self.__x - x3) - self.__y) % _p)
 
     def __mul__(self, e):
         if e >= _r:
-            e = e % r
+            e = e % _r
         if e == 0:
             return INFINITY
         if self == INFINITY:
@@ -155,7 +155,7 @@ class ECPoint:
         return cls(x, point_y(x, parity_hint))
 
     @classmethod
-    def from_bytes(cls, pubkey_hex):
+    def from_hex(cls, pubkey_hex):
         return ECPoint.from_bytes(bytes.fromhex(pubkey_hex))
 
     @classmethod

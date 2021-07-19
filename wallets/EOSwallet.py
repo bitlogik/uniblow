@@ -19,7 +19,6 @@
 import pytz
 import datetime as dt
 import json
-import hashlib
 import re
 
 from cryptolib.base58 import bin_to_base58_eos

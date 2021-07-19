@@ -18,7 +18,7 @@
 from .transaction import *
 
 from cryptolib.cryptography import Hash160
-from cryptolib.bech32 import bech32_decode, bech32_address_btc, decode
+from cryptolib.bech32 import bech32_address_btc, decode
 from cryptolib.base58 import encode_base58_header
 
 hash160Low = b"\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00"

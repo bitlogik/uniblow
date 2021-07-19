@@ -284,7 +284,7 @@ def device_selected(device):
                 else:
                     device_loaded.open_account()
                 break
-            except NotinitException as exc:
+            except NotinitException:
                 if the_device.has_admin_password:
                     set_admin_message = f"Choose your admin PIN3 for the {device_sel_name} device\n"
                     set_admin_message += "If blank, a default admin PIN will be used."
@@ -338,7 +338,7 @@ def device_selected(device):
                         # output the exception when dev environment
                         raise exc
                     return
-            except pwdException as exc:
+            except pwdException:
                 inp_message = f"Input your {device_sel_name} wallet {pwd_pin}\n"
                 password_default = get_password(device_sel_name, inp_message)
                 if password_default is None:
