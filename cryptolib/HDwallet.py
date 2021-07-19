@@ -62,8 +62,7 @@ def bip39_is_checksum_valid(mnemonic):
             return False, False
         i = i * n + k
     if words_len not in [12, 15, 18, 21, 24]:
-        return False, False
-        # raise ValueError("Mnemonic has not the right words size")
+        return False, True
     entropy = i >> checksum_length
     checksum = i % 2 ** checksum_length
     entb = entropy.to_bytes(entropy_length // 8, "big")
@@ -73,9 +72,13 @@ def bip39_is_checksum_valid(mnemonic):
 
 
 def bip39_mnemonic_to_seed(mnemonic_phrase, passphrase=""):
-    if not bip39_is_checksum_valid(mnemonic_phrase)[1]:
+    words_len = len([unicodedata.normalize("NFKD", word) for word in mnemonic_phrase.split()])
+    if words_len not in [12, 15, 18, 21, 24]:
+        raise ValueError("Mnemonic has not the right words size")
+    bip39_mnemonic_info = bip39_is_checksum_valid(mnemonic_phrase)
+    if not bip39_mnemonic_info[1]:
         raise ValueError("Mnemonic is not from wordlist")
-    if not bip39_is_checksum_valid(mnemonic_phrase)[0]:
+    if not bip39_mnemonic_info[0]:
         raise ValueError("BIP39 Checksum is invalid for this mnemonic")
     return mnemonic_to_seed(
         mnemonic_phrase, passphrasestr=passphrase, passphrase_prefix=b"mnemonic"
