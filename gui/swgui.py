@@ -18,7 +18,7 @@ import wx.dataview
 class MainFrame ( wx.Frame ):
 
     def __init__( self, parent ):
-        wx.Frame.__init__ ( self, parent, id = wx.ID_ANY, title = u"Seed Watcher", pos = wx.DefaultPosition, size = wx.Size( 652,693 ), style = wx.DEFAULT_FRAME_STYLE|wx.TAB_TRAVERSAL )
+        wx.Frame.__init__ ( self, parent, id = wx.ID_ANY, title = u"  [ Uniblow ]    Seed Watcher", pos = wx.DefaultPosition, size = wx.Size( 652,639 ), style = wx.DEFAULT_FRAME_STYLE|wx.TAB_TRAVERSAL )
 
         self.SetSizeHints( wx.DefaultSize, wx.DefaultSize )
 
@@ -65,7 +65,7 @@ class MainPanel ( wx.Panel ):
 
         bSizer3.Add( self.m_staticText5, 0, wx.ALIGN_BOTTOM|wx.ALL, 5 )
 
-        self.m_bitmap_wl = wx.StaticBitmap( self, wx.ID_ANY, wx.Bitmap( u"gui/bad.bmp", wx.BITMAP_TYPE_ANY ), wx.DefaultPosition, wx.DefaultSize, 0 )
+        self.m_bitmap_wl = wx.StaticBitmap( self, wx.ID_ANY, wx.NullBitmap, wx.DefaultPosition, wx.DefaultSize, 0 )
         bSizer3.Add( self.m_bitmap_wl, 0, wx.ALIGN_BOTTOM|wx.ALL, 5 )
 
         self.m_staticText6 = wx.StaticText( self, wx.ID_ANY, u"  Checksum", wx.DefaultPosition, wx.DefaultSize, 0 )
@@ -73,7 +73,7 @@ class MainPanel ( wx.Panel ):
 
         bSizer3.Add( self.m_staticText6, 0, wx.ALIGN_BOTTOM|wx.ALL, 5 )
 
-        self.m_bitmap_cs = wx.StaticBitmap( self, wx.ID_ANY, wx.Bitmap( u"gui/bad.bmp", wx.BITMAP_TYPE_ANY ), wx.DefaultPosition, wx.DefaultSize, 0 )
+        self.m_bitmap_cs = wx.StaticBitmap( self, wx.ID_ANY, wx.NullBitmap, wx.DefaultPosition, wx.DefaultSize, 0 )
         bSizer3.Add( self.m_bitmap_cs, 0, wx.ALIGN_BOTTOM|wx.ALL, 5 )
 
 
