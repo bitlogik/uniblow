@@ -26,6 +26,8 @@ coins_list = [
     {"name": "Tezos", "path": "m/44'/1729'/0'/0/0", "wallet_lib": XTZ_wallet},
 ]
 
+WORDSLEN_LIST = ["12 words", "15 words", "18 words", "21 words", "24 words"]
+
 
 class SeedDevice:
     def __init__(self, ecpair):
@@ -54,11 +56,21 @@ class SeedWatcherPanel(gui.swgui.MainPanel):
         event.Skip()
         mnemo_txt = event.GetString()
         self.m_dataViewListCtrl1.DeleteAllItems()
+        self.m_bitmap_wl.SetBitmap(self.BAD_BMP)
+        self.m_bitmap_cs.SetBitmap(self.BAD_BMP)
         if hasattr(self, "cl"):
             self.cl.Stop()
-            self.cl.Start(750, mnemo_txt)
+            if mnemo_txt:
+                self.cl.Start(750, mnemo_txt)
         else:
-            self.cl = wx.CallLater(750, self.refresh_wallet, mnemo_txt)
+            if mnemo_txt:
+                self.cl = wx.CallLater(750, self.refresh_wallet, mnemo_txt)
+
+    def gen_new_mnemonic(self, event):
+        event.Skip()
+        seli = self.m_choice_nwords.GetSelection()
+        selnw = int(WORDSLEN_LIST[seli][:2])
+        self.generate_mnemonic(selnw)
 
     def goSweep(self, event):
         event.Skip()
@@ -66,6 +78,8 @@ class SeedWatcherPanel(gui.swgui.MainPanel):
     def initialize(self):
         self.GOOD_BMP = wx.Bitmap(file_path("gui/good.bmp"))
         self.BAD_BMP = wx.Bitmap(file_path("gui/bad.bmp"))
+        self.m_choice_nwords.Set(WORDSLEN_LIST)
+        self.m_choice_nwords.SetSelection(0)
         ctab = self.m_dataViewListCtrl1
         dv1 = wx.dataview.DataViewColumn("Name", wx.dataview.DataViewTextRenderer(), 0)
         ctab.AppendColumn(dv1)
@@ -74,14 +88,10 @@ class SeedWatcherPanel(gui.swgui.MainPanel):
         ctab.AppendColumn(dv2)
         dv3 = wx.dataview.DataViewColumn("Balance", wx.dataview.DataViewTextRenderer(), 2)
         ctab.AppendColumn(dv3)
+        self.generate_mnemonic(12)
 
-        # generate_mnemonic ?
-        mnemonic = (
-            "rabbit tilt arm protect banner ill "
-            "produce vendor april bike much identify "
-            "pond upset front easily glass gallery "
-            "address hair priority focus forest angle"
-        )
+    def generate_mnemonic(self, n_words):
+        mnemonic = generate_mnemonic(n_words)
         # Trigger wallet table computations
         self.fill_mnemonic(mnemonic)
 
@@ -101,10 +111,10 @@ class SeedWatcherPanel(gui.swgui.MainPanel):
     def refresh_wallet(self, current_mnemonic):
         """Recompute HD wallet keys"""
         cs, wl = bip39_is_checksum_valid(current_mnemonic)
-        WLBMP = self.GOOD_BMP if wl else self.BAD_BMP
-        CSBMP = self.GOOD_BMP if cs else self.BAD_BMP
-        self.m_bitmap_wl.SetBitmap(WLBMP)
-        self.m_bitmap_cs.SetBitmap(CSBMP)
+        if wl:
+            self.m_bitmap_wl.SetBitmap(self.GOOD_BMP)
+        if cs:
+            self.m_bitmap_cs.SetBitmap(self.GOOD_BMP)
         wallet = HD_Wallet.from_mnemonic(current_mnemonic)
         coins = []
         for coin in coins_list:

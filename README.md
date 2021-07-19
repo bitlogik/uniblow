@@ -53,7 +53,7 @@ Compatible with the following blockchains :
 
 ### Seed Watcher
 
-This is not a real device to handle the private keys and make transactions. It provides a window GUI to read a mnemonic seed, analyzes it, and displays the major cryptos held by this given mnemonic, with their respective balance.
+This is not a real device to handle the private keys and make transactions. It provides a window GUI to read a mnemonic seed, analyzes it, and displays the major cryptos held by this given mnemonic, with their respective balance. It can also securely generate new BIP39 mnemonic seeds.
 
 ### BasicFile device
 

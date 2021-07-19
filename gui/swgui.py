@@ -18,7 +18,7 @@ import wx.dataview
 class MainFrame ( wx.Frame ):
 
     def __init__( self, parent ):
-        wx.Frame.__init__ ( self, parent, id = wx.ID_ANY, title = u"  [ Uniblow ]    Seed Watcher", pos = wx.DefaultPosition, size = wx.Size( 652,639 ), style = wx.DEFAULT_FRAME_STYLE|wx.TAB_TRAVERSAL )
+        wx.Frame.__init__ ( self, parent, id = wx.ID_ANY, title = u"  [ Uniblow ]    Seed Watcher", pos = wx.DefaultPosition, size = wx.Size( 652,657 ), style = wx.DEFAULT_FRAME_STYLE|wx.TAB_TRAVERSAL )
 
         self.SetSizeHints( wx.DefaultSize, wx.DefaultSize )
 
@@ -53,7 +53,7 @@ class MainPanel ( wx.Panel ):
 
         bSizer3 = wx.BoxSizer( wx.HORIZONTAL )
 
-        self.m_staticText12 = wx.StaticText( self, wx.ID_ANY, u"Your wallet mnemonic", wx.DefaultPosition, wx.DefaultSize, 0 )
+        self.m_staticText12 = wx.StaticText( self, wx.ID_ANY, u"wallet mnemonic", wx.DefaultPosition, wx.DefaultSize, 0 )
         self.m_staticText12.Wrap( -1 )
 
         self.m_staticText12.SetFont( wx.Font( 12, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, False, wx.EmptyString ) )
@@ -84,6 +84,27 @@ class MainPanel ( wx.Panel ):
 
         bSizer11.Add( self.m_textCtrl_mnemo, 0, wx.ALL|wx.EXPAND, 5 )
 
+        bSizer31 = wx.BoxSizer( wx.HORIZONTAL )
+
+        bSizer31.SetMinSize( wx.Size( -1,40 ) )
+        self.m_button_gen = wx.Button( self, wx.ID_ANY, u"Generate New", wx.DefaultPosition, wx.Size( 160,45 ), 0 )
+        self.m_button_gen.SetFont( wx.Font( 11, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, False, wx.EmptyString ) )
+
+        bSizer31.Add( self.m_button_gen, 0, wx.ALL, 10 )
+
+        m_choice_nwordsChoices = []
+        self.m_choice_nwords = wx.Choice( self, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, m_choice_nwordsChoices, 0 )
+        self.m_choice_nwords.SetSelection( 0 )
+        self.m_choice_nwords.SetFont( wx.Font( 11, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, False, wx.EmptyString ) )
+
+        bSizer31.Add( self.m_choice_nwords, 0, wx.ALL|wx.ALIGN_CENTER_VERTICAL, 5 )
+
+
+        bSizer11.Add( bSizer31, 0, wx.ALIGN_CENTER_HORIZONTAL, 5 )
+
+
+        bSizer11.Add( ( 0, 0), 0, wx.ALIGN_CENTER_HORIZONTAL|wx.TOP, 25 )
+
         self.m_staticText16 = wx.StaticText( self, wx.ID_ANY, u"wallet assets", wx.DefaultPosition, wx.DefaultSize, 0 )
         self.m_staticText16.Wrap( -1 )
 
@@ -103,6 +124,7 @@ class MainPanel ( wx.Panel ):
 
         # Connect Events
         self.m_textCtrl_mnemo.Bind( wx.EVT_TEXT, self.mnemo_changed )
+        self.m_button_gen.Bind( wx.EVT_BUTTON, self.gen_new_mnemonic )
 
     def __del__( self ):
         pass
@@ -110,6 +132,9 @@ class MainPanel ( wx.Panel ):
 
     # Virtual event handlers, overide them in your derived class
     def mnemo_changed( self, event ):
+        event.Skip()
+
+    def gen_new_mnemonic( self, event ):
         event.Skip()
 
 
