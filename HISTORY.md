@@ -1,6 +1,12 @@
 
 Uniblow versions history
 
+## 0.5.2
+
+* Add ERC20 and BEP20 tokens
+* Copy to clipboard in SeedWatcher
+* Fix input value (negative, float errors)
+
 ## 0.5.0
 
 * Add a Seed Watcher
