@@ -180,9 +180,6 @@ class BIP32node:
             node = node.derive_private(BIP32node.index_int(pt.rstrip()))
         return node
 
-    def output_pubkey(self, compr):
-        return privkey_to_pubkey(self.pv_key, self.curve, compr)
-
     @classmethod
     def master_node(cls, seed, curve):
         """BIP39"""
