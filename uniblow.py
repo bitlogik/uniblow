@@ -547,12 +547,16 @@ def send(ev):
     if not app.wallet.check_address(to):
         warn_modal("Wrong destination account address format")
         return
+    sending_value_str = app.gui_panel.amount.GetValue()
+    if sending_value_str[0] == "-":
+        warn_modal("Amount input must be positive or null")
+        return
     try:
-        amount = float(app.gui_panel.amount.GetValue())
+        float(sending_value_str)
     except ValueError:
         warn_modal("Unvalid amount input")
         return
-    transfer(to, amount)
+    transfer(to, sending_value_str)
 
 
 def send_all(ev):

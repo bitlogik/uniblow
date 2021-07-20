@@ -21,6 +21,7 @@ import urllib.parse
 import urllib.request
 
 from cryptolib.base58 import encode_base58, decode_base58
+from wallets.wallets_utils import shift_10
 
 try:
     import nacl.signing
@@ -236,7 +237,7 @@ class XTZwalletCore:
         return "\nDONE, txID : " + self.api.pushtx(txhex)
 
 
-XTZ_units = 1000000
+XTZ_units = 6
 
 
 class XTZ_wallet:
@@ -288,7 +289,7 @@ class XTZ_wallet:
 
     def get_balance(self):
         # Get balance in base integer unit
-        return str(self.xtz.getbalance() / XTZ_units) + " XTZ"
+        return str(self.xtz.getbalance() / (10 ** XTZ_units)) + " XTZ"
 
     def check_address(self, addr_str):
         # Check if address is valid
@@ -312,7 +313,7 @@ class XTZ_wallet:
     def transfer(self, amount, to_account, priority_fee):
         # Transfer x unit to an account, pay
         return self.raw_tx(
-            int(amount * XTZ_units),
+            shift_10(amount, XTZ_units),
             XTZ_wallet.OPERATION_FEE,
             XTZ_wallet.GAZ_LIMIT_SIMPLE_TX,
             to_account,

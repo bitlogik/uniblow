@@ -77,10 +77,11 @@ def read_string(data_ans):
     str_len = read_uint256(data_bin, str_offset)
     str_offset += 32
     return data_bin[str_offset : str_offset + str_len].decode("utf8")
+from wallets.wallets_utils import shift_10
 
 
 BSC_symbol = "BSC"
-BSC_units = 10 ** 18
+BSC_units = 18
 
 # BEP20 functions codes
 #   balanceOf(address)
@@ -249,8 +250,7 @@ class BSCwalletCore:
             balraw = self.api.call(self.BEP20, DECIMALS_FUNCTION)
             if balraw == [] or balraw == "0x":
                 return 1
-            decim = int(balraw[2:], 16)
-            return 10 ** decim
+            return int(balraw[2:], 16)
         else:
             return BSC_units
 
@@ -411,7 +411,7 @@ class BSC_wallet:
     def get_balance(self):
         # Get balance in base integer unit
         return (
-            str(self.bsc.getbalance(not self.bsc.BEP20) / self.bsc.decimals)
+            str(self.bsc.getbalance(not self.bsc.BEP20) / (10 ** self.bsc.decimals))
             + " "
             + self.bsc.token_symbol
         )
@@ -442,7 +442,9 @@ class BSC_wallet:
         if to_account.startswith("0x"):
             to_account = to_account[2:]
         ethgazprice = self.bsc.api.get_fee(priority_fee)  # gwei per gaz unit
-        return self.raw_tx(int(amount * self.bsc.decimals), ethgazprice, ethgazlimit, to_account)
+        return self.raw_tx(
+            shift_10(amount, self.bsc.decimals), ethgazprice, ethgazlimit, to_account
+        )
 
     def transfer_inclfee(self, amount, to_account, fee_priority):
         # Transfer the amount in base unit minus fee, like the receiver paying the fee

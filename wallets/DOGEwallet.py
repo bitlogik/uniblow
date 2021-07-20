@@ -22,6 +22,7 @@ import re
 
 import cryptolib.coins
 from cryptolib.base58 import decode_base58
+from wallets.wallets_utils import shift_10
 
 
 class sochain_api:
@@ -73,7 +74,7 @@ class sochain_api:
         for utxo in addrutxos:
             selutxos.append(
                 {
-                    "value": int(float(utxo["value"]) * DOGE_units),
+                    "value": shift_10(utxo["value"], DOGE_units),
                     "output": utxo["txid"] + ":" + str(utxo["output_no"]),
                 }
             )
@@ -97,7 +98,7 @@ class sochain_api:
         return out
 
     def get_fee(self, priority):
-        return int(DOGE_units)
+        return int(10 ** DOGE_units)
 
 
 def testaddr(doge_addr):
@@ -196,7 +197,7 @@ class DOGEwalletCore:
             raise Exception("Not enough utxos values for the tx")
 
 
-DOGE_units = 1e8
+DOGE_units = 8
 
 
 class DOGE_wallet:
@@ -247,7 +248,7 @@ class DOGE_wallet:
 
     def get_balance(self):
         # Get balance in base integer unit
-        return str(self.doge.getbalance() / DOGE_units) + " DOGE"
+        return str(self.doge.getbalance() / (10 ** DOGE_units)) + " DOGE"
 
     def check_address(self, addr_str):
         # Check if address is valid
@@ -277,7 +278,7 @@ class DOGE_wallet:
     def transfer(self, amount, to_account, fee_priority):
         # Transfer x base unit to an account, pay
         fee = self.assess_fee(fee_priority)
-        return self.raw_tx(int(amount * DOGE_units), fee, to_account)
+        return self.raw_tx(shift_10(amount, DOGE_units), fee, to_account)
 
     def transfer_inclfee(self, amount, to_account, fee_priority):
         # Transfer the amount in base unit minus fee, like the receiver paying the fee

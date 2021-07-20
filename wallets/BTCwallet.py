@@ -23,6 +23,7 @@ import re
 import cryptolib.coins
 from cryptolib.bech32 import bech32_decode
 from cryptolib.base58 import decode_base58
+from wallets.wallets_utils import shift_10
 
 
 class blkhub_api:
@@ -258,7 +259,7 @@ class BTCwalletCore:
             raise Exception("Not enough utxos values for the tx")
 
 
-BTC_units = 1e8
+BTC_units = 8
 
 
 class BTC_wallet:
@@ -315,7 +316,7 @@ class BTC_wallet:
 
     def get_balance(self):
         # Get balance in base integer unit
-        return str(self.btc.getbalance() / BTC_units) + " BTC"
+        return str(self.btc.getbalance() / (10 ** BTC_units)) + " BTC"
 
     def check_address(self, addr_str):
         # Check if address is valid
@@ -356,7 +357,7 @@ class BTC_wallet:
     def transfer(self, amount, to_account, fee_priority):
         # Transfer x base unit to an account, pay
         fee = self.assess_fee(fee_priority)
-        return self.raw_tx(int(amount * BTC_units), fee, to_account)
+        return self.raw_tx(shift_10(amount, BTC_units), fee, to_account)
 
     def transfer_inclfee(self, amount, to_account, fee_priority):
         # Transfer the amount in base unit minus fee, like the receiver paying the fee

@@ -109,9 +109,9 @@ class EOSwalletCore:
         if isinstance(pay_value, int) or isinstance(pay_value, float):
             qty = "%.4f %s" % (pay_value, "EOS")
         elif isinstance(pay_value, str):
-            qty = pay_value
+            qty = "%.4f %s" % (float(pay_value), "EOS")
         else:
-            raise Exception("to_account variable must be int float or EOS string")
+            raise Exception("to_account variable must be int float or string")
         args = {
             "from": self.account,
             "to": to_account,

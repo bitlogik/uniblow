@@ -79,9 +79,10 @@ def read_string(data_ans):
     str_offset += 32
     return data_bin[str_offset : str_offset + str_len].decode("utf8")
 
+from wallets.wallets_utils import shift_10
 
 ETH_symbol = "ETH"
-ETH_units = 10 ** 18
+ETH_units = 18
 
 # ERC20 functions codes
 #   balanceOf(address)
@@ -338,8 +339,7 @@ class ETHwalletCore:
             balraw = self.api.call(self.ERC20, DECIMALS_FUNCTION)
             if balraw == [] or balraw == "0x":
                 return 1
-            decim = int(balraw[2:], 16)
-            return 10 ** decim
+            return int(balraw[2:], 16)
         else:
             return ETH_units
 
@@ -526,7 +526,7 @@ class ETH_wallet:
     def get_balance(self):
         # Get balance in base integer unit
         return (
-            str(self.eth.getbalance(not self.eth.ERC20) / self.eth.decimals)
+            str(self.eth.getbalance(not self.eth.ERC20) / (10 ** self.eth.decimals))
             + " "
             + self.eth.token_symbol
         )
@@ -557,7 +557,9 @@ class ETH_wallet:
         if to_account.startswith("0x"):
             to_account = to_account[2:]
         ethgazprice = self.eth.api.get_fee(priority_fee)  # gwei per gaz unit
-        return self.raw_tx(int(amount * self.eth.decimals), ethgazprice, ethgazlimit, to_account)
+        return self.raw_tx(
+            shift_10(amount, self.eth.decimals), ethgazprice, ethgazlimit, to_account
+        )
 
     def transfer_inclfee(self, amount, to_account, fee_priority):
         # Transfer the amount in base unit minus fee, like the receiver paying the fee

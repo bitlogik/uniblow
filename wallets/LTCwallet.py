@@ -22,6 +22,7 @@ import re
 
 import cryptolib.coins
 from cryptolib.base58 import decode_base58
+from wallets.wallets_utils import shift_10
 
 
 class sochain_api:
@@ -74,7 +75,7 @@ class sochain_api:
         for utxo in addrutxos:
             selutxos.append(
                 {
-                    "value": int(float(utxo["value"]) * LTC_units),
+                    "value": shift_10(utxo["value"], LTC_units),
                     "output": utxo["txid"] + ":" + str(utxo["output_no"]),
                 }
             )
@@ -242,7 +243,7 @@ class LTCwalletCore:
             raise Exception("Not enough utxos values for the tx")
 
 
-LTC_units = 1e8
+LTC_units = 8
 
 
 class LTC_wallet:
@@ -297,7 +298,7 @@ class LTC_wallet:
 
     def get_balance(self):
         # Get balance in base integer unit
-        return str(self.ltc.getbalance() / LTC_units) + " LTC"
+        return str(self.ltc.getbalance() / (10 ** LTC_units)) + " LTC"
 
     def check_address(self, addr_str):
         # Check if address is valid
@@ -338,7 +339,7 @@ class LTC_wallet:
     def transfer(self, amount, to_account, fee_priority):
         # Transfer x base unit to an account, pay
         fee = self.assess_fee(fee_priority)
-        return self.raw_tx(int(amount * LTC_units), fee, to_account)
+        return self.raw_tx(shift_10(amount, LTC_units), fee, to_account)
 
     def transfer_inclfee(self, amount, to_account, fee_priority):
         # Transfer the amount in base unit minus fee, like the receiver paying the fee
