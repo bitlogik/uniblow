@@ -284,8 +284,8 @@ def device_selected(device):
         try:
             device_loaded = the_device()
         except Exception as exc:
-            warn_modal(str(exc))
             app.gui_panel.devices_choice.SetSelection(0)
+            warn_modal(str(exc))
             if not getattr(sys, "frozen", False):
                 # output the exception when dev environment
                 raise exc
@@ -348,8 +348,8 @@ def device_selected(device):
                         device_loaded.initialize_device()
                     break
                 except Exception as exc:
-                    warn_modal(str(exc))
                     app.gui_panel.devices_choice.SetSelection(0)
+                    warn_modal(str(exc))
                     if not getattr(sys, "frozen", False):
                         # output the exception when dev environment
                         raise exc
@@ -361,8 +361,8 @@ def device_selected(device):
                     app.gui_panel.devices_choice.SetSelection(0)
                     return
             except Exception as exc:
-                warn_modal(str(exc))
                 app.gui_panel.devices_choice.SetSelection(0)
+                warn_modal(str(exc))
                 if not getattr(sys, "frozen", False):
                     # output the exception when dev environment
                     raise exc
@@ -408,11 +408,12 @@ def set_coin(coin, network, wallet_type):
         app.wallet = Wallet(coin, network, wallet_type, app.device, **option_arg)
         account_id = app.wallet.get_account()
     except Exception as exc:
+        app.gui_panel.coins_choice.SetSelection(0)
+        erase_info()
         warn_modal(str(exc))
         if not getattr(sys, "frozen", False):
             # output the exception when dev environment
             raise exc
-        erase_info()
         return
     app.gui_panel.account_addr.SetValue(account_id)
     imgbuf = BytesIO()
