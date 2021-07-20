@@ -21,62 +21,7 @@ import urllib.parse
 import urllib.request
 
 from cryptolib.cryptography import public_key_recover, decompress_pubkey, sha3
-
-
-def rlp_encode(input):
-    if isinstance(input, bytearray):
-        if len(input) == 1 and input[0] == 0:
-            return bytearray(b"\x80")
-        if len(input) == 1 and input[0] < 0x80:
-            return input
-        else:
-            return encode_length(len(input), 0x80) + input
-    elif isinstance(input, list):
-        output = bytearray([])
-        for item in input:
-            output += rlp_encode(item)
-        return encode_length(len(output), 0xC0) + output
-    raise Exception("Bad input type, list or bytearray needed")
-
-
-def encode_length(L, offset):
-    if L < 56:
-        return bytearray([L + offset])
-    BL = to_binary(L)
-    return bytearray([len(BL) + offset + 55]) + BL
-
-
-def to_binary(x):
-    if x == 0:
-        return bytearray([])
-    else:
-        return to_binary(int(x // 256)) + bytearray([x % 256])
-
-
-def int2bytearray(i):
-    barr = (i).to_bytes(32, byteorder="big")
-    while barr[0] == 0 and len(barr) > 1:
-        barr = barr[1:]
-    return bytearray(barr)
-
-
-def uint256(i):
-    """256bits uint EVM"""
-    return i.to_bytes(32, byteorder="big")
-
-
-def read_uint256(data, offset):
-    """Extract and decode utint256 at the given offset bytes"""
-    return int.from_bytes(data[offset : offset + 32], "big")
-
-
-def read_string(data_ans):
-    """ABI String decoding"""
-    data_bin = bytes.fromhex(data_ans[2:])
-    str_offset = read_uint256(data_bin, 0)
-    str_len = read_uint256(data_bin, str_offset)
-    str_offset += 32
-    return data_bin[str_offset : str_offset + str_len].decode("utf8")
+from cryptolib.coins.ethereum import rlp_encode, int2bytearray, uint256, read_string
 from wallets.wallets_utils import shift_10
 
 
