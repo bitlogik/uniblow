@@ -78,9 +78,12 @@ def get_device_class(device_str):
 
 
 class Wallet:
-    def __init__(self, coin, *options):
-        self.coin = coin
-        self.coin_wallet = get_coin_class(coin)(*options)
+    def __init__(self, coin, *options, **user_options):
+        self.coin_wallet = get_coin_class(coin)(*options, **user_options)
+        if hasattr(self.coin_wallet, "coin"):
+            self.coin = self.coin_wallet.coin
+        else:
+            self.coin = coin
 
     def get_networks(self):
         return self.coin_wallet.get_networks()
@@ -182,6 +185,19 @@ def get_password(device_nam, input_message):
     if pwd_dialog.ShowModal() == wx.ID_OK:
         passval = pwd_dialog.GetValue()
         return passval
+
+
+def get_option(input_message):
+    option_dialog = wx.TextEntryDialog(
+        app.gui_frame,
+        input_message,
+        caption=f"Setting for the wallet",
+        value="",
+        pos=wx.DefaultPosition,
+    )
+    if option_dialog.ShowModal() == wx.ID_OK:
+        optval = option_dialog.GetValue()
+        return optval
 
 
 def get_mnemonic(propos):
@@ -370,9 +386,26 @@ def set_coin(coin, network, wallet_type):
     fee_opt_sel = app.gui_panel.fee_slider.GetValue()
     app.gui_panel.fee_setting.SetLabel(FEES_PRORITY_TEXT[fee_opt_sel])
     try:
+        option_info = None
+        option_arg = {}
+        if hasattr(get_coin_class(coin), "user_options"):
+            coin_class = get_coin_class(coin)
+            if wallet_type in coin_class.user_options:
+                # This wallet has a user input option
+                opt_idx = coin_class.user_options.index(wallet_type)
+                option_info = coin_class.options_data[opt_idx]
+                option_value = get_option(option_info["prompt"])
+                if option_value is None:
+                    app.gui_panel.network_choice.Clear()
+                    app.gui_panel.wallopt_choice.Clear()
+                    app.gui_panel.coins_choice.SetSelection(0)
+                    erase_info()
+                    return
         if app.device.is_HD:
             app.device.derive_key(get_coin_class(coin).get_path(network, wallet_type))
-        app.wallet = Wallet(coin, network, wallet_type, app.device)
+        if option_info is not None:
+            option_arg = {option_info["option_name"]: option_value}
+        app.wallet = Wallet(coin, network, wallet_type, app.device, **option_arg)
         account_id = app.wallet.get_account()
     except Exception as exc:
         warn_modal(str(exc))

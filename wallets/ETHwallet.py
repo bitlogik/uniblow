@@ -61,72 +61,37 @@ def int2bytearray(i):
     return bytearray(barr)
 
 
-class blockcypher_api:
-    def __init__(self, api_key):
-        # https://api.blockcypher.com/$API_VERSION/$COIN/$CHAIN/
-        self.apikey = api_key
-        # self.coin = cointype
-        self.url = "https://api.blockcypher.com/v1/beth/test/"
-        # self.url = "https://api.blockcypher.com/v1/eth/main/"
-        self.params = {"token": self.apikey}
-        self.jsres = []
+def uint256(i):
+    """256bits uint EVM"""
+    return i.to_bytes(32, byteorder="big")
 
-    def getData(self, endpoint, params={}, data=None):
-        parameters = {key: value for key, value in params.items()}
-        parameters.update(self.params)
-        params_enc = urllib.parse.urlencode(parameters)
-        try:
-            req = urllib.request.Request(
-                self.url + endpoint + "?" + params_enc,
-                headers={"User-Agent": "Mozilla/5.0"},
-                data=data,
-            )
-            self.webrsc = urllib.request.urlopen(req)
-            self.jsres = json.load(self.webrsc)
-        except Exception:
-            raise IOError(
-                "Error while processing request:\n%s" % (self.url + endpoint + "?" + params_enc)
-            )
 
-    def checkapiresp(self):
-        if "error" in self.jsres:
-            print(" !! ERROR :")
-            raise Exception(self.jsres["error"])
-        if "errors" in self.jsres:
-            print(" !! ERRORS :")
-            raise Exception(self.jsres["errors"])
+def read_uint256(data, offset):
+    """Extract and decode utint256 at the given offeset bytes"""
+    return int.from_bytes(data[offset : offset + 32], "big")
 
-    def get_balance(self, addr, nconf):  # nconf 0 or 1
-        self.getData("addrs/" + addr + "/balance")
-        balance = self.getKey("balance")
-        if nconf == 0:
-            balance += self.getKey("unconfirmed_balance")
-        return balance
 
-    def fund_faucet(self, addr, amount):
-        data = {"address": addr, "amount": int(amount * (10 ** 18))}
-        self.getData("faucet", {}, json.dumps(data).encode("utf-8"))
+def read_string(data_ans):
+    """ABI String decoding"""
+    data_bin = bytes.fromhex(data_ans[2:])
+    str_offset = read_uint256(data_bin, 0)
+    str_len = read_uint256(data_bin, str_offset)
+    str_offset += 32
+    return data_bin[str_offset : str_offset + str_len].decode("utf8")
 
-    def pushtx(self, txhex):
-        datatx = json.dumps({"tx": txhex}).encode("ascii")
-        self.getData("txs/push", data=datatx)
-        self.checkapiresp()
-        return self.getKey("tx/hash")
 
-    def get_fee(self, priority):
-        raise Exception("Not yet implemented for this API")
+ETH_name = "ETH"
+ETH_units = 10 ** 18
 
-    def getKey(self, keychar):
-        out = self.jsres
-        path = keychar.split("/")
-        for key in path:
-            if key.isdigit():
-                key = int(key)
-            try:
-                out = out[key]
-            except Exception:
-                out = []
-        return out
+# ERC20 functions codes
+#   balanceOf(address)
+BALANCEOF_FUNCTION = "70a08231"
+#   decimals()
+DECIMALS_FUNCTION = "313ce567"
+#   name()
+NAME_FUNCTION = "06fdde03"
+#   transfer(address,uint256)
+TRANSFERT_FUNCTION = "a9059cbb"
 
 
 class infura_api:
@@ -135,7 +100,7 @@ class infura_api:
         #         mainnet
         self.apikey = api_key
         self.network = network
-        self.url = "https://" + self.network + ".infura.io/v3/" + self.apikey
+        self.url = f"https://{self.network}.infura.io/v3/{self.apikey}"
         self.jsres = []
 
     def getData(self, method, params=[]):
@@ -173,10 +138,15 @@ class infura_api:
             datap = "latest"
         self.getData("eth_getBalance", ["0x" + addr, datap])
         balraw = self.getKey("result")[2:]
-        if balraw == []:
+        if balraw == [] or balraw == "":
             return 0
         balance = int(balraw, 16)
         return balance
+
+    def call(self, contract, command_code, data=""):
+        datab = f"0x{command_code}{data}"
+        self.getData("eth_call", [{"to": contract, "data": datab}, "pending"])
+        return self.getKey("result")
 
     def pushtx(self, txhex):
         self.getData("eth_sendRawTransaction", ["0x" + txhex])
@@ -221,7 +191,7 @@ class etherscan_api:
         if self.network == "mainnet":
             self.url = "https://api.etherscan.io/api"
         else:
-            self.url = "https://api-" + self.network + ".etherscan.io/api"
+            self.url = f"https://api-{self.network}.etherscan.io/api"
         self.params = {"token": self.apikey}
         self.params = {}
         self.jsres = []
@@ -258,14 +228,15 @@ class etherscan_api:
             raise Exception(self.jsres["errors"])
 
     def get_balance(self, addr, nconf):  # nconf 0 or 1
-        # if nconf==0: datap = "pending"
-        # if nconf==1: datap = "latest"
         self.getData({"module": "account", "action": "balance", "address": "0x" + addr})
         balraw = self.getKey("result")
         if balraw == []:
             return 0
         balance = int(balraw)
         return balance
+
+    def call(self, contract, command_code, data=""):
+        raise NotImplementedError()
 
     def pushtx(self, txhex):
         self.getData({"module": "proxy", "action": "eth_sendRawTransaction", "hex": "0x" + txhex})
@@ -277,7 +248,7 @@ class etherscan_api:
             {
                 "module": "proxy",
                 "action": "eth_getTransactionCount",
-                "address": "0x" + addr,
+                "address": f"0x{addr}",
             }
         )
         self.checkapiresp()
@@ -338,31 +309,76 @@ def testaddr(eth_addr):
 
 
 class ETHwalletCore:
-    def __init__(self, pubkey, network, api):
+    def __init__(self, pubkey, network, api, ERC20=None):
         self.pubkey = decompress_pubkey(pubkey)
         key_hash = sha3(self.pubkey[1:])
         self.address = format_checksum_address(key_hash.hex()[-40:])
+        self.ERC20 = ERC20
         self.api = api
         self.network = network
+        self.decimals = self.get_decimals()
+        self.token_name = self.get_name()
 
-    def getbalance(self):
-        return self.api.get_balance(self.address, 0)
+    def getbalance(self, native=True):
+        if native:
+            # ETH native balance
+            return self.api.get_balance(self.address, 0)
+        else:
+            # ERC20 token balance
+            balraw = self.api.call(
+                self.ERC20, BALANCEOF_FUNCTION, "000000000000000000000000" + self.address
+            )
+            if balraw == [] or balraw == "0x":
+                return 0
+            balance = int(balraw[2:], 16)
+            return balance
+
+    def get_decimals(self):
+        if self.ERC20:
+            balraw = self.api.call(self.ERC20, DECIMALS_FUNCTION)
+            if balraw == [] or balraw == "0x":
+                return 1
+            decim = int(balraw[2:], 16)
+            return 10 ** decim
+        else:
+            return ETH_units
+
+    def get_name(self):
+        if self.ERC20:
+            balraw = self.api.call(self.ERC20, NAME_FUNCTION)
+            if balraw == [] or balraw == "0x":
+                return "---"
+            return read_string(balraw)
+        else:
+            return ETH_name
 
     def getnonce(self):
         numtx = self.api.get_tx_num(self.address, "pending")
         return numtx
 
     def prepare(self, toaddr, paymentvalue, gprice, glimit):
-        balance = self.getbalance()
-        maxspendable = balance - ((gprice * glimit) * 10 ** 9)
+        if self.ERC20:
+            maxspendable = self.getbalance(False)
+            balance_eth = self.getbalance()
+            if balance_eth < ((gprice * glimit) * 10 ** 9):
+                raise Exception("Not enough native ETH funding for the tx fee")
+        else:
+            maxspendable = self.getbalance() - ((gprice * glimit) * 10 ** 9)
         if paymentvalue > maxspendable or paymentvalue < 0:
-            raise Exception("Not enough fund for the tx")
+            raise Exception(f"Not enough {self.token_name} tokens for the tx")
         self.nonce = int2bytearray(self.getnonce())
         self.gasprice = int2bytearray(gprice * 10 ** 9)
         self.startgas = int2bytearray(glimit)
-        self.to = bytearray.fromhex(toaddr)
-        self.value = int2bytearray(int(paymentvalue))
-        self.data = bytearray(b"")
+        if self.ERC20:
+            self.to = bytearray.fromhex(self.ERC20[2:])
+            self.value = int2bytearray(int(0))
+            self.data = bytearray.fromhex(TRANSFERT_FUNCTION + "00" * 12 + toaddr) + uint256(
+                paymentvalue
+            )
+        else:
+            self.to = bytearray.fromhex(toaddr)
+            self.value = int2bytearray(int(paymentvalue))
+            self.data = bytearray(b"")
         if self.network == "mainnet":
             self.chainID = 1
         if self.network == "ropsten":
@@ -424,9 +440,6 @@ class ETHwalletCore:
         return "\nDONE, txID : " + self.api.pushtx(txhex)[2:]
 
 
-ETH_units = 10 ** 18
-
-
 class ETH_wallet:
 
     networks = [
@@ -439,6 +452,7 @@ class ETH_wallet:
 
     wtypes = [
         "Standard",
+        "ERC20",
     ]
 
     derive_paths = [
@@ -461,9 +475,15 @@ class ETH_wallet:
         ],
     ]
 
-    GAZ_LIMIT_SIMPLE_TX = 21000
+    # ETH wallet type 1 has option
+    user_options = [1]
+    # self.__init__ ( contract_addr = "user input option" )
+    options_data = [{"option_name": "contract_addr", "prompt": "Input the ERC20 contract address"}]
 
-    def __init__(self, network, wtype, device):
+    GAZ_LIMIT_SIMPLE_TX = 21000
+    GAZ_LIMIT_ERC_20_TX = 180000
+
+    def __init__(self, network, wtype, device, contract_addr=None):
         self.network = ETH_wallet.networks[network].lower()
         self.current_device = device
         pubkey_hex = self.current_device.get_public_key()
@@ -472,7 +492,20 @@ class ETH_wallet:
             raise Exception(
                 "To use Uniblow from source, bring your own Infura key, or use etherscan_api"
             )
-        self.eth = ETHwalletCore(pubkey_hex, self.network, infura_api(INFURA_KEY, self.network))
+        if contract_addr is not None:
+            if len(contract_addr) == 42 and "0x" == contract_addr[:2]:
+                contract_addr_str = contract_addr.lower()
+            elif len(contract_addr) == 40:
+                contract_addr_str = "0x" + contract_addr.lower()
+            else:
+                raise Exception("Invalid contract address format : should be 0x/40hex/ or /40hex/")
+        else:
+            contract_addr_str = None
+        self.eth = ETHwalletCore(
+            pubkey_hex, self.network, infura_api(INFURA_KEY, self.network), contract_addr_str
+        )
+        if contract_addr_str is not None:
+            self.coin = self.eth.token_name
 
     @classmethod
     def get_networks(cls):
@@ -484,7 +517,7 @@ class ETH_wallet:
 
     @classmethod
     def get_path(cls, network_name, wtype):
-        return cls.derive_paths[network_name][wtype]
+        return cls.derive_paths[network_name][0]
 
     def get_account(self):
         # Read address to fund the wallet
@@ -492,7 +525,11 @@ class ETH_wallet:
 
     def get_balance(self):
         # Get balance in base integer unit
-        return str(self.eth.getbalance() / ETH_units) + " ETH"
+        return (
+            str(self.eth.getbalance(not self.eth.ERC20) / self.eth.decimals)
+            + " "
+            + self.eth.token_name
+        )
 
     def check_address(self, addr_str):
         # Check if address is valid
@@ -513,22 +550,31 @@ class ETH_wallet:
 
     def transfer(self, amount, to_account, priority_fee):
         # Transfer x unit to an account, pay
-        ethgazlimit = ETH_wallet.GAZ_LIMIT_SIMPLE_TX
+        if self.eth.ERC20:
+            ethgazlimit = ETH_wallet.GAZ_LIMIT_ERC_20_TX
+        else:
+            ethgazlimit = ETH_wallet.GAZ_LIMIT_SIMPLE_TX
         if to_account.startswith("0x"):
             to_account = to_account[2:]
         ethgazprice = self.eth.api.get_fee(priority_fee)  # gwei per gaz unit
-        return self.raw_tx(int(amount * ETH_units), ethgazprice, ethgazlimit, to_account)
+        return self.raw_tx(int(amount * self.eth.decimals), ethgazprice, ethgazlimit, to_account)
 
     def transfer_inclfee(self, amount, to_account, fee_priority):
         # Transfer the amount in base unit minus fee, like the receiver paying the fee
-        gazlimit = ETH_wallet.GAZ_LIMIT_SIMPLE_TX
+        if self.eth.ERC20:
+            gazlimit = ETH_wallet.GAZ_LIMIT_ERC_20_TX
+        else:
+            gazlimit = ETH_wallet.GAZ_LIMIT_SIMPLE_TX
         if to_account.startswith("0x"):
             to_account = to_account[2:]
         gazprice = self.eth.api.get_fee(fee_priority)
-        fee = gazlimit * gazprice
-        return self.raw_tx(amount - int(fee * 10 ** 9), gazprice, gazlimit, to_account)
+        if self.eth.ERC20:
+            fee = 0
+        else:
+            fee = int(gazlimit * gazprice * 10 ** 9)
+        return self.raw_tx(amount - fee, gazprice, gazlimit, to_account)
 
     def transfer_all(self, to_account, fee_priority):
         # Transfer all the wallet to an address (minus fee)
-        all_amount = self.eth.getbalance()
+        all_amount = self.eth.getbalance(not self.eth.ERC20)
         return self.transfer_inclfee(all_amount, to_account, fee_priority)
