@@ -67,7 +67,7 @@ def uint256(i):
 
 
 def read_uint256(data, offset):
-    """Extract and decode utint256 at the given offeset bytes"""
+    """Extract and decode utint256 at the given offset bytes"""
     return int.from_bytes(data[offset : offset + 32], "big")
 
 
@@ -80,7 +80,7 @@ def read_string(data_ans):
     return data_bin[str_offset : str_offset + str_len].decode("utf8")
 
 
-ETH_name = "ETH"
+ETH_symbol = "ETH"
 ETH_units = 10 ** 18
 
 # ERC20 functions codes
@@ -88,8 +88,8 @@ ETH_units = 10 ** 18
 BALANCEOF_FUNCTION = "70a08231"
 #   decimals()
 DECIMALS_FUNCTION = "313ce567"
-#   name()
-NAME_FUNCTION = "06fdde03"
+#   symbol()
+SYMBOL_FUNCTION = "95d89b41"
 #   transfer(address,uint256)
 TRANSFERT_FUNCTION = "a9059cbb"
 
@@ -317,7 +317,7 @@ class ETHwalletCore:
         self.api = api
         self.network = network
         self.decimals = self.get_decimals()
-        self.token_name = self.get_name()
+        self.token_symbol = self.get_symbol()
 
     def getbalance(self, native=True):
         if native:
@@ -343,14 +343,14 @@ class ETHwalletCore:
         else:
             return ETH_units
 
-    def get_name(self):
+    def get_symbol(self):
         if self.ERC20:
-            balraw = self.api.call(self.ERC20, NAME_FUNCTION)
+            balraw = self.api.call(self.ERC20, SYMBOL_FUNCTION)
             if balraw == [] or balraw == "0x":
                 return "---"
             return read_string(balraw)
         else:
-            return ETH_name
+            return ETH_symbol
 
     def getnonce(self):
         numtx = self.api.get_tx_num(self.address, "pending")
@@ -365,7 +365,7 @@ class ETHwalletCore:
         else:
             maxspendable = self.getbalance() - ((gprice * glimit) * 10 ** 9)
         if paymentvalue > maxspendable or paymentvalue < 0:
-            raise Exception(f"Not enough {self.token_name} tokens for the tx")
+            raise Exception(f"Not enough {self.token_symbol} tokens for the tx")
         self.nonce = int2bytearray(self.getnonce())
         self.gasprice = int2bytearray(gprice * 10 ** 9)
         self.startgas = int2bytearray(glimit)
@@ -505,7 +505,7 @@ class ETH_wallet:
             pubkey_hex, self.network, infura_api(INFURA_KEY, self.network), contract_addr_str
         )
         if contract_addr_str is not None:
-            self.coin = self.eth.token_name
+            self.coin = self.eth.token_symbol
 
     @classmethod
     def get_networks(cls):
@@ -528,7 +528,7 @@ class ETH_wallet:
         return (
             str(self.eth.getbalance(not self.eth.ERC20) / self.eth.decimals)
             + " "
-            + self.eth.token_name
+            + self.eth.token_symbol
         )
 
     def check_address(self, addr_str):
