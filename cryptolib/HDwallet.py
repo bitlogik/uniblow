@@ -17,6 +17,7 @@
 import os
 import unicodedata
 
+from nacl.hashlib import scrypt
 from cryptolib.cryptography import (
     sha2,
     HMAC_SHA512,
@@ -35,13 +36,31 @@ with open(
     BIP39_WORDSLIST = [wd.strip() for wd in fengmne.readlines()]
 
 
-def mnemonic_to_seed(mnemonic_phrase, passphrasestr="", passphrase_prefix=b"mnemonic"):
+def mnemonic_to_seed(
+    mnemonic_phrase,
+    passphrasestr="",
+    passphrase_prefix=b"mnemonic",
+    method="PBKDF2-2048-HMAC-SHA512",
+):
     passphrase = unicodedata.normalize("NFKD", passphrasestr or "").encode("utf8")
     mnemonic = unicodedata.normalize("NFKD", " ".join(mnemonic_phrase.split())).encode("utf8")
-    pbkdf2 = PBKDF2_SHA512(
-        passphrase_prefix + passphrase,
-    )
-    return pbkdf2.derive(mnemonic)
+    if method == "PBKDF2-2048-HMAC-SHA512":
+        pbkdf2 = PBKDF2_SHA512(
+            passphrase_prefix + passphrase,
+        )
+        return pbkdf2.derive(mnemonic)
+    elif method == "SCRYPT":
+        return scrypt(
+            mnemonic,
+            passphrase_prefix + passphrase,
+            n=pow(2, 20),
+            r=8,
+            p=8,
+            dklen=64,
+            maxmem=1.5 * pow(2, 30),
+        )
+    else:
+        raise Exception("Mnemonic derivation method not valid")
 
 
 def bip39_is_checksum_valid(mnemonic):
@@ -239,9 +258,15 @@ class HD_Wallet:
         return cls(BIP32node.master_node(seed, "K1"))
 
     @classmethod
-    def from_mnemonic(cls, mnemonic):
-        """Mnemonic to master key (BIP39)"""
-        seed = mnemonic_to_seed(mnemonic)
+    def from_mnemonic(cls, mnemonic, passw="", std="BIP39"):
+        """Mnemonic to master key (BIP39 or BOOST)"""
+        if std == "BIP39":
+            method = "PBKDF2-2048-HMAC-SHA512"
+        elif std == "BOOST":
+            method = "SCRYPT"
+        else:
+            raise Exception("Mnemonic standard not valid")
+        seed = mnemonic_to_seed(mnemonic, passphrasestr=passw, method=method)
         return HD_Wallet.from_seed(seed)
 
     def derive_key(self, path):
