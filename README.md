@@ -29,19 +29,21 @@ Compatible with the following blockchains :
 
 * BTC
     * mainnet and testnet networks
-    * Standard wallet
+    * Standard wallet (P2PKH)
     * Segwit P2SH compatibility
-    * Full Segwit bech32
+    * Full Segwit bech32 (P2WPKH)
 * ETH
     * mainnet, Rinkeby, Ropsten, Kovan and Goerli networks
+    * ERC20 tokens
 * LTC
     * mainnet and testnet networks
-    * Standard wallet
+    * Standard wallet (P2PKH)
     * Segwit P2SH compatibility
 * DOGE
     * mainnet and testnet networks
 * BSC
     * mainnet and testnet networks
+    * BEP20 tokens
 * EOS
     * K1 wallet
     * EOSio and Jungle3 networks
@@ -137,8 +139,7 @@ bringing even greater confidence in the integrity of the application.
 
 Features in development :
 
-* Full HD wallet device (BIP32/39/44)
-* ERC20 tokens on ETH/BSC
+* Full HD wallet device, avoiding address reuse, and discover in all account chains (external and internal change).
 
 ### Use it from source
 
