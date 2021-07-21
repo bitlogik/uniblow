@@ -74,11 +74,13 @@ class SeedWatcherPanel(gui.swgui.MainPanel):
         self.m_choice_nwords.SetSelection(0)
         ctab = self.m_dataViewListCtrl1
         dv1 = wx.dataview.DataViewColumn("Name", wx.dataview.DataViewTextRenderer(), 0)
+        dv1.SetWidth(130)
         ctab.AppendColumn(dv1)
         dv2 = wx.dataview.DataViewColumn("Account", wx.dataview.DataViewTextRenderer(), 1)
         dv2.SetWidth(380)
         ctab.AppendColumn(dv2)
         dv3 = wx.dataview.DataViewColumn("Balance", wx.dataview.DataViewTextRenderer(), 2)
+        dv3.SetWidth(100)
         ctab.AppendColumn(dv3)
 
     def generate_mnemonic(self, n_words):
