@@ -173,9 +173,6 @@ def makeup_sig(sig):
     return encode_der_s(r_value, s_value)
 
 
-# def gen_random_entropy(size_bits):
-
-
 def HMAC_SHA512(key, data):
     return hmac.new(key, data, hashlib.sha512).digest()
 
