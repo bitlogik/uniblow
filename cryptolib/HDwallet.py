@@ -65,6 +65,8 @@ def mnemonic_to_seed(
 
 def bip39_is_checksum_valid(mnemonic):
     """Provide tuple (is_checksum_valid, is_wordlist_valid)"""
+    if mnemonic == "":
+        return False, False
     words = [unicodedata.normalize("NFKD", word) for word in mnemonic.split()]
     words_len = len(words)
     n = len(BIP39_WORDSLIST)
@@ -83,7 +85,7 @@ def bip39_is_checksum_valid(mnemonic):
         return False, True
     entropy = i >> checksum_length
     checksum = i % 2 ** checksum_length
-    entb = entropy.to_bytes(entropy_length // 8, "big")
+    entb = entropy.to_bytes(entropy_length >> 3, "big")
     hashed = int.from_bytes(sha2(entb), "big")
     computed_checksum = hashed >> (256 - checksum_length)
     return checksum == computed_checksum, True
