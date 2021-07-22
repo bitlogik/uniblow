@@ -28,6 +28,7 @@ from cryptolib.HDwallet import (
     entropy_to_mnemonic,
     bip39_is_checksum_valid,
     mnemonic_to_seed,
+    generate_mnemonic,
 )
 
 
@@ -52,12 +53,16 @@ class HDdevice:
     def __init__(self):
         self.created = False
         self.has_hardware_button = False
+        self.aindex = "0"
 
     def open_account(self, password):
         if path.isfile(FILE_NAME):
             # Open the current key from its file
             key_file = open(FILE_NAME, "r")
-            key_content = json.load(key_file)
+            try:
+                key_content = json.load(key_file)
+            finally:
+                key_file.close()
             salt = bytes.fromhex(key_content["salt"])
             # decrypt
             decryption_key = nacl.pwhash.argon2id.kdf(
@@ -73,30 +78,33 @@ class HDdevice:
                 )
             except nacl.exceptions.CryptoError:
                 raise pwdException("BadPass")
+            idx = key_content.get("account_number")
+            if idx:
+                self.aindex = idx
             # Compute master key from seed
             self.master_node = HD_Wallet.from_seed(seed)
-            key_file.close()
         else:
             raise NotinitException()
 
     def generate_mnemonic(self):
-        random_entropy = nacl.utils.random(32)
-        return entropy_to_mnemonic(random_entropy)
+        return generate_mnemonic(12)
 
     def check_mnemonic(self, mnemonic):
         # return checksum_valid, wordlist_valid (bool, bool)
         return bip39_is_checksum_valid(mnemonic)
 
-    def initialize_device(self, password, mnemonic):
+    def initialize_device(self, settings):
         # Save the seed from the mnemonic in a file
         key_file = open(FILE_NAME, "w")
         # compute the seed
-        seedg = mnemonic_to_seed(mnemonic)
+        seedg = mnemonic_to_seed(
+            settings["mnemonic"], settings["HD_password"], method=settings["seed_gen"]
+        )
         # Encrypt the private key
         salt = token_bytes(nacl.pwhash.argon2i.SALTBYTES)
         encryption_key = nacl.pwhash.argon2id.kdf(
             nacl.secret.SecretBox.KEY_SIZE,
-            password.encode("utf8"),
+            settings["file_password"].encode("utf8"),
             salt,
             opslimit=nacl.pwhash.argon2i.OPSLIMIT_MODERATE,
             memlimit=nacl.pwhash.argon2i.MEMLIMIT_MODERATE,
@@ -108,8 +116,13 @@ class HDdevice:
         # Save the encrypted data
         json.dump({"seed_enc": encrypted_content.hex(), "salt": salt.hex()}, key_file)
         key_file.close()
+        self.aindex = settings["account_index"]
         self.created = True
         self.master_node = HD_Wallet.from_seed(seedg)
+
+    def get_address_index(self):
+        """Get the account address index, last BIP44 derivation number as str"""
+        return self.aindex
 
     def derive_key(self, path):
         self.pvkey = self.master_node.derive_key(path)

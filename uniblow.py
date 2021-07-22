@@ -292,7 +292,7 @@ def device_selected(device):
             return
         while True:
             try:
-                pwd_pin = "password"
+                pwd_pin = "local user password"
                 if device_sel_name == "OpenPGP":
                     pwd_pin = "PIN1"
                 if the_device.has_password:
@@ -316,18 +316,15 @@ def device_selected(device):
                         return
                 if the_device.is_HD:
                     # HD means also mnemonic can be imported
-                    mnemonic = device_loaded.generate_mnemonic()  # proposal
-                    mnemonic_checked = (False, False)
-                    while mnemonic_checked != (True, True):
-                        mnemonic = get_mnemonic(mnemonic)
-                        mnemonic_checked = device_loaded.check_mnemonic(mnemonic)
-                        if not mnemonic_checked[1]:
-                            warn_modal("Some words are not part of the BIP39 English wordlist.")
-                        elif not mnemonic_checked[0]:
-                            warn_modal("The mnemonic checksum is not valid.")
+                    mnemonic = device_loaded.generate_mnemonic()  # mnemonic proposal
+                    # Get settings from the user
+                    HDwallet_settings = gui.app.set_mnemonic(app, mnemonic)
+                    if HDwallet_settings is None:
+                        app.gui_panel.devices_choice.SetSelection(0)
+                        return
                 if the_device.has_password:
                     inp_message = f"Choose your {pwd_pin} for the {device_sel_name} wallet\n"
-                    inp_message += "If blank, a default PIN/password will be used."
+                    inp_message += f"If blank, a default {pwd_pin} will be used."
                     password = get_password(device_sel_name, inp_message)
                     if password is None:
                         app.gui_panel.devices_choice.SetSelection(0)
@@ -340,8 +337,10 @@ def device_selected(device):
                     if the_device.has_admin_password:
                         device_loaded.set_admin(admin_password)
                     if the_device.is_HD:
-                        device_loaded.initialize_device(password, mnemonic)
+                        HDwallet_settings["file_password"] = password
+                        device_loaded.initialize_device(HDwallet_settings)
                     # is_HD has password already
+                    #  attribute has_password is false, password set by settings parameters
                     elif the_device.has_password:
                         device_loaded.initialize_device(password)
                     else:
@@ -402,7 +401,10 @@ def set_coin(coin, network, wallet_type):
                     erase_info()
                     return
         if app.device.is_HD:
-            app.device.derive_key(get_coin_class(coin).get_path(network, wallet_type))
+            current_path = (
+                get_coin_class(coin).get_path(network, wallet_type) + app.device.get_address_index()
+            )
+            app.device.derive_key(current_path)
         if option_info is not None:
             option_arg = {option_info["option_name"]: option_value}
         app.wallet = Wallet(coin, network, wallet_type, app.device, **option_arg)

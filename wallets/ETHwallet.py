@@ -402,20 +402,20 @@ class ETH_wallet:
     derive_paths = [
         # mainnet
         [
-            "m/44'/60'/0'/0/0",
+            "m/44'/60'/0'/0/",
         ],
         # testnets
         [
-            "m/44'/1'/0'/0/0",
+            "m/44'/1'/0'/0/",
         ],
         [
-            "m/44'/1'/0'/0/0",
+            "m/44'/1'/0'/0/",
         ],
         [
-            "m/44'/1'/0'/0/0",
+            "m/44'/1'/0'/0/",
         ],
         [
-            "m/44'/1'/0'/0/0",
+            "m/44'/1'/0'/0/",
         ],
     ]
 
@@ -442,7 +442,7 @@ class ETH_wallet:
             elif len(contract_addr) == 40:
                 contract_addr_str = "0x" + contract_addr.lower()
             else:
-                raise Exception("Invalid contract address format : should be 0x/40hex/ or /40hex/")
+                raise Exception("Invalid contract address format :\nshould be 0x/40hex/ or /40hex/")
         else:
             contract_addr_str = None
         self.eth = ETHwalletCore(

@@ -250,8 +250,157 @@ class TopPanel ( wx.Panel ):
 
         self.SetSizer( bSizer1 )
         self.Layout()
+        bSizer1.Fit( self )
 
     def __del__( self ):
         pass
+
+
+###########################################################################
+## Class HDDialog
+###########################################################################
+
+class HDDialog ( wx.Dialog ):
+
+    def __init__( self, parent ):
+        wx.Dialog.__init__ ( self, parent, id = wx.ID_ANY, title = u"HD wallet settings", pos = wx.DefaultPosition, size = wx.Size( 500,438 ), style = wx.CAPTION|wx.CLOSE_BOX|wx.DEFAULT_DIALOG_STYLE|wx.STAY_ON_TOP|wx.SYSTEM_MENU )
+
+        self.SetSizeHints( wx.DefaultSize, wx.DefaultSize )
+
+
+        self.Centre( wx.BOTH )
+
+    def __del__( self ):
+        pass
+
+
+###########################################################################
+## Class HDPanel
+###########################################################################
+
+class HDPanel ( wx.Panel ):
+
+    def __init__( self, parent, id = wx.ID_ANY, pos = wx.DefaultPosition, size = wx.Size( -1,-1 ), style = wx.TAB_TRAVERSAL, name = wx.EmptyString ):
+        wx.Panel.__init__ ( self, parent, id = id, pos = pos, size = size, style = style, name = name )
+
+        bSizer11 = wx.BoxSizer( wx.VERTICAL )
+
+        bSizer15 = wx.BoxSizer( wx.HORIZONTAL )
+
+        self.m_staticText15 = wx.StaticText( self, wx.ID_ANY, u"Wallet mnemonic input", wx.DefaultPosition, wx.DefaultSize, 0 )
+        self.m_staticText15.Wrap( -1 )
+
+        self.m_staticText15.SetFont( wx.Font( 12, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, False, wx.EmptyString ) )
+
+        bSizer15.Add( self.m_staticText15, 0, wx.ALIGN_CENTER_HORIZONTAL|wx.ALIGN_CENTER_VERTICAL|wx.LEFT, 42 )
+
+
+        bSizer15.Add( ( 24, 0), 0, 0, 15 )
+
+        self.m_staticText16 = wx.StaticText( self, wx.ID_ANY, u"Words in list", wx.DefaultPosition, wx.DefaultSize, 0 )
+        self.m_staticText16.Wrap( -1 )
+
+        bSizer15.Add( self.m_staticText16, 0, wx.ALIGN_BOTTOM|wx.ALL, 5 )
+
+        self.m_bitmapHDwl = wx.StaticBitmap( self, wx.ID_ANY, wx.NullBitmap, wx.DefaultPosition, wx.DefaultSize, 0 )
+        bSizer15.Add( self.m_bitmapHDwl, 0, wx.ALIGN_BOTTOM|wx.BOTTOM, 5 )
+
+        self.m_staticText17 = wx.StaticText( self, wx.ID_ANY, u"Checksum", wx.DefaultPosition, wx.DefaultSize, wx.ST_NO_AUTORESIZE )
+        self.m_staticText17.Wrap( -1 )
+
+        bSizer15.Add( self.m_staticText17, 0, wx.ALL|wx.ALIGN_BOTTOM, 5 )
+
+        self.m_bitmapHDcs = wx.StaticBitmap( self, wx.ID_ANY, wx.NullBitmap, wx.DefaultPosition, wx.DefaultSize, 0 )
+        bSizer15.Add( self.m_bitmapHDcs, 0, wx.ALIGN_BOTTOM|wx.BOTTOM, 5 )
+
+
+        bSizer11.Add( bSizer15, 1, wx.EXPAND, 5 )
+
+        self.m_textCtrl_mnemo = wx.TextCtrl( self, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, wx.TE_MULTILINE )
+        self.m_textCtrl_mnemo.SetFont( wx.Font( 11, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, False, wx.EmptyString ) )
+
+        bSizer11.Add( self.m_textCtrl_mnemo, 1, wx.EXPAND|wx.LEFT|wx.RIGHT, 16 )
+
+        bSizer13 = wx.BoxSizer( wx.HORIZONTAL )
+
+
+        bSizer13.Add( ( 0, 0), 0, wx.RIGHT, 18 )
+
+        self.m_staticText13 = wx.StaticText( self, wx.ID_ANY, u"Password (optional)", wx.DefaultPosition, wx.DefaultSize, 0 )
+        self.m_staticText13.Wrap( -1 )
+
+        bSizer13.Add( self.m_staticText13, 0, wx.ALIGN_CENTER_VERTICAL, 5 )
+
+        self.m_textCtrl_pwd = wx.TextCtrl( self, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.Size( 180,-1 ), 0 )
+        bSizer13.Add( self.m_textCtrl_pwd, 0, wx.ALL, 5 )
+
+        self.m_checkBox_secboost = wx.CheckBox( self, wx.ID_ANY, u"SecuBoost", wx.DefaultPosition, wx.DefaultSize, 0 )
+        self.m_checkBox_secboost.SetToolTip( u"Extra security boost for mnemonic.\nNot compatible with BIP39.\nRequires >1GB RAM free" )
+
+        bSizer13.Add( self.m_checkBox_secboost, 0, wx.ALIGN_CENTER_VERTICAL|wx.LEFT, 28 )
+
+
+        bSizer11.Add( bSizer13, 0, wx.ALIGN_CENTER_HORIZONTAL, 5 )
+
+        bSizer14 = wx.BoxSizer( wx.HORIZONTAL )
+
+        self.m_staticText14 = wx.StaticText( self, wx.ID_ANY, u"Account #", wx.DefaultPosition, wx.DefaultSize, 0 )
+        self.m_staticText14.Wrap( -1 )
+
+        bSizer14.Add( self.m_staticText14, 0, wx.ALIGN_CENTER_VERTICAL, 5 )
+
+        self.m_spinCtrl_accountidx = wx.SpinCtrl( self, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.Size( 75,-1 ), wx.SP_ARROW_KEYS, 0, 10, 0 )
+        bSizer14.Add( self.m_spinCtrl_accountidx, 0, wx.ALL, 5 )
+
+
+        bSizer11.Add( bSizer14, 0, wx.ALIGN_CENTER_HORIZONTAL|wx.TOP, 16 )
+
+
+        bSizer11.Add( ( 0, 0), 0, wx.TOP, 20 )
+
+        self.m_staticText151 = wx.StaticText( self, wx.ID_ANY, u"Validate this first proposal,\nor insert your mnemonic and settings to import an existing HD wallet.", wx.DefaultPosition, wx.DefaultSize, 0 )
+        self.m_staticText151.Wrap( -1 )
+
+        self.m_staticText151.SetFont( wx.Font( 9, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, False, wx.EmptyString ) )
+
+        bSizer11.Add( self.m_staticText151, 0, wx.ALIGN_CENTER_HORIZONTAL|wx.LEFT|wx.RIGHT, 24 )
+
+        bSizer12 = wx.BoxSizer( wx.HORIZONTAL )
+
+        self.m_butOK = wx.Button( self, wx.ID_ANY, u"OK", wx.DefaultPosition, wx.Size( -1,36 ), 0 )
+        bSizer12.Add( self.m_butOK, 0, wx.ALL, 5 )
+
+
+        bSizer12.Add( ( 0, 0), 1, wx.RIGHT, 25 )
+
+        self.m_butcancel = wx.Button( self, wx.ID_ANY, u"Cancel", wx.DefaultPosition, wx.Size( -1,36 ), 0 )
+        bSizer12.Add( self.m_butcancel, 0, wx.ALL, 5 )
+
+
+        bSizer11.Add( bSizer12, 0, wx.ALIGN_CENTER_HORIZONTAL|wx.ALL, 20 )
+
+
+        self.SetSizer( bSizer11 )
+        self.Layout()
+        bSizer11.Fit( self )
+
+        # Connect Events
+        self.m_textCtrl_mnemo.Bind( wx.EVT_TEXT, self.hdmnemo_changed )
+        self.m_butOK.Bind( wx.EVT_BUTTON, self.hd_ok )
+        self.m_butcancel.Bind( wx.EVT_BUTTON, self.hd_cancel )
+
+    def __del__( self ):
+        pass
+
+
+    # Virtual event handlers, overide them in your derived class
+    def hdmnemo_changed( self, event ):
+        event.Skip()
+
+    def hd_ok( self, event ):
+        event.Skip()
+
+    def hd_cancel( self, event ):
+        event.Skip()
 
 
