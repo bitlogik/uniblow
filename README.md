@@ -55,9 +55,11 @@ Compatible with the following blockchains :
 
 ### Seed Watcher
 
-This is not a real device to handle the private keys and make transactions. It provides a window GUI to read a mnemonic seed, analyzes it, and displays the major cryptos held by this given mnemonic, with their respective balance. It can also securely generate new BIP39 mnemonic seeds.
+Useful for paperwallets or one-time analysis of a mnemonic seed. This specific device can be also useful to provide an ephemeral temporary wallet.
 
-Note that Seed Watcher only looks at the first address. If you used a full HD wallet for BTC, LTC or DOGE (such as Electrum), the balance could not be recomputed properly. For BTC, it looks at the SegWit/84 address.
+This devices doesn't store permanently the private keys. It provides a window GUI to read a mnemonic seed, analyzes it, and displays the major cryptos held by this given mnemonic, with their respective balance. It can also securely generate new BIP39 mnemonic seeds. Then one can load a given asset wallet in the app to make some transactions.
+
+Note that Seed Watcher only looks at the first address. If you used a full HD wallet for BTC, LTC or DOGE (such as Electrum), the balance could not be recomputed properly.
 
 ### BasicFile device
 
@@ -72,8 +74,8 @@ your files.
 If you setup a password but forget it, there would be no way to recover your
 coins.
 
-Your key encrypted is stored in JSON and hex in the BasicFileWallet.key in the
-same folder as Uniblow. Hence the name "BasicFile" for this device.
+Your key encrypted is stored in JSON and hex in the *BasicFileWallet.key* in the
+same folder as Uniblow. Hence the name "BasicFile" for this device. The key of this wallet is in a file named *BasicFileWallet.key*, stored in the same uniblow current directory. To backup it, copy the file elsewhere. To remove this wallet and start a fresh one, delete this file. You can also rename it and that would start a new different file wallet, and keep the first wallet aside. In this case, rename back to BasicFileWallet and you read back the first wallet.
 
 ### OpenPGP device
 
@@ -124,6 +126,19 @@ If you setup a password but forget it, there would be no way to recover your
 coins from the backup file. But you can still initialize a new HD device wallet
 with the same words mnemonic.
 
+The seed of this wallet is in a file named *HDseed.key*, stored in the same uniblow current directory. To backup it, copy the file elsewhere. To remove this wallet and start a fresh one, delete this file. You can also rename it and that would start a new different HD wallet, and keep the first wallet aside. In this case, rename back to HDseed and you read back the first wallet.
+
+
+## The SecuBoost seed derivation
+
+Uniblow is offering an alernative to the BIP39 mnemonic derivation. The SecuBoost algorithm is specific to Uniblow, so it won't work in a different wallet. This derivation option replaces the key derivation function of the BIP39 standard for a much stronger one. The key derivation is used to turn your mnemonic words list and password into the BIP32 seed (the H.D. wallet first data key).
+
+The benefit is that you can use a "weaker" password for your wallet, so it is easy to remember. For exemple 2 random words in the dictionary would take years to recover. Similarly, only 5 random letters would take also years to be recovered. By strengthening the derivation, one can use a password which is much easier to remember. An other benefit is even without password setup, it protect your mnemonic better because the derivation is more difficult, and more specific.
+
+Technically, the HMAC(SHA512 x 2048) is replaced with Script(8 x Sensitive, spaces removed). A high-end GPU hash-boxes can perform 1 million BIP39 derivations per second. With SecuBoost, it is approximately only 10 per second. The SecuBoost derivation is 100'000 times slower and additionnaly it takes 1GB RAM per try, so it is also very robust against large scale parallel hardware attack. The SecuBoost algorithm is designed to use a larger amount of memory and time, making a hardware implementation much more expensive, and therefore limiting the amount of parallelism one can use for brute-force recovery. Even a dictionnary attack would be slowed down by this time factor.
+
+Note that this algorithm, per design, uses extensive resources : requires 1 GB RAM, and takes approximately 20 seconds on a desktop computer.
+
 ## Use the GUI
 
 * Download the Uniblow binary [in Github releases](https://github.com/bitlogik/uniblow/releases/latest)
@@ -137,7 +152,7 @@ bringing even greater confidence in the integrity of the application.
 
 ### ToDo list
 
-Features in development :
+Future features :
 
 * Full HD wallet device, avoiding address reuse, and discover in all account chains (external and internal change).
 
@@ -158,6 +173,9 @@ For developers, one can easily add any crypto in this wallet, following this Pyt
 
 ```Python
 class newCOINwallet:
+
+    coin = "SYM"
+
     def __init__(self, coin, *options):
      ... create the wallet, for now options is network,wtype indexes (indexing the list returned by get_networks and get_account_types)
 
@@ -171,7 +189,7 @@ class newCOINwallet:
      ... return the account name (address or similar)
 
     def get_balance(self):
-     ...
+     ... return a string with the balance and the symbol ticker
 
     def check_address(self, addr_str):
      ... return True if the address/account name is valid
