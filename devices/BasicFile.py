@@ -17,14 +17,13 @@
 
 import json
 from os import path
-from secrets import randbelow, token_bytes
-from cryptography.hazmat.primitives import serialization, hashes
-from cryptography.hazmat.primitives.asymmetric import ec, utils
+from secrets import token_bytes
+
 import nacl.exceptions
 import nacl.pwhash
 import nacl.secret
+from devices.SingleKey import SKdevice
 
-CURVE_K1_ORDER = 0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEBAAEDCE6AF48A03BBFD25E8CD0364141
 EC_BYTES_SIZE = 32
 
 FILE_NAME = "BasicFileWallet.key"
@@ -38,58 +37,15 @@ class NotinitException(Exception):
     pass
 
 
-def encode_int(intarray):
-    # encode a bytes array to a DER integer (bytes list)
-    if intarray[0] >= 128:
-        return [2, len(intarray) + 1, 0, *intarray]
-    if intarray[0] == 0:
-        return encode_int(intarray[1:])
-    return [2, len(intarray), *intarray]
-
-
-def encode_der_s(int_r, int_s):
-    # Encode raw signature R|S (2x EC size bytes) into ASN1 DER
-    # Enforce low S
-    array_r = encode_int(int_r.to_bytes(EC_BYTES_SIZE, byteorder="big"))
-    if int_s > (CURVE_K1_ORDER >> 1):
-        s_data = (CURVE_K1_ORDER - int_s).to_bytes(EC_BYTES_SIZE, byteorder="big")
-        array_s = encode_int(s_data)
-    else:
-        array_s = encode_int(int_s.to_bytes(EC_BYTES_SIZE, byteorder="big"))
-    return bytes([0x30, len(array_r) + len(array_s), *array_r, *array_s])
-
-
-def fix_s_sig(sig):
-    # DER to DER with low S
-    if sig[0] != 0x30:
-        raise Exception("Wrong signature header")
-    if sig[2] != 0x02:
-        raise Exception("Wrong signature format")
-    rlen = sig[3]
-    r_value = int.from_bytes(sig[4 : 4 + rlen], "big")
-    slen = sig[5 + rlen]
-    s_value = int.from_bytes(sig[6 + rlen : 6 + rlen + slen], "big")
-    if sig[1] != 4 + rlen + slen or len(sig) != 6 + rlen + slen:
-        raise Exception("Wrong signature encoding")
-    return encode_der_s(r_value, s_value)
-
-
-class BasicFile:
-    # Using Python cryptography lib
-
-    has_password = True
-    has_admin_password = False
-    is_HD = False
-
-    def __init__(self):
-        self.created = False
-        self.has_hardware_button = False
-
+class BasicFile(SKdevice):
     def open_account(self, password):
         if path.isfile(FILE_NAME):
             # Open the current key from its file
             key_file = open(FILE_NAME, "r")
-            key_content = json.load(key_file)
+            try:
+                key_content = json.load(key_file)
+            finally:
+                key_file.close()
             salt = bytes.fromhex(key_content["salt"])
             # decrypt
             decryption_key = nacl.pwhash.argon2id.kdf(
@@ -107,15 +63,13 @@ class BasicFile:
                 raise pwdException("BadPass")
             # load private key
             pvkey_int = int.from_bytes(key_data, "big")
-            key_file.close()
-            self.pvkey = ec.derive_private_key(pvkey_int, ec.SECP256K1())
+            super().open_account(pvkey_int)
         else:
             raise NotinitException()
 
     def initialize_device(self, password):
         # Generate a new key and save it in a file
-        pvkey_int = randbelow(CURVE_K1_ORDER)
-        key_file = open(FILE_NAME, "w")
+        pvkey_int = super().initialize_device()
         # Encrypt the private key
         salt = token_bytes(nacl.pwhash.argon2i.SALTBYTES)
         encryption_key = nacl.pwhash.argon2id.kdf(
@@ -130,18 +84,7 @@ class BasicFile:
             nacl.utils.random(nacl.secret.SecretBox.NONCE_SIZE),
         )
         # Save the encrypted data
+        key_file = open(FILE_NAME, "w")
         json.dump({"keyenc": encrypted_content.hex(), "salt": salt.hex()}, key_file)
-        self.created = True
         key_file.close()
-        self.pvkey = ec.derive_private_key(pvkey_int, ec.SECP256K1())
-
-    def get_public_key(self):
-        return (
-            self.pvkey.public_key()
-            .public_bytes(serialization.Encoding.X962, serialization.PublicFormat.CompressedPoint)
-            .hex()
-        )
-
-    def sign(self, hashed_msg):
-        raw_sig = self.pvkey.sign(hashed_msg, ec.ECDSA(utils.Prehashed(hashes.SHA256())))
-        return fix_s_sig(raw_sig)
+        self.created = True

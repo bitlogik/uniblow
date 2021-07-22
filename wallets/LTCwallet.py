@@ -248,6 +248,8 @@ LTC_units = 8
 
 class LTC_wallet:
 
+    coin = "LTC"
+
     networks = [
         "mainnet",
         "testnet",
@@ -298,7 +300,7 @@ class LTC_wallet:
 
     def get_balance(self):
         # Get balance in base integer unit
-        return str(self.ltc.getbalance() / (10 ** LTC_units)) + " LTC"
+        return f"{self.ltc.getbalance() / (10 ** LTC_units)} {self.coin}"
 
     def check_address(self, addr_str):
         # Check if address is valid

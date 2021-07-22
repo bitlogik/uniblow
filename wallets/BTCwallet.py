@@ -264,6 +264,8 @@ BTC_units = 8
 
 class BTC_wallet:
 
+    coin = "BTC"
+
     networks = [
         "mainnet",
         "testnet",
@@ -316,7 +318,7 @@ class BTC_wallet:
 
     def get_balance(self):
         # Get balance in base integer unit
-        return str(self.btc.getbalance() / (10 ** BTC_units)) + " BTC"
+        return f"{self.btc.getbalance() / (10 ** BTC_units)} {self.coin}"
 
     def check_address(self, addr_str):
         # Check if address is valid

@@ -1,3 +1,4 @@
+from functools import partial
 import sys
 import webbrowser
 import wx
@@ -65,9 +66,9 @@ class ContextOptionsMenu(wx.Menu):
         self.Append(men2)
         self.Bind(wx.EVT_MENU, self.parent.open_explorer, men2)
 
-        # men3 = wx.MenuItem(self, 2, 'Open in wallet')
-        # self.Append(men3)
-        # self.Bind(wx.EVT_MENU, self.parent.open_wallet, men3)
+        men3 = wx.MenuItem(self, 2, "Open in wallet")
+        self.Append(men3)
+        self.Bind(wx.EVT_MENU, self.parent.open_wallet, men3)
 
 
 class SeedWatcherFrame(gui.swgui.MainFrame):
@@ -91,7 +92,7 @@ class SeedWatcherPanel(gui.swgui.MainPanel):
         selnw = int(WORDSLEN_LIST[seli][:2])
         self.generate_mnemonic(selnw)
 
-    def initialize(self):
+    def initialize(self, cb_wallet):
         self.GOOD_BMP = wx.Bitmap(file_path("gui/good.bmp"))
         self.BAD_BMP = wx.Bitmap(file_path("gui/bad.bmp"))
         self.m_choice_nwords.Set(WORDSLEN_LIST)
@@ -106,6 +107,7 @@ class SeedWatcherPanel(gui.swgui.MainPanel):
         dv3 = wx.dataview.DataViewColumn("Balance", wx.dataview.DataViewTextRenderer(), 2)
         dv3.SetWidth(100)
         ctab.AppendColumn(dv3)
+        self.cb_wallet = cb_wallet
 
     def generate_mnemonic(self, n_words):
         mnemonic = generate_mnemonic(n_words)
@@ -189,18 +191,24 @@ class SeedWatcherPanel(gui.swgui.MainPanel):
         sel_row = self.m_dataViewListCtrl1.GetSelectedRow()
         if sel_row == wx.NOT_FOUND:
             return
-        addr = self.m_dataViewListCtrl1.GetTextValue(sel_row, 1)
         open_explorer(self.coins[sel_row].wallet.history())
 
     def open_wallet(self, evt):
-        raise NotImplementedError
+        sel_row = self.m_dataViewListCtrl1.GetSelectedRow()
+        if sel_row == wx.NOT_FOUND:
+            return
+
+        wallet_type = coins_list[sel_row].get("type", 0)
+        wallet_open = partial(coins_list[sel_row]["wallet_lib"], 1, wallet_type)  # 0 = mainnet
+        key = self.coins[sel_row].wallet.current_device.ecpair
+        self.cb_wallet(wallet_open, key, self.GetParent())
 
 
-def start_seedwatcher(app):
+def start_seedwatcher(app, cb_wallet):
     app.frame_sw = SeedWatcherFrame(app.gui_frame)
     app.frame_sw.SetIcons(wx.IconBundle(file_path("gui/uniblow.ico")))
     app.gui_panel.devices_choice.SetSelection(0)
     app.gui_frame.Hide()
     app.panel_sw = SeedWatcherPanel(app.frame_sw)
-    app.panel_sw.initialize()
+    app.panel_sw.initialize(cb_wallet)
     app.frame_sw.Show()

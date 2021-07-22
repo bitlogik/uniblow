@@ -25,7 +25,6 @@ from cryptolib.cryptography import public_key_recover, decompress_pubkey, sha3
 from cryptolib.coins.ethereum import rlp_encode, int2bytearray, uint256, read_string
 from wallets.wallets_utils import shift_10
 
-ETH_symbol = "ETH"
 ETH_units = 18
 
 # ERC20 functions codes
@@ -293,8 +292,6 @@ class ETHwalletCore:
             if balraw == [] or balraw == "0x":
                 return "---"
             return read_string(balraw)
-        else:
-            return ETH_symbol
 
     def getnonce(self):
         numtx = self.api.get_tx_num(self.address, "pending")
@@ -386,6 +383,8 @@ class ETHwalletCore:
 
 class ETH_wallet:
 
+    coin = "ETH"
+
     networks = [
         "Mainnet",
         "Rinkeby",
@@ -472,7 +471,7 @@ class ETH_wallet:
         return (
             str(self.eth.getbalance(not self.eth.ERC20) / (10 ** self.eth.decimals))
             + " "
-            + self.eth.token_symbol
+            + self.coin
         )
 
     def check_address(self, addr_str):

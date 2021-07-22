@@ -24,6 +24,7 @@ import wx
 import qrcode
 import gui.app
 from devices.SeedWatcher import start_seedwatcher
+from devices.SingleKey import SKdevice
 from version import VERSION
 
 SUPPORTED_COINS = [
@@ -75,49 +76,6 @@ def get_device_class(device_str):
         pwdException = getattr(devices[device_str], "pwdException")
     NotinitException = getattr(devices[device_str], "NotinitException")
     return device_class
-
-
-class Wallet:
-    def __init__(self, coin, *options, **user_options):
-        self.coin_wallet = get_coin_class(coin)(*options, **user_options)
-        if hasattr(self.coin_wallet, "coin"):
-            self.coin = self.coin_wallet.coin
-        else:
-            self.coin = coin
-
-    def get_networks(self):
-        return self.coin_wallet.get_networks()
-
-    def get_account_types(self):
-        return self.coin_wallet.get_account_types()
-
-    def get_path(self, network, wallet_type):
-        # for HD wallet, get the right derivation path
-        return self.coin_wallet.get_path(network, wallet_type)
-
-    def get_account(self):
-        # Read address to fund the wallet
-        return self.coin_wallet.get_account()
-
-    def get_balance(self):
-        # Get balance as string
-        return self.coin_wallet.get_balance()
-
-    def check_address(self, addr_str):
-        # Check if address is valid
-        return self.coin_wallet.check_address(addr_str)
-
-    def history(self):
-        # Get history page
-        return self.coin_wallet.history()
-
-    def transfer(self, amount, to_account, fee_priority):
-        # Transfer to pay x coin unit to an external account
-        return self.coin_wallet.transfer(amount, to_account, fee_priority)
-
-    def transfer_all(self, to_account, fee_priority):
-        # Transfer all the wallet amount to an external account
-        return self.coin_wallet.transfer_all(to_account, fee_priority)
 
 
 def display_balance():
@@ -191,7 +149,7 @@ def get_option(input_message):
     option_dialog = wx.TextEntryDialog(
         app.gui_frame,
         input_message,
-        caption=f"Setting for the wallet",
+        caption="Setting for the wallet",
         value="",
         pos=wx.DefaultPosition,
     )
@@ -264,6 +222,15 @@ def close_device():
         del app.device
 
 
+def cb_open_wallet(wallet_obj, pkey, sw_frame):
+    key_device = SKdevice()
+    key_device.load_key(pkey)
+    app.wallet = wallet_obj(key_device)
+    sw_frame.Close()
+    app.gui_panel.devices_choice.SetSelection(1)
+    display_coin(app.wallet.get_account())
+
+
 def device_selected(device):
     global DEFAULT_PASSWORD
     close_device()
@@ -276,7 +243,7 @@ def device_selected(device):
     device_sel_name = DEVICES_LIST[sel_device - 1]
     if sel_device == 1:
         # Seed Watcher
-        start_seedwatcher(app)
+        start_seedwatcher(app, cb_open_wallet)
     if sel_device > 1:
         # Real keys device
         password_default = DEFAULT_PASSWORD
@@ -407,7 +374,7 @@ def set_coin(coin, network, wallet_type):
             app.device.derive_key(current_path)
         if option_info is not None:
             option_arg = {option_info["option_name"]: option_value}
-        app.wallet = Wallet(coin, network, wallet_type, app.device, **option_arg)
+        app.wallet = get_coin_class(coin)(network, wallet_type, app.device, **option_arg)
         account_id = app.wallet.get_account()
     except Exception as exc:
         app.gui_panel.coins_choice.SetSelection(0)
@@ -417,10 +384,14 @@ def set_coin(coin, network, wallet_type):
             # output the exception when dev environment
             raise exc
         return
-    app.gui_panel.account_addr.SetValue(account_id)
+    display_coin(account_id)
+
+
+def display_coin(account_addr):
+    app.gui_panel.account_addr.SetValue(account_addr)
     imgbuf = BytesIO()
     imgqr = qrcode.make(
-        account_id,
+        account_addr,
         error_correction=qrcode.constants.ERROR_CORRECT_L,
         box_size=4,
         border=3,
@@ -431,7 +402,7 @@ def set_coin(coin, network, wallet_type):
     app.gui_panel.qrimg.SetScaleMode(wx.StaticBitmap.ScaleMode.Scale_None)  # or Scale_AspectFit
     app.gui_panel.qrimg.SetBitmap(wx.Bitmap(wxi))
     app.balance_timer = DisplayTimer()
-    display_balance()
+    wx.CallLater(80, display_balance)
     app.balance_timer.Start(8000)
     app.gui_frame.Refresh()
     app.gui_frame.Update()
@@ -512,7 +483,7 @@ def transfer(to, amount):
             )
             wx.MilliSleep(50)
             wait_msg = "Buiding and signing the transaction"
-            if app.device.has_hardware_button:
+            if app.wallet.current_device.has_hardware_button:
                 wait_msg += "\nPress the button on the physical device to confirm."
             progress_modal.Update(50, wait_msg)
             wx.MilliSleep(250)

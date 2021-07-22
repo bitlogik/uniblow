@@ -18,7 +18,7 @@ import sys
 import os.path
 import webbrowser
 
-from wx import IconBundle, TextDataObject, TheClipboard, Bitmap, EVT_TEXT, ID_OK, ID_CANCEL
+from wx import IconBundle, TextDataObject, TheClipboard, Bitmap, ID_OK, ID_CANCEL
 
 import gui.window
 import gui.infodialog

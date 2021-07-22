@@ -172,6 +172,8 @@ class EOSwalletCore:
 # Only local key for now
 class EOS_wallet:
 
+    coin = "EOS"
+
     networks = [
         "EOSio",
         "Jungle3",
@@ -220,7 +222,7 @@ class EOS_wallet:
         if not self.eos.account:
             return "Register this publickey\nin an account, and refresh."
         bal_list = self.eos.getbalance()
-        return bal_list[0] if len(bal_list) > 0 else "0 EOS"
+        return bal_list[0] if len(bal_list) > 0 else f"0 {self.coin}"
 
     def check_address(self, addr_str):
         # Check if address is valid

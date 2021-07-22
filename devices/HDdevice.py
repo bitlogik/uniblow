@@ -25,7 +25,6 @@ import nacl.utils
 
 from cryptolib.HDwallet import (
     HD_Wallet,
-    entropy_to_mnemonic,
     bip39_is_checksum_valid,
     mnemonic_to_seed,
     generate_mnemonic,

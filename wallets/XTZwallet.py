@@ -242,6 +242,8 @@ XTZ_units = 6
 
 class XTZ_wallet:
 
+    coin = "XTZ"
+
     networks = [
         "Mainnet",
         "EdoNet",
@@ -289,7 +291,7 @@ class XTZ_wallet:
 
     def get_balance(self):
         # Get balance in base integer unit
-        return str(self.xtz.getbalance() / (10 ** XTZ_units)) + " XTZ"
+        return f"{self.xtz.getbalance() / (10 ** XTZ_units)} {self.coin}"
 
     def check_address(self, addr_str):
         # Check if address is valid

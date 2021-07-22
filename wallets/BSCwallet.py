@@ -25,7 +25,6 @@ from cryptolib.coins.ethereum import rlp_encode, int2bytearray, uint256, read_st
 from wallets.wallets_utils import shift_10
 
 
-BSC_symbol = "BSC"
 BSC_units = 18
 
 # BEP20 functions codes
@@ -205,8 +204,6 @@ class BSCwalletCore:
             if balraw == [] or balraw == "0x":
                 return "---"
             return read_string(balraw)
-        else:
-            return BSC_symbol
 
     def getnonce(self):
         numtx = self.api.get_tx_num(self.address, "pending")
@@ -292,6 +289,8 @@ class BSCwalletCore:
 
 class BSC_wallet:
 
+    coin = "BSC"
+
     networks = [
         "Mainnet",
         "Testnet",
@@ -358,7 +357,7 @@ class BSC_wallet:
         return (
             str(self.bsc.getbalance(not self.bsc.BEP20) / (10 ** self.bsc.decimals))
             + " "
-            + self.bsc.token_symbol
+            + self.coin
         )
 
     def check_address(self, addr_str):

@@ -202,6 +202,8 @@ DOGE_units = 8
 
 class DOGE_wallet:
 
+    coin = "DOGE"
+
     networks = [
         "mainnet",
         "testnet",
@@ -248,7 +250,7 @@ class DOGE_wallet:
 
     def get_balance(self):
         # Get balance in base integer unit
-        return str(self.doge.getbalance() / (10 ** DOGE_units)) + " DOGE"
+        return f"{self.doge.getbalance() / (10 ** DOGE_units)} {self.coin}"
 
     def check_address(self, addr_str):
         # Check if address is valid
