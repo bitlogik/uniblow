@@ -46,7 +46,7 @@
             <property name="name">MainFrame</property>
             <property name="pos"></property>
             <property name="size">652,713</property>
-            <property name="style">wxDEFAULT_FRAME_STYLE</property>
+            <property name="style">wxCAPTION|wxCLOSE_BOX|wxFRAME_FLOAT_ON_PARENT|wxMINIMIZE_BOX|wxSYSTEM_MENU</property>
             <property name="subclass">; ; forward_declare</property>
             <property name="title">  [ Uniblow ]    Seed Watcher</property>
             <property name="tooltip"></property>
@@ -72,7 +72,7 @@
             <property name="minimum_size"></property>
             <property name="name">MainPanel</property>
             <property name="pos"></property>
-            <property name="size">560,602</property>
+            <property name="size">-1,-1</property>
             <property name="subclass">; ; forward_declare</property>
             <property name="tooltip"></property>
             <property name="window_extra_style"></property>

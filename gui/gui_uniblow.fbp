@@ -46,7 +46,7 @@
             <property name="name">TopFrame</property>
             <property name="pos"></property>
             <property name="size">996,383</property>
-            <property name="style">wxDEFAULT_FRAME_STYLE</property>
+            <property name="style">wxCAPTION|wxCLOSE_BOX|wxMINIMIZE_BOX|wxSYSTEM_MENU</property>
             <property name="subclass">; ; forward_declare</property>
             <property name="title"></property>
             <property name="tooltip"></property>
@@ -71,7 +71,7 @@
             <property name="minimum_size"></property>
             <property name="name">TopPanel</property>
             <property name="pos"></property>
-            <property name="size">922,362</property>
+            <property name="size">-1,-1</property>
             <property name="subclass">; ; forward_declare</property>
             <property name="tooltip"></property>
             <property name="window_extra_style"></property>

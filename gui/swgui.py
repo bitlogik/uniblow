@@ -18,7 +18,7 @@ import wx.dataview
 class MainFrame ( wx.Frame ):
 
     def __init__( self, parent ):
-        wx.Frame.__init__ ( self, parent, id = wx.ID_ANY, title = u"  [ Uniblow ]    Seed Watcher", pos = wx.DefaultPosition, size = wx.Size( 652,713 ), style = wx.DEFAULT_FRAME_STYLE|wx.TAB_TRAVERSAL )
+        wx.Frame.__init__ ( self, parent, id = wx.ID_ANY, title = u"  [ Uniblow ]    Seed Watcher", pos = wx.DefaultPosition, size = wx.Size( 652,713 ), style = wx.CAPTION|wx.CLOSE_BOX|wx.FRAME_FLOAT_ON_PARENT|wx.MINIMIZE_BOX|wx.SYSTEM_MENU|wx.TAB_TRAVERSAL )
 
         self.SetSizeHints( wx.DefaultSize, wx.DefaultSize )
 
@@ -43,7 +43,7 @@ class MainFrame ( wx.Frame ):
 
 class MainPanel ( wx.Panel ):
 
-    def __init__( self, parent, id = wx.ID_ANY, pos = wx.DefaultPosition, size = wx.Size( 560,602 ), style = wx.TAB_TRAVERSAL, name = wx.EmptyString ):
+    def __init__( self, parent, id = wx.ID_ANY, pos = wx.DefaultPosition, size = wx.Size( -1,-1 ), style = wx.TAB_TRAVERSAL, name = wx.EmptyString ):
         wx.Panel.__init__ ( self, parent, id = id, pos = pos, size = size, style = style, name = name )
 
         bSizer11 = wx.BoxSizer( wx.VERTICAL )
@@ -158,6 +158,7 @@ class MainPanel ( wx.Panel ):
 
         self.SetSizer( bSizer11 )
         self.Layout()
+        bSizer11.Fit( self )
 
         # Connect Events
         self.m_button_gen.Bind( wx.EVT_BUTTON, self.gen_new_mnemonic )

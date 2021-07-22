@@ -46,7 +46,6 @@ class InfoBox(gui.infodialog.InfoDialog):
         # else silent : no Access
 
     def close_info(self, event):
-        event.Skip()
         self.Destroy()
 
 
