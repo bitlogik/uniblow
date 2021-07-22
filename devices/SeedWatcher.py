@@ -113,6 +113,7 @@ class SeedWatcherPanel(gui.swgui.MainPanel):
     def seek_assets(self, event):
         event.Skip()
         self.m_btnseek.Disable()
+        self.m_dataViewListCtrl1.DeleteAllItems()
         if self.m_SecuBoost.IsChecked():
             derivation = "BOOST"
         else:
