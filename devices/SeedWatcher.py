@@ -1,4 +1,5 @@
 import sys
+import webbrowser
 import wx
 import gui.swgui
 from gui.app import file_path
@@ -31,6 +32,10 @@ coins_list = [
 WORDSLEN_LIST = ["12 words", "15 words", "18 words", "21 words", "24 words"]
 
 
+def open_explorer(explorer_url):
+    webbrowser.open(explorer_url, new=1, autoraise=True)
+
+
 class SeedDevice:
     def __init__(self, ecpair):
         self.ecpair = ecpair
@@ -47,6 +52,24 @@ class blockchainWallet:
         self.wallet = coin_data["wallet_lib"](0, wallet_type, device)
 
 
+class ContextOptionsMenu(wx.Menu):
+    def __init__(self, parent):
+        wx.Menu.__init__(self)
+        self.parent = parent
+
+        men1 = wx.MenuItem(self, 0, "Copy Address")
+        self.Append(men1)
+        self.Bind(wx.EVT_MENU, self.parent.copy_account, men1)
+
+        men2 = wx.MenuItem(self, 1, "Open block explorer")
+        self.Append(men2)
+        self.Bind(wx.EVT_MENU, self.parent.open_explorer, men2)
+
+        # men3 = wx.MenuItem(self, 2, 'Open in wallet')
+        # self.Append(men3)
+        # self.Bind(wx.EVT_MENU, self.parent.open_wallet, men3)
+
+
 class SeedWatcherFrame(gui.swgui.MainFrame):
     def closesw(self, event):
         event.Skip()
@@ -57,6 +80,7 @@ class SeedWatcherPanel(gui.swgui.MainPanel):
     def mnemo_changed(self, event):
         event.Skip()
         self.m_dataViewListCtrl1.DeleteAllItems()
+        self.m_staticTextcopy.Disable()
         self.m_bitmap_wl.SetBitmap(self.BAD_BMP)
         self.m_bitmap_cs.SetBitmap(self.BAD_BMP)
         self.check_mnemonic()
@@ -96,9 +120,10 @@ class SeedWatcherPanel(gui.swgui.MainPanel):
             [coin.name, coin.wallet.get_account(), coin.wallet.get_balance()]
         )
 
-    def display_coins(self, coins):
-        for coin in coins:
+    def display_coins(self):
+        for coin in self.coins:
             self.add_coin(coin)
+        self.m_staticTextcopy.Enable()
         self.m_btnseek.Enable()
         self.m_dataViewListCtrl1.SetRowHeight(28)
 
@@ -113,6 +138,7 @@ class SeedWatcherPanel(gui.swgui.MainPanel):
     def seek_assets(self, event):
         event.Skip()
         self.m_btnseek.Disable()
+        self.m_staticTextcopy.Disable()
         self.m_dataViewListCtrl1.DeleteAllItems()
         if self.m_SecuBoost.IsChecked():
             derivation = "BOOST"
@@ -122,24 +148,30 @@ class SeedWatcherPanel(gui.swgui.MainPanel):
         password = self.m_textpwd.GetValue()
         account_idx = str(self.m_account.GetValue())
         wallet = HD_Wallet.from_mnemonic(mnemo_txt, password, derivation)
-        coins = []
+        self.coins = []
         for coin in coins_list:
             coin_key = SeedDevice(wallet.derive_key(coin["path"] + account_idx))
             try:
                 coin_wallet = blockchainWallet(coin, coin_key)
-                coins.append(coin_wallet)
+                self.coins.append(coin_wallet)
             except Exception as exc:
                 if not getattr(sys, "frozen", False):
                     # output the exception when dev environment
                     print(exc)
 
-        self.display_coins(coins)
+        self.display_coins()
 
-    def select_coin(self, event):
+    def pop_menu(self, event):
         event.Skip()
+        if self.m_dataViewListCtrl1.GetItemCount() > 0:
+            self.PopupMenu(ContextOptionsMenu(self))
+
+    def copy_account(self, event):
         if wx.TheClipboard.Open():
             wx.TheClipboard.Clear()
-            sel_row = self.m_dataViewListCtrl1.ItemToRow(event.GetItem())
+            sel_row = self.m_dataViewListCtrl1.GetSelectedRow()
+            if sel_row == wx.NOT_FOUND:
+                return
             addr = self.m_dataViewListCtrl1.GetTextValue(sel_row, 1)
             wx.TheClipboard.SetData(wx.TextDataObject(addr))
             wx.TheClipboard.Close()
@@ -152,6 +184,16 @@ class SeedWatcherPanel(gui.swgui.MainPanel):
                 wx.DefaultPosition,
             )
             copied_modal.ShowModal()
+
+    def open_explorer(self, event):
+        sel_row = self.m_dataViewListCtrl1.GetSelectedRow()
+        if sel_row == wx.NOT_FOUND:
+            return
+        addr = self.m_dataViewListCtrl1.GetTextValue(sel_row, 1)
+        open_explorer(self.coins[sel_row].wallet.history())
+
+    def open_wallet(self, evt):
+        raise NotImplementedError
 
 
 def start_seedwatcher(app):

@@ -18,7 +18,7 @@ import wx.dataview
 class MainFrame ( wx.Frame ):
 
     def __init__( self, parent ):
-        wx.Frame.__init__ ( self, parent, id = wx.ID_ANY, title = u"  [ Uniblow ]    Seed Watcher", pos = wx.DefaultPosition, size = wx.Size( 652,713 ), style = wx.CAPTION|wx.CLOSE_BOX|wx.FRAME_FLOAT_ON_PARENT|wx.MINIMIZE_BOX|wx.SYSTEM_MENU|wx.TAB_TRAVERSAL )
+        wx.Frame.__init__ ( self, parent, id = wx.ID_ANY, title = u"  [ Uniblow ]    Seed Watcher", pos = wx.DefaultPosition, size = wx.Size( 652,731 ), style = wx.CAPTION|wx.CLOSE_BOX|wx.FRAME_FLOAT_ON_PARENT|wx.MINIMIZE_BOX|wx.SYSTEM_MENU|wx.TAB_TRAVERSAL )
 
         self.SetSizeHints( wx.DefaultSize, wx.DefaultSize )
 
@@ -147,6 +147,14 @@ class MainPanel ( wx.Panel ):
 
         bSizer11.Add( self.m_btnseek, 0, wx.ALL|wx.ALIGN_CENTER_HORIZONTAL, 15 )
 
+        self.m_staticTextcopy = wx.StaticText( self, wx.ID_ANY, u"Right click on asset line to open menu", wx.DefaultPosition, wx.DefaultSize, 0 )
+        self.m_staticTextcopy.Wrap( -1 )
+
+        self.m_staticTextcopy.SetFont( wx.Font( 8, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, False, wx.EmptyString ) )
+        self.m_staticTextcopy.Enable( False )
+
+        bSizer11.Add( self.m_staticTextcopy, 0, wx.ALL|wx.ALIGN_CENTER_HORIZONTAL, 5 )
+
         self.m_dataViewListCtrl1 = wx.dataview.DataViewListCtrl( self, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.dataview.DV_HORIZ_RULES|wx.dataview.DV_SINGLE|wx.dataview.DV_VERT_RULES )
         self.m_dataViewListCtrl1.SetMinSize( wx.Size( -1,149 ) )
 
@@ -167,7 +175,7 @@ class MainPanel ( wx.Panel ):
         self.m_SecuBoost.Bind( wx.EVT_CHECKBOX, self.mnemo_changed )
         self.m_account.Bind( wx.EVT_SPINCTRL, self.mnemo_changed )
         self.m_btnseek.Bind( wx.EVT_BUTTON, self.seek_assets )
-        self.m_dataViewListCtrl1.Bind( wx.dataview.EVT_DATAVIEW_ITEM_ACTIVATED, self.select_coin, id = wx.ID_ANY )
+        self.m_dataViewListCtrl1.Bind( wx.dataview.EVT_DATAVIEW_ITEM_CONTEXT_MENU, self.pop_menu, id = wx.ID_ANY )
 
     def __del__( self ):
         pass
@@ -186,7 +194,7 @@ class MainPanel ( wx.Panel ):
     def seek_assets( self, event ):
         event.Skip()
 
-    def select_coin( self, event ):
+    def pop_menu( self, event ):
         event.Skip()
 
 
