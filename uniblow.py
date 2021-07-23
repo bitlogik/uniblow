@@ -548,9 +548,11 @@ if __name__ == "__main__":
         ctypes.windll.shcore.SetProcessDpiAwareness(True)
     except Exception:
         pass
-    app = wx.App()
 
-    gui.app.start_app(app, VERSION, SUPPORTED_COINS, DEVICES_LIST)
+    app = wx.App()
+    ret = gui.app.start_app(app, VERSION, SUPPORTED_COINS, DEVICES_LIST)
+    if ret == "ERR":
+        sys.exit()
 
     app.gui_panel.devices_choice.Bind(wx.EVT_CHOICE, device_selected)
     app.gui_panel.coins_choice.Bind(wx.EVT_CHOICE, coin_selected)

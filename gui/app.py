@@ -25,6 +25,8 @@ import gui.infodialog
 
 from cryptolib.HDwallet import bip39_is_checksum_valid
 
+ICON_FILE = "gui/uniblow.ico"
+
 
 class InfoBox(gui.infodialog.InfoDialog):
     def __init__(self, message, title, style, parent):
@@ -129,9 +131,14 @@ def set_mnemonic(app, proposal):
 
 
 def start_app(app, version, coins_list, devices_list):
+    icon_path = file_path(ICON_FILE)
+    if not os.path.isfile(icon_path):
+        print("Icon not found. Run uniblow from its directory.")
+        return "ERR"
+    wicon = IconBundle(icon_path)
     app.gui_frame = gui.window.TopFrame(None)
     app.gui_panel = gui.window.TopPanel(app.gui_frame)
-    app.gui_frame.SetIcons(IconBundle(file_path("gui/uniblow.ico")))
+    app.gui_frame.SetIcons(wicon)
     app.gui_frame.SetTitle(f"  Uniblow  -  {version}")
     load_coins_list(app, coins_list)
     load_devices(app, devices_list)
