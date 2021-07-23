@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 # -*- coding: utf8 -*-
 
-# UNIBLOW Basic File Wallet manager
+# UNIBLOW Hierarchical Deterministic keys device
 # Copyright (C) 2021 BitLogiK
 
 # This program is free software: you can redistribute it and/or modify
