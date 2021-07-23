@@ -43,8 +43,8 @@ class SKdevice:
     def initialize_device(self):
         # Generate a new key
         pvkey_int = randbelow(CURVE_K1_ORDER)
+        self.open_account(pvkey_int)
         self.created = True
-        self.eckey = EC_key_pair(pvkey_int)
         return pvkey_int
 
     def get_public_key(self, compressed=True):
