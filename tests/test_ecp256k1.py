@@ -26,12 +26,13 @@ def key_to_coords(pvkey):
 
 
 def test_ECDH():
-    """Test sclam point multiplication"""
+    """Test scalar point multiplication"""
     for x in range(10):
         pv_key_1 = gen_key()
         pv_key_2 = gen_key()
         Pub_1 = ECP256k1.ECPoint(*key_to_coords(pv_key_1))
         Pub_2 = ECP256k1.ECPoint(*key_to_coords(pv_key_2))
+        # a.B = b.A
         assert key_to_pvint(pv_key_1) * Pub_2 == key_to_pvint(pv_key_2) * Pub_1
 
 
