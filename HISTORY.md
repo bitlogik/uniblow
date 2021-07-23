@@ -1,20 +1,25 @@
 
 Uniblow versions history
 
-## 0.5.2
+## 0.6.0
 
 * Add ERC20 and BEP20 tokens
-* Copy to clipboard in SeedWatcher
+* Can select the HD-BIP44 account index
+* Action context menu in SeedWatcher
+* SeedWatcher addresses can be opened on wallet
+* Add SecuBoost derivation capability
 * Fix input value (negative, float errors)
+* Various GUI improvements
+* More code reusability
 
 ## 0.5.0
 
 * Add a Seed Watcher
 * Major rewrite of the crypto libraries
-    * cleaner, smaller, more modern
+    * Cleaner, smaller, more modern
     * Using exclusively cryptography lib and Python internal
     * Get rid of the external ecdsa lib
-    * testing
+    * Testing (from standards tests vectors)
 * Add Binance Smart Chain
 * Binary detail properties added for Windows
 
