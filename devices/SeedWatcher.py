@@ -215,8 +215,18 @@ class SeedWatcherPanel(gui.swgui.MainPanel):
         if sel_row == wx.NOT_FOUND:
             return
 
-        wallet_type = coins_list[sel_row].get("type", 0)
-        wallet_open = partial(coins_list[sel_row]["wallet_lib"], 0, wallet_type)
+        # Seek in coinslist for the right wallet
+        # It can be shifted because of a missing wallet (from a silent exception)
+        sel_wallet = sel_row
+        while coins_list[sel_wallet]["wallet_lib"].__qualname__ != str(
+            type(self.coins[sel_row].wallet).__name__
+        ):
+            sel_wallet += 1
+            if sel_wallet > len(coins_list):
+                return
+
+        wallet_type = coins_list[sel_wallet].get("type", 0)
+        wallet_open = partial(coins_list[sel_wallet]["wallet_lib"], 0, wallet_type)
         key = self.coins[sel_row].wallet.current_device.ecpair
         self.cb_wallet(wallet_open, key, self.GetParent())
 
