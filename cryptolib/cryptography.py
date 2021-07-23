@@ -29,7 +29,7 @@ from cryptography.hazmat import backends
 from cryptography.hazmat.primitives import serialization, hashes
 from cryptography.hazmat.primitives.asymmetric import ec, utils
 from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
-
+from nacl.hashlib import scrypt
 
 ## Cryptography
 
@@ -113,6 +113,26 @@ def Hash160(data):
     return md160(sha2(data))
 
 
+def HMAC_SHA512(key, data):
+    return hmac.digest(key, data, hashlib.sha512)
+
+
+def PBKDF2_SHA512(salt):
+    # Then .derive(data)
+    return PBKDF2HMAC(
+        algorithm=hashes.SHA512(),
+        length=64,
+        salt=salt,
+        iterations=2048,
+    )
+
+
+def SecuBoost_KDF(data, salt):
+    return scrypt(
+        data.replace(b" ", b""), salt, n=pow(2, 20), r=8, p=8, dklen=64, maxmem=1.5 * pow(2, 30)
+    )
+
+
 def b58checksum(data):
     return dbl_sha2(data)[:4]
 
@@ -171,16 +191,3 @@ def makeup_sig(sig):
     if sig[1] != 4 + rlen + slen or len(sig) != 6 + rlen + slen:
         raise Exception("Wrong signature encoding")
     return encode_der_s(r_value, s_value)
-
-
-def HMAC_SHA512(key, data):
-    return hmac.new(key, data, hashlib.sha512).digest()
-
-
-def PBKDF2_SHA512(salt):
-    return PBKDF2HMAC(
-        algorithm=hashes.SHA512(),
-        length=64,
-        salt=salt,
-        iterations=2048,
-    )

@@ -17,12 +17,12 @@
 import os
 import unicodedata
 
-from nacl.hashlib import scrypt
 from cryptolib.cryptography import (
     sha2,
     HMAC_SHA512,
     EC_key_pair,
     PBKDF2_SHA512,
+    SecuBoost_KDF,
     CURVES_ORDER,
     random_generator,
 )
@@ -42,7 +42,7 @@ def mnemonic_to_seed(
     passphrase_prefix=b"mnemonic",
     method="PBKDF2-2048-HMAC-SHA512",
 ):
-    passphrase = unicodedata.normalize("NFKD", passphrasestr or "").encode("utf8")
+    passphrase = unicodedata.normalize("NFKD", passphrasestr).encode("utf8")
     mnemonic = unicodedata.normalize("NFKD", " ".join(mnemonic_phrase.split())).encode("utf8")
     if method == "PBKDF2-2048-HMAC-SHA512":
         pbkdf2 = PBKDF2_SHA512(
@@ -50,14 +50,9 @@ def mnemonic_to_seed(
         )
         return pbkdf2.derive(mnemonic)
     elif method == "SCRYPT":
-        return scrypt(
+        return SecuBoost_KDF(
             mnemonic,
             passphrase_prefix + passphrase,
-            n=pow(2, 20),
-            r=8,
-            p=8,
-            dklen=64,
-            maxmem=1.5 * pow(2, 30),
         )
     else:
         raise Exception("Mnemonic derivation method not valid")
