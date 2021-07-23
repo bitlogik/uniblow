@@ -216,7 +216,7 @@ class SeedWatcherPanel(gui.swgui.MainPanel):
             return
 
         wallet_type = coins_list[sel_row].get("type", 0)
-        wallet_open = partial(coins_list[sel_row]["wallet_lib"], 1, wallet_type)  # 0 = mainnet
+        wallet_open = partial(coins_list[sel_row]["wallet_lib"], 0, wallet_type)
         key = self.coins[sel_row].wallet.current_device.ecpair
         self.cb_wallet(wallet_open, key, self.GetParent())
 
