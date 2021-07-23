@@ -63,7 +63,7 @@ class BasicFile(SKdevice):
                 raise pwdException("BadPass")
             # load private key
             pvkey_int = int.from_bytes(key_data, "big")
-            super().open_account(pvkey_int)
+            super().open_account_fromint(pvkey_int)
         else:
             raise NotinitException()
 

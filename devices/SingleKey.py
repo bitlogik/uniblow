@@ -34,7 +34,7 @@ class SKdevice:
         self.created = False
         self.has_hardware_button = False
 
-    def open_account(self, key_int):
+    def open_account_fromint(self, key_int):
         self.eckey = EC_key_pair(key_int)
 
     def load_key(self, ecpair_obj):
@@ -43,7 +43,7 @@ class SKdevice:
     def initialize_device(self):
         # Generate a new key
         pvkey_int = randbelow(CURVE_K1_ORDER)
-        self.open_account(pvkey_int)
+        self.open_account_fromint(pvkey_int)
         self.created = True
         return pvkey_int
 
