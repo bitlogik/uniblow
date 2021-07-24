@@ -6,11 +6,12 @@ Uniblow versions history
 * Add ERC20 and BEP20 tokens
 * Can select the HD-BIP44 account index
 * Action context menu in SeedWatcher
-* SeedWatcher addresses can be opened on wallet
-* Add SecuBoost derivation capability
-* Fix input value (negative, float errors)
+* SeedWatcher addresses can be opened in wallet
+* Add the SecuBoost derivation capability
+* Fix the input value (negative, float errors)
 * Various GUI improvements
 * More code reusability
+* Binary release for Debian and Tails
 
 ## 0.5.0
 

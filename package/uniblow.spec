@@ -5,14 +5,27 @@ import sys
 import platform
 from package.build_win_verinfo import fill_version_info
 
-current_path = os.path.dirname(os.path.abspath("uniblow.spec"))
-sys.path.append(current_path)
 from uniblow import SUPPORTED_COINS, DEVICES_LIST
 from version import VERSION
+
+
+current_path = os.path.dirname(os.path.abspath("uniblow.spec"))
+sys.path.append(current_path)
 
 ICON = "../gui/uniblow.ico"
 FILE_DESCRIPTION = "uniblow application executable"
 COMMENTS = "universal blockchain wallet for cryptos"
+
+
+def is_debian():
+    OS_REL_FILE = "/etc/os-release"
+    if os.path.isfile(OS_REL_FILE):
+        with open(OS_REL_FILE, "r") as osrel_fid:
+            for line_str in osrel_fid.readlines():
+                if line_str[6:12] == "Debian":
+                    # NAME="Debian
+                    return True
+    return False
 
 
 os_system = platform.system()
@@ -20,6 +33,8 @@ if os_system == "Windows":
     os_platform = "win"
 elif os_system == "Linux":
     os_platform = "nux"
+    if is_debian():
+        os_platform = "deb"
 elif os_system == "Darwin":
     os_platform = "mac"
 else:

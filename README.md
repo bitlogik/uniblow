@@ -51,6 +51,7 @@ Compatible with the following blockchains :
     * tz2 wallet
     * Main Tezos and Edo testnet networks
 
+
 ## Devices
 
 ### Seed Watcher
@@ -129,42 +130,57 @@ with the same words mnemonic.
 The seed of this wallet is in a file named *HDseed.key*, stored in the same uniblow current directory. To backup it, copy the file elsewhere. To remove this wallet and start a fresh one, delete this file. You can also rename it and that would start a new different HD wallet, and keep the first wallet aside. In this case, rename back to HDseed and you read back the first wallet.
 
 
+## Run Uniblow - Use the GUI
+
+On **Debian / Tails** :
+
+* Download the Uniblow *deb* binary [from the Github releases](https://github.com/bitlogik/uniblow/releases/latest)
+* Follow the [instructions of the dedicated instructions page](docs/LinuxBin.md).
+
+To increase the security, the Debian/Tails binaries releases are [signed with our PGP key](https://bitlogik.fr/pgp/bitlogik.asc),
+bringing even greater confidence in the integrity of the application. The checking process is described in [this
+ instructions document](docs/LinuxBin.md).
+
+
+On **Windows** : 
+
+* Download the Uniblow binary [in the Github releases](https://github.com/bitlogik/uniblow/releases/latest)
+
+To increase the security, the Windows exe releases are signed with our [Extended
+Validation certificate](https://en.wikipedia.org/wiki/Code_signing#Extended_validation_(EV)_code_signing),
+bringing even greater confidence in the integrity of the application.
+
+
 ## The SecuBoost seed derivation
 
-Uniblow is offering an alernative to the BIP39 mnemonic derivation. The SecuBoost algorithm is specific to Uniblow, so it won't work in a different wallet. This derivation option replaces the key derivation function of the BIP39 standard for a much stronger one. The key derivation is used to turn your mnemonic words list and password into the BIP32 seed (the H.D. wallet first data key).
+Uniblow is offering an alternative to [the BIP39 mnemonic derivation method](https://en.bitcoin.it/wiki/BIP_0039). The SecuBoost algorithm is specific to Uniblow, so it won't work in a different wallet. This derivation option replaces the key derivation function of the BIP39 standard for a much stronger one. The key derivation (BIP39 or SecuBoost) is used to turn your mnemonic words list and password into the BIP32 seed (the H.D. wallet first data key).
 
-The benefit is that you can use a "weaker" password for your wallet, so it is easy to remember. For exemple 2 random words in the dictionary would take years to recover. Similarly, only 5 random letters would take also years to be recovered. By strengthening the derivation, one can use a password which is much easier to remember. An other benefit is even without password setup, it protect your mnemonic better because the derivation is more difficult, and more specific.
+The benefit is that you can use a "weaker" password for your wallet, so it is easy to remember. For exemple 2 random words in the dictionnary would take years to recover. Similarly, only 5 random letters would take also years to be recovered. By strengthening the derivation, one can use a password which is much easier to remember. An other benefit is even without any password setup, it protects your mnemonic better because the derivation is more difficult, and more specific.
 
-Technically, the HMAC(SHA512 x 2048) is replaced with Script(8 x Sensitive, spaces removed). A high-end GPU hash-boxes can perform 1 million BIP39 derivations per second. With SecuBoost, it is approximately only 10 per second. The SecuBoost derivation is 100'000 times slower and additionnaly it takes 1GB RAM per try, so it is also very robust against large scale parallel hardware attack. The SecuBoost algorithm is designed to use a larger amount of memory and time, making a hardware implementation much more expensive, and therefore limiting the amount of parallelism one can use for brute-force recovery. Even a dictionnary attack would be slowed down by this time factor.
+Technically, the [HMAC](https://en.wikipedia.org/wiki/HMAC)(SHA512 x 2048) is replaced with [Scrypt](http://passwords12.project.ifi.uio.no/Colin_Percival_scrypt/Colin_Percival_scrypt_Passwords12.pdf)(8 x Sensitive, spaces removed). A high-end [GPU hash-box](https://www.shellntel.com/blog/2017/2/8/how-to-build-a-8-gpu-password-cracker) can perform 1 million BIP39 derivations per second. With SecuBoost, it is approximately only 10 per second. The SecuBoost derivation is 100'000 times slower and additionnaly it takes 1GB RAM per try, so it is also very robust against large scale parallel hardware attack. The SecuBoost algorithm is designed to use a larger amount of memory and time, making a hardware implementation much more expensive, and therefore limiting the amount of parallelism one can use for brute-force recovery. Even a dictionnary attack would be slowed down by this time factor.
 
 Note that this algorithm, per design, uses extensive resources : requires 1 GB RAM, and takes approximately 20 seconds on a desktop computer.
 
-## Use the GUI
-
-* Download the Uniblow binary [in Github releases](https://github.com/bitlogik/uniblow/releases/latest)
-
-To increase the security, the Windows exe releases are [signed with our Extended
-Validation
-certificate](https://en.wikipedia.org/wiki/Code_signing#Extended_validation_(EV)_code_signing),
-bringing even greater confidence in the integrity of the application.
 
 ## Development
+
+### Use it from source
+
+* For the GUI, [install wxPython 4](https://wxpython.org/pages/downloads/) with your system binaries wheels.
+    * **Windows** : Install [Python3](https://www.python.org/ftp/python/3.8.10/python-3.8.10-amd64.exe), then run `pip3 install wxPython==4.1.1`
+    * **MacOS** : Use `pip3 install wxPython==4.1.1`
+    * **Linux** : Read the [LinuxDev document](docs/LinuxDev.md) for more details
+* Install the uniblow package and its dependencies
+    * `python3 setup.py install --user`
+* For ETH, put your Infura key in ETHwallet, or use the EtherscanAPI. The binaries have the InfuraKey embedded.
+* Run with `python3 uniblow.py`
+
 
 ### ToDo list
 
 Future features :
 
 * Full HD wallet device, avoiding address reuse, and discover in all account chains (external and internal change).
-
-### Use it from source
-
-* For the GUI, [install wxPython 4](https://wxpython.org/pages/downloads/) with your system binaries wheels.
-    * Windows and MacOS: Use `pip3 install -U wxPython`
-    * For Linux : Read [LinuxDev.md](LinuxDev.md) for more details
-* Install this package and its dependencies
-    * `python3 setup.py install`
-* For ETH, put your Infura key in ETHwallet, or use the EtherscanAPI. The binaries have the InfuraKey embedded.
-* Run with `python3 uniblow.py`
 
 
 ### Add more cryptos
