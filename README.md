@@ -175,6 +175,10 @@ Note that this algorithm, per design, uses extensive resources : requires 1 GB R
 * For ETH, put your Infura key in ETHwallet, or use the EtherscanAPI. The binaries have the InfuraKey embedded.
 * Run with `python3 uniblow.py`
 
+### Build binaries
+
+There are specific instructions and scripts to build uniblow binaries for the Windows and Debian platforms in a dedicated [build document](docs/Build.md).
+
 
 ### ToDo list
 

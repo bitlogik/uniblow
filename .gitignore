@@ -3,3 +3,5 @@
 /dist
 *.key
 package/version_info
+unibenv
+Uniblow.egg-info
