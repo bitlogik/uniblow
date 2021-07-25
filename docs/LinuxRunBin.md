@@ -64,7 +64,7 @@ Note that since you get the signed binary and the PGP key from 2 different sourc
 
 ### Run it
 
-Before to run Uniblow, you have to set the binary to be run, like tell Linux this is indeed an executable binary.
+Before to run Uniblow, you have to set once the binary to be run, like tell Linux this is indeed an executable binary.
 
 In the GUI, with a file explorer like Files, Nautilus or Nemo : right-click on the Uniblow file, select Properties. Then in the Permissions tab, tick the checkbox *Allow executing file as program* for the Execute option. Then close the properties window.
 
@@ -81,7 +81,7 @@ torsocks ./Uniblow-deb-amd64-0.6.0
 ```
 
 
-In **Debian**, you can run it from the file explorer GUI : double-click on the Uniblow binary icon to start it.
+In **Debian**, you can directly run it from the file explorer GUI : double-click on the Uniblow binary icon to start it.
 
 If nothing happens after some seconds, open a terminal in the current directory and type `./Uniblow-deb-amd64-0.6.0`
 
