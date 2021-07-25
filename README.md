@@ -227,7 +227,8 @@ Development
         [Python3](https://www.python.org/ftp/python/3.8.10/python-3.8.10-amd64.exe),
         then run `pip3 install wxPython==4.1.1`
 
-    -   **MacOS** : Use `pip3 install wxPython==4.1.1`
+    -   **MacOS** : Read the [MacDev document](docs/MacDev.md) for more
+        details. The Mac version is not stable for now.
 
     -   **Linux** : Read the [LinuxDev document](docs/LinuxDev.md) for more
         details
