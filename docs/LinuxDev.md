@@ -1,7 +1,7 @@
 
 # Uniblow development on Linux
 
-A binary is given to run on Tails and Debian OS. For easy run on these platforms, check the [specific instructions in the LinuxBin doc](docs/LinuxBin.md) instead.
+A binary is given to run on Tails and Debian OS. For easy run on these platforms, check the [specific instructions in the LinuxRunBin doc](docs/LinuxRunBin.md) instead.
 
 The following instructions commands are given to run uniblow **from the source** on various Linux distributions. This can also be used for development purpose.
 

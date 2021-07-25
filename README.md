@@ -135,11 +135,11 @@ The seed of this wallet is in a file named *HDseed.key*, stored in the same unib
 On **Debian / Tails** :
 
 * Download the Uniblow *deb* binary [from the Github releases](https://github.com/bitlogik/uniblow/releases/latest)
-* Follow the [instructions of the dedicated instructions page](docs/LinuxBin.md).
+* Follow the [instructions of the dedicated instructions page](docs/LinuxRunBin.md).
 
 To increase the security, the Debian/Tails binaries releases are [signed with our PGP key](https://bitlogik.fr/pgp/bitlogik.asc),
 bringing even greater confidence in the integrity of the application. The checking process is described in [this
- instructions document](docs/LinuxBin.md).
+ instructions document](docs/LinuxRunBin.md).
 
 
 On **Windows** : 
