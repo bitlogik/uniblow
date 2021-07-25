@@ -34,7 +34,7 @@ setup(
     python_requires=">=3.6",
     install_requires=[
         "wxPython==4.1.1",
-        "cryptography==3.4.6",
+        "cryptography==3.4.7",
         "pysha3==1.0.2",
         "qrcode==6.1",
         "PyNaCl==1.4.0",
