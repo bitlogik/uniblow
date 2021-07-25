@@ -20,12 +20,6 @@ sudo apt update
 sudo apt install -y git libsdl2-2.0-0 python3-venv python3-pip python3-pyscard
 ```
 
-#### Create venv for uniblow
-```
-python3 -m venv --system-site-packages unibenv
-source unibenv/bin/activate
-```
-
 #### Install required packages 
 ```
 python -m pip install -U -f https://extras.wxpython.org/wxPython4/extras/linux/gtk3/debian-10/wxPython-4.1.1-cp37-cp37m-linux_x86_64.whl wxPython
@@ -38,6 +32,12 @@ git clone https://github.com/bitlogik/uniblow.git
 cd uniblow
 ```
 
+#### Create venv for uniblow
+```
+python3 -m venv --system-site-packages unibenv
+source unibenv/bin/activate
+```
+
 #### Install uniblow dependencies
 ```
 python setup.py install
@@ -46,6 +46,20 @@ python setup.py install
 #### Run uniblow
 ```
 python uniblow.py
+```
+
+#### Quit the venv
+```
+deactivate
+```
+
+#### Run uniblow next time
+
+Within a terminal, in the uniblow directory
+```
+source unibenv/bin/activate
+python uniblow.py
+deactivate
 ```
 
 
@@ -74,14 +88,34 @@ git clone https://github.com/bitlogik/uniblow.git
 cd uniblow
 ```
 
+#### Create venv for uniblow
+```
+python3 -m venv --system-site-packages unibenv
+source unibenv/bin/activate
+```
+
 #### Install uniblow dependencies
 ```
-python3 setup.py install --user
+python setup.py install
 ```
 
 #### Run uniblow
 ```
-python3 uniblow.py
+python uniblow.py
+```
+
+#### Quit the venv
+```
+deactivate
+```
+
+#### Run uniblow next time
+
+Within a terminal, in the uniblow directory
+```
+source unibenv/bin/activate
+python uniblow.py
+deactivate
 ```
 
 
@@ -106,12 +140,32 @@ git clone https://github.com/bitlogik/uniblow.git
 cd uniblow
 ```
 
+#### Create venv for uniblow
+```
+python3 -m venv --system-site-packages unibenv
+source unibenv/bin/activate
+```
+
 #### Install uniblow dependencies
 ```
-python3 setup.py install --user
+python setup.py install
 ```
 
 #### Run uniblow
 ```
-python3 uniblow.py
+python uniblow.py
+```
+
+#### Quit the venv
+```
+deactivate
+```
+
+#### Run uniblow next time
+
+Within a terminal, in the uniblow directory
+```
+source unibenv/bin/activate
+python uniblow.py
+deactivate
 ```
