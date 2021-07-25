@@ -72,7 +72,7 @@ Tested on Ubuntu 20.04
 ```
 sudo add-apt-repository universe < /dev/null
 sudo apt update < /dev/null
-sudo apt install -y git python3-pip < /dev/null
+sudo apt install -y git python3-venv python3-pip < /dev/null
 ```
 
 #### Install required packages (Ubuntu 20.04)
@@ -125,7 +125,7 @@ Tested on Fedora 32-34
 
 #### Install system packages
 ```
-sudo dnf install -y git python3-pip
+sudo dnf install -y git python3-virtualenv python3-pip
 ```
 
 #### Install required packages
