@@ -9,7 +9,7 @@ This document provides specific instructions and scripts to build uniblow binari
 
 * Get the [sources](https://github.com/bitlogik/uniblow/archive/refs/heads/master.zip), unzip.
 
-* Start the **Build-Windows** batch script in the *package* directory, double click to start it.
+* Start the **Build-Windows** batch script in the *package* directory, double-click on this bat file to start it.
 
 
 ## Debian

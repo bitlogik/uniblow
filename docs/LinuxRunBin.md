@@ -2,7 +2,7 @@
 # Uniblow on Debian or Tails
 
 
-We provide a Linux binary which can be used directly on Tails OS and the Debian 10 Linux distribution, for the common x86/64 *AMD64* architecture.
+We provide a Linux binary file which can be used directly on Tails OS and the Debian 10 Linux distribution, for the common x86/64 *AMD64* architecture.
 
 For the following Linux OS :
 
@@ -25,7 +25,7 @@ curl -LOJ https://github.com/bitlogik/uniblow/releases/latest/download/Uniblow-d
 
 ### Check authenticity
 
-The binary is signed with the PGP key of the editor's developer. You have to check the authenticity of the binary. This way, you can be sure it is the official approved binary from the editor, and was not altered.
+The binary is signed with the PGP key of the editor's developer. You have to check the authenticity of the binary. This way, you can be sure it is the official approved binary from the editor, and was not altered in any way.
 
 **Get the public key** :  
 Tails  : `gpg --import <(torsocks curl https://bitlogik.fr/pgp/bitlogik.asc)`  
@@ -41,7 +41,7 @@ In Tails, using the Files explorer, you can right click on the sig file and sele
 *Uniblow : Untrusted Valid Signature*  
 *Valid but untrusted signature by Antoine FERRON <antoine...*
 
-OR alternalively using the Terminal, in Debian (also valid for Tails) :
+OR alternatively using the Terminal, in Debian (also valid for Tails) :
 ```
 UniblowFile=Uniblow-deb-x86_64-0.6.0
 gpg --verify --trust-model always $UniblowFile.sig $UniblowFile
@@ -57,7 +57,7 @@ gpg: WARNING: Using untrusted key!
 
 The most important part to check for presence is *Good signature from Antoine FERRON (BitLogiK)*.
 
-The warning message *untrusted* is because the key is not formally approved by *gpg*. But you are sure of the key since it was retrieved from the HTTPS BitLogiK editor website, protected by HTTPS, CAA, DNSSEC and your certificate store.
+The warning message *untrusted* is because the key is not formally approved by *gpg*. But you are sure of the key since it was retrieved from the HTTPS BitLogiK editor website, protected by HTTPS, CAA, DNSSEC and your certificates store.
 
 Note that since you get the signed binary and the PGP key from 2 different sources (Github and the BitLogiK website), a hacker would need to modify data in our Github account and our website. Else, you would notice with this signature check. Still, this doesn't protect our building process nor our PGP private key, there are dedicated security measures for those of course.
 
@@ -66,7 +66,7 @@ Note that since you get the signed binary and the PGP key from 2 different sourc
 
 Before to run Uniblow, you have to set the binary to be run, like tell Linux this is indeed an executable binary.
 
-In the GUI, with a file explorer like Files, Nautilus or Nemo : right-click on the Uniblow file, select Properties. Then In the Permissions tab, tick the checkbox *Allow executing file as program* for the Execute option. Then close the properties window.
+In the GUI, with a file explorer like Files, Nautilus or Nemo : right-click on the Uniblow file, select Properties. Then in the Permissions tab, tick the checkbox *Allow executing file as program* for the Execute option. Then close the properties window.
 
 OR within the terminal :
 ```

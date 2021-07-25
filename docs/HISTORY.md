@@ -5,6 +5,7 @@ Uniblow versions history
 
 * Add ERC20 and BEP20 tokens
 * Can select the HD-BIP44 account index
+* Can use a BIP39 password
 * Action context menu in SeedWatcher
 * SeedWatcher addresses can be opened in wallet
 * Add the SecuBoost derivation capability
@@ -12,6 +13,7 @@ Uniblow versions history
 * Various GUI improvements
 * More code reusability
 * Binary release for Debian and Tails
+* Full building script for Debian binary
 
 ## 0.5.0
 
