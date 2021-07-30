@@ -77,11 +77,11 @@ Now, you can run Uniblow.
 
 In **Tails**, the *torsocks* software is required to wrap the internet queries of the Uniblow app. Else you get the network error message *Network is unreachable*.
 ```
-torsocks ./Uniblow-deb-amd64-0.6.0
+torsocks ./Uniblow-deb-x86_64-0.6.0
 ```
 
 
 In **Debian**, you can directly run it from the file explorer GUI : double-click on the Uniblow binary icon to start it.
 
-If nothing happens after some seconds, open a terminal in the current directory and type `./Uniblow-deb-amd64-0.6.0`
+If nothing happens after some seconds, open a terminal in the current directory and type `./Uniblow-deb-x86_64-0.6.0`
 
