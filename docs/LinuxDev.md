@@ -1,13 +1,13 @@
 
 # Uniblow development on Linux
 
-A binary is given to run on Tails and Debian OS. For easy run on these platforms, check the [specific instructions in the LinuxRunBin doc](docs/LinuxRunBin.md) instead.
+A binary is given to run on Tails and Debian OS. For easy run on these platforms, check the [specific instructions in the LinuxRunBin doc](LinuxRunBin.md) instead.
 
 The following instructions commands are given to run uniblow **from the source** on various Linux distributions. This can also be used for development purpose.
 
 When running from the source files, for ETH, you can put your Infura key in ETHwallet, or use the EtherscanAPI.
 
-Additionally, there are specific instructions and scripts to build uniblow binaries for the Windows and Debian platforms in the [Build document](docs/Build.md).
+Additionally, there are specific instructions and scripts to build uniblow binaries for the Windows and Debian platforms in the [Build document](Build.md).
 
 
 ## Debian
