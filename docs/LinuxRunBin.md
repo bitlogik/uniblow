@@ -28,12 +28,12 @@ curl -LOJ https://github.com/bitlogik/uniblow/releases/latest/download/Uniblow-d
 The binary is signed with the PGP key of the editor's developer. You have to check the authenticity of the binary. This way, you can be sure it is the official approved binary from the editor, and was not altered in any way.
 
 **Get the public key** :  
-Tails  : `gpg --import <(torsocks curl https://bitlogik.fr/pgp/bitlogik.asc)`  
-Debian : `gpg --import <(curl https://bitlogik.fr/pgp/bitlogik.asc)`
-
-In Tails, if this outputs *No valid OpenPGP data found*, your Tor access node is probably banned from the web server : turn off and then connect again the network interface. That will change the Tor circuit.
+Tails  : `gpg --import <(torsocks curl https://keys.openpgp.org//vks/v1/by-email/antoine.ferron%40bitlogik.fr)`  
+Debian : `gpg --import <(curl https://keys.openpgp.org//vks/v1/by-email/antoine.ferron%40bitlogik.fr)`
 
 When the public key download is successful, it says `Total number processed/imported : 1`.
+
+In Tails, if this outputs *No valid OpenPGP data found*, your Tor access node is probably banned from the web server : turn off and then connect again the network interface. That will change the Tor circuit.
 
 **Check the binary signature** :
 
@@ -59,7 +59,7 @@ The most important part to check for presence is *Good signature from Antoine FE
 
 The warning message *untrusted* is because the key is not formally approved by *gpg*. But you are sure of the key since it was retrieved from the HTTPS BitLogiK editor website, protected by HTTPS, CAA, DNSSEC and your certificates store.
 
-Note that since you get the signed binary and the PGP key from 2 different sources (Github and the BitLogiK website), a hacker would need to modify data in our Github account and our website. Else, you would notice with this signature check. Still, this doesn't protect our building process nor our PGP private key, there are dedicated security measures for those of course.
+Note that since you get the signed binary and the PGP key from 2 different sources (Github and the key server), a hacker would need to modify data in our Github account and our key. Else, you would notice with this signature check. Still, this doesn't protect our building process nor our PGP private key, there are dedicated security measures for those of course.
 
 
 ### Run it
