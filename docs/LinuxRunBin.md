@@ -17,7 +17,7 @@ Get the binary and its signature file.
 From the uniblow Github release page :
 https://github.com/bitlogik/uniblow/releases/latest/
 
-OR using the terminal :
+OR using the terminal, in Tails you need to prepend *torsocks* to these commands :
 ```
 curl -LOJ https://github.com/bitlogik/uniblow/releases/latest/download/Uniblow-deb-x86_64-0.6.0
 curl -LOJ https://github.com/bitlogik/uniblow/releases/latest/download/Uniblow-deb-x86_64-0.6.0.sig
