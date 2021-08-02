@@ -379,6 +379,8 @@ def set_coin(coin, network, wallet_type):
         app.wallet = get_coin_class(coin)(network, wallet_type, app.device, **option_arg)
         account_id = app.wallet.get_account()
     except Exception as exc:
+        app.gui_panel.network_choice.Clear()
+        app.gui_panel.wallopt_choice.Clear()
         app.gui_panel.coins_choice.SetSelection(0)
         erase_info()
         warn_modal(str(exc))
