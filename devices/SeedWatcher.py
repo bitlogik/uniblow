@@ -234,8 +234,13 @@ class SeedWatcherPanel(gui.swgui.MainPanel):
 def start_seedwatcher(app, cb_wallet):
     app.frame_sw = SeedWatcherFrame(app.gui_frame)
     app.frame_sw.SetIcons(wx.IconBundle(file_path("gui/uniblow.ico")))
+    HAND_CURSOR = wx.Cursor(wx.CURSOR_HAND)
     app.gui_panel.devices_choice.SetSelection(0)
     app.gui_frame.Hide()
     app.panel_sw = SeedWatcherPanel(app.frame_sw)
+    app.panel_sw.m_button_gen.SetCursor(HAND_CURSOR)
+    app.panel_sw.m_choice_nwords.SetCursor(HAND_CURSOR)
+    app.panel_sw.m_SecuBoost.SetCursor(HAND_CURSOR)
+    app.panel_sw.m_btnseek.SetCursor(HAND_CURSOR)
     app.panel_sw.initialize(cb_wallet)
     app.frame_sw.Show()

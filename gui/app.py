@@ -18,7 +18,16 @@ import sys
 import os.path
 import webbrowser
 
-from wx import IconBundle, TextDataObject, TheClipboard, Bitmap, ID_OK, ID_CANCEL
+from wx import (
+    IconBundle,
+    TextDataObject,
+    TheClipboard,
+    Bitmap,
+    ID_OK,
+    ID_CANCEL,
+    Cursor,
+    CURSOR_HAND,
+)
 
 import gui.window
 import gui.infodialog
@@ -118,6 +127,8 @@ def set_mnemonic(app, proposal):
     app.gui_hdpanel.m_bitmapHDwl.SetBitmap(app.gui_hdpanel.BAD_BMP)
     app.gui_hdpanel.m_bitmapHDcs.SetBitmap(app.gui_hdpanel.BAD_BMP)
     app.gui_hdpanel.m_textCtrl_mnemo.SetValue(proposal)
+    app.gui_hdpanel.m_butOK.SetCursor(HAND_CURSOR)
+    app.gui_hdpanel.m_butcancel.SetCursor(HAND_CURSOR)
     ret = app.gui_hdframe.ShowModal()
     if ret == ID_OK:
         wallet_settings = app.gui_hdpanel.hd_wallet_settings
@@ -136,10 +147,21 @@ def start_app(app, version, coins_list, devices_list):
         print("Icon not found. Run uniblow from its directory.")
         return "ERR"
     wicon = IconBundle(icon_path)
+    HAND_CURSOR = Cursor(CURSOR_HAND)
     app.gui_frame = gui.window.TopFrame(None)
     app.gui_panel = gui.window.TopPanel(app.gui_frame)
     app.gui_frame.SetIcons(wicon)
     app.gui_frame.SetTitle(f"  Uniblow  -  {version}")
     load_coins_list(app, coins_list)
     load_devices(app, devices_list)
+
+    app.gui_panel.devices_choice.SetCursor(HAND_CURSOR)
+    app.gui_panel.coins_choice.SetCursor(HAND_CURSOR)
+    app.gui_panel.network_choice.SetCursor(HAND_CURSOR)
+    app.gui_panel.wallopt_choice.SetCursor(HAND_CURSOR)
+    app.gui_panel.hist_button.SetCursor(HAND_CURSOR)
+    app.gui_panel.copy_button.SetCursor(HAND_CURSOR)
+    app.gui_panel.send_button.SetCursor(HAND_CURSOR)
+    app.gui_panel.send_all.SetCursor(HAND_CURSOR)
+
     app.gui_frame.Show()
