@@ -18,7 +18,7 @@ import wx.dataview
 class MainFrame ( wx.Frame ):
 
     def __init__( self, parent ):
-        wx.Frame.__init__ ( self, parent, id = wx.ID_ANY, title = u"  [ Uniblow ]    Seed Watcher", pos = wx.DefaultPosition, size = wx.Size( 652,731 ), style = wx.CAPTION|wx.CLOSE_BOX|wx.FRAME_FLOAT_ON_PARENT|wx.MINIMIZE_BOX|wx.SYSTEM_MENU|wx.TAB_TRAVERSAL )
+        wx.Frame.__init__ ( self, parent, id = wx.ID_ANY, title = u"  [ Uniblow ]    Seed Watcher", pos = wx.DefaultPosition, size = wx.Size( 652,750 ), style = wx.CAPTION|wx.CLOSE_BOX|wx.FRAME_FLOAT_ON_PARENT|wx.MINIMIZE_BOX|wx.SYSTEM_MENU|wx.TAB_TRAVERSAL )
 
         self.SetSizeHints( wx.DefaultSize, wx.DefaultSize )
 
@@ -54,9 +54,10 @@ class MainPanel ( wx.Panel ):
         bSizer31 = wx.BoxSizer( wx.HORIZONTAL )
 
         bSizer31.SetMinSize( wx.Size( -1,40 ) )
-        self.m_button_gen = wx.Button( self, wx.ID_ANY, u"Generate New", wx.DefaultPosition, wx.Size( 160,45 ), 0 )
-        self.m_button_gen.SetFont( wx.Font( 11, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, False, wx.EmptyString ) )
+        self.m_button_gen = wx.BitmapButton( self, wx.ID_ANY, wx.NullBitmap, wx.DefaultPosition, wx.DefaultSize, wx.BU_AUTODRAW|wx.BORDER_NONE )
 
+        self.m_button_gen.SetBitmap( wx.Bitmap( u"gui/GenSeed.png", wx.BITMAP_TYPE_ANY ) )
+        self.m_button_gen.SetBitmapPressed( wx.Bitmap( u"gui/GenSeeddn.png", wx.BITMAP_TYPE_ANY ) )
         bSizer31.Add( self.m_button_gen, 0, wx.ALL, 10 )
 
         m_choice_nwordsChoices = []
@@ -64,7 +65,7 @@ class MainPanel ( wx.Panel ):
         self.m_choice_nwords.SetSelection( 0 )
         self.m_choice_nwords.SetFont( wx.Font( 11, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, False, wx.EmptyString ) )
 
-        bSizer31.Add( self.m_choice_nwords, 0, wx.ALL|wx.ALIGN_CENTER_VERTICAL, 5 )
+        bSizer31.Add( self.m_choice_nwords, 0, wx.ALL|wx.ALIGN_CENTER_VERTICAL, 10 )
 
 
         bSizer11.Add( bSizer31, 0, wx.ALIGN_CENTER_HORIZONTAL, 5 )
@@ -76,7 +77,7 @@ class MainPanel ( wx.Panel ):
 
         self.m_staticText12.SetFont( wx.Font( 12, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, False, wx.EmptyString ) )
 
-        bSizer3.Add( self.m_staticText12, 1, wx.ALIGN_CENTER|wx.RIGHT|wx.TOP, 25 )
+        bSizer3.Add( self.m_staticText12, 1, wx.ALIGN_CENTER|wx.RIGHT|wx.TOP, 20 )
 
         self.m_staticText5 = wx.StaticText( self, wx.ID_ANY, u"  Words in list", wx.DefaultPosition, wx.DefaultSize, 0 )
         self.m_staticText5.Wrap( -1 )
@@ -142,9 +143,10 @@ class MainPanel ( wx.Panel ):
 
         bSizer11.Add( bSizer5, 0, wx.ALIGN_CENTER, 5 )
 
-        self.m_btnseek = wx.Button( self, wx.ID_ANY, u"Seek Assets", wx.DefaultPosition, wx.Size( 140,40 ), 0 )
-        self.m_btnseek.SetFont( wx.Font( 11, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, False, wx.EmptyString ) )
+        self.m_btnseek = wx.BitmapButton( self, wx.ID_ANY, wx.NullBitmap, wx.DefaultPosition, wx.DefaultSize, wx.BU_AUTODRAW|wx.BORDER_NONE )
 
+        self.m_btnseek.SetBitmap( wx.Bitmap( u"gui/SeekAssets.png", wx.BITMAP_TYPE_ANY ) )
+        self.m_btnseek.SetBitmapPressed( wx.Bitmap( u"gui/SeekAssetsdn.png", wx.BITMAP_TYPE_ANY ) )
         bSizer11.Add( self.m_btnseek, 0, wx.ALL|wx.ALIGN_CENTER_HORIZONTAL, 15 )
 
         self.m_staticTextcopy = wx.StaticText( self, wx.ID_ANY, u"Right click on asset line to open menu", wx.DefaultPosition, wx.DefaultSize, 0 )
@@ -153,7 +155,7 @@ class MainPanel ( wx.Panel ):
         self.m_staticTextcopy.SetFont( wx.Font( 8, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, False, wx.EmptyString ) )
         self.m_staticTextcopy.Enable( False )
 
-        bSizer11.Add( self.m_staticTextcopy, 0, wx.ALL|wx.ALIGN_CENTER_HORIZONTAL, 5 )
+        bSizer11.Add( self.m_staticTextcopy, 0, wx.ALIGN_CENTER_HORIZONTAL|wx.TOP|wx.RIGHT|wx.LEFT, 5 )
 
         self.m_dataViewListCtrl1 = wx.dataview.DataViewListCtrl( self, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.dataview.DV_HORIZ_RULES|wx.dataview.DV_SINGLE|wx.dataview.DV_VERT_RULES )
         self.m_dataViewListCtrl1.SetMinSize( wx.Size( -1,149 ) )

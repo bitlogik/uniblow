@@ -40,7 +40,25 @@ setup(
         "PyNaCl==1.4.0",
         "OpenPGPpy==0.4",
     ],
-    package_data={"gui": ["uniblow.ico", "good.bmp", "bad.bmp"]},
+    package_data={
+        "gui": [
+            "uniblow.ico",
+            "good.bmp",
+            "bad.bmp",
+            "GenSeed.png",
+            "GenSeeddn.png",
+            "copy.png",
+            "copydn.png",
+            "histo.png",
+            "histodn.png",
+            "SeekAssets.png",
+            "SeekAssetsdn.png",
+            "send.png",
+            "senddn.png",
+            "swipe.png",
+            "swipedn.png",
+        ]
+    },
     include_package_data=False,
     classifiers=[
         "Programming Language :: Python :: 3 :: Only",

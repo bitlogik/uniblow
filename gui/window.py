@@ -136,29 +136,35 @@ class TopPanel ( wx.Panel ):
 
         self.balance_label.SetFont( wx.Font( 14, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, False, wx.EmptyString ) )
 
-        bSizer6.Add( self.balance_label, 0, wx.ALL|wx.ALIGN_CENTER_VERTICAL, 5 )
+        bSizer6.Add( self.balance_label, 0, wx.ALIGN_CENTER_VERTICAL|wx.TOP|wx.LEFT, 20 )
 
         self.balance_info = wx.StaticText( self, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, 0 )
         self.balance_info.Wrap( -1 )
 
         self.balance_info.SetFont( wx.Font( 16, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, False, wx.EmptyString ) )
 
-        bSizer6.Add( self.balance_info, 0, wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5 )
+        bSizer6.Add( self.balance_info, 0, wx.ALIGN_CENTER_VERTICAL|wx.TOP|wx.LEFT, 20 )
 
-        self.hist_button = wx.Button( self, wx.ID_ANY, u"History", wx.DefaultPosition, wx.DefaultSize, 0 )
+        self.hist_button = wx.BitmapButton( self, wx.ID_ANY, wx.NullBitmap, wx.DefaultPosition, wx.DefaultSize, wx.BU_AUTODRAW|wx.BORDER_NONE )
+
+        self.hist_button.SetBitmap( wx.Bitmap( u"gui/histo.png", wx.BITMAP_TYPE_ANY ) )
+        self.hist_button.SetBitmapPressed( wx.Bitmap( u"gui/histodn.png", wx.BITMAP_TYPE_ANY ) )
         self.hist_button.Enable( False )
 
-        bSizer6.Add( self.hist_button, 0, wx.BOTTOM|wx.RIGHT|wx.LEFT, 5 )
+        bSizer6.Add( self.hist_button, 0, 0, 5 )
 
-        self.copy_button = wx.Button( self, wx.ID_ANY, u"Copy", wx.DefaultPosition, wx.DefaultSize, 0 )
+        self.copy_button = wx.BitmapButton( self, wx.ID_ANY, wx.NullBitmap, wx.DefaultPosition, wx.DefaultSize, wx.BU_AUTODRAW|wx.BORDER_NONE )
+
+        self.copy_button.SetBitmap( wx.Bitmap( u"gui/copy.png", wx.BITMAP_TYPE_ANY ) )
+        self.copy_button.SetBitmapPressed( wx.Bitmap( u"gui/copydn.png", wx.BITMAP_TYPE_ANY ) )
         self.copy_button.Enable( False )
 
-        bSizer6.Add( self.copy_button, 0, wx.LEFT, 16 )
+        bSizer6.Add( self.copy_button, 0, wx.LEFT, 75 )
 
         self.copy_status = wx.StaticText( self, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, 0 )
         self.copy_status.Wrap( -1 )
 
-        bSizer6.Add( self.copy_status, 0, wx.ALL, 5 )
+        bSizer6.Add( self.copy_status, 0, wx.TOP|wx.LEFT, 10 )
 
         bSizer8 = wx.BoxSizer( wx.VERTICAL )
 
@@ -229,17 +235,24 @@ class TopPanel ( wx.Panel ):
 
         bSizer7.Add( bSizer9, 0, 0, 0 )
 
-        self.send_button = wx.Button( self, wx.ID_ANY, u"Send", wx.DefaultPosition, wx.DefaultSize, 0 )
-        self.send_button.SetFont( wx.Font( 12, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, False, wx.EmptyString ) )
+        self.send_button = wx.BitmapButton( self, wx.ID_ANY, wx.NullBitmap, wx.DefaultPosition, wx.DefaultSize, wx.BU_AUTODRAW|wx.BORDER_NONE )
+
+        self.send_button.SetBitmap( wx.Bitmap( u"gui/send.png", wx.BITMAP_TYPE_ANY ) )
+        self.send_button.SetBitmapPressed( wx.Bitmap( u"gui/senddn.png", wx.BITMAP_TYPE_ANY ) )
         self.send_button.Enable( False )
 
-        bSizer7.Add( self.send_button, 0, wx.ALL, 5 )
+        bSizer7.Add( self.send_button, 0, wx.TOP|wx.LEFT, 10 )
 
-        self.send_all = wx.Button( self, wx.ID_ANY, u"Swipe Max", wx.DefaultPosition, wx.DefaultSize, 0 )
-        self.send_all.SetFont( wx.Font( 12, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, False, wx.EmptyString ) )
+
+        bSizer7.Add( ( 12, 0), 0, 0, 5 )
+
+        self.send_all = wx.BitmapButton( self, wx.ID_ANY, wx.NullBitmap, wx.DefaultPosition, wx.DefaultSize, wx.BU_AUTODRAW|wx.BORDER_NONE )
+
+        self.send_all.SetBitmap( wx.Bitmap( u"gui/swipe.png", wx.BITMAP_TYPE_ANY ) )
+        self.send_all.SetBitmapPressed( wx.Bitmap( u"gui/swipedn.png", wx.BITMAP_TYPE_ANY ) )
         self.send_all.Enable( False )
 
-        bSizer7.Add( self.send_all, 0, wx.ALL, 5 )
+        bSizer7.Add( self.send_all, 0, wx.TOP|wx.LEFT, 10 )
 
 
         bSizer3.Add( bSizer7, 1, wx.EXPAND, 5 )
