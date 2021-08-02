@@ -106,7 +106,9 @@ def erase_info():
     app.gui_panel.copy_button.Disable()
     app.gui_panel.send_all.Disable()
     app.gui_panel.send_button.Disable()
+    app.gui_panel.network_label.Disable()
     app.gui_panel.network_choice.Disable()
+    app.gui_panel.wallopt_label.Disable()
     app.gui_panel.wallopt_choice.Disable()
     app.gui_panel.qrimg.SetBitmap(wx.Bitmap())
     if hasattr(app, "wallet"):
@@ -411,6 +413,8 @@ def display_coin(account_addr):
 def process_coin_select(coin, sel_network, sel_wallettype):
     app.gui_panel.network_choice.Enable()
     app.gui_panel.wallopt_choice.Enable()
+    app.gui_panel.network_label.Enable()
+    app.gui_panel.wallopt_label.Enable()
     set_coin(coin, sel_network, sel_wallettype)
 
 
