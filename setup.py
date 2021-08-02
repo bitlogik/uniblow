@@ -40,7 +40,7 @@ setup(
         "PyNaCl==1.4.0",
         "OpenPGPpy==0.4",
     ],
-    package_data={"gui": ["uniblow.ico"]},
+    package_data={"gui": ["uniblow.ico", "good.bmp", "bad.bmp"]},
     include_package_data=False,
     classifiers=[
         "Programming Language :: Python :: 3 :: Only",
