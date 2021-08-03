@@ -48,8 +48,6 @@ class infura_api:
         self.jsres = []
 
     def getData(self, method, params=[]):
-        # parameters = {key: value for key, value in params.items()}
-        # parameters.update( self.params )
         if isinstance(params, str):
             params = [params]
         data = {"jsonrpc": "2.0", "method": method, "params": params, "id": 1}
@@ -61,11 +59,13 @@ class infura_api:
             )
             self.webrsc = urllib.request.urlopen(req)
             self.jsres = json.load(self.webrsc)
-        except Exception:
-            raise IOError(
-                "Error while processing request:\n%s"
-                % (self.url + "->" + method + " : " + str(params))
-            )
+        except urllib.error.HTTPError as e:
+            strerr = e.read()
+            raise IOError(f"{e.code}  :  {strerr.decode('utf8')}")
+        except urllib.error.URLError as e:
+            raise IOError(e)
+        except Exception as exc:
+            raise IOError(f"Error while processing request:\n {self.url}  :  {method} ,  {params}")
 
     def checkapiresp(self):
         if "error" in self.jsres:

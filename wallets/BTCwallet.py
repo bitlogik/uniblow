@@ -52,15 +52,12 @@ class blkhub_api:
                 brep = b'{"txid":"' + brep + b'"}'
             self.jsres = json.loads(brep)
         except urllib.error.HTTPError as e:
-            print(e.read())
-            raise IOError(e)
+            strerr = e.read()
+            raise IOError(f"{e.code}  :  {strerr.decode('utf8')}")
         except urllib.error.URLError as e:
             raise IOError(e)
         except Exception as exc:
-            print(exc.read())
-            raise IOError(
-                "Error while processing request:\n%s" % (self.url + endpoint + "?" + params_enc)
-            )
+            raise IOError(f"Error while processing request:\n{self.url}{endpoint}?{params_enc}")
 
     def checkapiresp(self):
         if "error" in self.jsres:

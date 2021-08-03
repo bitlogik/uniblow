@@ -52,12 +52,12 @@ class sochain_api:
                 brep = b'{"txid":"' + brep + b'"}'
             self.jsres = json.loads(brep)
         except urllib.error.HTTPError as e:
-            print(e.read())
-            raise IOError(e)
+            strerr = e.read()
+            raise IOError(f"{e.code}  :  {strerr.decode('utf8')}")
         except urllib.error.URLError as e:
             raise IOError(e)
-        except Exception:
-            raise IOError("Error while processing request:\n%s" % (self.url + command))
+        except Exception as exc:
+            raise IOError(f"Error while processing request:\n{self.url}{command}/{param}")
 
     def checkapiresp(self):
         if ("status" not in self.jsres) or self.jsres["status"] != "success":
