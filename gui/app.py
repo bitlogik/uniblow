@@ -27,6 +27,7 @@ from wx import (
     ID_CANCEL,
     Cursor,
     CURSOR_HAND,
+    BITMAP_TYPE_PNG,
 )
 
 import gui.window
@@ -127,6 +128,8 @@ def set_mnemonic(app, proposal):
     app.gui_hdpanel.m_bitmapHDwl.SetBitmap(app.gui_hdpanel.BAD_BMP)
     app.gui_hdpanel.m_bitmapHDcs.SetBitmap(app.gui_hdpanel.BAD_BMP)
     app.gui_hdpanel.m_textCtrl_mnemo.SetValue(proposal)
+    HAND_CURSOR = Cursor(CURSOR_HAND)
+    app.gui_hdpanel.m_checkBox_secboost.SetCursor(HAND_CURSOR)
     app.gui_hdpanel.m_butOK.SetCursor(HAND_CURSOR)
     app.gui_hdpanel.m_butcancel.SetCursor(HAND_CURSOR)
     ret = app.gui_hdframe.ShowModal()
@@ -154,6 +157,17 @@ def start_app(app, version, coins_list, devices_list):
     app.gui_frame.SetTitle(f"  Uniblow  -  {version}")
     load_coins_list(app, coins_list)
     load_devices(app, devices_list)
+
+    app.gui_panel.hist_button.SetBitmap(Bitmap(file_path("gui/histo.png"), BITMAP_TYPE_PNG))
+    app.gui_panel.hist_button.SetBitmapPressed(
+        Bitmap(file_path("gui/histodn.png"), BITMAP_TYPE_PNG)
+    )
+    app.gui_panel.copy_button.SetBitmap(Bitmap(file_path("gui/copy.png"), BITMAP_TYPE_PNG))
+    app.gui_panel.copy_button.SetBitmapPressed(Bitmap(file_path("gui/copydn.png"), BITMAP_TYPE_PNG))
+    app.gui_panel.send_button.SetBitmap(Bitmap(file_path("gui/send.png"), BITMAP_TYPE_PNG))
+    app.gui_panel.send_button.SetBitmapPressed(Bitmap(file_path("gui/senddn.png"), BITMAP_TYPE_PNG))
+    app.gui_panel.send_all.SetBitmap(Bitmap(file_path("gui/swipe.png"), BITMAP_TYPE_PNG))
+    app.gui_panel.send_all.SetBitmapPressed(Bitmap(file_path("gui/swipedn.png"), BITMAP_TYPE_PNG))
 
     app.gui_panel.devices_choice.SetCursor(HAND_CURSOR)
     app.gui_panel.coins_choice.SetCursor(HAND_CURSOR)

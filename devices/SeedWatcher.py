@@ -33,6 +33,7 @@ from wx import (
     IconBundle,
     Cursor,
     CURSOR_HAND,
+    BITMAP_TYPE_PNG,
     TextDataObject,
 )
 import gui.swgui
@@ -254,6 +255,16 @@ def start_seedwatcher(app, cb_wallet):
     app.gui_panel.devices_choice.SetSelection(0)
     app.gui_frame.Hide()
     app.panel_sw = SeedWatcherPanel(app.frame_sw)
+
+    app.panel_sw.m_button_gen.SetBitmap(Bitmap(file_path("gui/GenSeed.png"), BITMAP_TYPE_PNG))
+    app.panel_sw.m_button_gen.SetBitmapPressed(
+        Bitmap(file_path("gui/GenSeeddn.png"), BITMAP_TYPE_PNG)
+    )
+    app.panel_sw.m_btnseek.SetBitmap(Bitmap(file_path("gui/SeekAssets.png"), BITMAP_TYPE_PNG))
+    app.panel_sw.m_btnseek.SetBitmapPressed(
+        Bitmap(file_path("gui/SeekAssetsdn.png"), BITMAP_TYPE_PNG)
+    )
+
     app.panel_sw.m_button_gen.SetCursor(HAND_CURSOR)
     app.panel_sw.m_choice_nwords.SetCursor(HAND_CURSOR)
     app.panel_sw.m_SecuBoost.SetCursor(HAND_CURSOR)

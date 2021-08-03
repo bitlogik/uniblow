@@ -147,16 +147,16 @@ class TopPanel ( wx.Panel ):
 
         self.hist_button = wx.BitmapButton( self, wx.ID_ANY, wx.NullBitmap, wx.DefaultPosition, wx.DefaultSize, wx.BU_AUTODRAW|wx.BORDER_NONE )
 
-        self.hist_button.SetBitmap( wx.Bitmap( u"gui/histo.png", wx.BITMAP_TYPE_ANY ) )
-        self.hist_button.SetBitmapPressed( wx.Bitmap( u"gui/histodn.png", wx.BITMAP_TYPE_ANY ) )
+        self.hist_button.SetBitmap( wx.NullBitmap )
+        self.hist_button.SetBitmapPressed( wx.NullBitmap )
         self.hist_button.Enable( False )
 
         bSizer6.Add( self.hist_button, 0, 0, 5 )
 
         self.copy_button = wx.BitmapButton( self, wx.ID_ANY, wx.NullBitmap, wx.DefaultPosition, wx.DefaultSize, wx.BU_AUTODRAW|wx.BORDER_NONE )
 
-        self.copy_button.SetBitmap( wx.Bitmap( u"gui/copy.png", wx.BITMAP_TYPE_ANY ) )
-        self.copy_button.SetBitmapPressed( wx.Bitmap( u"gui/copydn.png", wx.BITMAP_TYPE_ANY ) )
+        self.copy_button.SetBitmap( wx.NullBitmap )
+        self.copy_button.SetBitmapPressed( wx.NullBitmap )
         self.copy_button.Enable( False )
 
         bSizer6.Add( self.copy_button, 0, wx.LEFT, 75 )
@@ -237,8 +237,8 @@ class TopPanel ( wx.Panel ):
 
         self.send_button = wx.BitmapButton( self, wx.ID_ANY, wx.NullBitmap, wx.DefaultPosition, wx.DefaultSize, wx.BU_AUTODRAW|wx.BORDER_NONE )
 
-        self.send_button.SetBitmap( wx.Bitmap( u"gui/send.png", wx.BITMAP_TYPE_ANY ) )
-        self.send_button.SetBitmapPressed( wx.Bitmap( u"gui/senddn.png", wx.BITMAP_TYPE_ANY ) )
+        self.send_button.SetBitmap( wx.NullBitmap )
+        self.send_button.SetBitmapPressed( wx.NullBitmap )
         self.send_button.Enable( False )
 
         bSizer7.Add( self.send_button, 0, wx.TOP|wx.LEFT, 10 )
@@ -248,8 +248,8 @@ class TopPanel ( wx.Panel ):
 
         self.send_all = wx.BitmapButton( self, wx.ID_ANY, wx.NullBitmap, wx.DefaultPosition, wx.DefaultSize, wx.BU_AUTODRAW|wx.BORDER_NONE )
 
-        self.send_all.SetBitmap( wx.Bitmap( u"gui/swipe.png", wx.BITMAP_TYPE_ANY ) )
-        self.send_all.SetBitmapPressed( wx.Bitmap( u"gui/swipedn.png", wx.BITMAP_TYPE_ANY ) )
+        self.send_all.SetBitmap( wx.NullBitmap )
+        self.send_all.SetBitmapPressed( wx.NullBitmap )
         self.send_all.Enable( False )
 
         bSizer7.Add( self.send_all, 0, wx.TOP|wx.LEFT, 10 )

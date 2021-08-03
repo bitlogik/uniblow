@@ -894,7 +894,7 @@
                                         <property name="aui_row"></property>
                                         <property name="best_size"></property>
                                         <property name="bg"></property>
-                                        <property name="bitmap">Load From File; gui/histo.png</property>
+                                        <property name="bitmap">Load From File; </property>
                                         <property name="caption"></property>
                                         <property name="caption_visible">1</property>
                                         <property name="center_pane">0</property>
@@ -934,7 +934,7 @@
                                         <property name="pin_button">1</property>
                                         <property name="pos"></property>
                                         <property name="position"></property>
-                                        <property name="pressed">Load From File; gui/histodn.png</property>
+                                        <property name="pressed">Load From File; </property>
                                         <property name="resize">Resizable</property>
                                         <property name="show">1</property>
                                         <property name="size"></property>
@@ -966,7 +966,7 @@
                                         <property name="aui_row"></property>
                                         <property name="best_size"></property>
                                         <property name="bg"></property>
-                                        <property name="bitmap">Load From File; gui/copy.png</property>
+                                        <property name="bitmap">Load From File; </property>
                                         <property name="caption"></property>
                                         <property name="caption_visible">1</property>
                                         <property name="center_pane">0</property>
@@ -1006,7 +1006,7 @@
                                         <property name="pin_button">1</property>
                                         <property name="pos"></property>
                                         <property name="position"></property>
-                                        <property name="pressed">Load From File; gui/copydn.png</property>
+                                        <property name="pressed">Load From File; </property>
                                         <property name="resize">Resizable</property>
                                         <property name="show">1</property>
                                         <property name="size"></property>
@@ -1650,7 +1650,7 @@
                                         <property name="aui_row"></property>
                                         <property name="best_size"></property>
                                         <property name="bg"></property>
-                                        <property name="bitmap">Load From File; gui/send.png</property>
+                                        <property name="bitmap">Load From File; </property>
                                         <property name="caption"></property>
                                         <property name="caption_visible">1</property>
                                         <property name="center_pane">0</property>
@@ -1690,7 +1690,7 @@
                                         <property name="pin_button">1</property>
                                         <property name="pos"></property>
                                         <property name="position"></property>
-                                        <property name="pressed">Load From File; gui/senddn.png</property>
+                                        <property name="pressed">Load From File; </property>
                                         <property name="resize">Resizable</property>
                                         <property name="show">1</property>
                                         <property name="size"></property>
@@ -1732,7 +1732,7 @@
                                         <property name="aui_row"></property>
                                         <property name="best_size"></property>
                                         <property name="bg"></property>
-                                        <property name="bitmap">Load From File; gui/swipe.png</property>
+                                        <property name="bitmap">Load From File; </property>
                                         <property name="caption"></property>
                                         <property name="caption_visible">1</property>
                                         <property name="center_pane">0</property>
@@ -1772,7 +1772,7 @@
                                         <property name="pin_button">1</property>
                                         <property name="pos"></property>
                                         <property name="position"></property>
-                                        <property name="pressed">Load From File; gui/swipedn.png</property>
+                                        <property name="pressed">Load From File; </property>
                                         <property name="resize">Resizable</property>
                                         <property name="show">1</property>
                                         <property name="size"></property>

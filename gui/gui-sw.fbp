@@ -117,7 +117,7 @@
                                 <property name="aui_row"></property>
                                 <property name="best_size"></property>
                                 <property name="bg"></property>
-                                <property name="bitmap">Load From File; gui/GenSeed.png</property>
+                                <property name="bitmap">Load From File; </property>
                                 <property name="caption"></property>
                                 <property name="caption_visible">1</property>
                                 <property name="center_pane">0</property>
@@ -157,7 +157,7 @@
                                 <property name="pin_button">1</property>
                                 <property name="pos"></property>
                                 <property name="position"></property>
-                                <property name="pressed">Load From File; gui\GenSeeddn.png</property>
+                                <property name="pressed">Load From File; </property>
                                 <property name="resize">Resizable</property>
                                 <property name="show">1</property>
                                 <property name="size"></property>
@@ -998,7 +998,7 @@
                         <property name="aui_row"></property>
                         <property name="best_size"></property>
                         <property name="bg"></property>
-                        <property name="bitmap">Load From File; gui/SeekAssets.png</property>
+                        <property name="bitmap">Load From File; </property>
                         <property name="caption"></property>
                         <property name="caption_visible">1</property>
                         <property name="center_pane">0</property>
@@ -1038,7 +1038,7 @@
                         <property name="pin_button">1</property>
                         <property name="pos"></property>
                         <property name="position"></property>
-                        <property name="pressed">Load From File; gui\SeekAssetsdn.png</property>
+                        <property name="pressed">Load From File; </property>
                         <property name="resize">Resizable</property>
                         <property name="show">1</property>
                         <property name="size"></property>
