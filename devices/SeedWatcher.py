@@ -18,7 +18,23 @@
 from functools import partial
 import sys
 import webbrowser
-import wx
+from wx import (
+    Menu,
+    MenuItem,
+    EVT_MENU,
+    Bitmap,
+    dataview,
+    TheClipboard,
+    NOT_FOUND,
+    MessageDialog,
+    STAY_ON_TOP,
+    CENTER,
+    DefaultPosition,
+    IconBundle,
+    Cursor,
+    CURSOR_HAND,
+    TextDataObject,
+)
 import gui.swgui
 from gui.app import file_path
 from cryptolib.HDwallet import HD_Wallet, generate_mnemonic, bip39_is_checksum_valid
@@ -70,22 +86,22 @@ class blockchainWallet:
         self.wallet = coin_data["wallet_lib"](0, wallet_type, device)
 
 
-class ContextOptionsMenu(wx.Menu):
+class ContextOptionsMenu(Menu):
     def __init__(self, parent):
-        wx.Menu.__init__(self)
+        Menu.__init__(self)
         self.parent = parent
 
-        men1 = wx.MenuItem(self, 0, "Copy Address")
+        men1 = MenuItem(self, 0, "Copy Address")
         self.Append(men1)
-        self.Bind(wx.EVT_MENU, self.parent.copy_account, men1)
+        self.Bind(EVT_MENU, self.parent.copy_account, men1)
 
-        men2 = wx.MenuItem(self, 1, "Open block explorer")
+        men2 = MenuItem(self, 1, "Open block explorer")
         self.Append(men2)
-        self.Bind(wx.EVT_MENU, self.parent.open_explorer, men2)
+        self.Bind(EVT_MENU, self.parent.open_explorer, men2)
 
-        men3 = wx.MenuItem(self, 2, "Open in wallet")
+        men3 = MenuItem(self, 2, "Open in wallet")
         self.Append(men3)
-        self.Bind(wx.EVT_MENU, self.parent.open_wallet, men3)
+        self.Bind(EVT_MENU, self.parent.open_wallet, men3)
 
 
 class SeedWatcherFrame(gui.swgui.MainFrame):
@@ -110,18 +126,18 @@ class SeedWatcherPanel(gui.swgui.MainPanel):
         self.generate_mnemonic(selnw)
 
     def initialize(self, cb_wallet):
-        self.GOOD_BMP = wx.Bitmap(file_path("gui/good.bmp"))
-        self.BAD_BMP = wx.Bitmap(file_path("gui/bad.bmp"))
+        self.GOOD_BMP = Bitmap(file_path("gui/good.bmp"))
+        self.BAD_BMP = Bitmap(file_path("gui/bad.bmp"))
         self.m_choice_nwords.Set(WORDSLEN_LIST)
         self.m_choice_nwords.SetSelection(0)
         ctab = self.m_dataViewListCtrl1
-        dv1 = wx.dataview.DataViewColumn("Name", wx.dataview.DataViewTextRenderer(), 0)
+        dv1 = dataview.DataViewColumn("Name", dataview.DataViewTextRenderer(), 0)
         dv1.SetWidth(130)
         ctab.AppendColumn(dv1)
-        dv2 = wx.dataview.DataViewColumn("Account", wx.dataview.DataViewTextRenderer(), 1)
+        dv2 = dataview.DataViewColumn("Account", dataview.DataViewTextRenderer(), 1)
         dv2.SetWidth(380)
         ctab.AppendColumn(dv2)
-        dv3 = wx.dataview.DataViewColumn("Balance", wx.dataview.DataViewTextRenderer(), 2)
+        dv3 = dataview.DataViewColumn("Balance", dataview.DataViewTextRenderer(), 2)
         dv3.SetWidth(100)
         ctab.AppendColumn(dv3)
         self.cb_wallet = cb_wallet
@@ -186,33 +202,33 @@ class SeedWatcherPanel(gui.swgui.MainPanel):
             self.PopupMenu(ContextOptionsMenu(self))
 
     def copy_account(self, event):
-        if wx.TheClipboard.Open():
-            wx.TheClipboard.Clear()
+        if TheClipboard.Open():
+            TheClipboard.Clear()
             sel_row = self.m_dataViewListCtrl1.GetSelectedRow()
-            if sel_row == wx.NOT_FOUND:
+            if sel_row == NOT_FOUND:
                 return
             addr = self.m_dataViewListCtrl1.GetTextValue(sel_row, 1)
-            wx.TheClipboard.SetData(wx.TextDataObject(addr))
-            wx.TheClipboard.Close()
-            wx.TheClipboard.Flush()
-            copied_modal = wx.MessageDialog(
+            TheClipboard.SetData(TextDataObject(addr))
+            TheClipboard.Close()
+            TheClipboard.Flush()
+            copied_modal = MessageDialog(
                 self,
                 f"Account address {addr}\nwas copied in the clipboard",
                 "Copied",
-                wx.STAY_ON_TOP | wx.CENTER,
-                wx.DefaultPosition,
+                STAY_ON_TOP | CENTER,
+                DefaultPosition,
             )
             copied_modal.ShowModal()
 
     def open_explorer(self, event):
         sel_row = self.m_dataViewListCtrl1.GetSelectedRow()
-        if sel_row == wx.NOT_FOUND:
+        if sel_row == NOT_FOUND:
             return
         open_explorer(self.coins[sel_row].wallet.history())
 
     def open_wallet(self, evt):
         sel_row = self.m_dataViewListCtrl1.GetSelectedRow()
-        if sel_row == wx.NOT_FOUND:
+        if sel_row == NOT_FOUND:
             return
 
         # Seek in coinslist for the right wallet
@@ -233,8 +249,8 @@ class SeedWatcherPanel(gui.swgui.MainPanel):
 
 def start_seedwatcher(app, cb_wallet):
     app.frame_sw = SeedWatcherFrame(app.gui_frame)
-    app.frame_sw.SetIcons(wx.IconBundle(file_path("gui/uniblow.ico")))
-    HAND_CURSOR = wx.Cursor(wx.CURSOR_HAND)
+    app.frame_sw.SetIcons(IconBundle(file_path("gui/uniblow.ico")))
+    HAND_CURSOR = Cursor(CURSOR_HAND)
     app.gui_panel.devices_choice.SetSelection(0)
     app.gui_frame.Hide()
     app.panel_sw = SeedWatcherPanel(app.frame_sw)
