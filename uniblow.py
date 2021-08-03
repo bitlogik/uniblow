@@ -406,8 +406,8 @@ def display_coin(account_addr):
     app.gui_panel.qrimg.SetScaleMode(wx.StaticBitmap.ScaleMode.Scale_None)  # or Scale_AspectFit
     app.gui_panel.qrimg.SetBitmap(wx.Bitmap(wxi))
     app.balance_timer = DisplayTimer()
-    wx.CallLater(80, display_balance)
-    app.balance_timer.Start(8000)
+    wx.CallLater(50, display_balance)
+    app.balance_timer.Start(10000)
     app.gui_frame.Refresh()
     app.gui_frame.Update()
 
