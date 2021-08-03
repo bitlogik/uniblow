@@ -13,24 +13,63 @@
 # GNU General Public License for more details.
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
-#
 
 
-import pytz
-import datetime as dt
 import json
 import re
+import urllib.request
 
 from cryptolib.base58 import bin_to_base58_eos
-from cryptolib.cryptography import public_key_recover, decompress_pubkey
-
-from eospy.cleos import Cleos
-from eospy.utils import sig_digest
-from eospy.types import EOSEncoder, Transaction
+from cryptolib.coins.eos import (
+    uint2bin,
+    uint16,
+    uint32,
+    string_to_binname,
+    encode_varuint,
+    expiration_string_epoch_int,
+    near_future_iso_str,
+)
+from cryptolib.cryptography import public_key_recover, decompress_pubkey, sha2
 
 
 def compute_eos_address(pubkey, key_type="K1"):
     return f"PUB_{key_type}_{bin_to_base58_eos(pubkey, key_type)}"
+
+
+def serialize_tx(tx_obj):
+    """Serialize a transaction to binary"""
+    # Transaction is restricted :
+    #    A single action / authorization
+    #    Empty context actions
+    #    Empty extensions
+    # Encode transaction header
+    exp_ts = expiration_string_epoch_int(tx_obj["expiration"])
+    exp = uint32(exp_ts)
+    ref_blk = uint16(tx_obj["ref_block_num"] & 0xFFFF)
+    ref_block_prefix = uint32(tx_obj["ref_block_prefix"])
+    net_usage_words = encode_varuint(tx_obj["max_net_usage_words"])
+    max_cpu_usage_ms = uint2bin(tx_obj["max_cpu_usage_ms"], 1)
+    delay_sec = encode_varuint(tx_obj["delay_sec"])
+    tx_header = exp + ref_blk + ref_block_prefix + net_usage_words + max_cpu_usage_ms + delay_sec
+    # Encode actions (1)
+    action_account = tx_obj["actions"][0]["account"]
+    action_name = tx_obj["actions"][0]["name"]
+    tx_actions = uint2bin(1, 1) + string_to_binname(action_account) + string_to_binname(action_name)
+    # Encode authorizations (1)
+    auth_actor = tx_obj["actions"][0]["authorization"][0]["actor"]
+    auth_perm = tx_obj["actions"][0]["authorization"][0]["permission"]
+    tx_auths = uint2bin(1, 1) + string_to_binname(auth_actor) + string_to_binname(auth_perm)
+    # Encode action data
+    tx_data_rawhex = tx_obj["actions"][0]["data"]
+    tx_data = encode_varuint(len(tx_data_rawhex) // 2) + bytes.fromhex(tx_data_rawhex)
+    #        Header | Context actions | Actions : authorizations , Data | Extensions
+    return tx_header + uint2bin(0, 1) + tx_actions + tx_auths + tx_data + uint2bin(0, 1)
+
+
+def compute_sig_hash(tx_bin, chain_id):
+    """Compute the sig digest, with empty context data"""
+    chain_id_bin = bytes.fromhex(chain_id)
+    return sha2(chain_id_bin + tx_bin + 32 * b"\0")
 
 
 class eos_api:
@@ -42,37 +81,51 @@ class eos_api:
             self.url = "https://api.jungle3.alohaeos.com"
         else:
             raise Exception("Not valid EOS network")
-        self.libeos = Cleos(url=self.url)
+
+    def getData(self, endpoint, data=None):
+        """POST data to the EOS RPC API endpoint"""
+        if data is not None and isinstance(data, dict):
+            data = json.dumps(data).encode("utf8")
+        try:
+            req = urllib.request.Request(
+                f"{self.url}/v1/chain/{endpoint}",
+                headers={"User-Agent": "Mozilla/5.0"},
+                data=data,
+            )
+            webrsc = urllib.request.urlopen(req)
+            return json.load(webrsc)
+        except urllib.error.HTTPError as exc:
+            strerr = exc.read()
+            raise IOError(f"{exc.code}  :  {strerr.decode('utf8')}")
+        except urllib.error.URLError as exc:
+            raise IOError(exc)
+        except Exception:
+            raise IOError(f"Error while processing request:\n{self.url}/v1/chain/{endpoint}")
 
     def get_balance(self, account):
-        return self.libeos.get_currency_balance(account)
+        data_bal = {"account": account, "code": "eosio.token", "symbol": "EOS"}
+        return self.getData("get_currency_balance", data_bal)
 
     def get_account(self, address):
-        accounts_info = self.libeos.get_accounts(address)
-        if len(accounts_info["account_names"]) > 0:
-            return accounts_info["account_names"][0]
-        else:
-            return ""
+        accounts_info = self.getData("get_accounts_by_authorizers", {"keys": [address]})
+        if len(accounts_info["accounts"]) > 0:
+            return accounts_info["accounts"][0]["account_name"]
+        return ""
+
+    def abi_json_to_bin(self, code, action, args):
+        abi_query = {"code": code, "action": action, "args": args}
+        return self.getData("abi_json_to_bin", abi_query)
+
+    def get_chain_lib_info(self):
+        chain_info = self.getData("get_info")
+        lib_info = self.get_block(chain_info["last_irreversible_block_num"])
+        return chain_info, lib_info
+
+    def get_block(self, block_num):
+        return self.getData("get_block", {"block_num_or_id": block_num})
 
     def pushtx(self, txdata):
-        return self.libeos.post("chain.push_transaction", params=None, data=txdata, timeout=30)
-
-    def get_tx_num(self, addr, blocks):
-        self.getData("eth_getTransactionCount", ["0x" + addr, blocks])
-        self.checkapiresp()
-        return int(self.getKey("result")[2:], 16)
-
-    def getKey(self, keychar):
-        out = self.jsres
-        path = keychar.split("/")
-        for key in path:
-            if key.isdigit():
-                key = int(key)
-            try:
-                out = out[key]
-            except Exception:
-                out = []
-        return out
+        return self.getData("push_transaction", txdata)
 
 
 def testaddr(eos_account):
@@ -94,6 +147,8 @@ class EOSwalletCore:
         self.address = compute_eos_address(bytes.fromhex(pubkey))
         self.account = self.getaccount(self.address)
         self.network = network
+        self.datahash = b""
+        self.trx = {}
 
     def getbalance(self):
         return self.api.get_balance(self.account)
@@ -106,7 +161,7 @@ class EOSwalletCore:
         balance = float(bal_str[0][:-4]) if len(bal_str) > 0 else 0.0
         if float(pay_value) > balance:
             raise Exception("Not enough fund for the tx")
-        if isinstance(pay_value, int) or isinstance(pay_value, float):
+        if isinstance(pay_value, (int, float)):
             qty = "%.4f %s" % (pay_value, "EOS")
         elif isinstance(pay_value, str):
             qty = "%.4f %s" % (float(pay_value), "EOS")
@@ -128,15 +183,18 @@ class EOSwalletCore:
                 }
             ],
         }
-        data = self.api.libeos.abi_json_to_bin(payload["account"], payload["name"], args)
+        data = self.api.abi_json_to_bin(payload["account"], payload["name"], args)
         payload["data"] = data["binargs"]
-        trx = {"actions": [payload]}
-        trx["expiration"] = str(
-            (dt.datetime.utcnow() + dt.timedelta(seconds=60)).replace(tzinfo=pytz.UTC)
-        )
-        chain_info, lib_info = self.api.libeos.get_chain_lib_info()
-        self.tx_info = Transaction(trx, chain_info, lib_info)
-        self.datahash = bytes.fromhex(sig_digest(self.tx_info.encode(), chain_info["chain_id"]))
+        self.trx = {"actions": [payload]}
+        self.trx["expiration"] = near_future_iso_str(60)
+        chain_info, lib_info = self.api.get_chain_lib_info()
+        self.trx["ref_block_num"] = chain_info["last_irreversible_block_num"] & 0xFFFF
+        self.trx["ref_block_prefix"] = lib_info["ref_block_prefix"]
+        self.trx["max_net_usage_words"] = 0
+        self.trx["max_cpu_usage_ms"] = 0
+        self.trx["delay_sec"] = 0
+        self.trx["context_free_actions"] = []
+        self.datahash = compute_sig_hash(serialize_tx(self.trx), chain_info["chain_id"])
         return self.datahash
 
     def send(self, signature_der):
@@ -161,11 +219,10 @@ class EOSwalletCore:
         signature_b58 = f"SIG_{sigtype}_{bin_to_base58_eos(sig_bin, sigtype)}"
         final_tx = {
             "compression": "none",
-            "transaction": self.tx_info.__dict__,
+            "transaction": self.trx,
             "signatures": [signature_b58],
         }
-        data_tx = json.dumps(final_tx, cls=EOSEncoder)
-        ret_tx = self.api.pushtx(data_tx)
+        ret_tx = self.api.pushtx(final_tx)
         return "\nDONE, txID : " + ret_tx["transaction_id"]
 
 
@@ -238,6 +295,7 @@ class EOS_wallet:
                     f"https://{self.network.lower()}.bloks.io/account/{self.eos.account}"
                 )
             return EOS_EXPLORER_URL
+        return None
 
     def transfer(self, amount, to_account, priority_fee):
         # Transfer x unit to an account, pay

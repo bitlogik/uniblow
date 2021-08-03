@@ -14,12 +14,6 @@ with open("README.md") as readme_file:
 
 is_venv = sys.prefix != sys.base_prefix
 
-EOSPY_URL = "https://github.com/eosnewyork/eospy/archive/master.zip"
-if is_venv:
-    pipmain(["install", EOSPY_URL])
-else:
-    pipmain(["install", EOSPY_URL, "--user"])
-
 setup(
     name="Uniblow",
     version=VERSION,
