@@ -1,6 +1,18 @@
 
 Uniblow versions history
 
+## 0.8.0
+
+* Hand cursor for buttons
+* Customized images buttons
+* Add Electrum seed in SeedWatcher
+* Choices label enabled
+* Improved API errors output
+* Rework EOS wallet, eospy removed
+* EOS wallet is PowerUp capable
+* Change balance timer
+* Fix docs
+
 ## 0.6.0
 
 * Add ERC20 and BEP20 tokens

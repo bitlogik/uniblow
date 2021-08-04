@@ -55,13 +55,11 @@ Compatible with the following blockchains :
 
 ## Devices
 
-Devices
--------
-
 ### Seed Watcher
 
 Useful for paperwallets or one-time analysis of a mnemonic seed. This specific
-device can be also useful to provide an ephemeral temporary wallet.
+device can be also useful to provide an ephemeral temporary wallet, in TailsOS for
+example.
 
 This device doesn't store permanently the private keys. It provides a window GUI
 to read a mnemonic seed, analyzes it, and displays the major cryptos held by
@@ -189,8 +187,8 @@ Validation
 certificate](https://en.wikipedia.org/wiki/Code_signing#Extended_validation_(EV)_code_signing),
 bringing even greater confidence in the integrity of the application.
 
-The SecuBoost seed derivation
------------------------------
+The SecuBoost seed derivation type
+----------------------------------
 
 Uniblow is offering an alternative to [the BIP39 mnemonic derivation
 method](https://en.bitcoin.it/wiki/BIP_0039). The SecuBoost algorithm is
@@ -261,6 +259,7 @@ Windows and Debian platforms in a dedicated [build document](docs/Build.md).
 
 Future features :
 
+-   A working MacOS version.
 -   Full HD wallet device, avoiding address reuse, and discover in all account
     chains (external and internal change).
 
@@ -303,3 +302,17 @@ class newCOINwallet:
      ... transfer all the wallet to an address (minus fee)
      ... fee is 0, 1 or 2 : "economic", "normal", "fast"
 ```
+
+
+## License
+
+Copyright (C) 2021  BitLogiK SAS
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, version 3 of the License.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+See the [GNU General Public License](LICENSE.md) for more details.
