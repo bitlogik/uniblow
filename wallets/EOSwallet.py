@@ -139,6 +139,9 @@ def testaddr(eos_account):
 
 account_pattern = re.compile(r"^[a-z1-5]{12}$")
 
+CPU_per_tx = 500
+POWER_UP_PAYMENT = "0.0002"
+
 
 class EOSwalletCore:
     def __init__(self, pubkey, network, api):
@@ -154,17 +157,84 @@ class EOSwalletCore:
     def getaccount(self, addr):
         return self.api.get_account(addr)
 
+    def getresources(self):
+        """Return the CPU available"""
+        account_info = self.api.getData("get_account", {"account_name": self.account})
+        return account_info["cpu_limit"]["available"]
+
+    def power_up(self, value):
+        bal_str = self.getbalance()
+        balance = float(bal_str[0][:-4]) if len(bal_str) > 0 else 0.0
+        if (float(POWER_UP_PAYMENT) + value) > balance:
+            raise Exception("Not enough fund for the tx and the powerup")
+        args = {
+            "payer": self.account,
+            "receiver": self.account,
+            "days": 1,
+            "cpu_frac": 1000 * CPU_per_tx,
+            "net_frac": 10000,
+            "max_payment": f"{POWER_UP_PAYMENT} EOS",
+        }
+        payload = {
+            "account": "eosio",
+            "name": "powerup",
+            "authorization": [
+                {
+                    "actor": self.account,
+                    "permission": "active",
+                }
+            ],
+        }
+        data = self.api.abi_json_to_bin(payload["account"], payload["name"], args)
+        payload["data"] = data["binargs"]
+        ptrx = {"actions": [payload]}
+        ptrx["expiration"] = near_future_iso_str(60)
+        chain_info, lib_info = self.api.get_chain_lib_info()
+        ptrx["ref_block_num"] = chain_info["last_irreversible_block_num"] & 0xFFFF
+        ptrx["ref_block_prefix"] = lib_info["ref_block_prefix"]
+        ptrx["max_net_usage_words"] = 0
+        ptrx["max_cpu_usage_ms"] = 0
+        ptrx["delay_sec"] = 0
+        ptrx["context_free_actions"] = []
+        pdatahash = compute_sig_hash(serialize_tx(ptrx), chain_info["chain_id"])
+        return ptrx, pdatahash
+
+    def finalize_powerup(self, tx, datahash, signature_der):
+        # Signature decoding
+        lenr = int(signature_der[3])
+        lens = int(signature_der[5 + lenr])
+        r = int.from_bytes(signature_der[4 : lenr + 4], "big")
+        s = int.from_bytes(signature_der[lenr + 6 : lenr + 6 + lens], "big")
+        # Parity recovery
+        i = 31
+        h = int.from_bytes(datahash, "big")
+        if public_key_recover(h, r, s, i) != self.pubkey:
+            i += 1
+        # Signature encoding
+        # pack
+        ib = i.to_bytes(1, byteorder="big")
+        rb = r.to_bytes(32, byteorder="big")
+        sb = s.to_bytes(32, byteorder="big")
+        sig_bin = ib + rb + sb
+        # encode
+        sigtype = "K1"
+        signature_b58 = f"SIG_{sigtype}_{bin_to_base58_eos(sig_bin, sigtype)}"
+        final_ptx = {
+            "compression": "none",
+            "transaction": tx,
+            "signatures": [signature_b58],
+        }
+        self.api.pushtx(final_ptx)
+
     def prepare(self, to_account, pay_value):
         bal_str = self.getbalance()
         balance = float(bal_str[0][:-4]) if len(bal_str) > 0 else 0.0
-        if float(pay_value) > balance:
+        if pay_value > balance or pay_value < 0:
             raise Exception("Not enough fund for the tx")
         if isinstance(pay_value, (int, float)):
             qty = "%.4f %s" % (pay_value, "EOS")
-        elif isinstance(pay_value, str):
-            qty = "%.4f %s" % (float(pay_value), "EOS")
         else:
-            raise Exception("to_account variable must be int float or string")
+            raise Exception("to_account variable must be int or float")
         args = {
             "from": self.account,
             "to": to_account,
@@ -295,8 +365,30 @@ class EOS_wallet:
             return EOS_EXPLORER_URL
         return None
 
-    def transfer(self, amount, to_account, priority_fee):
-        # Transfer x unit to an account, pay
+    def transfer(self, amount, to_account, priority_fee, is_all=False):
+        # Transfer x unit to an account
+        if isinstance(amount, str) and amount[-4:] == " EOS":
+            amount = amount[:-4]
+        value = float(amount)
+
+        # Check CPU available
+        cpu_avail = self.eos.getresources()
+        if cpu_avail < CPU_per_tx:
+            # Need to power up
+            pu_tx, ptxhash = self.eos.power_up(value)
+            # sign until R|S = 2x32
+            len_r = 0
+            len_s = 0
+            while len_r != 32 or len_s != 32:
+                tx_signature = self.current_device.sign(ptxhash)
+                len_r = int(tx_signature[3])
+                len_s = int(tx_signature[5 + len_r])
+            # Finalize powerup tx and send it
+            self.eos.finalize_powerup(pu_tx, ptxhash, tx_signature)
+            if is_all:
+                value -= float(POWER_UP_PAYMENT)
+
+        # Perform the transfer transaction
         atx, hash_to_sign = self.eos.prepare(to_account, value)
         # sign until R|S = 2x32
         len_r = 0
@@ -310,4 +402,4 @@ class EOS_wallet:
     def transfer_all(self, to_account, fee_priority):
         # Transfer all the wallet to an address (minus fee)
         all_amount = self.get_balance()
-        return self.transfer(all_amount, to_account, fee_priority)
+        return self.transfer(all_amount, to_account, fee_priority, is_all=True)
