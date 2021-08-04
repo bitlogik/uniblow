@@ -12,6 +12,7 @@ This document provides specific instructions and scripts to build uniblow binari
 
 * Start the **Build-Windows** batch script in the *package* directory, double-click on this bat file to start it.
 
+The pysha3 library may require the Microsoft Visual C++ 14.x build tools.
 
 ## Debian Buster
 
