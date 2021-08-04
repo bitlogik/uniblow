@@ -27,7 +27,7 @@ from cryptolib.cryptography import (
     random_generator,
 )
 
-## BIP39 : mnemonic <-> seed
+# BIP39 : mnemonic <-> seed
 
 with open(
     os.path.join(os.path.dirname(os.path.realpath(__file__)), "wordslist/english.txt"),
@@ -135,7 +135,7 @@ def generate_mnemonic(nwords):
     return entropy_to_mnemonic(new_ent)
 
 
-## BIP32 : key derivation tree
+# BIP32 : key derivation tree
 
 
 class BIP32node:
@@ -243,7 +243,7 @@ class BIP32node:
         return num.to_bytes(32, "big")
 
 
-## HDWallet : BIP39, BIP32, ...
+# HDWallet : BIP39, BIP32, ...
 
 
 class HD_Wallet:

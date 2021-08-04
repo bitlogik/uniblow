@@ -53,7 +53,7 @@ from wallets.XTZwallet import XTZ_wallet
 
 coins_list = [
     {"name": "Bitcoin Legacy", "path": "m/44'/ 0'/0'/0/", "wallet_lib": BTC_wallet, "type": 0},
-    {"name": "Bitcoin WP2SH", "path": "m/49'/ 0'/0'/0/", "wallet_lib": BTC_wallet, "type": 1},
+    {"name": "Bitcoin P2WSH", "path": "m/49'/ 0'/0'/0/", "wallet_lib": BTC_wallet, "type": 1},
     {"name": "Bitcoin SegWit", "path": "m/84'/ 0'/0'/0/", "wallet_lib": BTC_wallet, "type": 2},
     {"name": "Ethereum", "path": "m/44'/60'/0'/0/", "wallet_lib": ETH_wallet},
     {"name": "BSC", "path": "m/44'/60'/0'/0/", "wallet_lib": BSC_wallet},
@@ -82,7 +82,6 @@ class SeedDevice:
 class blockchainWallet:
     def __init__(self, coin_data, device):
         self.name = coin_data["name"]
-        self.path = coin_data["name"]
         wallet_type = coin_data.get("type", 0)
         self.wallet = coin_data["wallet_lib"](0, wallet_type, device)
 
