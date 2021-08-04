@@ -143,6 +143,7 @@ class SeedWatcherPanel(gui.swgui.MainPanel):
         self.cb_wallet = cb_wallet
 
     def generate_mnemonic(self, n_words):
+        self.m_typechoice.SetSelection(0)
         mnemonic = generate_mnemonic(n_words)
         # Trigger wallet table computations
         self.fill_mnemonic(mnemonic)
@@ -175,8 +176,10 @@ class SeedWatcherPanel(gui.swgui.MainPanel):
         self.m_btnseek.Disable()
         self.m_staticTextcopy.Disable()
         self.m_dataViewListCtrl1.DeleteAllItems()
-        if self.m_SecuBoost.IsChecked():
+        if self.m_typechoice.GetSelection() == 2:
             derivation = "BOOST"
+        elif self.m_typechoice.GetSelection() == 1:
+            derivation = "Electrum"
         else:
             derivation = "BIP39"
         mnemo_txt = self.m_textCtrl_mnemo.GetValue()
@@ -185,7 +188,21 @@ class SeedWatcherPanel(gui.swgui.MainPanel):
         wallet = HD_Wallet.from_mnemonic(mnemo_txt, password, derivation)
         self.coins = []
         for coin in coins_list:
-            coin_key = SeedDevice(wallet.derive_key(coin["path"] + account_idx))
+            cpath = coin["path"]
+            if derivation == "Electrum":
+                if coin["name"][:8] != "Bitcoin ":
+                    # Use only Bitcoin for the Electrum seed
+                    continue
+                if coin["type"] == 0:
+                    # standard
+                    cpath = "m/0/"
+                elif coin["type"] == 1:
+                    # p2wsh
+                    cpath = "m/1'/0/"
+                elif coin["type"] == 2:
+                    # segwit
+                    cpath = "m/0'/0/"
+            coin_key = SeedDevice(wallet.derive_key(cpath + account_idx))
             try:
                 coin_wallet = blockchainWallet(coin, coin_key)
                 self.coins.append(coin_wallet)
@@ -266,7 +283,7 @@ def start_seedwatcher(app, cb_wallet):
 
     app.panel_sw.m_button_gen.SetCursor(HAND_CURSOR)
     app.panel_sw.m_choice_nwords.SetCursor(HAND_CURSOR)
-    app.panel_sw.m_SecuBoost.SetCursor(HAND_CURSOR)
+    app.panel_sw.m_typechoice.SetCursor(HAND_CURSOR)
     app.panel_sw.m_btnseek.SetCursor(HAND_CURSOR)
     app.panel_sw.initialize(cb_wallet)
     app.frame_sw.Show()

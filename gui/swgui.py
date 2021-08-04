@@ -72,12 +72,12 @@ class MainPanel ( wx.Panel ):
 
         bSizer3 = wx.BoxSizer( wx.HORIZONTAL )
 
-        self.m_staticText12 = wx.StaticText( self, wx.ID_ANY, u"wallet mnemonic", wx.DefaultPosition, wx.DefaultSize, 0 )
+        self.m_staticText12 = wx.StaticText( self, wx.ID_ANY, u"Wallet mnemonic", wx.DefaultPosition, wx.DefaultSize, 0 )
         self.m_staticText12.Wrap( -1 )
 
         self.m_staticText12.SetFont( wx.Font( 12, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, False, wx.EmptyString ) )
 
-        bSizer3.Add( self.m_staticText12, 1, wx.ALIGN_CENTER|wx.RIGHT|wx.TOP, 20 )
+        bSizer3.Add( self.m_staticText12, 1, wx.ALIGN_CENTER|wx.RIGHT|wx.TOP|wx.ALIGN_CENTER_VERTICAL, 20 )
 
         self.m_staticText5 = wx.StaticText( self, wx.ID_ANY, u"  Words in list", wx.DefaultPosition, wx.DefaultSize, 0 )
         self.m_staticText5.Wrap( -1 )
@@ -85,7 +85,10 @@ class MainPanel ( wx.Panel ):
         bSizer3.Add( self.m_staticText5, 0, wx.ALIGN_BOTTOM|wx.ALL, 5 )
 
         self.m_bitmap_wl = wx.StaticBitmap( self, wx.ID_ANY, wx.NullBitmap, wx.DefaultPosition, wx.DefaultSize, 0 )
-        bSizer3.Add( self.m_bitmap_wl, 0, wx.ALIGN_BOTTOM|wx.ALL, 5 )
+        bSizer3.Add( self.m_bitmap_wl, 0, wx.ALIGN_BOTTOM|wx.BOTTOM, 7 )
+
+
+        bSizer3.Add( ( 0, 0), 0, wx.RIGHT, 8 )
 
         self.m_staticText6 = wx.StaticText( self, wx.ID_ANY, u"  Checksum", wx.DefaultPosition, wx.DefaultSize, 0 )
         self.m_staticText6.Wrap( -1 )
@@ -93,7 +96,7 @@ class MainPanel ( wx.Panel ):
         bSizer3.Add( self.m_staticText6, 0, wx.ALIGN_BOTTOM|wx.ALL, 5 )
 
         self.m_bitmap_cs = wx.StaticBitmap( self, wx.ID_ANY, wx.NullBitmap, wx.DefaultPosition, wx.DefaultSize, 0 )
-        bSizer3.Add( self.m_bitmap_cs, 0, wx.ALIGN_BOTTOM|wx.ALL, 5 )
+        bSizer3.Add( self.m_bitmap_cs, 0, wx.ALIGN_BOTTOM|wx.BOTTOM, 7 )
 
 
         bSizer11.Add( bSizer3, 0, wx.ALIGN_CENTER_HORIZONTAL, 5 )
@@ -106,23 +109,28 @@ class MainPanel ( wx.Panel ):
         bSizer4 = wx.BoxSizer( wx.HORIZONTAL )
 
 
-        bSizer4.Add( ( 0, 0), 0, wx.RIGHT, 60 )
+        bSizer4.Add( ( 0, 0), 0, wx.RIGHT, 50 )
 
         self.m_staticText51 = wx.StaticText( self, wx.ID_ANY, u"Password (optional)", wx.DefaultPosition, wx.DefaultSize, 0 )
         self.m_staticText51.Wrap( -1 )
 
         bSizer4.Add( self.m_staticText51, 0, wx.ALL|wx.ALIGN_CENTER_VERTICAL, 5 )
 
-        self.m_textpwd = wx.TextCtrl( self, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.Size( 220,-1 ), 0 )
+        self.m_textpwd = wx.TextCtrl( self, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.Size( 208,-1 ), 0 )
         bSizer4.Add( self.m_textpwd, 0, wx.ALL, 5 )
 
 
-        bSizer4.Add( ( 0, 0), 1, wx.EXPAND, 5 )
+        bSizer4.Add( ( 0, 0), 0, wx.RIGHT, 18 )
 
-        self.m_SecuBoost = wx.CheckBox( self, wx.ID_ANY, u"SecuBoost", wx.DefaultPosition, wx.DefaultSize, 0 )
-        self.m_SecuBoost.SetToolTip( u"Extra security boost for mnemonic.\nNot compatible with BIP39.\nRequires >1GB RAM free" )
+        self.m_staticText7 = wx.StaticText( self, wx.ID_ANY, u"Type", wx.DefaultPosition, wx.DefaultSize, 0 )
+        self.m_staticText7.Wrap( -1 )
 
-        bSizer4.Add( self.m_SecuBoost, 0, wx.ALL|wx.ALIGN_CENTER_VERTICAL, 5 )
+        bSizer4.Add( self.m_staticText7, 0, wx.ALL|wx.ALIGN_CENTER_VERTICAL, 5 )
+
+        m_typechoiceChoices = [ u"BIP39", u"Electrum", u"SecuBoost" ]
+        self.m_typechoice = wx.Choice( self, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, m_typechoiceChoices, 0 )
+        self.m_typechoice.SetSelection( 0 )
+        bSizer4.Add( self.m_typechoice, 0, wx.LEFT|wx.RIGHT|wx.TOP, 4 )
 
 
         bSizer11.Add( bSizer4, 0, wx.EXPAND, 5 )
@@ -147,7 +155,7 @@ class MainPanel ( wx.Panel ):
 
         self.m_btnseek.SetBitmap( wx.NullBitmap )
         self.m_btnseek.SetBitmapPressed( wx.NullBitmap )
-        bSizer11.Add( self.m_btnseek, 0, wx.ALL|wx.ALIGN_CENTER_HORIZONTAL, 15 )
+        bSizer11.Add( self.m_btnseek, 0, wx.ALL|wx.ALIGN_CENTER_HORIZONTAL, 14 )
 
         self.m_staticTextcopy = wx.StaticText( self, wx.ID_ANY, u"Right click on asset line to open menu", wx.DefaultPosition, wx.DefaultSize, 0 )
         self.m_staticTextcopy.Wrap( -1 )
@@ -160,7 +168,7 @@ class MainPanel ( wx.Panel ):
         self.m_dataViewListCtrl1 = wx.dataview.DataViewListCtrl( self, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.dataview.DV_HORIZ_RULES|wx.dataview.DV_SINGLE|wx.dataview.DV_VERT_RULES )
         self.m_dataViewListCtrl1.SetMinSize( wx.Size( -1,149 ) )
 
-        bSizer11.Add( self.m_dataViewListCtrl1, 1, wx.ALL|wx.EXPAND, 5 )
+        bSizer11.Add( self.m_dataViewListCtrl1, 1, wx.ALIGN_LEFT|wx.EXPAND, 5 )
 
 
         bSizer11.Add( ( 0, 0), 0, wx.ALIGN_CENTER_HORIZONTAL|wx.ALL, 8 )
@@ -174,7 +182,7 @@ class MainPanel ( wx.Panel ):
         self.m_button_gen.Bind( wx.EVT_BUTTON, self.gen_new_mnemonic )
         self.m_textCtrl_mnemo.Bind( wx.EVT_TEXT, self.mnemo_changed )
         self.m_textpwd.Bind( wx.EVT_TEXT, self.mnemo_changed )
-        self.m_SecuBoost.Bind( wx.EVT_CHECKBOX, self.mnemo_changed )
+        self.m_typechoice.Bind( wx.EVT_CHOICE, self.mnemo_changed )
         self.m_account.Bind( wx.EVT_SPINCTRL, self.mnemo_changed )
         self.m_btnseek.Bind( wx.EVT_BUTTON, self.seek_assets )
         self.m_dataViewListCtrl1.Bind( wx.dataview.EVT_DATAVIEW_ITEM_CONTEXT_MENU, self.pop_menu, id = wx.ID_ANY )

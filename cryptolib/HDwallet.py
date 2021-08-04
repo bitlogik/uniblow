@@ -257,13 +257,21 @@ class HD_Wallet:
     @classmethod
     def from_mnemonic(cls, mnemonic, passw="", std="BIP39"):
         """Mnemonic to master key (BIP39 or BOOST)"""
+        pprefix = b"mnemonic"
         if std == "BIP39":
+            mnemonic = mnemonic.lower()
             method = "PBKDF2-2048-HMAC-SHA512"
         elif std == "BOOST":
             method = "SCRYPT"
+        elif std == "Electrum":
+            mnemonic = mnemonic.lower()
+            method = "PBKDF2-2048-HMAC-SHA512"
+            pprefix = b"electrum"
         else:
             raise Exception("Mnemonic standard not valid")
-        seed = mnemonic_to_seed(mnemonic, passphrasestr=passw, method=method)
+        seed = mnemonic_to_seed(
+            mnemonic, passphrasestr=passw, passphrase_prefix=pprefix, method=method
+        )
         return HD_Wallet.from_seed(seed)
 
     def derive_key(self, path):
