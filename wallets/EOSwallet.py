@@ -147,8 +147,6 @@ class EOSwalletCore:
         self.address = compute_eos_address(bytes.fromhex(pubkey))
         self.account = self.getaccount(self.address)
         self.network = network
-        self.datahash = b""
-        self.trx = {}
 
     def getbalance(self):
         return self.api.get_balance(self.account)
@@ -185,19 +183,19 @@ class EOSwalletCore:
         }
         data = self.api.abi_json_to_bin(payload["account"], payload["name"], args)
         payload["data"] = data["binargs"]
-        self.trx = {"actions": [payload]}
-        self.trx["expiration"] = near_future_iso_str(60)
+        trx = {"actions": [payload]}
+        trx["expiration"] = near_future_iso_str(60)
         chain_info, lib_info = self.api.get_chain_lib_info()
-        self.trx["ref_block_num"] = chain_info["last_irreversible_block_num"] & 0xFFFF
-        self.trx["ref_block_prefix"] = lib_info["ref_block_prefix"]
-        self.trx["max_net_usage_words"] = 0
-        self.trx["max_cpu_usage_ms"] = 0
-        self.trx["delay_sec"] = 0
-        self.trx["context_free_actions"] = []
-        self.datahash = compute_sig_hash(serialize_tx(self.trx), chain_info["chain_id"])
-        return self.datahash
+        trx["ref_block_num"] = chain_info["last_irreversible_block_num"] & 0xFFFF
+        trx["ref_block_prefix"] = lib_info["ref_block_prefix"]
+        trx["max_net_usage_words"] = 0
+        trx["max_cpu_usage_ms"] = 0
+        trx["delay_sec"] = 0
+        trx["context_free_actions"] = []
+        datahash = compute_sig_hash(serialize_tx(trx), chain_info["chain_id"])
+        return trx, datahash
 
-    def send(self, signature_der):
+    def send(self, tx, datahash, signature_der):
         # Signature decoding
         lenr = int(signature_der[3])
         lens = int(signature_der[5 + lenr])
@@ -205,7 +203,7 @@ class EOSwalletCore:
         s = int.from_bytes(signature_der[lenr + 6 : lenr + 6 + lens], "big")
         # Parity recovery
         i = 31
-        h = int.from_bytes(self.datahash, "big")
+        h = int.from_bytes(datahash, "big")
         if public_key_recover(h, r, s, i) != self.pubkey:
             i += 1
         # Signature encoding
@@ -219,7 +217,7 @@ class EOSwalletCore:
         signature_b58 = f"SIG_{sigtype}_{bin_to_base58_eos(sig_bin, sigtype)}"
         final_tx = {
             "compression": "none",
-            "transaction": self.trx,
+            "transaction": tx,
             "signatures": [signature_b58],
         }
         ret_tx = self.api.pushtx(final_tx)
@@ -299,7 +297,7 @@ class EOS_wallet:
 
     def transfer(self, amount, to_account, priority_fee):
         # Transfer x unit to an account, pay
-        hash_to_sign = self.eos.prepare(to_account, amount)
+        atx, hash_to_sign = self.eos.prepare(to_account, value)
         # sign until R|S = 2x32
         len_r = 0
         len_s = 0
@@ -307,7 +305,7 @@ class EOS_wallet:
             tx_signature = self.current_device.sign(hash_to_sign)
             len_r = int(tx_signature[3])
             len_s = int(tx_signature[5 + len_r])
-        return self.eos.send(tx_signature)
+        return self.eos.send(atx, hash_to_sign, tx_signature)
 
     def transfer_all(self, to_account, fee_priority):
         # Transfer all the wallet to an address (minus fee)
