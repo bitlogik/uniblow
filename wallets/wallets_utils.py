@@ -36,7 +36,7 @@ def shift_10(num_str, shift):
         new_int = int_str + dec_str[:shift]
     else:
         raise Exception("Invalid value")
-    if new_int != "0":
+    if set(new_int) != {"0"}:
         return int(new_int.lstrip("0"))
     return 0
 

@@ -568,8 +568,11 @@ def send(ev):
         warn_modal("Wrong destination account address format")
         return
     sending_value_str = app.gui_panel.amount.GetValue()
+    if len(sending_value_str) <= 0:
+        warn_modal("Input an amount value to transfer.")
+        return
     if sending_value_str[0] == "-":
-        warn_modal("Amount input must be positive or null")
+        warn_modal("Amount input must be positive or null.")
         return
     try:
         float(sending_value_str)
