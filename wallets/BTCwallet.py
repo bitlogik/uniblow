@@ -56,7 +56,7 @@ class blkhub_api:
             raise IOError(f"{e.code}  :  {strerr.decode('utf8')}")
         except urllib.error.URLError as e:
             raise IOError(e)
-        except Exception as exc:
+        except Exception:
             raise IOError(f"Error while processing request:\n{self.url}{endpoint}?{params_enc}")
 
     def checkapiresp(self):
