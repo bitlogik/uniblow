@@ -81,7 +81,7 @@ class TopPanel ( wx.Panel ):
         bSizer2.Add( self.network_label, 0, wx.ALL|wx.ALIGN_CENTER_HORIZONTAL, 5 )
 
         network_choiceChoices = []
-        self.network_choice = wx.Choice( self, wx.ID_ANY, wx.DefaultPosition, wx.Size( 120,-1 ), network_choiceChoices, 0 )
+        self.network_choice = wx.Choice( self, wx.ID_ANY, wx.DefaultPosition, wx.Size( 150,-1 ), network_choiceChoices, 0 )
         self.network_choice.SetSelection( 0 )
         self.network_choice.SetFont( wx.Font( 12, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, False, wx.EmptyString ) )
         self.network_choice.Enable( False )
@@ -97,7 +97,7 @@ class TopPanel ( wx.Panel ):
         bSizer2.Add( self.wallopt_label, 0, wx.ALL|wx.ALIGN_CENTER_HORIZONTAL, 5 )
 
         wallopt_choiceChoices = []
-        self.wallopt_choice = wx.Choice( self, wx.ID_ANY, wx.DefaultPosition, wx.Size( 150,-1 ), wallopt_choiceChoices, 0 )
+        self.wallopt_choice = wx.Choice( self, wx.ID_ANY, wx.DefaultPosition, wx.Size( 185,-1 ), wallopt_choiceChoices, 0 )
         self.wallopt_choice.SetSelection( 0 )
         self.wallopt_choice.SetFont( wx.Font( 12, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, False, wx.EmptyString ) )
         self.wallopt_choice.Enable( False )
