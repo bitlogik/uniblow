@@ -132,13 +132,13 @@ class SeedWatcherPanel(gui.swgui.MainPanel):
         self.m_choice_nwords.SetSelection(0)
         ctab = self.m_dataViewListCtrl1
         dv1 = dataview.DataViewColumn("Name", dataview.DataViewTextRenderer(), 0)
-        dv1.SetWidth(130)
+        dv1.SetWidth(125)
         ctab.AppendColumn(dv1)
         dv2 = dataview.DataViewColumn("Account", dataview.DataViewTextRenderer(), 1)
-        dv2.SetWidth(380)
+        dv2.SetWidth(372)
         ctab.AppendColumn(dv2)
         dv3 = dataview.DataViewColumn("Balance", dataview.DataViewTextRenderer(), 2)
-        dv3.SetWidth(100)
+        dv3.SetWidth(86)
         ctab.AppendColumn(dv3)
         self.cb_wallet = cb_wallet
 

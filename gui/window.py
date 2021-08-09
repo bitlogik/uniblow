@@ -17,7 +17,7 @@ import wx.xrc
 class TopFrame ( wx.Frame ):
 
     def __init__( self, parent ):
-        wx.Frame.__init__ ( self, parent, id = wx.ID_ANY, title = wx.EmptyString, pos = wx.DefaultPosition, size = wx.Size( 996,383 ), style = wx.CAPTION|wx.CLOSE_BOX|wx.MINIMIZE_BOX|wx.SYSTEM_MENU|wx.TAB_TRAVERSAL )
+        wx.Frame.__init__ ( self, parent, id = wx.ID_ANY, title = wx.EmptyString, pos = wx.DefaultPosition, size = wx.Size( 918,418 ), style = wx.CAPTION|wx.CLOSE_BOX|wx.MINIMIZE_BOX|wx.SYSTEM_MENU|wx.TAB_TRAVERSAL )
 
         self.SetSizeHints( wx.DefaultSize, wx.DefaultSize )
 
@@ -112,38 +112,28 @@ class TopPanel ( wx.Panel ):
 
         bSizer3 = wx.BoxSizer( wx.VERTICAL )
 
-        bSizer5 = wx.BoxSizer( wx.HORIZONTAL )
+        bSizer5 = wx.BoxSizer( wx.VERTICAL )
 
-        self.account_label = wx.StaticText( self, wx.ID_ANY, u"Account :", wx.DefaultPosition, wx.DefaultSize, 0 )
+        self.account_label = wx.StaticText( self, wx.ID_ANY, u"Account", wx.DefaultPosition, wx.DefaultSize, 0 )
         self.account_label.Wrap( -1 )
 
-        self.account_label.SetFont( wx.Font( 14, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, False, wx.EmptyString ) )
+        self.account_label.SetFont( wx.Font( 12, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, False, wx.EmptyString ) )
 
-        bSizer5.Add( self.account_label, 0, wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5 )
+        bSizer5.Add( self.account_label, 0, wx.TOP|wx.RIGHT|wx.LEFT, 5 )
 
-        self.account_addr = wx.TextCtrl( self, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.Size( 585,-1 ), wx.TE_READONLY|wx.BORDER_NONE )
+        self.account_addr = wx.TextCtrl( self, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.Size( 585,-1 ), wx.TE_CENTER|wx.TE_READONLY|wx.BORDER_NONE )
         self.account_addr.SetFont( wx.Font( 14, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, False, wx.EmptyString ) )
 
-        bSizer5.Add( self.account_addr, 1, wx.ALIGN_CENTER_VERTICAL, 2 )
+        bSizer5.Add( self.account_addr, 0, wx.BOTTOM|wx.TOP|wx.ALIGN_CENTER_HORIZONTAL, 16 )
 
 
-        bSizer3.Add( bSizer5, 1, wx.EXPAND, 3 )
+        bSizer3.Add( bSizer5, 0, wx.LEFT|wx.TOP|wx.ALIGN_CENTER_HORIZONTAL, 12 )
 
         bSizer6 = wx.BoxSizer( wx.HORIZONTAL )
 
-        self.balance_label = wx.StaticText( self, wx.ID_ANY, u"Balance :", wx.DefaultPosition, wx.DefaultSize, 0 )
-        self.balance_label.Wrap( -1 )
+        bSizer18 = wx.BoxSizer( wx.VERTICAL )
 
-        self.balance_label.SetFont( wx.Font( 14, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, False, wx.EmptyString ) )
-
-        bSizer6.Add( self.balance_label, 0, wx.ALIGN_CENTER_VERTICAL|wx.TOP|wx.LEFT, 20 )
-
-        self.balance_info = wx.StaticText( self, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, 0 )
-        self.balance_info.Wrap( -1 )
-
-        self.balance_info.SetFont( wx.Font( 16, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, False, wx.EmptyString ) )
-
-        bSizer6.Add( self.balance_info, 0, wx.ALIGN_CENTER_VERTICAL|wx.TOP|wx.LEFT, 20 )
+        bSizer19 = wx.BoxSizer( wx.HORIZONTAL )
 
         self.hist_button = wx.BitmapButton( self, wx.ID_ANY, wx.NullBitmap, wx.DefaultPosition, wx.DefaultSize, wx.BU_AUTODRAW|wx.BORDER_NONE )
 
@@ -151,7 +141,7 @@ class TopPanel ( wx.Panel ):
         self.hist_button.SetBitmapPressed( wx.NullBitmap )
         self.hist_button.Enable( False )
 
-        bSizer6.Add( self.hist_button, 0, 0, 5 )
+        bSizer19.Add( self.hist_button, 0, wx.LEFT, 25 )
 
         self.copy_button = wx.BitmapButton( self, wx.ID_ANY, wx.NullBitmap, wx.DefaultPosition, wx.DefaultSize, wx.BU_AUTODRAW|wx.BORDER_NONE )
 
@@ -159,23 +149,43 @@ class TopPanel ( wx.Panel ):
         self.copy_button.SetBitmapPressed( wx.NullBitmap )
         self.copy_button.Enable( False )
 
-        bSizer6.Add( self.copy_button, 0, wx.LEFT, 75 )
+        bSizer19.Add( self.copy_button, 0, wx.LEFT, 75 )
+
+
+        bSizer18.Add( bSizer19, 0, 0, 5 )
+
+        bSizer16 = wx.BoxSizer( wx.HORIZONTAL )
+
+        self.balance_label = wx.StaticText( self, wx.ID_ANY, u"Balance :", wx.DefaultPosition, wx.DefaultSize, 0 )
+        self.balance_label.Wrap( -1 )
+
+        self.balance_label.SetFont( wx.Font( 14, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, False, wx.EmptyString ) )
+
+        bSizer16.Add( self.balance_label, 0, wx.LEFT|wx.TOP, 20 )
+
+        self.balance_info = wx.StaticText( self, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, 0 )
+        self.balance_info.Wrap( -1 )
+
+        self.balance_info.SetFont( wx.Font( 16, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, False, wx.EmptyString ) )
+
+        bSizer16.Add( self.balance_info, 0, wx.TOP|wx.LEFT, 16 )
+
+
+        bSizer18.Add( bSizer16, 0, wx.TOP, 16 )
+
+
+        bSizer6.Add( bSizer18, 1, 0, 5 )
 
         self.copy_status = wx.StaticText( self, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, 0 )
         self.copy_status.Wrap( -1 )
 
         bSizer6.Add( self.copy_status, 0, wx.TOP|wx.LEFT, 10 )
 
-        bSizer8 = wx.BoxSizer( wx.VERTICAL )
-
         self.qrimg = wx.StaticBitmap( self, wx.ID_ANY, wx.NullBitmap, wx.DefaultPosition, wx.Size( 140,140 ), 0 )
-        bSizer8.Add( self.qrimg, 0, wx.ALIGN_RIGHT|wx.RIGHT, 50 )
+        bSizer6.Add( self.qrimg, 0, wx.LEFT, 148 )
 
 
-        bSizer6.Add( bSizer8, 1, wx.EXPAND, 5 )
-
-
-        bSizer3.Add( bSizer6, 1, wx.EXPAND, 5 )
+        bSizer3.Add( bSizer6, 0, wx.ALIGN_CENTER_HORIZONTAL, 8 )
 
         bSizer4 = wx.BoxSizer( wx.HORIZONTAL )
 
@@ -184,24 +194,24 @@ class TopPanel ( wx.Panel ):
 
         self.dest_label.SetFont( wx.Font( 14, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, False, wx.EmptyString ) )
 
-        bSizer4.Add( self.dest_label, 0, wx.ALL|wx.ALIGN_BOTTOM, 6 )
+        bSizer4.Add( self.dest_label, 0, wx.ALL|wx.ALIGN_BOTTOM, 8 )
 
         self.addr_panel = wx.Panel( self, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL )
-        bSizer11 = wx.BoxSizer( wx.HORIZONTAL )
+        bSizer20 = wx.BoxSizer( wx.VERTICAL )
 
-        self.dest_addr = wx.TextCtrl( self.addr_panel, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.Size( 570,-1 ), 0 )
+        self.dest_addr = wx.TextCtrl( self.addr_panel, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.Size( 584,-1 ), 0 )
         self.dest_addr.SetFont( wx.Font( 14, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, False, wx.EmptyString ) )
 
-        bSizer11.Add( self.dest_addr, 0, wx.ALIGN_BOTTOM|wx.ALL, 2 )
+        bSizer20.Add( self.dest_addr, 0, wx.ALIGN_CENTER_HORIZONTAL|wx.ALL, 3 )
 
 
-        self.addr_panel.SetSizer( bSizer11 )
+        self.addr_panel.SetSizer( bSizer20 )
         self.addr_panel.Layout()
-        bSizer11.Fit( self.addr_panel )
-        bSizer4.Add( self.addr_panel, 0, wx.ALIGN_BOTTOM, 5 )
+        bSizer20.Fit( self.addr_panel )
+        bSizer4.Add( self.addr_panel, 0, wx.ALIGN_BOTTOM, 3 )
 
 
-        bSizer3.Add( bSizer4, 1, wx.EXPAND, 5 )
+        bSizer3.Add( bSizer4, 0, wx.EXPAND|wx.TOP, 8 )
 
         bSizer7 = wx.BoxSizer( wx.HORIZONTAL )
 
@@ -210,27 +220,24 @@ class TopPanel ( wx.Panel ):
 
         self.amount_label.SetFont( wx.Font( 14, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, False, wx.EmptyString ) )
 
-        bSizer7.Add( self.amount_label, 0, wx.ALL, 7 )
+        bSizer7.Add( self.amount_label, 0, wx.LEFT|wx.TOP, 8 )
 
         self.amount = wx.TextCtrl( self, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, wx.TE_PROCESS_ENTER )
         self.amount.SetFont( wx.Font( 14, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, False, wx.EmptyString ) )
 
         bSizer7.Add( self.amount, 0, wx.ALL, 5 )
 
-
-        bSizer7.Add( ( 32, 0), 0, 0, 5 )
-
         bSizer9 = wx.BoxSizer( wx.VERTICAL )
 
         self.fee_slider = wx.Slider( self, wx.ID_ANY, 1, 0, 2, wx.DefaultPosition, wx.DefaultSize, wx.SL_HORIZONTAL )
-        bSizer9.Add( self.fee_slider, 0, wx.LEFT|wx.RIGHT|wx.TOP, 10 )
+        bSizer9.Add( self.fee_slider, 0, wx.LEFT|wx.TOP, 6 )
 
         self.fee_setting = wx.StaticText( self, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, wx.ALIGN_CENTER_HORIZONTAL )
         self.fee_setting.Wrap( -1 )
 
         self.fee_setting.SetFont( wx.Font( 10, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, False, wx.EmptyString ) )
 
-        bSizer9.Add( self.fee_setting, 0, 0, 5 )
+        bSizer9.Add( self.fee_setting, 0, wx.LEFT, 6 )
 
 
         bSizer7.Add( bSizer9, 0, 0, 0 )
@@ -241,10 +248,10 @@ class TopPanel ( wx.Panel ):
         self.send_button.SetBitmapPressed( wx.NullBitmap )
         self.send_button.Enable( False )
 
-        bSizer7.Add( self.send_button, 0, wx.TOP|wx.LEFT, 10 )
+        bSizer7.Add( self.send_button, 0, wx.TOP|wx.LEFT, 8 )
 
 
-        bSizer7.Add( ( 12, 0), 0, 0, 5 )
+        bSizer7.Add( ( 0, 0), 1, wx.LEFT, 8 )
 
         self.send_all = wx.BitmapButton( self, wx.ID_ANY, wx.NullBitmap, wx.DefaultPosition, wx.DefaultSize, wx.BU_AUTODRAW|wx.BORDER_NONE )
 
@@ -252,13 +259,13 @@ class TopPanel ( wx.Panel ):
         self.send_all.SetBitmapPressed( wx.NullBitmap )
         self.send_all.Enable( False )
 
-        bSizer7.Add( self.send_all, 0, wx.TOP|wx.LEFT, 10 )
+        bSizer7.Add( self.send_all, 0, wx.LEFT|wx.TOP, 8 )
 
 
-        bSizer3.Add( bSizer7, 1, wx.EXPAND, 5 )
+        bSizer3.Add( bSizer7, 0, wx.TOP, 12 )
 
 
-        bSizer1.Add( bSizer3, 1, wx.EXPAND, 5 )
+        bSizer1.Add( bSizer3, 1, 0, 5 )
 
 
         self.SetSizer( bSizer1 )
