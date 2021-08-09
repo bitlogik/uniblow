@@ -113,7 +113,7 @@ def testaddr(doge_addr):
     try:
         if checked:
             decode_base58(doge_addr)
-    except AssertionError:
+    except ValueError:
         return False
     return checked
 

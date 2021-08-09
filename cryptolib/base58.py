@@ -78,6 +78,8 @@ def base58_to_bin(base58_str):
 
 def decode_base58(b58string):
     bin_data_all = base58_to_bin(b58string)
+    if len(bin_data_all) < 4:
+        raise ValueError("Base58 string is to short")
     if b58checksum(bin_data_all[:-4]) != bin_data_all[-4:]:
         raise ValueError("Base58 checksum is not valid")
     return bin_data_all[:-4]

@@ -116,7 +116,7 @@ def testaddr(ltc_addr):
     try:
         if checked:
             decode_base58(ltc_addr)
-    except AssertionError:
+    except ValueError:
         return False
     return checked
 

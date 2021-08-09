@@ -129,7 +129,7 @@ def testaddr(btc_addr):
     try:
         if checked:
             decode_base58(btc_addr)
-    except AssertionError:
+    except ValueError:
         return False
     return checked
 

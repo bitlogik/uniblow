@@ -118,7 +118,7 @@ def testaddr(xtz_addr):
         return False
     try:
         decode_base58(xtz_addr)
-    except AssertionError:
+    except ValueError:
         return False
     return True
 

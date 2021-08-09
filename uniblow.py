@@ -508,7 +508,7 @@ def check_addr(ev):
     if not hasattr(app, "wallet"):
         return
     addr = ev.GetString()
-    if len(addr) < 10:
+    if len(addr) < 7:
         app.gui_frame.Refresh()
         return
     if app.wallet.check_address(addr):
