@@ -23,7 +23,7 @@ import urllib.request
 
 from cryptolib.cryptography import public_key_recover, decompress_pubkey, sha3
 from cryptolib.coins.ethereum import rlp_encode, int2bytearray, uint256, read_string
-from wallets.wallets_utils import shift_10
+from wallets.wallets_utils import shift_10, InvalidOption
 
 ETH_units = 18
 
@@ -441,7 +441,9 @@ class ETH_wallet:
             elif len(contract_addr) == 40:
                 contract_addr_str = "0x" + contract_addr.lower()
             else:
-                raise Exception("Invalid contract address format :\nshould be 0x/40hex/ or /40hex/")
+                raise InvalidOption(
+                    "Invalid contract address format :\nshould be 0x/40hex/ or /40hex/"
+                )
         else:
             contract_addr_str = None
         self.eth = ETHwalletCore(

@@ -25,6 +25,7 @@ import qrcode
 import gui.app
 from devices.SeedWatcher import start_seedwatcher
 from devices.SingleKey import SKdevice
+from wallets.wallets_utils import InvalidOption
 from version import VERSION
 
 SUPPORTED_COINS = [
@@ -224,12 +225,33 @@ def close_device():
         del app.device
 
 
-def cb_open_wallet(wallet_obj, pkey, sw_frame):
+def cb_open_wallet(wallet_obj, pkey, waltype, sw_frame):
+    """Process the opening of the wallet from SeedWatcher"""
     key_device = SKdevice()
     key_device.load_key(pkey)
+    app.device = key_device
     app.wallet = wallet_obj(key_device)
     sw_frame.Close()
     app.gui_panel.devices_choice.SetSelection(1)
+    app.gui_panel.coins_choice.Clear()
+    app.gui_panel.coins_choice.Append(app.wallet.coin)
+    app.gui_panel.coins_choice.SetSelection(0)
+    app.gui_panel.coins_choice.Disable()
+    app.gui_panel.network_choice.Clear()
+    app.gui_panel.wallopt_choice.Clear()
+    app.gui_panel.network_choice.Enable()
+    app.gui_panel.network_label.Enable()
+    if app.wallet.coin != "BTC":
+        app.gui_panel.wallopt_choice.Enable()
+        app.gui_panel.wallopt_label.Enable()
+    networks = app.wallet.get_networks()
+    acc_types = app.wallet.get_account_types()
+    for netw in networks:
+        app.gui_panel.network_choice.Append(netw)
+    for wtype in acc_types:
+        app.gui_panel.wallopt_choice.Append(wtype)
+    app.gui_panel.network_choice.SetSelection(0)
+    app.gui_panel.wallopt_choice.SetSelection(waltype)
     display_coin(app.wallet.get_account())
 
 
@@ -241,6 +263,7 @@ def device_selected(device):
     app.gui_panel.network_choice.Clear()
     app.gui_panel.wallopt_choice.Clear()
     erase_info()
+    gui.app.load_coins_list(app, SUPPORTED_COINS)
     sel_device = device.GetInt()
     device_sel_name = DEVICES_LIST[sel_device - 1]
     if sel_device == 1:
@@ -350,6 +373,17 @@ def device_selected(device):
         erase_info()
 
 
+def wallet_fallback():
+    """Called when a user option failed"""
+    # Reset the wallet to the first type
+    wallet_type_fallback = 0
+    app.gui_panel.wallopt_choice.SetSelection(wallet_type_fallback)
+    # Act like the user selected back the first wallet type
+    coin_sel = app.gui_panel.coins_choice.GetStringSelection()
+    net_sel = app.gui_panel.network_choice.GetSelection()
+    wx.CallLater(180, process_coin_select, coin_sel, net_sel, wallet_type_fallback)
+
+
 def set_coin(coin, network, wallet_type):
     fee_opt_sel = app.gui_panel.fee_slider.GetValue()
     app.gui_panel.fee_setting.SetLabel(FEES_PRORITY_TEXT[fee_opt_sel])
@@ -360,14 +394,12 @@ def set_coin(coin, network, wallet_type):
             coin_class = get_coin_class(coin)
             if wallet_type in coin_class.user_options:
                 # This wallet has a user input option
+                # ! A wallet cant have its first type option having a user option
                 opt_idx = coin_class.user_options.index(wallet_type)
                 option_info = coin_class.options_data[opt_idx]
                 option_value = get_option(option_info["prompt"])
                 if option_value is None:
-                    app.gui_panel.network_choice.Clear()
-                    app.gui_panel.wallopt_choice.Clear()
-                    app.gui_panel.coins_choice.SetSelection(0)
-                    erase_info()
+                    wallet_fallback()
                     return
         if app.device.is_HD:
             current_path = (
@@ -378,6 +410,10 @@ def set_coin(coin, network, wallet_type):
             option_arg = {option_info["option_name"]: option_value}
         app.wallet = get_coin_class(coin)(network, wallet_type, app.device, **option_arg)
         account_id = app.wallet.get_account()
+    except InvalidOption as exc:
+        warn_modal(str(exc))
+        wallet_fallback()
+        return
     except Exception as exc:
         app.gui_panel.network_choice.Clear()
         app.gui_panel.wallopt_choice.Clear()
@@ -414,9 +450,14 @@ def display_coin(account_addr):
 
 def process_coin_select(coin, sel_network, sel_wallettype):
     app.gui_panel.network_choice.Enable()
-    app.gui_panel.wallopt_choice.Enable()
     app.gui_panel.network_label.Enable()
-    app.gui_panel.wallopt_label.Enable()
+    if (
+        app.gui_panel.coins_choice.IsEnabled()
+        or app.gui_panel.coins_choice.GetStringSelection() != "BTC"
+    ):
+        # Because BTC wallet types are different path/wallet from SeedWatcher
+        app.gui_panel.wallopt_choice.Enable()
+        app.gui_panel.wallopt_label.Enable()
     set_coin(coin, sel_network, sel_wallettype)
 
 

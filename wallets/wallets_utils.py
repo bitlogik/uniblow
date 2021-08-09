@@ -39,3 +39,6 @@ def shift_10(num_str, shift):
     if new_int != "0":
         return int(new_int.lstrip("0"))
     return 0
+
+class InvalidOption(Exception):
+    pass
