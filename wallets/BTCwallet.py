@@ -21,7 +21,7 @@ import urllib.request
 import re
 
 import cryptolib.coins
-from cryptolib.bech32 import bech32_decode
+from cryptolib.bech32 import test_bech32
 from cryptolib.base58 import decode_base58
 from wallets.wallets_utils import shift_10
 
@@ -114,16 +114,25 @@ class blkhub_api:
         # return fees_data[priority]
 
 
-def testaddr(btc_addr):
+def testaddr(btc_addr, is_testnet):
     # Safe tests of the address format
     checked = False
-    if btc_addr.startswith("1") or btc_addr.startswith("3"):
-        checked = re.match("^[13][a-km-zA-HJ-NP-Z1-9]{25,34}$", btc_addr) is not None
-    elif btc_addr.startswith("n") or btc_addr.startswith("m") or btc_addr.startswith("2"):
-        checked = re.match("^[2nm][a-km-zA-HJ-NP-Z1-9]{25,34}$", btc_addr) is not None
-    elif btc_addr.startswith("bc") or btc_addr.startswith("tb"):
-        checked = re.match("^(bc|tb)[01][ac-hj-np-z02-9]{8,87}$", btc_addr) is not None
-        return checked and (bech32_decode(btc_addr) != (None, None))
+    addr_head = "1"
+    addr_head_alt = "1"
+    mult_head = "3"
+    segwit_head = "bc"
+    if is_testnet:
+        addr_head = "n"
+        addr_head_alt = "m"
+        mult_head = "2"
+        segwit_head = "tb"
+    if btc_addr.startswith(addr_head) or btc_addr.startswith(addr_head_alt):
+        checked = re.match("^[1nm][a-km-zA-HJ-NP-Z1-9]{25,34}$", btc_addr) is not None
+    elif btc_addr.startswith(mult_head):
+        checked = re.match("^[23][a-km-zA-HJ-NP-Z1-9]{25,34}$", btc_addr) is not None
+    elif btc_addr.lower().startswith(segwit_head):
+        checked = re.match("^(bc|tb)[01][ac-hj-np-z02-9]{8,87}$", btc_addr.lower()) is not None
+        return checked and test_bech32(btc_addr)
     else:
         return False
     try:
@@ -318,7 +327,7 @@ class BTC_wallet:
 
     def check_address(self, addr_str):
         # Check if address is valid
-        return testaddr(addr_str)
+        return testaddr(addr_str, self.btc.testnet)
 
     def history(self):
         # Get history page

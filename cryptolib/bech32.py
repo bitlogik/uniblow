@@ -120,6 +120,20 @@ def decode(hrp, addr):
     return (data[0], decoded)
 
 
+def test_bech32(addr_str):
+    """Test the validity of a bech32 address"""
+    # Before testing here check header is correct
+    header_length = 2
+    # "ltc" or "tltc" -> LTC address
+    if addr_str.startswith("ltc"):
+        header_length = 3
+    if addr_str.startswith("tltc"):
+        header_length = 4
+    if len(addr_str) < header_length:
+        return False
+    return decode(addr_str[:header_length].lower(), addr_str) != (None, None)
+
+
 def bech32_address(hrp, datahash):
     """Encode a segwit address without witver, for altcoins"""
     return bech32_encode(hrp, convertbits(datahash, 8, 5))

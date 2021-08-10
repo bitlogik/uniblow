@@ -115,6 +115,8 @@ def testaddr(xtz_addr):
         return False
     if len(xtz_addr) != 36:
         return False
+    if xtz_addr[2] not in ["1", "2", "3"]:
+        return False
     try:
         decode_base58(xtz_addr)
     except ValueError:

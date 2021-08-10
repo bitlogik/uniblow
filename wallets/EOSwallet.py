@@ -137,7 +137,7 @@ def testaddr(eos_account):
     return True
 
 
-account_pattern = re.compile(r"^[a-z1-5]{12}$")
+account_pattern = re.compile(r"^[a-z1-5\.]{11}[a-z1-5]$")
 
 CPU_per_tx = 500
 POWER_UP_PAYMENT = "0.0002"

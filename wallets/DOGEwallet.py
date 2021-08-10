@@ -101,13 +101,22 @@ class sochain_api:
         return int(10 ** DOGE_units)
 
 
-def testaddr(doge_addr):
+def testaddr(doge_addr, is_testnet):
     # Safe tests of the address format
     checked = False
-    if doge_addr.startswith("D") or doge_addr.startswith("9"):
-        checked = re.match("^[D][a-km-zA-HJ-NP-Z1-9]{25,34}$", doge_addr) is not None
-    elif doge_addr.startswith("m") or doge_addr.startswith("n"):
-        checked = re.match("^[mn][a-km-zA-HJ-NP-Z1-9]{25,34}$", doge_addr) is not None
+    addr_head = "D"
+    addr_head_alt = "D"
+    mult_head = "9"
+    mult_head_alt = "A"
+    if is_testnet:
+        addr_head = "n"
+        addr_head_alt = "m"
+        mult_head = "2"
+        mult_head_alt = "2"
+    if doge_addr.startswith(addr_head) or doge_addr.startswith(addr_head_alt):
+        checked = re.match("^[Dnm][a-km-zA-HJ-NP-Z1-9]{25,34}$", doge_addr) is not None
+    elif doge_addr.startswith(mult_head) or doge_addr.startswith(mult_head_alt):
+        checked = re.match("^[9A2][a-km-zA-HJ-NP-Z1-9]{25,34}$", doge_addr) is not None
     else:
         return False
     try:
@@ -253,7 +262,7 @@ class DOGE_wallet:
 
     def check_address(self, addr_str):
         # Check if address is valid
-        return testaddr(addr_str)
+        return testaddr(addr_str, self.doge.testnet)
 
     def history(self):
         # Get history page

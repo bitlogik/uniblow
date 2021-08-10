@@ -22,6 +22,7 @@ import re
 
 import cryptolib.coins
 from cryptolib.base58 import decode_base58
+from cryptolib.bech32 import test_bech32
 from wallets.wallets_utils import shift_10
 
 
@@ -102,15 +103,27 @@ class sochain_api:
         return 1
 
 
-def testaddr(ltc_addr):
+def testaddr(ltc_addr, is_testnet):
     # Safe tests of the address format
     checked = False
-    if ltc_addr.startswith("L") or ltc_addr.startswith("M"):
-        checked = re.match("^[LM][a-km-zA-HJ-NP-Z1-9]{25,34}$", ltc_addr) is not None
-    elif ltc_addr.startswith("m") or ltc_addr.startswith("Q"):
-        checked = re.match("^[mQ][a-km-zA-HJ-NP-Z1-9]{25,34}$", ltc_addr) is not None
-    elif ltc_addr.startswith("ltc") or ltc_addr.startswith("ltc"):
-        checked = re.match("^(ltc|ltc)[01][ac-hj-np-z02-9]{8,87}$", ltc_addr) is not None
+    addr_head = "L"
+    addr_head_alt = "L"
+    mult_head = "M"
+    mult_head_alt = "3"
+    segwit_head = "ltc"
+    if is_testnet:
+        addr_head = "n"
+        addr_head_alt = "m"
+        mult_head = "Q"
+        mult_head_alt = "2"
+        segwit_head = "tltc"
+    if ltc_addr.startswith(addr_head) or ltc_addr.startswith(addr_head_alt):
+        checked = re.match("^[Lnm][a-km-zA-HJ-NP-Z1-9]{25,34}$", ltc_addr) is not None
+    elif ltc_addr.startswith(mult_head) or ltc_addr.startswith(mult_head_alt):
+        checked = re.match("^[23MQ][a-km-zA-HJ-NP-Z1-9]{25,34}$", ltc_addr) is not None
+    elif ltc_addr.startswith(segwit_head):
+        checked = re.match("^(ltc|tltc)[01][ac-hj-np-z02-9]{8,87}$", ltc_addr) is not None
+        return checked and test_bech32(ltc_addr)
     else:
         return False
     try:
@@ -303,7 +316,7 @@ class LTC_wallet:
 
     def check_address(self, addr_str):
         # Check if address is valid
-        return testaddr(addr_str)
+        return testaddr(addr_str, self.ltc.testnet)
 
     def history(self):
         # Get history page
