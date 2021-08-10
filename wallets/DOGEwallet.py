@@ -161,7 +161,6 @@ class DOGEwalletCore:
         self.leninputs = len(inputs)
         datahashes = []
         for i in range(self.leninputs):
-            print("\nSigning INPUT #", i)
             signing_tx = cryptolib.coins.signature_form(
                 self.tx, i, script, cryptolib.coins.SIGHASH_ALL
             )

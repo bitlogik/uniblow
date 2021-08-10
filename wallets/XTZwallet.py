@@ -73,7 +73,6 @@ class RPC_api:
             except Exception:
                 err = ""
             if err and err != []:
-                print(err)
                 key = "msg"
                 if key not in err[0]:
                     key = "id"
