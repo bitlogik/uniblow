@@ -28,6 +28,8 @@ from wx import (
     Cursor,
     CURSOR_HAND,
     BITMAP_TYPE_PNG,
+    ID_CANCEL,
+    ID_OK,
 )
 
 import gui.window
@@ -142,6 +144,46 @@ def set_mnemonic(app, proposal):
         return wallet_settings
     else:
         return None
+
+
+class app_option_panel(gui.window.OptionPanel):
+    def valid_custom(self, event):
+        self.okOption(event)
+
+    def okOption(self, event):
+        event.Skip()
+        option_value = self.new_choice.GetValue()
+        if option_value:
+            self.option_value = option_value
+        else:
+            preset_choice = self.known_choice.GetStringSelection()
+            self.option_value = self.preset_values.get(preset_choice, "NotSelected")
+        self.GetParent().EndModal(ID_OK)
+
+    def cancelOption(self, event):
+        event.Skip()
+        self.GetParent().EndModal(ID_CANCEL)
+
+    def GetValue(self):
+        return self.option_value
+
+    def SetPresetLabel(self, text):
+        self.preset_label = text
+        self.preset_text.SetLabelText(self.preset_label)
+
+    def SetPresetValues(self, values):
+        self.known_choice.Clear()
+        self.known_choice.Append(f"Select a {self.preset_label}")
+        self.preset_values = values
+        for preset_txt in values.keys():
+            self.known_choice.Append(preset_txt)
+        self.known_choice.SetSelection(0)
+
+    def SetCustomLabel(self, text):
+        self.custom_text.SetLabelText(text)
+
+    def SetTitle(self, title):
+        self.GetParent().SetTitle(title)
 
 
 def start_app(app, version, coins_list, devices_list):

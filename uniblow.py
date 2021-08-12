@@ -148,16 +148,15 @@ def get_password(device_nam, input_message):
         return passval
 
 
-def get_option(input_message):
-    option_dialog = wx.TextEntryDialog(
-        app.gui_frame,
-        input_message,
-        caption="Setting for the wallet",
-        value="",
-        pos=wx.DefaultPosition,
-    )
+def get_option(network_id, input_value, preset_values):
+    option_dialog = gui.window.OptionDialog(app.gui_frame)
+    option_panel = gui.app.app_option_panel(option_dialog)
+    option_panel.SetTitle(f"Wallet settings : {input_value} selection")
+    option_panel.SetPresetLabel(f"preset {input_value}")
+    option_panel.SetCustomLabel(f"input your own {input_value}")
+    option_panel.SetPresetValues(preset_values[network_id])
     if option_dialog.ShowModal() == wx.ID_OK:
-        optval = option_dialog.GetValue()
+        optval = option_panel.GetValue()
         return optval
 
 
@@ -397,7 +396,7 @@ def set_coin(coin, network, wallet_type):
                 # ! A wallet cant have its first type option having a user option
                 opt_idx = coin_class.user_options.index(wallet_type)
                 option_info = coin_class.options_data[opt_idx]
-                option_value = get_option(option_info["prompt"])
+                option_value = get_option(network, option_info["prompt"], option_info["preset"])
                 if option_value is None:
                     wallet_fallback()
                     return

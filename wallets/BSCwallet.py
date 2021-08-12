@@ -23,6 +23,7 @@ import urllib.request
 from cryptolib.cryptography import public_key_recover, decompress_pubkey, sha3
 from cryptolib.coins.ethereum import rlp_encode, int2bytearray, uint256, read_string
 from wallets.wallets_utils import shift_10, InvalidOption
+from wallets.BSCtokens import tokens_values
 
 
 BSC_units = 18
@@ -312,7 +313,13 @@ class BSC_wallet:
     # BSC wallet type 1 has option
     user_options = [1]
     # self.__init__ ( contract_addr = "user input option" )
-    options_data = [{"option_name": "contract_addr", "prompt": "Input the BEP20 contract address"}]
+    options_data = [
+        {
+            "option_name": "contract_addr",
+            "prompt": "BEP20 contract address",
+            "preset": tokens_values,
+        }
+    ]
 
     GAZ_LIMIT_SIMPLE_TX = 21000
     GAZ_LIMIT_ERC_20_TX = 180000
@@ -372,6 +379,8 @@ class BSC_wallet:
             BSC_EXPLORER_URL = f"https://www.bscscan.com/address/0x{self.bsc.address}"
         else:
             BSC_EXPLORER_URL = f"https://testnet.bscscan.com/address/0x{self.bsc.address}"
+        if self.bsc.BEP20:
+            BSC_EXPLORER_URL += "#tokentxns"
         return BSC_EXPLORER_URL
 
     def raw_tx(self, amount, gazprice, ethgazlimit, account):

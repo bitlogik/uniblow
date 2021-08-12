@@ -24,6 +24,7 @@ import urllib.request
 from cryptolib.cryptography import public_key_recover, decompress_pubkey, sha3
 from cryptolib.coins.ethereum import rlp_encode, int2bytearray, uint256, read_string
 from wallets.wallets_utils import shift_10, InvalidOption
+from wallets.ETHtokens import tokens_values
 
 ETH_units = 18
 
@@ -421,7 +422,13 @@ class ETH_wallet:
     # ETH wallet type 1 has option
     user_options = [1]
     # self.__init__ ( contract_addr = "user input option" )
-    options_data = [{"option_name": "contract_addr", "prompt": "Input the ERC20 contract address"}]
+    options_data = [
+        {
+            "option_name": "contract_addr",
+            "prompt": "ERC20 contract address",
+            "preset": tokens_values,
+        }
+    ]
 
     GAZ_LIMIT_SIMPLE_TX = 21000
     GAZ_LIMIT_ERC_20_TX = 180000
@@ -486,6 +493,8 @@ class ETH_wallet:
             ETH_EXPLORER_URL = f"https://etherscan.io/address/0x{self.eth.address}"
         else:
             ETH_EXPLORER_URL = f"https://{self.network}.etherscan.io/address/0x{self.eth.address}"
+        if self.eth.ERC20:
+            ETH_EXPLORER_URL += "#tokentxns"
         return ETH_EXPLORER_URL
 
     def raw_tx(self, amount, gazprice, ethgazlimit, account):
