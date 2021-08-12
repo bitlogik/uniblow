@@ -16,7 +16,7 @@
 
 import sys
 import os.path
-import webbrowser
+from webbrowser import open as wopen
 
 from wx import (
     IconBundle,
@@ -85,7 +85,7 @@ def load_coins_list(app, coins_list):
 
 
 def show_history(history_url):
-    webbrowser.open(history_url, new=1, autoraise=True)
+    wopen(history_url, new=1, autoraise=True)
 
 
 class HDsetting_panel(gui.window.HDPanel):

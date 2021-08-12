@@ -15,8 +15,8 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 
-import ctypes
-import importlib
+from ctypes import windll
+from importlib import import_module
 import sys
 from io import BytesIO
 
@@ -58,7 +58,7 @@ RED_COLOR = wx.Colour(198, 60, 60)
 
 wallets = {}
 for coin_lib in SUPPORTED_COINS:
-    wallets[f"{coin_lib}wallet"] = importlib.import_module(f"wallets.{coin_lib}wallet")
+    wallets[f"{coin_lib}wallet"] = import_module(f"wallets.{coin_lib}wallet")
 
 
 def get_coin_class(coin_name):
@@ -67,7 +67,7 @@ def get_coin_class(coin_name):
 
 devices = {}
 for device_name in DEVICES_LIST:
-    devices[device_name] = importlib.import_module(f"devices.{device_name}")
+    devices[device_name] = import_module(f"devices.{device_name}")
 
 
 def get_device_class(device_str):
@@ -581,7 +581,7 @@ def send_all(ev):
 
 if __name__ == "__main__":
     try:
-        ctypes.windll.shcore.SetProcessDpiAwareness(True)
+        windll.shcore.SetProcessDpiAwareness(True)
     except Exception:
         pass
 
