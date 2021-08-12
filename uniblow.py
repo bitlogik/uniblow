@@ -160,19 +160,6 @@ def get_option(network_id, input_value, preset_values):
         return optval
 
 
-def get_mnemonic(propos):
-    mnemo_dialog = wx.TextEntryDialog(
-        app.gui_frame,
-        "Validate this proposal, or insert yours to import an existing :",
-        caption="BIP39 words mnemonic input",
-        value=propos,
-        pos=wx.DefaultPosition,
-    )
-    if mnemo_dialog.ShowModal() == wx.ID_OK:
-        mnemoval = mnemo_dialog.GetValue()
-        return mnemoval
-
-
 def confirm(to_addr, amount):
     conf_txt = f"Confirm this transaction ?\n{amount} {app.wallet.coin} to {to_addr}"
     confirm_modal = wx.MessageDialog(
