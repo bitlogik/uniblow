@@ -42,9 +42,9 @@ TRANSFERT_FUNCTION = "a9059cbb"
 class web3_api:
     def __init__(self, network):
         self.network = network
-        self.url = "https://bsc-dataseed.binance.org/"
+        self.url = "https://bsc-dataseed2.binance.org/"
         if network.lower() == "testnet":
-            self.url = "https://data-seed-prebsc-1-s1.binance.org:8545/"
+            self.url = "https://data-seed-prebsc-2-s1.binance.org:8545/"
         self.jsres = []
 
     def getData(self, method, params=[]):
