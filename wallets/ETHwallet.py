@@ -44,8 +44,7 @@ class infura_api:
         # https://ropsten.infura.io/v3/YOUR-PROJECT-ID
         #         mainnet
         self.apikey = api_key
-        self.network = network
-        self.url = f"https://{self.network}.infura.io/v3/{self.apikey}"
+        self.url = f"https://{network}.infura.io/v3/{self.apikey}"
         self.jsres = []
 
     def getData(self, method, params=[]):
@@ -131,12 +130,11 @@ class infura_api:
 class etherscan_api:
     def __init__(self, api_key, network):
         self.apikey = api_key
-        self.network = network
         # https://api.etherscan.io/api?module=account&action=balance&address=0xde0b295669a9fd93d5f28d9ec85e40f4cb697bae&tag=latest&apikey=YourApiKeyToken
-        if self.network == "mainnet":
+        if network == "mainnet":
             self.url = "https://api.etherscan.io/api"
         else:
-            self.url = f"https://api-{self.network}.etherscan.io/api"
+            self.url = f"https://api-{network}.etherscan.io/api"
         self.params = {"token": self.apikey}
         self.params = {}
         self.jsres = []
@@ -260,7 +258,16 @@ class ETHwalletCore:
         self.address = format_checksum_address(key_hash.hex()[-40:])
         self.ERC20 = ERC20
         self.api = api
-        self.network = network
+        if network == "mainnet":
+            self.chainID = 1
+        if network == "ropsten":
+            self.chainID = 3
+        if network == "rinkeby":
+            self.chainID = 4
+        if network == "goerli":
+            self.chainID = 5
+        if network == "kovan":
+            self.chainID = 42
         self.decimals = self.get_decimals()
         self.token_symbol = self.get_symbol()
 
@@ -321,16 +328,6 @@ class ETHwalletCore:
             self.to = bytearray.fromhex(toaddr)
             self.value = int2bytearray(int(paymentvalue))
             self.data = bytearray(b"")
-        if self.network == "mainnet":
-            self.chainID = 1
-        if self.network == "ropsten":
-            self.chainID = 3
-        if self.network == "rinkeby":
-            self.chainID = 4
-        if self.network == "goerli":
-            self.chainID = 5
-        if self.network == "kovan":
-            self.chainID = 42
         v = int2bytearray(self.chainID)
         r = int2bytearray(0)
         s = int2bytearray(0)

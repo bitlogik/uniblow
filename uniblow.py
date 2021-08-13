@@ -153,8 +153,9 @@ def get_option(network_id, input_value, preset_values):
     option_panel = gui.app.app_option_panel(option_dialog)
     option_panel.SetTitle(f"Wallet settings : {input_value} selection")
     option_panel.SetPresetLabel(f"preset {input_value}")
-    option_panel.SetCustomLabel(f"input your own {input_value}")
-    option_panel.SetPresetValues(preset_values[network_id])
+    option_panel.SetCustomLabel(f"input a {input_value}")
+    if preset_values:
+        option_panel.SetPresetValues(preset_values[network_id])
     if option_dialog.ShowModal() == wx.ID_OK:
         optval = option_panel.GetValue()
         return optval
@@ -383,7 +384,8 @@ def set_coin(coin, network, wallet_type):
                 # ! A wallet cant have its first type option having a user option
                 opt_idx = coin_class.user_options.index(wallet_type)
                 option_info = coin_class.options_data[opt_idx]
-                option_value = get_option(network, option_info["prompt"], option_info["preset"])
+                option_preset = option_info.get("preset")
+                option_value = get_option(network, option_info["prompt"], option_preset)
                 if option_value is None:
                     wallet_fallback()
                     return

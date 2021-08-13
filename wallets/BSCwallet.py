@@ -41,7 +41,6 @@ TRANSFERT_FUNCTION = "a9059cbb"
 
 class web3_api:
     def __init__(self, network):
-        self.network = network
         self.url = "https://bsc-dataseed2.binance.org/"
         if network.lower() == "testnet":
             self.url = "https://data-seed-prebsc-2-s1.binance.org:8545/"
@@ -172,7 +171,10 @@ class BSCwalletCore:
         self.address = format_checksum_address(key_hash.hex()[-40:])
         self.BEP20 = BEP20
         self.api = api
-        self.network = network
+        if network == "mainnet":
+            self.chainID = 56
+        if network == "testnet":
+            self.chainID = 97
         self.decimals = self.get_decimals()
         self.token_symbol = self.get_symbol()
 
@@ -233,10 +235,6 @@ class BSCwalletCore:
             self.to = bytearray.fromhex(toaddr)
             self.value = int2bytearray(int(paymentvalue))
             self.data = bytearray(b"")
-        if self.network == "mainnet":
-            self.chainID = 56
-        if self.network == "testnet":
-            self.chainID = 97
         v = int2bytearray(self.chainID)
         r = int2bytearray(0)
         s = int2bytearray(0)
