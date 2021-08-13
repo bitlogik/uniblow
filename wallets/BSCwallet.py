@@ -24,6 +24,7 @@ from cryptolib.cryptography import public_key_recover, decompress_pubkey, sha3
 from cryptolib.coins.ethereum import rlp_encode, int2bytearray, uint256, read_string
 from wallets.wallets_utils import shift_10, InvalidOption
 from wallets.BSCtokens import tokens_values
+from wallets.WalletConnect import WalletConnectClient
 
 
 BSC_units = 18
@@ -295,7 +296,7 @@ class BSC_wallet:
         "Testnet",
     ]
 
-    wtypes = ["Standard", "BEP20"]
+    wtypes = ["Standard", "BEP20", "WalletConnect"]
 
     derive_paths = [
         # mainnet
@@ -308,21 +309,22 @@ class BSC_wallet:
         ],
     ]
 
-    # BSC wallet type 1 has option
-    user_options = [1]
+    # BSC wallet type 1 and 2 have option
+    user_options = [1, 2]
     # self.__init__ ( contract_addr = "user input option" )
     options_data = [
         {
             "option_name": "contract_addr",
             "prompt": "BEP20 contract address",
             "preset": tokens_values,
-        }
+        },
+        {"option_name": "wc_uri", "prompt": "WalletConnect URI link"},
     ]
 
     GAZ_LIMIT_SIMPLE_TX = 21000
     GAZ_LIMIT_ERC_20_TX = 180000
 
-    def __init__(self, network, wtype, device, contract_addr=None):
+    def __init__(self, network, wtype, device, contract_addr=None, wc_uri=None):
         self.network = BSC_wallet.networks[network].lower()
         self.current_device = device
         pubkey_hex = self.current_device.get_public_key()
@@ -342,6 +344,8 @@ class BSC_wallet:
         )
         if contract_addr_str is not None:
             self.coin = self.bsc.token_symbol
+        if wc_uri is not None:
+            self.wc_client = WalletConnectClient.from_wc_uri(wc_uri, self.get_account(), self.bsc.chainID)
 
     @classmethod
     def get_networks(cls):
@@ -360,6 +364,16 @@ class BSC_wallet:
         return f"0x{self.bsc.address}"
 
     def get_balance(self):
+        # Use get balance to check periodically messages
+        if hasattr(self, "wc_client"):
+            print("Checking WC messages")
+            wc_messages = self.wc_client.read_data()
+            while len(wc_messages) > 0:
+                wc_msg = wc_messages.pop(0)
+                print(wc_msg)
+                if wc_msg and wc_msg != "ping":
+                    print(">>> received from WC :")
+                    print(wc_msg)
         # Get balance in base integer unit
         return (
             str(self.bsc.getbalance(not self.bsc.BEP20) / (10 ** self.bsc.decimals))
