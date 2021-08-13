@@ -102,6 +102,9 @@ def display_balance():
 def erase_info():
     if hasattr(app, "balance_timer"):
         app.balance_timer.Stop()
+    if hasattr(app, "wallet") and hasattr(app.wallet, "wc_timer"):
+        app.wallet.wc_timer.Stop()
+        delattr(app.wallet, "wc_timer")
     paint_toaddr(wx.NullColour)
     app.gui_panel.hist_button.Disable()
     app.gui_panel.copy_button.Disable()
@@ -398,6 +401,9 @@ def set_coin(coin, network, wallet_type):
             option_arg = {option_info["option_name"]: option_value}
         app.wallet = get_coin_class(coin)(network, wallet_type, app.device, **option_arg)
         account_id = app.wallet.get_account()
+        if option_info is not None and option_info["option_name"] == "wc_uri":
+            app.wallet.wc_timer = wx.Timer()
+            app.wallet.wc_timer.Notify = app.wallet.get_socket_messages
     except InvalidOption as exc:
         warn_modal(str(exc))
         wallet_fallback()
@@ -432,6 +438,8 @@ def display_coin(account_addr):
     app.balance_timer = DisplayTimer()
     wx.CallLater(50, display_balance)
     app.balance_timer.Start(10000)
+    if hasattr(app.wallet, "wc_timer"):
+        app.wallet.wc_timer.Start(2500, oneShot=wx.TIMER_CONTINUOUS)
     app.gui_frame.Refresh()
     app.gui_frame.Update()
 

@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 # -*- coding: utf8 -*-
 
-# UNIBLOW WalletConnect library
+# pyWalletConnect : a Python library to use WalletConnect
 # Copyright (C) 2021 BitLogiK
 
 # This program is free software: you can redistribute it and/or modify
@@ -13,14 +13,13 @@
 # GNU General Public License for more details.
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
-#
 
 
 import re
 from os import urandom
 from urllib.parse import unquote, urlparse
 from json import dumps, loads
-from ssl import create_default_context
+from ssl import create_default_context, SSLWantReadError
 from socket import create_connection
 from time import sleep
 from uuid import uuid4
@@ -41,15 +40,13 @@ from wsproto.events import (
     BytesMessage,
 )
 
-from wallets.wallets_utils import InvalidOption
-
 
 # ---- WalletConnect settings
 
 
 DEFAULT_HTTPS_PORT = 443
 
-GLOBAL_TIMEOUT = 8  # seconds
+GLOBAL_TIMEOUT = 12  # seconds
 UNIT_WAITING_TIME = 0.1
 CYCLES_TIMEOUT = int(GLOBAL_TIMEOUT / UNIT_WAITING_TIME)
 
@@ -108,18 +105,18 @@ def json_encode(dataobj):
     return dumps(dataobj, separators=(",", ":"))
 
 
-def JSONRPCencpack_response(id, result_obj):
+def JSONRPCencpack_response(idmsg, result_obj):
     """Build a JSON-RPC response"""
     request_obj = {
         "jsonrpc": "2.0",
-        "id": id,
+        "id": idmsg,
         "result": result_obj,
     }
     return json_encode(request_obj).encode("utf8")
 
 
 def JSONRPCunpack_query(buffer):
-    """Decode a JSON-RPC query"""
+    """Decode a JSON-RPC query : id, method, params"""
     try:
         resp_obj = loads(buffer)
     except Exception:
@@ -128,12 +125,7 @@ def JSONRPCunpack_query(buffer):
         raise Exception(f"Server is not JSONRPC 2.0 but {resp_obj.jsonrpc}")
     if "error" in resp_obj:
         raise Exception(resp_obj["error"]["message"])
-    else:
-        # Response
-        # print(f"<--  {resp_obj['result']} ")
-        # return resp_obj["result"]
-        # Request : method, params
-        return resp_obj["id"], resp_obj["method"], resp_obj["params"]
+    return resp_obj["id"], resp_obj["method"], resp_obj["params"]
 
 
 class TLSsocket:
@@ -141,7 +133,7 @@ class TLSsocket:
         context = create_default_context()
         sock = create_connection((domain, port))
         self.conn = context.wrap_socket(sock, server_hostname=domain)
-        self.conn.settimeout(None)
+        self.conn.settimeout(0)
 
     def __del(self):
         self.conn.close()
@@ -150,7 +142,10 @@ class TLSsocket:
         self.conn.sendall(data_buffer)
 
     def receive(self):
-        return self.conn.recv(RECEIVING_BUFFER_SIZE)
+        try:
+            return self.conn.recv(RECEIVING_BUFFER_SIZE)
+        except SSLWantReadError:
+            return b""
 
 
 class WebSocketClientException(Exception):
@@ -195,38 +190,35 @@ class WebSocketClient:
     def get_messages(self):
         sleep(UNIT_WAITING_TIME)
         # Listen to server data and build a queue generator
-        datar = self.ssocket.receive()
-        self.ws_conn.receive_data(datar)
         events = []
-        for event in self.ws_conn.events():
-            if isinstance(event, AcceptConnection):
-                print("Connection established")
-                events.insert(0, "established")
-            elif isinstance(event, RejectConnection):
-                print("Connection rejected")
-                events.insert(0, "rejected")
-            elif isinstance(event, CloseConnection):
-                print(
-                    "Connection closed: code={} reason={}".format(
-                        event.code, event.reason
-                    )
-                )
-                del self
-            elif isinstance(event, Ping):
-                print("Ping received")
-                self.send(event.response())
-                print("Pong sent")
-                events.insert(0, "ping")
-            elif isinstance(event, TextMessage):
-                print("Text received")
-                if event.message_finished:
-                    events.insert(0, event.data)
-            elif isinstance(event, BytesMessage):
-                print("Bytes received")
-                if event.message_finished:
-                    events.insert(0, vent.data)
-            else:
-                Exception("Unknown event: {!r}".format(event))
+        datar = self.ssocket.receive()
+        if datar:
+            self.ws_conn.receive_data(datar)
+            for event in self.ws_conn.events():
+                if isinstance(event, AcceptConnection):
+                    print("Connection established")
+                    events.insert(0, "established")
+                elif isinstance(event, RejectConnection):
+                    print("Connection rejected")
+                    events.insert(0, "rejected")
+                elif isinstance(event, CloseConnection):
+                    print("Connection closed: code={} reason={}".format(event.code, event.reason))
+                    del self
+                elif isinstance(event, Ping):
+                    print("Ping received")
+                    self.send(event.response())
+                    print("Pong sent")
+                    events.insert(0, "ping")
+                elif isinstance(event, TextMessage):
+                    print("Text received")
+                    if event.message_finished:
+                        events.insert(0, event.data)
+                elif isinstance(event, BytesMessage):
+                    print("Bytes received")
+                    if event.message_finished:
+                        events.insert(0, event.data)
+                else:
+                    Exception("Unknown event: {!r}".format(event))
         print("get messages out:")
         print(events)
         return events
@@ -259,6 +251,10 @@ class WalletConnectClientException(Exception):
     pass
 
 
+class WalletConnectClientInvalidOption(Exception):
+    pass
+
+
 class WalletConnectClient:
     def __init__(self, wcURL, account, chain_id, topic, symkey, debug=True):
         print(wcURL)
@@ -287,18 +283,18 @@ class WalletConnectClient:
         pattern = r"^wc:(.+)@(\d)\?bridge=(.+)&key=(.+)$"
         found = re.findall(pattern, wc_uri_str)
         if not found:
-            raise InvalidOption("Bad wc URI\nMust be wc:xxxx")
+            raise WalletConnectClientInvalidOption("Bad wc URI\nMust be wc:xxxx")
         wc_data = found[0]
         if len(wc_data) != 4:
-            raise InvalidOption("Bad data received in URI")
+            raise WalletConnectClientInvalidOption("Bad data received in URI")
         handshake_topic = wc_data[0]
         wc_ver = wc_data[1]
         bridge_url = unquote(wc_data[2])
         sym_key = bytes.fromhex(wc_data[3])
         if wc_ver != "1":
-            raise InvalidOption("Bad WalletConnect version. Only supports v1.")
+            raise WalletConnectClientInvalidOption("Bad WalletConnect version. Only supports v1.")
         if len(sym_key) != WC_AES_KEY_SIZE:
-            raise InvalidOption("Bad key data in URI")
+            raise WalletConnectClientInvalidOption("Bad key data in URI")
         return cls(bridge_url, account_adr, chain_id, handshake_topic, sym_key, True)
 
     def write(self, data_dict):
@@ -322,6 +318,14 @@ class WalletConnectClient:
             if rcvd_message and rcvd_message.startswith('{"'):
                 return self.enc_channel.decrypt_payload(loads(rcvd_message))
             return rcvd_message
+        return None
+
+    def get_message(self):
+        """Like get data but filter the messages and fully decode them"""
+        rcvd_data = self.get_data()
+        if rcvd_data and isinstance(rcvd_data, bytes) and rcvd_data.startswith(b'{"'):
+            return JSONRPCunpack_query(rcvd_data)[2][0]
+        return {}
 
     def reply(self, peer_id, req_id, result):
         payload_bin = JSONRPCencpack_response(req_id, result)
@@ -376,7 +380,7 @@ class WalletConnectClient:
         print(" -- Session Request --")
         self.service_id = query_params[0]["peerId"]
         param = query_params[0]["peerMeta"]
-        
+
         print("From :", param["name"])
         print(" URL :", param["url"])
         print("")
@@ -384,23 +388,5 @@ class WalletConnectClient:
         print(" -> Accept ?")
         sleep(1)
         print("accepted automatically")
-        
+
         self.reply_session_request(self.service_id, msg_id)
-
-
-if __name__ == "__main__":
-
-    print("WC handler")
-
-    string_uri = input("Input the WalletConnect URI : ")
-
-    relay = WalletConnectClient.from_wc_uri(string_uri)
-
-    # Waiting for new message
-    sleep(2)
-    while True:
-        resp = relay.get_data()
-        if resp and resp != "ping":
-            print(">>> read :")
-            print(resp)
-            break

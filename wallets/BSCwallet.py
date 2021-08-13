@@ -24,7 +24,7 @@ from cryptolib.cryptography import public_key_recover, decompress_pubkey, sha3
 from cryptolib.coins.ethereum import rlp_encode, int2bytearray, uint256, read_string
 from wallets.wallets_utils import shift_10, InvalidOption
 from wallets.BSCtokens import tokens_values
-from wallets.WalletConnect import WalletConnectClient
+from wallets.WalletConnect import WalletConnectClient, WalletConnectClientInvalidOption
 
 
 BSC_units = 18
@@ -345,7 +345,12 @@ class BSC_wallet:
         if contract_addr_str is not None:
             self.coin = self.bsc.token_symbol
         if wc_uri is not None:
-            self.wc_client = WalletConnectClient.from_wc_uri(wc_uri, self.get_account(), self.bsc.chainID)
+            try:
+                self.wc_client = WalletConnectClient.from_wc_uri(
+                    wc_uri, self.get_account(), self.bsc.chainID
+                )
+            except WalletConnectClientInvalidOption as exc:
+                raise InvalidOption(exc)
 
     @classmethod
     def get_networks(cls):
@@ -363,17 +368,18 @@ class BSC_wallet:
         # Read address to fund the wallet
         return f"0x{self.bsc.address}"
 
+    # Requires for WalletConnect, esp. for ping in WebSocket
+    def get_socket_messages(self):
+        print("Checking WC messages")
+        wc_message = self.wc_client.get_message()
+        while wc_message != {}:
+            print(">>> received from WC :")
+            print(wc_message)
+            # if : {'approved': False, 'chainId': None, 'networkId': None, 'accounts': None}
+            # -> disconnect
+            wc_message = self.wc_client.get_message()
+
     def get_balance(self):
-        # Use get balance to check periodically messages
-        if hasattr(self, "wc_client"):
-            print("Checking WC messages")
-            wc_messages = self.wc_client.read_data()
-            while len(wc_messages) > 0:
-                wc_msg = wc_messages.pop(0)
-                print(wc_msg)
-                if wc_msg and wc_msg != "ping":
-                    print(">>> received from WC :")
-                    print(wc_msg)
         # Get balance in base integer unit
         return (
             str(self.bsc.getbalance(not self.bsc.BEP20) / (10 ** self.bsc.decimals))
