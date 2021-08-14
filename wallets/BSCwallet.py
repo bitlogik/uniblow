@@ -318,7 +318,11 @@ class BSC_wallet:
             "prompt": "BEP20 contract address",
             "preset": tokens_values,
         },
-        {"option_name": "wc_uri", "prompt": "WalletConnect URI link"},
+        {
+            "option_name": "wc_uri",
+            "prompt": "WalletConnect URI link",
+            "use_get_messages": True,
+        },
     ]
 
     GAZ_LIMIT_SIMPLE_TX = 21000
@@ -351,22 +355,24 @@ class BSC_wallet:
                 self.wc_client = WalletConnectClient.from_wc_uri(wc_uri)
                 req_id, req_chain_id, request_info = self.wc_client.open_session()
             except WalletConnectClientInvalidOption as exc:
+                if hasattr(self, "wc_client"):
+                    self.wc_client.close()
                 raise InvalidOption(exc)
             print(request_info)
             if req_chain_id != self.bsc.chainID:
+                self.wc_client.close()
                 raise InvalidOption("Chain ID is different.")
             request_message = (
-                "WalletConnect request from :\n"
+                "WalletConnect request from :\n\n"
                 f"{request_info['name']}\n"
-                f"{request_info['url']}\n"
+                f"website : {request_info['url']}\n"
             )
-            confirm_callback(
-                request_message,
-                self.wc_client.reply_session_request,
-                req_id,
-                self.bsc.chainID,
-                self.get_account(),
-            )
+            approve = confirm_callback(request_message)
+            if approve:
+                self.wc_client.reply_session_request(req_id, self.bsc.chainID, self.get_account())
+            else:
+                self.wc_client.close()
+                raise InvalidOption("You just declined the WalletConnect request.")
 
     def __del__(self):
         """Close the WebSocket connection when deleting the object."""
