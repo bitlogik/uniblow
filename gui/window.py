@@ -201,6 +201,7 @@ class TopPanel ( wx.Panel ):
 
         self.dest_addr = wx.TextCtrl( self.addr_panel, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.Size( 584,-1 ), 0 )
         self.dest_addr.SetFont( wx.Font( 14, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, False, wx.EmptyString ) )
+        self.dest_addr.Enable( False )
 
         bSizer20.Add( self.dest_addr, 0, wx.ALIGN_CENTER_HORIZONTAL|wx.ALL, 3 )
 
@@ -224,6 +225,7 @@ class TopPanel ( wx.Panel ):
 
         self.amount = wx.TextCtrl( self, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, wx.TE_PROCESS_ENTER )
         self.amount.SetFont( wx.Font( 14, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, False, wx.EmptyString ) )
+        self.amount.Enable( False )
 
         bSizer7.Add( self.amount, 0, wx.ALL, 5 )
 

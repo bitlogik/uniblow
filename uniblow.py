@@ -101,6 +101,8 @@ def display_balance():
         # WalletConnect : disable sending
         and not hasattr(app.wallet, "wc_timer")
     ):
+        app.gui_panel.dest_addr.Enable()
+        app.gui_panel.amount.Enable()
         app.gui_panel.send_button.Enable()
         app.gui_panel.send_all.Enable()
 
@@ -115,6 +117,8 @@ def erase_info():
     paint_toaddr(wx.NullColour)
     app.gui_panel.hist_button.Disable()
     app.gui_panel.copy_button.Disable()
+    app.gui_panel.dest_addr.Disable()
+    app.gui_panel.amount.Disable()
     app.gui_panel.send_all.Disable()
     app.gui_panel.send_button.Disable()
     app.gui_panel.network_label.Disable()
