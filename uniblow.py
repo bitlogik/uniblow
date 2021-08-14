@@ -235,6 +235,16 @@ def disp_history(ev):
         gui.app.show_history(hist_url)
 
 
+def watch_messages():
+    """Watch for messages recveives.
+    For some wallet types such as WalletConnect.
+    """
+    try:
+        app.wallet.get_messages()
+    except Exception as exc:
+        wallet_error(exc)
+
+
 def close_device():
     if hasattr(app, "device"):
         del app.device
@@ -399,6 +409,18 @@ def wallet_fallback():
     wx.CallLater(180, process_coin_select, coin_sel, net_sel, wallet_type_fallback)
 
 
+def wallet_error(exc):
+    """Process wallet exception"""
+    app.gui_panel.network_choice.Clear()
+    app.gui_panel.wallopt_choice.Clear()
+    app.gui_panel.coins_choice.SetSelection(0)
+    erase_info()
+    warn_modal(str(exc))
+    if not getattr(sys, "frozen", False):
+        # output the exception when dev environment
+        raise exc
+
+
 def set_coin(coin, network, wallet_type):
     fee_opt_sel = app.gui_panel.fee_slider.GetValue()
     app.gui_panel.fee_setting.SetLabel(FEES_PRORITY_TEXT[fee_opt_sel])
@@ -431,20 +453,13 @@ def set_coin(coin, network, wallet_type):
         account_id = app.wallet.get_account()
         if option_info is not None and option_info.get("use_get_messages", False):
             app.wallet.wc_timer = wx.Timer()
-            app.wallet.wc_timer.Notify = app.wallet.get_messages
+            app.wallet.wc_timer.Notify = watch_messages
     except InvalidOption as exc:
         warn_modal(str(exc))
         wallet_fallback()
         return
     except Exception as exc:
-        app.gui_panel.network_choice.Clear()
-        app.gui_panel.wallopt_choice.Clear()
-        app.gui_panel.coins_choice.SetSelection(0)
-        erase_info()
-        warn_modal(str(exc))
-        if not getattr(sys, "frozen", False):
-            # output the exception when dev environment
-            raise exc
+        wallet_error(exc)
         return
     display_coin(account_id)
 

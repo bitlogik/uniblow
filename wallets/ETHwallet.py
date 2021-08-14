@@ -527,8 +527,7 @@ class ETH_wallet:
             method = wc_message[1]
             parameters = wc_message[2]
             if "wc_sessionUpdate" == method:
-                if "approved" in parameters and parameters["approved"] is False:
-                    self.wc_client.close()
+                if parameters[0].get("approved") is False:
                     raise Exception("Disconnected by the web app service")
             elif "personal_sign" == method:
                 # Not implemented

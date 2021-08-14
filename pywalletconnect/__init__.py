@@ -217,7 +217,7 @@ class WebSocketClient:
         """Stop read timer and close the TLS connection when deleting the object."""
         print("Cancel timer")
         self.timer_pings.cancel()
-        print("delete WC")
+        print("delete WS")
         self.ssocket.close()
         delattr(self, "ssocket")
 
