@@ -94,7 +94,13 @@ def display_balance():
     app.gui_panel.hist_button.Enable()
     app.gui_panel.copy_button.Enable()
     bal_str = balance.split(" ")[0]
-    if bal_str not in ("0", "0.0") and not bal_str.startswith("Register"):
+    if (
+        bal_str not in ("0", "0.0")
+        # EOS when register pubkey mode : disable sending
+        and not bal_str.startswith("Register")
+        # WalletConnect : disable sending
+        and not hasattr(app.wallet, "wc_timer")
+    ):
         app.gui_panel.send_button.Enable()
         app.gui_panel.send_all.Enable()
 
