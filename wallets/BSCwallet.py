@@ -374,8 +374,9 @@ class BSC_wallet:
                 raise InvalidOption("Chain ID is different.")
             request_message = (
                 "WalletConnect request from :\n\n"
-                f"{request_info['name']}\n"
-                f"website : {request_info['url']}\n"
+                f"{request_info['name']}\n\n"
+                f"Website   : {request_info['url']}\n"
+                f"Relay URL : {self.wc_client.get_relay_url()}\n"
             )
             approve = self.confirm_callback(request_message)
             if approve:

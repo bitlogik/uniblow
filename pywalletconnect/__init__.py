@@ -333,11 +333,9 @@ class WalletConnectClient:
         """Create a WalletConnect client from parameters.
         Call open_session immediately after to get the session request info.
         """
-        print(ws_url)
-        print(topic)
-        print(symkey)
         # Chain ID is managed outside the walletconnect class
         # Shall be managed by the user / webapp
+        self.relay_url = ws_url
         try:
             self.websock = WebSocketClient(ws_url)
             self.data_queue = self.websock.received_messages
@@ -372,6 +370,10 @@ class WalletConnectClient:
         if len(sym_key) != WC_AES_KEY_SIZE:
             raise WalletConnectClientInvalidOption("Bad key data in URI")
         return cls(bridge_url, handshake_topic, sym_key)
+
+    def get_relay_url(self):
+        """Give the URL of the WebSocket relay bridge."""
+        return self.relay_url
 
     def write(self, data_dict):
         """Send a data_object to the WalletConnect relay.
