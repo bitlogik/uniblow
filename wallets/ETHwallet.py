@@ -23,10 +23,14 @@ import urllib.request
 
 from cryptolib.cryptography import public_key_recover, decompress_pubkey, sha3
 from cryptolib.coins.ethereum import rlp_encode, int2bytearray, uint256, read_string
-from wallets.wallets_utils import shift_10, InvalidOption
+from wallets.wallets_utils import shift_10, compare_eth_addresses, InvalidOption
 from wallets.ETHtokens import tokens_values
+from pywalletconnect import WalletConnectClient, WalletConnectClientInvalidOption
+
 
 ETH_units = 18
+GWEI_UNIT = 10 ** 9
+
 
 # ERC20 functions codes
 #   balanceOf(address)
@@ -103,9 +107,10 @@ class infura_api:
         return int(self.getKey("result")[2:], 16)
 
     def get_fee(self, priority):
+        """Get the gas price in Gwei units"""
         self.getData("eth_gasPrice")
         self.checkapiresp()
-        gaz_price = int(self.getKey("result")[2:], 16) / 10 ** 9
+        gaz_price = int(self.getKey("result")[2:], 16) / GWEI_UNIT
         if priority == 0:
             return int(gaz_price * 0.9)
         if priority == 1:
@@ -305,18 +310,22 @@ class ETHwalletCore:
         numtx = self.api.get_tx_num(self.address, "pending")
         return numtx
 
-    def prepare(self, toaddr, paymentvalue, gprice, glimit):
+    def prepare(self, toaddr, paymentvalue, gprice, glimit, data=bytearray(b"")):
+        """Build a transaction to be signed.
+        toaddr in hex without 0x
+        value in wei, gprice in Gwei
+        """
         if self.ERC20:
             maxspendable = self.getbalance(False)
             balance_eth = self.getbalance()
-            if balance_eth < ((gprice * glimit) * 10 ** 9):
+            if balance_eth < ((gprice * glimit) * GWEI_UNIT):
                 raise Exception("Not enough native ETH funding for the tx fee")
         else:
-            maxspendable = self.getbalance() - ((gprice * glimit) * 10 ** 9)
+            maxspendable = self.getbalance() - ((gprice * glimit) * GWEI_UNIT)
         if paymentvalue > maxspendable or paymentvalue < 0:
             raise Exception(f"Not enough {self.token_symbol} tokens for the tx")
         self.nonce = int2bytearray(self.getnonce())
-        self.gasprice = int2bytearray(gprice * 10 ** 9)
+        self.gasprice = int2bytearray(gprice * GWEI_UNIT)
         self.startgas = int2bytearray(glimit)
         if self.ERC20:
             self.to = bytearray.fromhex(self.ERC20[2:])
@@ -327,7 +336,7 @@ class ETHwalletCore:
         else:
             self.to = bytearray.fromhex(toaddr)
             self.value = int2bytearray(int(paymentvalue))
-            self.data = bytearray(b"")
+            self.data = data
         v = int2bytearray(self.chainID)
         r = int2bytearray(0)
         s = int2bytearray(0)
@@ -347,7 +356,7 @@ class ETHwalletCore:
         self.datahash = sha3(signing_tx)
         return self.datahash
 
-    def send(self, signature_der):
+    def add_signature(self, signature_der):
         # Signature decoding
         lenr = int(signature_der[3])
         lens = int(signature_der[5 + lenr])
@@ -375,8 +384,11 @@ class ETHwalletCore:
                 s,
             ]
         )
-        txhex = tx_final.hex()
-        return "\nDONE, txID : " + self.api.pushtx(txhex)[2:]
+        return tx_final.hex()
+
+    def send(self, tx_hex):
+        """Upload the tx"""
+        return self.api.pushtx(tx_hex)
 
 
 class ETH_wallet:
@@ -391,10 +403,7 @@ class ETH_wallet:
         "Goerli",
     ]
 
-    wtypes = [
-        "Standard",
-        "ERC20",
-    ]
+    wtypes = ["Standard", "ERC20", "WalletConnect"]
 
     derive_paths = [
         # mainnet
@@ -416,23 +425,31 @@ class ETH_wallet:
         ],
     ]
 
-    # ETH wallet type 1 has option
-    user_options = [1]
+    # ETH wallet type 1 and 2 have option
+    user_options = [1, 2]
     # self.__init__ ( contract_addr = "user input option" )
     options_data = [
         {
             "option_name": "contract_addr",
             "prompt": "ERC20 contract address",
             "preset": tokens_values,
-        }
+        },
+        {
+            "option_name": "wc_uri",
+            "prompt": "WalletConnect URI link",
+            "use_get_messages": True,
+        },
     ]
 
     GAZ_LIMIT_SIMPLE_TX = 21000
     GAZ_LIMIT_ERC_20_TX = 180000
 
-    def __init__(self, network, wtype, device, contract_addr=None):
+    def __init__(
+        self, network, wtype, device, contract_addr=None, wc_uri=None, confirm_callback=None
+    ):
         self.network = ETH_wallet.networks[network].lower()
         self.current_device = device
+        self.confirm_callback = confirm_callback
         pubkey_hex = self.current_device.get_public_key()
         INFURA_KEY = "xxx"
         if INFURA_KEY == "xxx":
@@ -455,6 +472,33 @@ class ETH_wallet:
         )
         if contract_addr_str is not None:
             self.coin = self.eth.token_symbol
+        if wc_uri is not None:
+            try:
+                self.wc_client = WalletConnectClient.from_wc_uri(wc_uri)
+                req_id, req_chain_id, request_info = self.wc_client.open_session()
+            except WalletConnectClientInvalidOption as exc:
+                if hasattr(self, "wc_client"):
+                    self.wc_client.close()
+                raise InvalidOption(exc)
+            if req_chain_id != self.eth.chainID:
+                self.wc_client.close()
+                raise InvalidOption("Chain ID is different.")
+            request_message = (
+                "WalletConnect request from :\n\n"
+                f"{request_info['name']}\n"
+                f"website : {request_info['url']}\n"
+            )
+            approve = self.confirm_callback(request_message)
+            if approve:
+                self.wc_client.reply_session_request(req_id, self.eth.chainID, self.get_account())
+            else:
+                self.wc_client.close()
+                raise InvalidOption("You just declined the WalletConnect request.")
+
+    def __del__(self):
+        """Close the WebSocket connection when deleting the object."""
+        if hasattr(self, "wc_client"):
+            del self.wc_client
 
     @classmethod
     def get_networks(cls):
@@ -471,6 +515,44 @@ class ETH_wallet:
     def get_account(self):
         # Read address to fund the wallet
         return f"0x{self.eth.address}"
+
+    # Process messages for WalletConnect
+    # Get messages more often than balance
+    def get_messages(self):
+        # wc_message : (id, method, params) or (None, "", [])
+        wc_message = self.wc_client.get_message()
+        while wc_message[0] is not None:
+            print(">>> received from WC :")
+            print(wc_message)
+            id_request = wc_message[0]
+            method = wc_message[1]
+            parameters = wc_message[2]
+            if "wc_sessionUpdate" == method:
+                if "approved" in parameters and parameters["approved"] is False:
+                    self.wc_client.close()
+                    raise Exception("Disconnected by the web app service")
+            elif "personal_sign" == method:
+                # Not implemented
+                pass
+            elif "eth_sign" == method:
+                # Not implemented
+                pass
+            elif "eth_signTypedData" == method:
+                # Not implemented
+                pass
+            elif "eth_sendTransaction" == method:
+                print("----  Signature request received :")
+                tx_to_sign = parameters[0]
+                print(tx_to_sign)
+                if compare_eth_addresses(tx_to_sign["from"], self.get_account()):
+                    self.process_sendtransaction(id_request, tx_to_sign)
+            elif "eth_signTransaction" == method:
+                # Not implemented
+                pass
+            elif "eth_sendRawTransaction" == method:
+                # Not implemented
+                pass
+            wc_message = self.wc_client.get_message()
 
     def get_balance(self):
         # Get balance in base integer unit
@@ -494,10 +576,45 @@ class ETH_wallet:
             ETH_EXPLORER_URL += "#tokentxns"
         return ETH_EXPLORER_URL
 
-    def raw_tx(self, amount, gazprice, ethgazlimit, account):
-        hash_to_sign = self.eth.prepare(account, amount, gazprice, ethgazlimit)
+    def exec_tx(self, amount, gazprice, ethgazlimit, account, data=None):
+        """Build, sign, and broadcast a transaction.
+        Used to transfer tokens native or ERC20 with the given parameters.
+        Return the tx hash broadcasted as 0xhhhhhhhh.
+        """
+        if data is None:
+            data = bytearray(b"")
+        hash_to_sign = self.eth.prepare(account, amount, gazprice, ethgazlimit, data)
         tx_signature = self.current_device.sign(hash_to_sign)
-        return self.eth.send(tx_signature)
+        tx_signed = self.eth.add_signature(tx_signature)
+        return self.eth.send(tx_signed)
+
+    def process_sendtransaction(self, id_request, txdata):
+        """Process a WalletConnect eth_sendTransaction call"""
+        to_addr = txdata.get("to", "  New contract")[2:]
+        value = txdata.get("value", 0)
+        if value != 0:
+            value = int(value, 16)
+        gas_price = txdata.get("gasPrice", 0)
+        if gas_price != 0:
+            gas_price = int(gas_price, 16) // GWEI_UNIT
+        else:
+            gas_price = self.eth.api.get_fee(1)
+        gas_limit = txdata.get("gas", 90000)
+        if gas_limit != 90000:
+            gas_limit = int(gas_limit, 16)
+        request_message = (
+            "WalletConnect transaction request :\n\n"
+            f" To    :  0x{to_addr}\n"
+            f" Value :  {value / (10 ** self.eth.decimals)} {self.coin}\n"
+            f" Gas price  : {gas_price} Gwei\n"
+            f" Gas limit  : {gas_limit}\n"
+            f"Max fee cost: {gas_limit*gas_price/GWEI_UNIT} {self.coin}\n"
+        )
+        if self.confirm_callback(request_message):
+            data_hex = txdata.get("data", "0x")
+            data = bytearray.fromhex(data_hex[2:])
+            tx_hash = self.exec_tx(value, gas_price, gas_limit, to_addr, data)
+            self.wc_client.reply(id_request, tx_hash)
 
     def transfer(self, amount, to_account, priority_fee):
         # Transfer x unit to an account, pay
@@ -508,9 +625,10 @@ class ETH_wallet:
         if to_account.startswith("0x"):
             to_account = to_account[2:]
         ethgazprice = self.eth.api.get_fee(priority_fee)  # gwei per gaz unit
-        return self.raw_tx(
+        tx_hash = self.exec_tx(
             shift_10(amount, self.eth.decimals), ethgazprice, ethgazlimit, to_account
         )
+        return "\nDONE, txID : " + tx_hash[2:]
 
     def transfer_inclfee(self, amount, to_account, fee_priority):
         # Transfer the amount in base unit minus fee, like the receiver paying the fee
@@ -524,8 +642,9 @@ class ETH_wallet:
         if self.eth.ERC20:
             fee = 0
         else:
-            fee = int(gazlimit * gazprice * 10 ** 9)
-        return self.raw_tx(amount - fee, gazprice, gazlimit, to_account)
+            fee = int(gazlimit * gazprice * GWEI_UNIT)
+        tx_hash = self.exec_tx(amount - fee, gazprice, gazlimit, to_account)
+        return "\nDONE, txID : " + tx_hash[2:]
 
     def transfer_all(self, to_account, fee_priority):
         # Transfer all the wallet to an address (minus fee)
