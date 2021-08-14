@@ -384,6 +384,7 @@ class WalletConnectClient:
 
     def get_data(self):
         """Read the first data in the receive queue messages."""
+        # Non-blocking, so return None if no data has been received
         if len(self.data_queue) > 0:
             rcvd_message = self.data_queue.pop(0)
             if rcvd_message and rcvd_message.startswith('{"'):
@@ -394,12 +395,16 @@ class WalletConnectClient:
     def get_message(self):
         """
         Like get data but filter the messages and fully decode them.
-        Return : id, method, params
+        Return : (id, method, params) or (None, "", [])
+        Use like a pump : call get_message() until empty response,
+        because it read message from the receiving bucket.
+        Non-blocking, so return (None, "", []) if no data has been received
         """
         rcvd_data = self.get_data()
         if rcvd_data and isinstance(rcvd_data, bytes) and rcvd_data.startswith(b'{"'):
+            # return (id, method, params)
             return json_rpc_unpack(rcvd_data)
-        return {}
+        return (None, "", [])
 
     def reply(self, req_id, result):
         """Send a RPC response to the webapp through the relay."""
@@ -422,6 +427,8 @@ class WalletConnectClient:
     def open_session(self):
         """Start a WalletConnect session : read session request message
         Return : (message RPC ID, chain ID, peerMeta data object).
+        Or throw WalletConnectClientException("sessionRequest timeout")
+        after GLOBAL_TIMEOUT seconds.
         """
         self.subscribe(self.wallet_id)
 
@@ -448,13 +455,6 @@ class WalletConnectClient:
         print(query_params[0])
         print(query_params[0]["peerMeta"])
         return msg_id, app_chain_id, query_params[0]["peerMeta"]
-
-        # print("From :", param["name"])
-        # print(" URL :", param["url"])
-        # print("")
-        # print(param["description"])
-        # print(" -> Accept ?")
-        # self.reply_session_request(msg_id)
 
     def reply_session_request(self, msg_id, chain_id, account_address):
         """Send the fort sessionRequest result."""
