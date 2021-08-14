@@ -177,7 +177,7 @@ def confirm_tx(to_addr, amount):
     return confirm_tx_modal.ShowModal()
 
 
-def confirm_request(request_ui_message, callback_approve, *args):
+def confirm_request(request_ui_message):
     """Display a modal to the user.
     callback *args called if the user approves the request.
     """
@@ -189,8 +189,8 @@ def confirm_request(request_ui_message, callback_approve, *args):
         wx.YES_NO | wx.NO_DEFAULT | wx.ICON_QUESTION | wx.STAY_ON_TOP | wx.CENTER,
         wx.DefaultPosition,
     )
-    if confirm_tx_modal.ShowModal() == wx.ID_YES:
-        callback_approve(*args)
+    modal_choice = confirm_tx_modal.ShowModal()
+    return modal_choice == wx.ID_YES
 
 
 def tx_success(message):
@@ -421,7 +421,8 @@ def set_coin(coin, network, wallet_type):
             }
         app.wallet = get_coin_class(coin)(network, wallet_type, app.device, **option_arg)
         account_id = app.wallet.get_account()
-        if option_info is not None and option_info["option_name"] == "wc_uri":
+        if option_info is not None and option_info.get("use_get_messages", False):
+            print("Starting get messages timer")
             app.wallet.wc_timer = wx.Timer()
             app.wallet.wc_timer.Notify = app.wallet.get_messages
     except InvalidOption as exc:

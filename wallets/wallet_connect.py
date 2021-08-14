@@ -49,7 +49,7 @@ from wsproto.events import (
 
 DEFAULT_HTTPS_PORT = 443
 
-GLOBAL_TIMEOUT = 12  # seconds
+GLOBAL_TIMEOUT = 8  # seconds
 UNIT_WAITING_TIME = 0.4
 CYCLES_TIMEOUT = int(GLOBAL_TIMEOUT / UNIT_WAITING_TIME)
 
@@ -219,6 +219,7 @@ class WebSocketClient:
         self.timer_pings.cancel()
         print("delete WC")
         self.ssocket.close()
+        delattr(self, "ssocket")
 
     def send(self, data_frame):
         """Send a WebSocket data frame to the host."""
@@ -438,6 +439,7 @@ class WalletConnectClient:
                     break
             cyclew += 1
         if cyclew == CYCLES_TIMEOUT:
+            self.close()
             raise WalletConnectClientException("sessionRequest timeout")
 
         print(" -- Session Request --")
