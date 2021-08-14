@@ -94,7 +94,13 @@ def display_balance():
     app.gui_panel.hist_button.Enable()
     app.gui_panel.copy_button.Enable()
     bal_str = balance.split(" ")[0]
-    if bal_str not in ("0", "0.0") and not bal_str.startswith("Register"):
+    if (
+        bal_str not in ("0", "0.0")
+        # EOS when register pubkey mode : disable sending
+        and not bal_str.startswith("Register")
+        # WalletConnect : disable sending
+        and not hasattr(app.wallet, "wc_timer")
+    ):
         app.gui_panel.send_button.Enable()
         app.gui_panel.send_all.Enable()
 
@@ -102,6 +108,10 @@ def display_balance():
 def erase_info():
     if hasattr(app, "balance_timer"):
         app.balance_timer.Stop()
+    if hasattr(app, "wallet") and hasattr(app.wallet, "wc_timer"):
+        app.wallet.wc_client.close()
+        app.wallet.wc_timer.Stop()
+        delattr(app.wallet, "wc_timer")
     paint_toaddr(wx.NullColour)
     app.gui_panel.hist_button.Disable()
     app.gui_panel.copy_button.Disable()
@@ -113,7 +123,7 @@ def erase_info():
     app.gui_panel.wallopt_choice.Disable()
     app.gui_panel.qrimg.SetBitmap(wx.Bitmap())
     if hasattr(app, "wallet"):
-        delattr(app, "wallet")
+        del app.wallet
     app.gui_panel.balance_info.SetLabel("")
     app.gui_panel.account_addr.SetLabel("")
     app.gui_frame.Refresh()
@@ -156,21 +166,39 @@ def get_option(network_id, input_value, preset_values):
     option_panel.SetCustomLabel(f"input a {input_value}")
     if preset_values:
         option_panel.SetPresetValues(preset_values[network_id])
+    else:
+        option_panel.HidePreset()
     if option_dialog.ShowModal() == wx.ID_OK:
         optval = option_panel.GetValue()
         return optval
 
 
-def confirm(to_addr, amount):
+def confirm_tx(to_addr, amount):
     conf_txt = f"Confirm this transaction ?\n{amount} {app.wallet.coin} to {to_addr}"
-    confirm_modal = wx.MessageDialog(
+    confirm_tx_modal = wx.MessageDialog(
         app.gui_frame,
         conf_txt,
         "Confirmation",
         wx.YES_NO | wx.NO_DEFAULT | wx.ICON_QUESTION | wx.STAY_ON_TOP | wx.CENTER,
         wx.DefaultPosition,
     )
-    return confirm_modal.ShowModal()
+    return confirm_tx_modal.ShowModal()
+
+
+def confirm_request(request_ui_message):
+    """Display a modal to the user.
+    callback *args called if the user approves the request.
+    """
+    confirm_txt = f"Do you approve the following request ?\n\n{request_ui_message}"
+    confirm_tx_modal = wx.MessageDialog(
+        app.gui_frame,
+        confirm_txt,
+        "Request",
+        wx.YES_NO | wx.NO_DEFAULT | wx.ICON_QUESTION | wx.STAY_ON_TOP | wx.CENTER,
+        wx.DefaultPosition,
+    )
+    modal_choice = confirm_tx_modal.ShowModal()
+    return modal_choice == wx.ID_YES
 
 
 def tx_success(message):
@@ -395,9 +423,15 @@ def set_coin(coin, network, wallet_type):
             )
             app.device.derive_key(current_path)
         if option_info is not None:
-            option_arg = {option_info["option_name"]: option_value}
+            option_arg = {
+                option_info["option_name"]: option_value,
+                "confirm_callback": confirm_request,
+            }
         app.wallet = get_coin_class(coin)(network, wallet_type, app.device, **option_arg)
         account_id = app.wallet.get_account()
+        if option_info is not None and option_info.get("use_get_messages", False):
+            app.wallet.wc_timer = wx.Timer()
+            app.wallet.wc_timer.Notify = app.wallet.get_messages
     except InvalidOption as exc:
         warn_modal(str(exc))
         wallet_fallback()
@@ -432,6 +466,8 @@ def display_coin(account_addr):
     app.balance_timer = DisplayTimer()
     wx.CallLater(50, display_balance)
     app.balance_timer.Start(10000)
+    if hasattr(app.wallet, "wc_timer"):
+        app.wallet.wc_timer.Start(2500, oneShot=wx.TIMER_CONTINUOUS)
     app.gui_frame.Refresh()
     app.gui_frame.Update()
 
@@ -507,7 +543,7 @@ def check_addr(ev):
 
 
 def transfer(to, amount):
-    conf = confirm(to, amount)
+    conf = confirm_tx(to, amount)
     if conf == wx.ID_YES:
         fee_opt = app.gui_panel.fee_slider.GetValue()
         try:

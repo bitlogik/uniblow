@@ -167,6 +167,11 @@ class app_option_panel(gui.window.OptionPanel):
     def GetValue(self):
         return self.option_value
 
+    def HidePreset(self):
+        self.preset_text.Hide()
+        self.known_choice.Hide()
+        self.m_staticTextor.Hide()
+
     def SetPresetLabel(self, text):
         self.preset_label = text
         self.preset_text.SetLabelText(self.preset_label)

@@ -470,12 +470,12 @@ class OptionPanel ( wx.Panel ):
 
         bSizer18.Add( self.known_choice, 0, wx.ALL|wx.ALIGN_CENTER_HORIZONTAL, 5 )
 
-        self.m_staticText19 = wx.StaticText( self, wx.ID_ANY, u"OR", wx.DefaultPosition, wx.DefaultSize, 0 )
-        self.m_staticText19.Wrap( -1 )
+        self.m_staticTextor = wx.StaticText( self, wx.ID_ANY, u"OR", wx.DefaultPosition, wx.DefaultSize, 0 )
+        self.m_staticTextor.Wrap( -1 )
 
-        self.m_staticText19.SetFont( wx.Font( 11, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, False, wx.EmptyString ) )
+        self.m_staticTextor.SetFont( wx.Font( 11, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, False, wx.EmptyString ) )
 
-        bSizer18.Add( self.m_staticText19, 0, wx.ALL|wx.ALIGN_CENTER_HORIZONTAL, 5 )
+        bSizer18.Add( self.m_staticTextor, 0, wx.ALL|wx.ALIGN_CENTER_HORIZONTAL, 5 )
 
         self.custom_text = wx.StaticText( self, wx.ID_ANY, u"other custom", wx.DefaultPosition, wx.DefaultSize, 0 )
         self.custom_text.Wrap( -1 )
