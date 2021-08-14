@@ -160,6 +160,8 @@ def get_option(network_id, input_value, preset_values):
     option_panel.SetCustomLabel(f"input a {input_value}")
     if preset_values:
         option_panel.SetPresetValues(preset_values[network_id])
+    else:
+        option_panel.HidePreset()
     if option_dialog.ShowModal() == wx.ID_OK:
         optval = option_panel.GetValue()
         return optval
