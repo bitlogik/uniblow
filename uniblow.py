@@ -424,7 +424,6 @@ def set_coin(coin, network, wallet_type):
         app.wallet = get_coin_class(coin)(network, wallet_type, app.device, **option_arg)
         account_id = app.wallet.get_account()
         if option_info is not None and option_info.get("use_get_messages", False):
-            print("Starting get messages timer")
             app.wallet.wc_timer = wx.Timer()
             app.wallet.wc_timer.Notify = app.wallet.get_messages
     except InvalidOption as exc:

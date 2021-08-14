@@ -28,6 +28,8 @@ from pywalletconnect import WalletConnectClient, WalletConnectClientInvalidOptio
 
 
 BSC_units = 18
+GWEI_UNIT = 10 ** 9
+
 
 # BEP20 functions codes
 #   balanceOf(address)
@@ -38,8 +40,6 @@ DECIMALS_FUNCTION = "313ce567"
 SYMBOL_FUNCTION = "95d89b41"
 #   transfer(address,uint256)
 TRANSFERT_FUNCTION = "a9059cbb"
-
-GWEI_UNIT = 10 ** 9
 
 
 class web3_api:
@@ -411,8 +411,6 @@ class BSC_wallet:
         # wc_message : (id, method, params) or (None, "", [])
         wc_message = self.wc_client.get_message()
         while wc_message[0] is not None:
-            print(">>> received from WC :")
-            print(wc_message)
             id_request = wc_message[0]
             method = wc_message[1]
             parameters = wc_message[2]
@@ -430,9 +428,7 @@ class BSC_wallet:
                 # Not implemented
                 pass
             elif "eth_sendTransaction" == method:
-                print("----  Signature request received :")
                 tx_to_sign = parameters[0]
-                print(tx_to_sign)
                 if compare_eth_addresses(tx_to_sign["from"], self.get_account()):
                     self.process_sendtransaction(id_request, tx_to_sign)
             elif "eth_signTransaction" == method:

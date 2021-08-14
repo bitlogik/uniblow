@@ -522,8 +522,6 @@ class ETH_wallet:
         # wc_message : (id, method, params) or (None, "", [])
         wc_message = self.wc_client.get_message()
         while wc_message[0] is not None:
-            print(">>> received from WC :")
-            print(wc_message)
             id_request = wc_message[0]
             method = wc_message[1]
             parameters = wc_message[2]
@@ -541,9 +539,7 @@ class ETH_wallet:
                 # Not implemented
                 pass
             elif "eth_sendTransaction" == method:
-                print("----  Signature request received :")
                 tx_to_sign = parameters[0]
-                print(tx_to_sign)
                 if compare_eth_addresses(tx_to_sign["from"], self.get_account()):
                     self.process_sendtransaction(id_request, tx_to_sign)
             elif "eth_signTransaction" == method:
