@@ -22,9 +22,9 @@ import urllib.request
 
 from cryptolib.cryptography import public_key_recover, decompress_pubkey, sha3
 from cryptolib.coins.ethereum import rlp_encode, int2bytearray, uint256, read_string
-from wallets.wallets_utils import shift_10, InvalidOption
+from wallets.wallets_utils import shift_10, compare_eth_addresses, InvalidOption
 from wallets.BSCtokens import tokens_values
-from wallets.wallet_connect import WalletConnectClient, WalletConnectClientInvalidOption
+from pywalletconnect import WalletConnectClient, WalletConnectClientInvalidOption
 
 
 BSC_units = 18
@@ -38,6 +38,8 @@ DECIMALS_FUNCTION = "313ce567"
 SYMBOL_FUNCTION = "95d89b41"
 #   transfer(address,uint256)
 TRANSFERT_FUNCTION = "a9059cbb"
+
+GWEI_UNIT = 10 ** 9
 
 
 class web3_api:
@@ -103,9 +105,10 @@ class web3_api:
         return int(self.getKey("result")[2:], 16)
 
     def get_fee(self, priority):
+        """Get the gas price in Gwei units"""
         self.getData("eth_gasPrice")
         self.checkapiresp()
-        gaz_price = int(self.getKey("result")[2:], 16) / 10 ** 9
+        gaz_price = int(self.getKey("result")[2:], 16) / GWEI_UNIT
         if priority == 0:
             return int(gaz_price * 0.9)
         if priority == 1:
@@ -213,18 +216,22 @@ class BSCwalletCore:
         numtx = self.api.get_tx_num(self.address, "pending")
         return numtx
 
-    def prepare(self, toaddr, paymentvalue, gprice, glimit):
+    def prepare(self, toaddr, paymentvalue, gprice, glimit, data=bytearray(b"")):
+        """Build a transaction to be signed.
+        toaddr in hex without 0x
+        value in wei, gprice in Gwei
+        """
         if self.BEP20:
             maxspendable = self.getbalance(False)
             balance_bsc = self.getbalance()
-            if balance_bsc < ((gprice * glimit) * 10 ** 9):
+            if balance_bsc < ((gprice * glimit) * GWEI_UNIT):
                 raise Exception("Not enough native BSC funding for the tx fee")
         else:
-            maxspendable = self.getbalance() - ((gprice * glimit) * 10 ** 9)
+            maxspendable = self.getbalance() - ((gprice * glimit) * GWEI_UNIT)
         if paymentvalue > maxspendable or paymentvalue < 0:
             raise Exception(f"Not enough {self.token_symbol} tokens for the tx")
         self.nonce = int2bytearray(self.getnonce())
-        self.gasprice = int2bytearray(gprice * 10 ** 9)
+        self.gasprice = int2bytearray(gprice * GWEI_UNIT)
         self.startgas = int2bytearray(glimit)
         if self.BEP20:
             self.to = bytearray.fromhex(self.BEP20[2:])
@@ -235,7 +242,7 @@ class BSCwalletCore:
         else:
             self.to = bytearray.fromhex(toaddr)
             self.value = int2bytearray(int(paymentvalue))
-            self.data = bytearray(b"")
+            self.data = data
         v = int2bytearray(self.chainID)
         r = int2bytearray(0)
         s = int2bytearray(0)
@@ -255,7 +262,7 @@ class BSCwalletCore:
         self.datahash = sha3(signing_tx)
         return self.datahash
 
-    def send(self, signature_der):
+    def add_signature(self, signature_der):
         # Signature decoding
         lenr = int(signature_der[3])
         lens = int(signature_der[5 + lenr])
@@ -283,8 +290,11 @@ class BSCwalletCore:
                 s,
             ]
         )
-        txhex = tx_final.hex()
-        return "\nDONE, txID : " + self.api.pushtx(txhex)[2:]
+        return tx_final.hex()
+
+    def send(self, tx_hex):
+        """Upload the tx"""
+        return self.api.pushtx(tx_hex)
 
 
 class BSC_wallet:
@@ -333,6 +343,7 @@ class BSC_wallet:
     ):
         self.network = BSC_wallet.networks[network].lower()
         self.current_device = device
+        self.confirm_callback = confirm_callback
         pubkey_hex = self.current_device.get_public_key()
         if contract_addr is not None:
             if len(contract_addr) == 42 and "0x" == contract_addr[:2]:
@@ -358,7 +369,6 @@ class BSC_wallet:
                 if hasattr(self, "wc_client"):
                     self.wc_client.close()
                 raise InvalidOption(exc)
-            print(request_info)
             if req_chain_id != self.bsc.chainID:
                 self.wc_client.close()
                 raise InvalidOption("Chain ID is different.")
@@ -367,7 +377,7 @@ class BSC_wallet:
                 f"{request_info['name']}\n"
                 f"website : {request_info['url']}\n"
             )
-            approve = confirm_callback(request_message)
+            approve = self.confirm_callback(request_message)
             if approve:
                 self.wc_client.reply_session_request(req_id, self.bsc.chainID, self.get_account())
             else:
@@ -395,18 +405,43 @@ class BSC_wallet:
         # Read address to fund the wallet
         return f"0x{self.bsc.address}"
 
-    # For WalletConnect, get messages more often than balance
+    # Process messages for WalletConnect
+    # Get messages more often than balance
     def get_messages(self):
-        print("Checking WC messages")
+        # wc_message : (id, method, params) or (None, "", [])
         wc_message = self.wc_client.get_message()
-        while wc_message != {}:
+        while wc_message[0] is not None:
             print(">>> received from WC :")
             print(wc_message)
-            # if : {'approved': False, 'chainId': None, 'networkId': None, 'accounts': None}
-            # -> disconnect
+            id_request = wc_message[0]
+            method = wc_message[1]
+            parameters = wc_message[2]
+            if "wc_sessionUpdate" == method:
+                if "approved" in parameters and parameters["approved"] is False:
+                    self.wc_client.close()
+                    raise Exception("Disconnected by the web app service")
+            elif "personal_sign" == method:
+                # Not implemented
+                pass
+            elif "eth_sign" == method:
+                # Not implemented
+                pass
+            elif "eth_signTypedData" == method:
+                # Not implemented
+                pass
+            elif "eth_sendTransaction" == method:
+                print("----  Signature request received :")
+                tx_to_sign = parameters[0]
+                print(tx_to_sign)
+                if compare_eth_addresses(tx_to_sign["from"], self.get_account()):
+                    self.process_sendtransaction(id_request, tx_to_sign)
+            elif "eth_signTransaction" == method:
+                # Not implemented
+                pass
+            elif "eth_sendRawTransaction" == method:
+                # Not implemented
+                pass
             wc_message = self.wc_client.get_message()
-
-            # .reply(msg_id, session_request_result)
 
     def get_balance(self):
         # Get balance in base integer unit
@@ -430,10 +465,45 @@ class BSC_wallet:
             BSC_EXPLORER_URL += "#tokentxns"
         return BSC_EXPLORER_URL
 
-    def raw_tx(self, amount, gazprice, ethgazlimit, account):
-        hash_to_sign = self.bsc.prepare(account, amount, gazprice, ethgazlimit)
+    def exec_tx(self, amount, gazprice, ethgazlimit, account, data=None):
+        """Build, sign, and broadcast a transaction.
+        Used to transfer tokens native or ERC20 with the given parameters.
+        Return the tx hash broadcasted as 0xhhhhhhhh.
+        """
+        if data is None:
+            data = bytearray(b"")
+        hash_to_sign = self.bsc.prepare(account, amount, gazprice, ethgazlimit, data)
         tx_signature = self.current_device.sign(hash_to_sign)
-        return self.bsc.send(tx_signature)
+        tx_signed = self.bsc.add_signature(tx_signature)
+        return self.bsc.send(tx_signed)
+
+    def process_sendtransaction(self, id_request, txdata):
+        """Process a WalletConnect eth_sendTransaction call"""
+        to_addr = txdata.get("to", "  New contract")[2:]
+        value = txdata.get("value", 0)
+        if value != 0:
+            value = int(value, 16)
+        gas_price = txdata.get("gasPrice", 0)
+        if gas_price != 0:
+            gas_price = int(gas_price, 16) // GWEI_UNIT
+        else:
+            gas_price = self.bsc.api.get_fee(1)
+        gas_limit = txdata.get("gas", 90000)
+        if gas_limit != 90000:
+            gas_limit = int(gas_limit, 16)
+        request_message = (
+            "WalletConnect transaction request :\n\n"
+            f" To    :  0x{to_addr}\n"
+            f" Value :  {value / (10 ** self.bsc.decimals)} {self.coin}\n"
+            f" Gas price  : {gas_price} Gwei\n"
+            f" Gas limit  : {gas_limit}\n"
+            f"Max fee cost: {gas_limit*gas_price/GWEI_UNIT} {self.coin}\n"
+        )
+        if self.confirm_callback(request_message):
+            data_hex = txdata.get("data", "0x")
+            data = bytearray.fromhex(data_hex[2:])
+            tx_hash = self.exec_tx(value, gas_price, gas_limit, to_addr, data)
+            self.wc_client.reply(id_request, tx_hash)
 
     def transfer(self, amount, to_account, priority_fee):
         # Transfer x unit to an account, pay
@@ -444,9 +514,10 @@ class BSC_wallet:
         if to_account.startswith("0x"):
             to_account = to_account[2:]
         ethgazprice = self.bsc.api.get_fee(priority_fee)  # gwei per gaz unit
-        return self.raw_tx(
+        tx_hash = self.exec_tx(
             shift_10(amount, self.bsc.decimals), ethgazprice, ethgazlimit, to_account
         )
+        return "\nDONE, txID : " + tx_hash[2:]
 
     def transfer_inclfee(self, amount, to_account, fee_priority):
         # Transfer the amount in base unit minus fee, like the receiver paying the fee
@@ -460,8 +531,9 @@ class BSC_wallet:
         if self.bsc.BEP20:
             fee = 0
         else:
-            fee = int(gazlimit * gazprice * 10 ** 9)
-        return self.raw_tx(amount - fee, gazprice, gazlimit, to_account)
+            fee = int(gazlimit * gazprice * GWEI_UNIT)
+        tx_hash = self.exec_tx(amount - fee, gazprice, gazlimit, to_account)
+        return "\nDONE, txID : " + tx_hash[2:]
 
     def transfer_all(self, to_account, fee_priority):
         # Transfer all the wallet to an address (minus fee)
