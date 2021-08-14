@@ -103,6 +103,7 @@ def erase_info():
     if hasattr(app, "balance_timer"):
         app.balance_timer.Stop()
     if hasattr(app, "wallet") and hasattr(app.wallet, "wc_timer"):
+        app.wallet.wc_client.close()
         app.wallet.wc_timer.Stop()
         delattr(app.wallet, "wc_timer")
     paint_toaddr(wx.NullColour)
@@ -116,7 +117,7 @@ def erase_info():
     app.gui_panel.wallopt_choice.Disable()
     app.gui_panel.qrimg.SetBitmap(wx.Bitmap())
     if hasattr(app, "wallet"):
-        delattr(app, "wallet")
+        del app.wallet
     app.gui_panel.balance_info.SetLabel("")
     app.gui_panel.account_addr.SetLabel("")
     app.gui_frame.Refresh()
@@ -164,16 +165,32 @@ def get_option(network_id, input_value, preset_values):
         return optval
 
 
-def confirm(to_addr, amount):
+def confirm_tx(to_addr, amount):
     conf_txt = f"Confirm this transaction ?\n{amount} {app.wallet.coin} to {to_addr}"
-    confirm_modal = wx.MessageDialog(
+    confirm_tx_modal = wx.MessageDialog(
         app.gui_frame,
         conf_txt,
         "Confirmation",
         wx.YES_NO | wx.NO_DEFAULT | wx.ICON_QUESTION | wx.STAY_ON_TOP | wx.CENTER,
         wx.DefaultPosition,
     )
-    return confirm_modal.ShowModal()
+    return confirm_tx_modal.ShowModal()
+
+
+def confirm_request(request_ui_message, callback_approve, *args):
+    """Display a modal to the user.
+    callback *args called if the user approves the request.
+    """
+    confirm_txt = f"Do you approve the following request ?\n\n{request_ui_message}"
+    confirm_tx_modal = wx.MessageDialog(
+        app.gui_frame,
+        confirm_txt,
+        "Request",
+        wx.YES_NO | wx.NO_DEFAULT | wx.ICON_QUESTION | wx.STAY_ON_TOP | wx.CENTER,
+        wx.DefaultPosition,
+    )
+    if confirm_tx_modal.ShowModal() == wx.ID_YES:
+        callback_approve(*args)
 
 
 def tx_success(message):
@@ -398,12 +415,15 @@ def set_coin(coin, network, wallet_type):
             )
             app.device.derive_key(current_path)
         if option_info is not None:
-            option_arg = {option_info["option_name"]: option_value}
+            option_arg = {
+                option_info["option_name"]: option_value,
+                "confirm_callback": confirm_request,
+            }
         app.wallet = get_coin_class(coin)(network, wallet_type, app.device, **option_arg)
         account_id = app.wallet.get_account()
         if option_info is not None and option_info["option_name"] == "wc_uri":
             app.wallet.wc_timer = wx.Timer()
-            app.wallet.wc_timer.Notify = app.wallet.get_socket_messages
+            app.wallet.wc_timer.Notify = app.wallet.get_messages
     except InvalidOption as exc:
         warn_modal(str(exc))
         wallet_fallback()
@@ -515,7 +535,7 @@ def check_addr(ev):
 
 
 def transfer(to, amount):
-    conf = confirm(to, amount)
+    conf = confirm_tx(to, amount)
     if conf == wx.ID_YES:
         fee_opt = app.gui_panel.fee_slider.GetValue()
         try:

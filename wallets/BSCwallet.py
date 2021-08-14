@@ -24,7 +24,7 @@ from cryptolib.cryptography import public_key_recover, decompress_pubkey, sha3
 from cryptolib.coins.ethereum import rlp_encode, int2bytearray, uint256, read_string
 from wallets.wallets_utils import shift_10, InvalidOption
 from wallets.BSCtokens import tokens_values
-from wallets.WalletConnect import WalletConnectClient, WalletConnectClientInvalidOption
+from wallets.wallet_connect import WalletConnectClient, WalletConnectClientInvalidOption
 
 
 BSC_units = 18
@@ -324,7 +324,9 @@ class BSC_wallet:
     GAZ_LIMIT_SIMPLE_TX = 21000
     GAZ_LIMIT_ERC_20_TX = 180000
 
-    def __init__(self, network, wtype, device, contract_addr=None, wc_uri=None):
+    def __init__(
+        self, network, wtype, device, contract_addr=None, wc_uri=None, confirm_callback=None
+    ):
         self.network = BSC_wallet.networks[network].lower()
         self.current_device = device
         pubkey_hex = self.current_device.get_public_key()
@@ -346,11 +348,30 @@ class BSC_wallet:
             self.coin = self.bsc.token_symbol
         if wc_uri is not None:
             try:
-                self.wc_client = WalletConnectClient.from_wc_uri(
-                    wc_uri, self.get_account(), self.bsc.chainID
-                )
+                self.wc_client = WalletConnectClient.from_wc_uri(wc_uri)
+                req_id, req_chain_id, request_info = self.wc_client.open_session()
             except WalletConnectClientInvalidOption as exc:
                 raise InvalidOption(exc)
+            print(request_info)
+            if req_chain_id != self.bsc.chainID:
+                raise InvalidOption("Chain ID is different.")
+            request_message = (
+                "WalletConnect request from :\n"
+                f"{request_info['name']}\n"
+                f"{request_info['url']}\n"
+            )
+            confirm_callback(
+                request_message,
+                self.wc_client.reply_session_request,
+                req_id,
+                self.bsc.chainID,
+                self.get_account(),
+            )
+
+    def __del__(self):
+        """Close the WebSocket connection when deleting the object."""
+        if hasattr(self, "wc_client"):
+            del self.wc_client
 
     @classmethod
     def get_networks(cls):
@@ -368,8 +389,8 @@ class BSC_wallet:
         # Read address to fund the wallet
         return f"0x{self.bsc.address}"
 
-    # Requires for WalletConnect, esp. for ping in WebSocket
-    def get_socket_messages(self):
+    # For WalletConnect, get messages more often than balance
+    def get_messages(self):
         print("Checking WC messages")
         wc_message = self.wc_client.get_message()
         while wc_message != {}:
@@ -378,6 +399,8 @@ class BSC_wallet:
             # if : {'approved': False, 'chainId': None, 'networkId': None, 'accounts': None}
             # -> disconnect
             wc_message = self.wc_client.get_message()
+
+            # .reply(msg_id, session_request_result)
 
     def get_balance(self):
         # Get balance in base integer unit
