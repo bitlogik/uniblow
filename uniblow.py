@@ -642,9 +642,7 @@ def send_all(ev):
 
 
 def start_main_app():
-    global app
 
-    app = wx.App()
     ret = gui.app.start_app(app, VERSION, SUPPORTED_COINS, DEVICES_LIST)
     if ret == "ERR":
         return
@@ -662,6 +660,9 @@ def start_main_app():
     app.gui_panel.fee_slider.Bind(wx.EVT_SCROLL_CHANGED, fee_changed)
 
     app.MainLoop()
+
+
+app = wx.App()
 
 
 if __name__ == "__main__":
