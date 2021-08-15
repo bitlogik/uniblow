@@ -153,7 +153,7 @@ python setup.py install
 
 #### Run uniblow
 ```
-python uniblow.py
+python uniblow.py -v
 ```
 
 #### Quit the venv
@@ -166,6 +166,8 @@ deactivate
 Within a terminal, in the uniblow directory
 ```
 source unibenv/bin/activate
-python uniblow.py
+python uniblow.py -v
 deactivate
 ```
+
+The '-v' argument enables the debug logging output for more verbose terminal output.
