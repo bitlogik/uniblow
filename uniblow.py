@@ -259,7 +259,7 @@ def close_device():
 
 
 def cb_open_wallet(wallet_obj, pkey, waltype, sw_frame):
-    """Process the opening of the wallet from SeedWatcher"""
+    """Process the opening of the wallet from SeedWatcher."""
     key_device = SKdevice()
     key_device.load_key(pkey)
     app.device = key_device

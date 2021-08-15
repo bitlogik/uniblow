@@ -189,8 +189,8 @@ class WebSocketClient:
         ws_url = urlparse(wsURL)
         assert ws_url.scheme == "https"
         self.received_messages = []
+        port_num = ws_url.port or DEFAULT_HTTPS_PORT
         try:
-            port_num = ws_url.port or DEFAULT_HTTPS_PORT
             self.ssocket = TLSsocket(ws_url.hostname, port_num)
             self.websock_conn = WSConnection(ConnectionType.CLIENT)
             logger.debug(
