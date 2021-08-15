@@ -637,16 +637,13 @@ def send_all(ev):
     transfer(to, "ALL")
 
 
-if __name__ == "__main__":
-    try:
-        windll.shcore.SetProcessDpiAwareness(True)
-    except Exception:
-        pass
+def start_main_app():
+    global app
 
     app = wx.App()
     ret = gui.app.start_app(app, VERSION, SUPPORTED_COINS, DEVICES_LIST)
     if ret == "ERR":
-        sys.exit()
+        return
 
     app.gui_panel.devices_choice.Bind(wx.EVT_CHOICE, device_selected)
     app.gui_panel.coins_choice.Bind(wx.EVT_CHOICE, coin_selected)
@@ -661,3 +658,12 @@ if __name__ == "__main__":
     app.gui_panel.fee_slider.Bind(wx.EVT_SCROLL_CHANGED, fee_changed)
 
     app.MainLoop()
+
+
+if __name__ == "__main__":
+    try:
+        windll.shcore.SetProcessDpiAwareness(True)
+    except Exception:
+        pass
+
+    start_main_app()
