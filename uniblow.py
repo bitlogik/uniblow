@@ -59,6 +59,9 @@ GREEN_COLOR = wx.Colour(73, 172, 73)
 RED_COLOR = wx.Colour(198, 60, 60)
 
 
+BAD_ADDRESS = "Wrong destination account address checksum or wrong format."
+
+
 logger = getLogger(__name__)
 
 
@@ -613,7 +616,7 @@ def send(ev):
         return
     to = app.gui_panel.dest_addr.GetValue()
     if not app.wallet.check_address(to):
-        warn_modal("Wrong destination account address format")
+        warn_modal(BAD_ADDRESS)
         return
     sending_value_str = app.gui_panel.amount.GetValue()
     if len(sending_value_str) <= 0:
@@ -636,7 +639,7 @@ def send_all(ev):
         return
     to = app.gui_panel.dest_addr.GetValue()
     if not app.wallet.check_address(to):
-        warn_modal("Wrong destination account address format")
+        warn_modal(BAD_ADDRESS)
         return
     transfer(to, "ALL")
 
