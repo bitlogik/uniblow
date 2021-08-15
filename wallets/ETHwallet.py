@@ -25,7 +25,7 @@ from cryptolib.cryptography import public_key_recover, decompress_pubkey, sha3
 from cryptolib.coins.ethereum import rlp_encode, int2bytearray, uint256, read_string
 from wallets.wallets_utils import shift_10, compare_eth_addresses, InvalidOption
 from wallets.ETHtokens import tokens_values
-from pywalletconnect import WalletConnectClient, WalletConnectClientInvalidOption
+from pywalletconnect import WCClient, WCClientInvalidOption
 
 
 ETH_units = 18
@@ -474,9 +474,9 @@ class ETH_wallet:
             self.coin = self.eth.token_symbol
         if wc_uri is not None:
             try:
-                self.wc_client = WalletConnectClient.from_wc_uri(wc_uri)
+                self.wc_client = WCClient.from_wc_uri(wc_uri)
                 req_id, req_chain_id, request_info = self.wc_client.open_session()
-            except WalletConnectClientInvalidOption as exc:
+            except WCClientInvalidOption as exc:
                 if hasattr(self, "wc_client"):
                     self.wc_client.close()
                 raise InvalidOption(exc)
