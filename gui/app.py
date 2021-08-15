@@ -153,7 +153,8 @@ class app_option_panel(gui.window.OptionPanel):
     def okOption(self, event):
         event.Skip()
         option_value = self.new_choice.GetValue()
-        if option_value:
+        # Option value filled by user, or not preset displayed
+        if option_value or not hasattr(self, "preset_values"):
             self.option_value = option_value
         else:
             preset_choice = self.known_choice.GetStringSelection()
