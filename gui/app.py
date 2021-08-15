@@ -28,8 +28,6 @@ from wx import (
     Cursor,
     CURSOR_HAND,
     BITMAP_TYPE_PNG,
-    ID_CANCEL,
-    ID_OK,
 )
 
 import gui.window

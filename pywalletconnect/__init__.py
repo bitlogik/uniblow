@@ -1,4 +1,3 @@
-#!/usr/bin/python3
 # -*- coding: utf8 -*-
 
 # pyWalletConnect : a Python library to use WalletConnect

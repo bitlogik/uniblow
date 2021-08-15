@@ -6,7 +6,6 @@
 
 import sys
 from setuptools import setup, find_packages
-from pip._internal import main as pipmain
 from version import VERSION
 
 with open("README.md") as readme_file:

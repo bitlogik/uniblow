@@ -1,5 +1,3 @@
-import pytest
-
 import secrets
 
 from cryptolib import ECP256k1
