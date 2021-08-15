@@ -391,7 +391,7 @@ def device_selected(device):
                 app.gui_panel.devices_choice.SetSelection(0)
                 warn_modal(str(exc))
                 logger.error(
-                    f"Error during device PIN/pwd : {str(exc)}", exc_info=exc, stack_info=True
+                    "Error during device PIN/pwd : %s", str(exc), exc_info=exc, stack_info=True
                 )
                 return
         wx.MilliSleep(100)
