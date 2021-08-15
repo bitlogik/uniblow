@@ -243,9 +243,7 @@ class WebSocketClient:
         So that pings are reply almost real time "async".
         """
         self.get_messages()
-        for _ in range(self.received_messages.count("ping")):
-            ping_idx = self.received_messages.index("ping")
-            self.received_messages.pop(ping_idx)
+        # Restart the reading timer if the socket is still present
         if hasattr(self, "ssocket"):
             self.timer_pings = Timer(UNIT_WAITING_TIME, self.collect_messages)
             self.timer_pings.daemon = True
@@ -278,7 +276,6 @@ class WebSocketClient:
                 elif isinstance(event, Ping):
                     logger.debug("Ping received in WebSocket")
                     self.send(event.response())
-                    self.received_messages.insert(0, "ping")
                     logger.debug("Pong reply sent")
                 elif isinstance(event, TextMessage):
                     logger.debug("WebSocket Text message received : %s", event.data)
@@ -452,10 +449,10 @@ class WalletConnectClient:
         while cyclew < CYCLES_TIMEOUT:
             sleep(UNIT_WAITING_TIME)
             read_data = self.get_data()
-            if read_data and read_data != "ping":
-                print(">>> read :")
-                print(read_data)
+            if read_data:
+                logger.debug("<-- WalletConnect message read : %s", read_data)
                 msg_id, method, query_params = json_rpc_unpack(read_data)
+                logger.debug("RPC Call id=%i : method=%s params=%s", msg_id, method, query_params)
                 if method == "wc_sessionRequest":
                     break
             cyclew += 1
