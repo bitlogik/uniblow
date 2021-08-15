@@ -21,6 +21,7 @@
 from os import urandom
 from urllib.parse import unquote, urlparse
 from json import dumps, loads
+from logging import getLogger
 from re import compile as regexcompile
 from ssl import create_default_context, SSLWantReadError
 from socket import create_connection
@@ -58,6 +59,9 @@ AES_BLOCK_SIZE_BITS = AES_BLOCK_SIZE << 3
 WC_AES_KEY_SIZE = 32  # WCv1 uses 256 bits AES key
 
 RECEIVING_BUFFER_SIZE = 8192
+
+
+logger = getLogger(__name__)
 
 
 # ---- Crypto primitives for the secure channel
@@ -189,11 +193,13 @@ class WebSocketClient:
             port_num = ws_url.port or DEFAULT_HTTPS_PORT
             self.ssocket = TLSsocket(ws_url.hostname, port_num)
             self.websock_conn = WSConnection(ConnectionType.CLIENT)
-            print("path target")
+            logger.debug(
+                "Connecting to WebSocket Host=%s PathTarget=%s", ws_url.hostname, ws_url.path
+            )
             self.send(Request(host=ws_url.hostname, target=ws_url.path or "/"))
             cyclew = 0
             while cyclew < CYCLES_TIMEOUT:
-                print(f"{cyclew} loop ws")
+                logger.debug("Waiting WebSocket handshake : %ith loop.", cyclew + 1)
                 sleep(UNIT_WAITING_TIME)
                 self.get_messages()
                 while len(self.received_messages) > 0:
@@ -210,14 +216,14 @@ class WebSocketClient:
             if cyclew == CYCLES_TIMEOUT:
                 raise WebSocketClientException("WebSocket handshake timeout")
         except Exception as exc:
-            print(exc)
+            logger.error("Error during WebSocket connection : %s", str(exc), exc_info=exc)
             raise WebSocketClientException(exc) from exc
 
     def close(self):
         """Stop read timer and close the TLS connection when deleting the object."""
-        print("Cancel timer")
+        logger.debug("Cancelling the WebSocket reading timer")
         self.timer_pings.cancel()
-        print("delete WS")
+        logger.debug("Closing WebSocket")
         self.ssocket.close()
         delattr(self, "ssocket")
 
@@ -236,8 +242,6 @@ class WebSocketClient:
         Used to be called periodically from the timer.
         So that pings are reply almost real time "async".
         """
-        print("Reply Pings")
-        print("gettings messages")
         self.get_messages()
         for _ in range(self.received_messages.count("ping")):
             ping_idx = self.received_messages.index("ping")
@@ -261,31 +265,31 @@ class WebSocketClient:
             self.websock_conn.receive_data(datarcv)
             for event in self.websock_conn.events():
                 if isinstance(event, AcceptConnection):
-                    print("Connection established")
+                    logger.debug("WebSocket connection established.")
                     self.received_messages.insert(0, "established")
                 elif isinstance(event, RejectConnection):
-                    print("Connection rejected")
+                    logger.debug("WebSocket connection rejected.")
                     self.received_messages.insert(0, "rejected")
                 elif isinstance(event, CloseConnection):
-                    print("Connection closed: code={} reason={}".format(event.code, event.reason))
+                    logger.error(
+                        "WebSocket Connection closed: code=%i reason=%s", event.code, event.reason
+                    )
                     del self
                 elif isinstance(event, Ping):
-                    print("Ping received")
+                    logger.debug("Ping received in WebSocket")
                     self.send(event.response())
-                    print("Pong sent")
                     self.received_messages.insert(0, "ping")
+                    logger.debug("Pong reply sent")
                 elif isinstance(event, TextMessage):
-                    print("Text receive")
+                    logger.debug("WebSocket Text message received : %s", event.data)
                     if event.message_finished:
                         self.received_messages.insert(0, event.data)
                 elif isinstance(event, BytesMessage):
-                    print("Bytes receive")
+                    logger.debug("WebSocket Bytes message received : %s", event.data)
                     if event.message_finished:
                         self.received_messages.insert(0, event.data)
                 else:
-                    Exception("Unknown event: {!r}".format(event))
-        print("get messages out:")
-        print(self.received_messages)
+                    Exception("Unknown WebSocket event : {!r}".format(event))
 
 
 class EncryptedChannel:
@@ -335,12 +339,13 @@ class WalletConnectClient:
         """
         # Chain ID is managed outside the walletconnect class
         # Shall be managed by the user / webapp
+        logger.debug("Opening a WalletConnect client with %s", ws_url)
         self.relay_url = ws_url
         try:
             self.websock = WebSocketClient(ws_url)
             self.data_queue = self.websock.received_messages
         except Exception as exc:
-            print(exc)
+            logger.error("Error during device initialization : %s", str(exc), exc_info=exc)
             raise WalletConnectClientException(exc) from exc
         self.wallet_id = str(uuid4())
         self.enc_channel = EncryptedChannel(symkey)
@@ -349,7 +354,7 @@ class WalletConnectClient:
 
     def close(self):
         """Close the WebSocket connection when deleting the object."""
-        print("delete WC")
+        logger.debug("Closing WalletConnect link.")
         self.websock.close()
 
     @classmethod
@@ -357,18 +362,19 @@ class WalletConnectClient:
         """Create a WalletConnect client from wc URI"""
         found = WalletConnectClient.wc_uri_pattern.findall(wc_uri_str)
         if not found:
-            raise WalletConnectClientInvalidOption("Bad wc URI\nMust be wc:xxxx")
+            raise WalletConnectClientInvalidOption("Bad wc URI provided\nMust be : wc:xxxx...")
         wc_data = found[0]
         if len(wc_data) != 4:
-            raise WalletConnectClientInvalidOption("Bad data receive in URI")
+            raise WalletConnectClientInvalidOption("Bad data received in URI")
         handshake_topic = wc_data[0]
         wc_ver = wc_data[1]
         bridge_url = unquote(wc_data[2])
+        if len(wc_data[3]) % 2 != 0 or len(wc_data[3]) // 2 != WC_AES_KEY_SIZE:
+            raise WalletConnectClientInvalidOption("Bad key data format in URI")
         sym_key = bytes.fromhex(wc_data[3])
         if wc_ver != "1":
             raise WalletConnectClientInvalidOption("Bad WalletConnect version. Only supports v1.")
-        if len(sym_key) != WC_AES_KEY_SIZE:
-            raise WalletConnectClientInvalidOption("Bad key data in URI")
+        logger.debug("wc URI provided decoded successfully, now starting the WalletConnect client")
         return cls(bridge_url, handshake_topic, sym_key)
 
     def get_relay_url(self):
@@ -380,12 +386,11 @@ class WalletConnectClient:
         Usually : { topic: 'xxxx', type: 'pub/sub', payload: 'xxxx' }
         """
         raw_data = json_encode(data_dict)
-        print("Sending :")
-        print(raw_data)
+        logger.debug("WalletConnect message sending to relay : %s", raw_data)
         self.websock.write_message(raw_data)
 
     def get_data(self):
-        """Read the first data in the receive queue messages."""
+        """Read the first data available in the receive queue messages."""
         # Non-blocking, so return None if no data has been received
         if len(self.data_queue) > 0:
             rcvd_message = self.data_queue.pop(0)
@@ -405,8 +410,11 @@ class WalletConnectClient:
         rcvd_data = self.get_data()
         if rcvd_data and isinstance(rcvd_data, bytes) and rcvd_data.startswith(b'{"'):
             # return (id, method, params)
-            return json_rpc_unpack(rcvd_data)
-        return (None, "", [])
+            msg_ready = json_rpc_unpack(rcvd_data)
+        else:
+            msg_ready = (None, "", [])
+        logger.debug("Get data, WalletConnect message available : %s", msg_ready)
+        return msg_ready
 
     def reply(self, req_id, result):
         """Send a RPC response to the webapp through the relay."""
@@ -416,13 +424,17 @@ class WalletConnectClient:
             "type": "pub",
             "payload": json_encode(self.enc_channel.encrypt_payload(payload_bin)),
         }
-        # if self.debug:
-        print(f"--> [{req_id}] {result} ")
-        print(payload_bin)
+        logger.debug(
+            "--> WalletConnect Replying id[%i] : result=%s\nRaw message: %s",
+            req_id,
+            result,
+            payload_bin,
+        )
         self.write(datafull)
 
     def subscribe(self, peer_uuid):
         """Start listening to a given peer."""
+        logger.debug("Sending a subscription request for %s.", peer_uuid)
         data = {"topic": peer_uuid, "type": "sub", "payload": ""}
         self.write(data)
 
@@ -435,7 +447,7 @@ class WalletConnectClient:
         self.subscribe(self.wallet_id)
 
         # Waiting for sessionRequest
-        print("Waiting for sessionRequest")
+        logger.debug("Waiting for WalletConnect sessionRequest.")
         cyclew = 0
         while cyclew < CYCLES_TIMEOUT:
             sleep(UNIT_WAITING_TIME)
@@ -451,11 +463,9 @@ class WalletConnectClient:
             self.close()
             raise WalletConnectClientException("sessionRequest timeout")
 
-        print(" -- Session Request --")
+        logger.debug(" -- Session Request received : %s", query_params[0])
         self.app_peer_id = query_params[0]["peerId"]
         app_chain_id = query_params[0]["chainId"]
-        print(query_params[0])
-        print(query_params[0]["peerMeta"])
         return msg_id, app_chain_id, query_params[0]["peerMeta"]
 
     def reply_session_request(self, msg_id, chain_id, account_address):
@@ -472,4 +482,5 @@ class WalletConnectClient:
             "chainId": chain_id,
             "accounts": [account_address],
         }
+        logger.debug("Replying the sessionRequest.")
         self.reply(msg_id, session_request_result)

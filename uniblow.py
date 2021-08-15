@@ -17,8 +17,9 @@
 
 from ctypes import windll
 from importlib import import_module
-import sys
+from logging import basicConfig, DEBUG, getLogger
 from io import BytesIO
+from sys import argv
 
 import wx
 import qrcode
@@ -57,6 +58,10 @@ DEFAULT_PASSWORD = "NoPasswd"
 GREEN_COLOR = wx.Colour(73, 172, 73)
 RED_COLOR = wx.Colour(198, 60, 60)
 
+
+logger = getLogger(__name__)
+
+
 wallets = {}
 for coin_lib in SUPPORTED_COINS:
     wallets[f"{coin_lib}wallet"] = import_module(f"wallets.{coin_lib}wallet")
@@ -86,10 +91,8 @@ def display_balance():
     except IOError as exc:
         erase_info()
         err_msg = f"Network error when getting info.\nCheck your Internet connection.\n{str(exc)}"
+        logger.error("Error in display_balance : %s", err_msg, exc_info=exc, stack_info=True)
         warn_modal(err_msg)
-        if not getattr(sys, "frozen", False):
-            # output the exception when dev environment
-            raise exc
         return
     app.gui_panel.balance_info.SetLabel(balance)
     app.gui_panel.hist_button.Enable()
@@ -307,10 +310,10 @@ def device_selected(device):
             device_loaded = the_device()
         except Exception as exc:
             app.gui_panel.devices_choice.SetSelection(0)
+            logger.error(
+                "Error during device loading : %s", str(exc), exc_info=exc, stack_info=True
+            )
             warn_modal(str(exc))
-            if not getattr(sys, "frozen", False):
-                # output the exception when dev environment
-                raise exc
             return
         while True:
             try:
@@ -370,10 +373,13 @@ def device_selected(device):
                     break
                 except Exception as exc:
                     app.gui_panel.devices_choice.SetSelection(0)
+                    logger.error(
+                        "Error during device initialization : %s",
+                        {str(exc)},
+                        exc_info=exc,
+                        stack_info=True,
+                    )
                     warn_modal(str(exc))
-                    if not getattr(sys, "frozen", False):
-                        # output the exception when dev environment
-                        raise exc
                     return
             except pwdException:
                 inp_message = f"Input your {device_sel_name} wallet {pwd_pin}\n"
@@ -384,9 +390,9 @@ def device_selected(device):
             except Exception as exc:
                 app.gui_panel.devices_choice.SetSelection(0)
                 warn_modal(str(exc))
-                if not getattr(sys, "frozen", False):
-                    # output the exception when dev environment
-                    raise exc
+                logger.error(
+                    f"Error during device PIN/pwd : {str(exc)}", exc_info=exc, stack_info=True
+                )
                 return
         wx.MilliSleep(100)
         app.device = device_loaded
@@ -420,10 +426,8 @@ def wallet_error(exc):
     app.gui_panel.wallopt_choice.Clear()
     app.gui_panel.coins_choice.SetSelection(0)
     erase_info()
+    logger.error("Error in the wallet : %s", str(exc), exc_info=exc, stack_info=True)
     warn_modal(str(exc))
-    if not getattr(sys, "frozen", False):
-        # output the exception when dev environment
-        raise exc
 
 
 def set_coin(coin, network, wallet_type):
@@ -590,14 +594,14 @@ def transfer(to, amount):
             wx.MilliSleep(100)
             progress_modal.Destroy()
             wx.MilliSleep(100)
+            logger.error(
+                "Error during device selection : %s", str(exc), exc_info=exc, stack_info=True
+            )
             if str(exc) == "Error status : 0x6600":
                 warn_modal("User button on PGP device timeout")
             else:
                 warn_modal(str(exc))
             wx.MilliSleep(250)
-            if not getattr(sys, "frozen", False):
-                # output the exception when dev environment
-                raise exc
             return
 
 
@@ -661,6 +665,10 @@ def start_main_app():
 
 
 if __name__ == "__main__":
+
+    if "-v" in argv[1:]:
+        basicConfig(level=DEBUG)
+
     try:
         windll.shcore.SetProcessDpiAwareness(True)
     except Exception:

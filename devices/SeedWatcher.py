@@ -16,6 +16,7 @@
 
 
 from functools import partial
+from logging import getLogger
 import sys
 import webbrowser
 from wx import (
@@ -65,6 +66,9 @@ coins_list = [
 ]
 
 WORDSLEN_LIST = ["12 words", "15 words", "18 words", "21 words", "24 words"]
+
+
+logger = getLogger(__name__)
 
 
 def open_explorer(explorer_url):
@@ -152,9 +156,12 @@ class SeedWatcherPanel(gui.swgui.MainPanel):
         self.m_textCtrl_mnemo.SetValue(mnemo)
 
     def add_coin(self, coin):
-        self.m_dataViewListCtrl1.AppendItem(
-            [coin.name, coin.wallet.get_account(), coin.wallet.get_balance()]
-        )
+        try:
+            coin_info = [coin.name, coin.wallet.get_account(), coin.wallet.get_balance()]
+        except Exception as exc:
+            logger.error("Error when reading info for %s (skipped) : ", coin.name, exc_info=exc)
+        else:
+            self.m_dataViewListCtrl1.AppendItem(coin_info)
 
     def display_coins(self):
         for coin in self.coins:
