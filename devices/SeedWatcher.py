@@ -42,6 +42,7 @@ from gui.app import file_path
 from cryptolib.HDwallet import HD_Wallet, generate_mnemonic, bip39_is_checksum_valid
 from wallets.BTCwallet import BTC_wallet
 from wallets.ETHwallet import ETH_wallet
+from wallets.MATICwallet import MATIC_wallet
 from wallets.BSCwallet import BSC_wallet
 from wallets.LTCwallet import LTC_wallet
 from wallets.DOGEwallet import DOGE_wallet
@@ -57,6 +58,7 @@ coins_list = [
     {"name": "Bitcoin P2WSH", "path": "m/49'/ 0'/0'/0/", "wallet_lib": BTC_wallet, "type": 1},
     {"name": "Bitcoin SegWit", "path": "m/84'/ 0'/0'/0/", "wallet_lib": BTC_wallet, "type": 2},
     {"name": "Ethereum", "path": "m/44'/60'/0'/0/", "wallet_lib": ETH_wallet},
+    {"name": "MATIC", "path": "m/44'/60'/0'/0/", "wallet_lib": MATIC_wallet},
     {"name": "BSC", "path": "m/44'/60'/0'/0/", "wallet_lib": BSC_wallet},
     # {"name": "Binance", "path": "m/44'/714'/0'/0/", "wallet_lib": BNB_wallet},
     {"name": "Litecoin", "path": "m/44'/2'/0'/0/", "wallet_lib": LTC_wallet},
