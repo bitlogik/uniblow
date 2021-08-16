@@ -166,11 +166,8 @@ class BIP32node:
         fingerprint = 0  # Hash160(privkey_to_pubkey(self.pv_key, self.curve, True))[:4]
         while not key_valid:  # SLIP10
             deriv = HMAC_SHA512(self.chain_code, data)
-            # if private:
             derIL = int.from_bytes(deriv[:32], "big")
             newkey = (derIL + self.pv_key.pv_int()) % n_order
-            # else:
-            # newkey = add_pubkeys(compress(privkey_to_pubkey(I[:32], opensslbin, curve)), key)
             if derIL >= n_order or newkey == 0:
                 data = bytes([1]) + deriv[32:] + BIP32node.ser32(i)
                 deriv = HMAC_SHA512(self.chain_code, data)
