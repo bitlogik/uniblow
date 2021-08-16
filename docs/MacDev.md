@@ -23,11 +23,20 @@ Known issues :
 
 You MacOS system needs :
 
--   [Python 3.8
-    pkg](https://www.python.org/ftp/python/3.8.10/python-3.8.10-macos11.pkg)
+-   [Python 3.9
+    pkg](https://www.python.org/ftp/python/3.9.6/python-3.9.6-macos11.pkg)
     installed
 
 -   XCode and developer tools
+
+#### Prepare system
+
+Update the Python certificates, in the Terminal.
+
+```
+cd /Applications/Python\ 3.9/
+./Install\ Certificates.command
+```
 
 #### Get the uniblow source
 ```
@@ -44,8 +53,8 @@ source unibenv/bin/activate
 #### Install uniblow dependencies
 ```
 python -m pip install pip==21.2.1
-python -m pip install wxPython==4.1.1 pyscard=2.0.0 pysha3==1.0.2 pynacl==1.4.0
-python -m pip install .
+python -m pip install wxPython==4.1.1 pyscard==2.0.1 pysha3==1.0.2 pynacl==1.4.0 pyWalletConnect==1.0.0
+python -m pip install -e .
 ```
 
 #### Run uniblow
