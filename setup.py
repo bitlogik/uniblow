@@ -6,7 +6,6 @@
 
 import sys
 from setuptools import setup, find_packages
-from pip._internal import main as pipmain
 from version import VERSION
 
 with open("README.md") as readme_file:
@@ -33,6 +32,7 @@ setup(
         "qrcode==6.1",
         "PyNaCl==1.4.0",
         "OpenPGPpy==0.4",
+        "pyWalletConnect==1.0.0",
     ],
     package_data={
         "gui": [

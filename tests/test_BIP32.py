@@ -1,5 +1,3 @@
-import pytest
-
 from cryptolib.HDwallet import BIP32node
 
 # Tests from BIP32 and SLIP10 vectors

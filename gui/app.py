@@ -28,8 +28,6 @@ from wx import (
     Cursor,
     CURSOR_HAND,
     BITMAP_TYPE_PNG,
-    ID_CANCEL,
-    ID_OK,
 )
 
 import gui.window
@@ -153,7 +151,8 @@ class app_option_panel(gui.window.OptionPanel):
     def okOption(self, event):
         event.Skip()
         option_value = self.new_choice.GetValue()
-        if option_value:
+        # Option value filled by user, or not preset displayed
+        if option_value or not hasattr(self, "preset_values"):
             self.option_value = option_value
         else:
             preset_choice = self.known_choice.GetStringSelection()
@@ -166,6 +165,11 @@ class app_option_panel(gui.window.OptionPanel):
 
     def GetValue(self):
         return self.option_value
+
+    def HidePreset(self):
+        self.preset_text.Hide()
+        self.known_choice.Hide()
+        self.m_staticTextor.Hide()
 
     def SetPresetLabel(self, text):
         self.preset_label = text

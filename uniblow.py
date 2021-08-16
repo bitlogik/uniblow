@@ -17,8 +17,9 @@
 
 from ctypes import windll
 from importlib import import_module
-import sys
+from logging import basicConfig, DEBUG, getLogger
 from io import BytesIO
+from sys import argv
 
 import wx
 import qrcode
@@ -31,8 +32,9 @@ from version import VERSION
 SUPPORTED_COINS = [
     "BTC",
     "ETH",
-    "LTC",
     "BSC",
+    "MATIC",
+    "LTC",
     "DOGE",
     "EOS",
     "XTZ",
@@ -55,6 +57,13 @@ DEFAULT_PASSWORD = "NoPasswd"
 
 GREEN_COLOR = wx.Colour(73, 172, 73)
 RED_COLOR = wx.Colour(198, 60, 60)
+
+
+BAD_ADDRESS = "Wrong destination account address checksum or wrong format."
+
+
+logger = getLogger(__name__)
+
 
 wallets = {}
 for coin_lib in SUPPORTED_COINS:
@@ -85,16 +94,22 @@ def display_balance():
     except IOError as exc:
         erase_info()
         err_msg = f"Network error when getting info.\nCheck your Internet connection.\n{str(exc)}"
+        logger.error("Error in display_balance : %s", err_msg, exc_info=exc, stack_info=True)
         warn_modal(err_msg)
-        if not getattr(sys, "frozen", False):
-            # output the exception when dev environment
-            raise exc
         return
     app.gui_panel.balance_info.SetLabel(balance)
     app.gui_panel.hist_button.Enable()
     app.gui_panel.copy_button.Enable()
     bal_str = balance.split(" ")[0]
-    if bal_str not in ("0", "0.0") and not bal_str.startswith("Register"):
+    if (
+        bal_str not in ("0", "0.0")
+        # EOS when register pubkey mode : disable sending
+        and not bal_str.startswith("Register")
+        # WalletConnect : disable sending
+        and not hasattr(app.wallet, "wc_timer")
+    ):
+        app.gui_panel.dest_addr.Enable()
+        app.gui_panel.amount.Enable()
         app.gui_panel.send_button.Enable()
         app.gui_panel.send_all.Enable()
 
@@ -102,9 +117,15 @@ def display_balance():
 def erase_info():
     if hasattr(app, "balance_timer"):
         app.balance_timer.Stop()
+    if hasattr(app, "wallet") and hasattr(app.wallet, "wc_timer"):
+        app.wallet.wc_client.close()
+        app.wallet.wc_timer.Stop()
+        delattr(app.wallet, "wc_timer")
     paint_toaddr(wx.NullColour)
     app.gui_panel.hist_button.Disable()
     app.gui_panel.copy_button.Disable()
+    app.gui_panel.dest_addr.Disable()
+    app.gui_panel.amount.Disable()
     app.gui_panel.send_all.Disable()
     app.gui_panel.send_button.Disable()
     app.gui_panel.network_label.Disable()
@@ -113,7 +134,7 @@ def erase_info():
     app.gui_panel.wallopt_choice.Disable()
     app.gui_panel.qrimg.SetBitmap(wx.Bitmap())
     if hasattr(app, "wallet"):
-        delattr(app, "wallet")
+        del app.wallet
     app.gui_panel.balance_info.SetLabel("")
     app.gui_panel.account_addr.SetLabel("")
     app.gui_frame.Refresh()
@@ -156,21 +177,39 @@ def get_option(network_id, input_value, preset_values):
     option_panel.SetCustomLabel(f"input a {input_value}")
     if preset_values:
         option_panel.SetPresetValues(preset_values[network_id])
+    else:
+        option_panel.HidePreset()
     if option_dialog.ShowModal() == wx.ID_OK:
         optval = option_panel.GetValue()
         return optval
 
 
-def confirm(to_addr, amount):
+def confirm_tx(to_addr, amount):
     conf_txt = f"Confirm this transaction ?\n{amount} {app.wallet.coin} to {to_addr}"
-    confirm_modal = wx.MessageDialog(
+    confirm_tx_modal = wx.MessageDialog(
         app.gui_frame,
         conf_txt,
         "Confirmation",
         wx.YES_NO | wx.NO_DEFAULT | wx.ICON_QUESTION | wx.STAY_ON_TOP | wx.CENTER,
         wx.DefaultPosition,
     )
-    return confirm_modal.ShowModal()
+    return confirm_tx_modal.ShowModal()
+
+
+def confirm_request(request_ui_message):
+    """Display a modal to the user.
+    callback *args called if the user approves the request.
+    """
+    confirm_txt = f"Do you approve the following request ?\n\n{request_ui_message}"
+    confirm_tx_modal = wx.MessageDialog(
+        app.gui_frame,
+        confirm_txt,
+        "Request",
+        wx.YES_NO | wx.NO_DEFAULT | wx.ICON_QUESTION | wx.STAY_ON_TOP | wx.CENTER,
+        wx.DefaultPosition,
+    )
+    modal_choice = confirm_tx_modal.ShowModal()
+    return modal_choice == wx.ID_YES
 
 
 def tx_success(message):
@@ -207,13 +246,23 @@ def disp_history(ev):
         gui.app.show_history(hist_url)
 
 
+def watch_messages():
+    """Watch for messages recveives.
+    For some wallet types such as WalletConnect.
+    """
+    try:
+        app.wallet.get_messages()
+    except Exception as exc:
+        wallet_error(exc)
+
+
 def close_device():
     if hasattr(app, "device"):
         del app.device
 
 
 def cb_open_wallet(wallet_obj, pkey, waltype, sw_frame):
-    """Process the opening of the wallet from SeedWatcher"""
+    """Process the opening of the wallet from SeedWatcher."""
     key_device = SKdevice()
     key_device.load_key(pkey)
     app.device = key_device
@@ -264,10 +313,10 @@ def device_selected(device):
             device_loaded = the_device()
         except Exception as exc:
             app.gui_panel.devices_choice.SetSelection(0)
+            logger.error(
+                "Error during device loading : %s", str(exc), exc_info=exc, stack_info=True
+            )
             warn_modal(str(exc))
-            if not getattr(sys, "frozen", False):
-                # output the exception when dev environment
-                raise exc
             return
         while True:
             try:
@@ -327,10 +376,13 @@ def device_selected(device):
                     break
                 except Exception as exc:
                     app.gui_panel.devices_choice.SetSelection(0)
+                    logger.error(
+                        "Error during device initialization : %s",
+                        {str(exc)},
+                        exc_info=exc,
+                        stack_info=True,
+                    )
                     warn_modal(str(exc))
-                    if not getattr(sys, "frozen", False):
-                        # output the exception when dev environment
-                        raise exc
                     return
             except pwdException:
                 inp_message = f"Input your {device_sel_name} wallet {pwd_pin}\n"
@@ -341,9 +393,9 @@ def device_selected(device):
             except Exception as exc:
                 app.gui_panel.devices_choice.SetSelection(0)
                 warn_modal(str(exc))
-                if not getattr(sys, "frozen", False):
-                    # output the exception when dev environment
-                    raise exc
+                logger.error(
+                    "Error during device PIN/pwd : %s", str(exc), exc_info=exc, stack_info=True
+                )
                 return
         wx.MilliSleep(100)
         app.device = device_loaded
@@ -371,6 +423,16 @@ def wallet_fallback():
     wx.CallLater(180, process_coin_select, coin_sel, net_sel, wallet_type_fallback)
 
 
+def wallet_error(exc):
+    """Process wallet exception"""
+    app.gui_panel.network_choice.Clear()
+    app.gui_panel.wallopt_choice.Clear()
+    app.gui_panel.coins_choice.SetSelection(0)
+    erase_info()
+    logger.error("Error in the wallet : %s", str(exc), exc_info=exc, stack_info=True)
+    warn_modal(str(exc))
+
+
 def set_coin(coin, network, wallet_type):
     fee_opt_sel = app.gui_panel.fee_slider.GetValue()
     app.gui_panel.fee_setting.SetLabel(FEES_PRORITY_TEXT[fee_opt_sel])
@@ -395,22 +457,21 @@ def set_coin(coin, network, wallet_type):
             )
             app.device.derive_key(current_path)
         if option_info is not None:
-            option_arg = {option_info["option_name"]: option_value}
+            option_arg = {
+                option_info["option_name"]: option_value,
+                "confirm_callback": confirm_request,
+            }
         app.wallet = get_coin_class(coin)(network, wallet_type, app.device, **option_arg)
         account_id = app.wallet.get_account()
+        if option_info is not None and option_info.get("use_get_messages", False):
+            app.wallet.wc_timer = wx.Timer()
+            app.wallet.wc_timer.Notify = watch_messages
     except InvalidOption as exc:
         warn_modal(str(exc))
         wallet_fallback()
         return
     except Exception as exc:
-        app.gui_panel.network_choice.Clear()
-        app.gui_panel.wallopt_choice.Clear()
-        app.gui_panel.coins_choice.SetSelection(0)
-        erase_info()
-        warn_modal(str(exc))
-        if not getattr(sys, "frozen", False):
-            # output the exception when dev environment
-            raise exc
+        wallet_error(exc)
         return
     display_coin(account_id)
 
@@ -432,6 +493,8 @@ def display_coin(account_addr):
     app.balance_timer = DisplayTimer()
     wx.CallLater(50, display_balance)
     app.balance_timer.Start(10000)
+    if hasattr(app.wallet, "wc_timer"):
+        app.wallet.wc_timer.Start(2500, oneShot=wx.TIMER_CONTINUOUS)
     app.gui_frame.Refresh()
     app.gui_frame.Update()
 
@@ -507,7 +570,7 @@ def check_addr(ev):
 
 
 def transfer(to, amount):
-    conf = confirm(to, amount)
+    conf = confirm_tx(to, amount)
     if conf == wx.ID_YES:
         fee_opt = app.gui_panel.fee_slider.GetValue()
         try:
@@ -534,14 +597,14 @@ def transfer(to, amount):
             wx.MilliSleep(100)
             progress_modal.Destroy()
             wx.MilliSleep(100)
+            logger.error(
+                "Error during device selection : %s", str(exc), exc_info=exc, stack_info=True
+            )
             if str(exc) == "Error status : 0x6600":
                 warn_modal("User button on PGP device timeout")
             else:
                 warn_modal(str(exc))
             wx.MilliSleep(250)
-            if not getattr(sys, "frozen", False):
-                # output the exception when dev environment
-                raise exc
             return
 
 
@@ -553,7 +616,7 @@ def send(ev):
         return
     to = app.gui_panel.dest_addr.GetValue()
     if not app.wallet.check_address(to):
-        warn_modal("Wrong destination account address format")
+        warn_modal(BAD_ADDRESS)
         return
     sending_value_str = app.gui_panel.amount.GetValue()
     if len(sending_value_str) <= 0:
@@ -576,21 +639,16 @@ def send_all(ev):
         return
     to = app.gui_panel.dest_addr.GetValue()
     if not app.wallet.check_address(to):
-        warn_modal("Wrong destination account address format")
+        warn_modal(BAD_ADDRESS)
         return
     transfer(to, "ALL")
 
 
-if __name__ == "__main__":
-    try:
-        windll.shcore.SetProcessDpiAwareness(True)
-    except Exception:
-        pass
+def start_main_app():
 
-    app = wx.App()
     ret = gui.app.start_app(app, VERSION, SUPPORTED_COINS, DEVICES_LIST)
     if ret == "ERR":
-        sys.exit()
+        return
 
     app.gui_panel.devices_choice.Bind(wx.EVT_CHOICE, device_selected)
     app.gui_panel.coins_choice.Bind(wx.EVT_CHOICE, coin_selected)
@@ -605,3 +663,19 @@ if __name__ == "__main__":
     app.gui_panel.fee_slider.Bind(wx.EVT_SCROLL_CHANGED, fee_changed)
 
     app.MainLoop()
+
+
+app = wx.App()
+
+
+if __name__ == "__main__":
+
+    if "-v" in argv[1:]:
+        basicConfig(level=DEBUG)
+
+    try:
+        windll.shcore.SetProcessDpiAwareness(True)
+    except Exception:
+        pass
+
+    start_main_app()

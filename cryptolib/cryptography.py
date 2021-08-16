@@ -31,7 +31,7 @@ from cryptography.hazmat.primitives.asymmetric import ec, utils
 from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
 from nacl.hashlib import scrypt
 
-## Cryptography
+# Cryptography
 
 CURVES_ORDER = {
     "K1": int("FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEBAAEDCE6AF48A03BBFD25E8CD0364141", 16),
@@ -55,7 +55,7 @@ def public_key_recover(h, r, s, par=0):
     return Q.encode_output(False)
 
 
-## EC key pair (private, public)
+# EC key pair (private, public)
 
 
 class EC_key_pair:

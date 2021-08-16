@@ -16,6 +16,7 @@
 
 
 from functools import partial
+from logging import getLogger
 import sys
 import webbrowser
 from wx import (
@@ -41,6 +42,7 @@ from gui.app import file_path
 from cryptolib.HDwallet import HD_Wallet, generate_mnemonic, bip39_is_checksum_valid
 from wallets.BTCwallet import BTC_wallet
 from wallets.ETHwallet import ETH_wallet
+from wallets.MATICwallet import MATIC_wallet
 from wallets.BSCwallet import BSC_wallet
 from wallets.LTCwallet import LTC_wallet
 from wallets.DOGEwallet import DOGE_wallet
@@ -56,6 +58,7 @@ coins_list = [
     {"name": "Bitcoin P2WSH", "path": "m/49'/ 0'/0'/0/", "wallet_lib": BTC_wallet, "type": 1},
     {"name": "Bitcoin SegWit", "path": "m/84'/ 0'/0'/0/", "wallet_lib": BTC_wallet, "type": 2},
     {"name": "Ethereum", "path": "m/44'/60'/0'/0/", "wallet_lib": ETH_wallet},
+    {"name": "MATIC", "path": "m/44'/60'/0'/0/", "wallet_lib": MATIC_wallet},
     {"name": "BSC", "path": "m/44'/60'/0'/0/", "wallet_lib": BSC_wallet},
     # {"name": "Binance", "path": "m/44'/714'/0'/0/", "wallet_lib": BNB_wallet},
     {"name": "Litecoin", "path": "m/44'/2'/0'/0/", "wallet_lib": LTC_wallet},
@@ -65,6 +68,9 @@ coins_list = [
 ]
 
 WORDSLEN_LIST = ["12 words", "15 words", "18 words", "21 words", "24 words"]
+
+
+logger = getLogger(__name__)
 
 
 def open_explorer(explorer_url):
@@ -152,9 +158,12 @@ class SeedWatcherPanel(gui.swgui.MainPanel):
         self.m_textCtrl_mnemo.SetValue(mnemo)
 
     def add_coin(self, coin):
-        self.m_dataViewListCtrl1.AppendItem(
-            [coin.name, coin.wallet.get_account(), coin.wallet.get_balance()]
-        )
+        try:
+            coin_info = [coin.name, coin.wallet.get_account(), coin.wallet.get_balance()]
+        except Exception as exc:
+            logger.error("Error when reading info for %s (skipped) : ", coin.name, exc_info=exc)
+        else:
+            self.m_dataViewListCtrl1.AppendItem(coin_info)
 
     def display_coins(self):
         for coin in self.coins:

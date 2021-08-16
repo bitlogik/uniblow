@@ -41,5 +41,17 @@ def shift_10(num_str, shift):
     return 0
 
 
+def compare_eth_addresses(addr1, addr2):
+    """Compare 2 ethereum-compatible addresses.
+    Accept 0x or hex, lower, upper or mixed "checksummed".
+    Does not check for their validity.
+    """
+    if addr1.startswith("0x"):
+        addr1 = addr1[2:]
+    if addr2.startswith("0x"):
+        addr2 = addr2[2:]
+    return addr1.lower() == addr2.lower()
+
+
 class InvalidOption(Exception):
     pass

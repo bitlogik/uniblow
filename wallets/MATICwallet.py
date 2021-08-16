@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 # -*- coding: utf8 -*-
 
-# UNIBLOW BSC wallet with with Binance web3 API REST
+# UNIBLOW MATIC wallet with with RPC API REST
 # Copyright (C) 2021 BitLogiK
 
 # This program is free software: you can redistribute it and/or modify
@@ -23,15 +23,15 @@ import urllib.request
 from cryptolib.cryptography import public_key_recover, decompress_pubkey, sha3
 from cryptolib.coins.ethereum import rlp_encode, int2bytearray, uint256, read_string
 from wallets.wallets_utils import shift_10, compare_eth_addresses, InvalidOption
-from wallets.BSCtokens import tokens_values
+from wallets.MATICtokens import tokens_values
 from pywalletconnect import WCClient, WCClientInvalidOption
 
 
-BSC_units = 18
+MATIC_units = 18
 GWEI_UNIT = 10 ** 9
 
 
-# BEP20 functions codes
+# ERC20 functions codes
 #   balanceOf(address)
 BALANCEOF_FUNCTION = "70a08231"
 #   decimals()
@@ -44,9 +44,9 @@ TRANSFERT_FUNCTION = "a9059cbb"
 
 class web3_api:
     def __init__(self, network):
-        self.url = "https://bsc-dataseed2.binance.org/"
-        if network.lower() == "testnet":
-            self.url = "https://data-seed-prebsc-2-s1.binance.org:8545/"
+        self.url = "https://rpc-mainnet.maticvigil.com/"
+        if network.lower() == "mumbai":
+            self.url = "https://rpc-mumbai.maticvigil.com/"
         self.jsres = []
 
     def getData(self, method, params=[]):
@@ -136,7 +136,7 @@ def has_checksum(addr):
 
 
 def format_checksum_address(addr):
-    # Format an ETH/BSC address with checksum (without 0x)
+    # Format an MATIC/ETH address with checksum (without 0x)
     addr = addr.lower()
     addr_sha3hash = sha3(addr.encode("ascii")).hex()
     cs_address = ""
@@ -168,28 +168,28 @@ def testaddr(eth_addr):
     return True
 
 
-class BSCwalletCore:
-    def __init__(self, pubkey, network, api, BEP20=None):
+class MATICwalletCore:
+    def __init__(self, pubkey, network, api, ERC20=None):
         self.pubkey = decompress_pubkey(pubkey)
         key_hash = sha3(self.pubkey[1:])
         self.address = format_checksum_address(key_hash.hex()[-40:])
-        self.BEP20 = BEP20
+        self.ERC20 = ERC20
         self.api = api
         if network == "mainnet":
-            self.chainID = 56
-        if network == "testnet":
-            self.chainID = 97
+            self.chainID = 137
+        if network == "mumbai":
+            self.chainID = 80001
         self.decimals = self.get_decimals()
         self.token_symbol = self.get_symbol()
 
     def getbalance(self, native=True):
         if native:
-            # BSC native balance
+            # MATIC native balance
             return self.api.get_balance(self.address, 0)
         else:
-            # BEP20 token balance
+            # ERC20 token balance
             balraw = self.api.call(
-                self.BEP20, BALANCEOF_FUNCTION, "000000000000000000000000" + self.address
+                self.ERC20, BALANCEOF_FUNCTION, "000000000000000000000000" + self.address
             )
             if balraw == [] or balraw == "0x":
                 return 0
@@ -197,17 +197,17 @@ class BSCwalletCore:
             return balance
 
     def get_decimals(self):
-        if self.BEP20:
-            balraw = self.api.call(self.BEP20, DECIMALS_FUNCTION)
+        if self.ERC20:
+            balraw = self.api.call(self.ERC20, DECIMALS_FUNCTION)
             if balraw == [] or balraw == "0x":
                 return 1
             return int(balraw[2:], 16)
         else:
-            return BSC_units
+            return MATIC_units
 
     def get_symbol(self):
-        if self.BEP20:
-            balraw = self.api.call(self.BEP20, SYMBOL_FUNCTION)
+        if self.ERC20:
+            balraw = self.api.call(self.ERC20, SYMBOL_FUNCTION)
             if balraw == [] or balraw == "0x":
                 return "---"
             return read_string(balraw)
@@ -221,11 +221,11 @@ class BSCwalletCore:
         toaddr in hex without 0x
         value in wei, gprice in Gwei
         """
-        if self.BEP20:
+        if self.ERC20:
             maxspendable = self.getbalance(False)
-            balance_bsc = self.getbalance()
-            if balance_bsc < ((gprice * glimit) * GWEI_UNIT):
-                raise Exception("Not enough native BSC funding for the tx fee")
+            balance_mtc = self.getbalance()
+            if balance_mtc < ((gprice * glimit) * GWEI_UNIT):
+                raise Exception("Not enough native MATIC funding for the tx fee")
         else:
             maxspendable = self.getbalance() - ((gprice * glimit) * GWEI_UNIT)
         if paymentvalue > maxspendable or paymentvalue < 0:
@@ -233,8 +233,8 @@ class BSCwalletCore:
         self.nonce = int2bytearray(self.getnonce())
         self.gasprice = int2bytearray(gprice * GWEI_UNIT)
         self.startgas = int2bytearray(glimit)
-        if self.BEP20:
-            self.to = bytearray.fromhex(self.BEP20[2:])
+        if self.ERC20:
+            self.to = bytearray.fromhex(self.ERC20[2:])
             self.value = int2bytearray(int(0))
             self.data = bytearray.fromhex(TRANSFERT_FUNCTION + "00" * 12 + toaddr) + uint256(
                 paymentvalue
@@ -297,35 +297,35 @@ class BSCwalletCore:
         return self.api.pushtx(tx_hex)
 
 
-class BSC_wallet:
+class MATIC_wallet:
 
-    coin = "BSC"
+    coin = "MATIC"
 
     networks = [
         "Mainnet",
-        "Testnet",
+        "Mumbai",
     ]
 
-    wtypes = ["Standard", "BEP20", "WalletConnect"]
+    wtypes = ["Standard", "ERC20", "WalletConnect"]
 
     derive_paths = [
-        # mainnet
+        # Mainnet
         [
             "m/44'/60'/0'/0/",
         ],
-        # testnet
+        # Testnet Mumbai
         [
             "m/44'/1'/0'/0/",
         ],
     ]
 
-    # BSC wallet type 1 and 2 have option
+    # MATIC wallet type 1 and 2 have option
     user_options = [1, 2]
     # self.__init__ ( contract_addr = "user input option" )
     options_data = [
         {
             "option_name": "contract_addr",
-            "prompt": "BEP20 contract address",
+            "prompt": "ERC20 contract address",
             "preset": tokens_values,
         },
         {
@@ -341,7 +341,7 @@ class BSC_wallet:
     def __init__(
         self, network, wtype, device, contract_addr=None, wc_uri=None, confirm_callback=None
     ):
-        self.network = BSC_wallet.networks[network].lower()
+        self.network = MATIC_wallet.networks[network].lower()
         self.current_device = device
         self.confirm_callback = confirm_callback
         pubkey_hex = self.current_device.get_public_key()
@@ -356,11 +356,11 @@ class BSC_wallet:
                 )
         else:
             contract_addr_str = None
-        self.bsc = BSCwalletCore(
+        self.eth = MATICwalletCore(
             pubkey_hex, self.network, web3_api(self.network), contract_addr_str
         )
         if contract_addr_str is not None:
-            self.coin = self.bsc.token_symbol
+            self.coin = self.eth.token_symbol
         if wc_uri is not None:
             try:
                 self.wc_client = WCClient.from_wc_uri(wc_uri)
@@ -369,18 +369,18 @@ class BSC_wallet:
                 if hasattr(self, "wc_client"):
                     self.wc_client.close()
                 raise InvalidOption(exc)
-            if req_chain_id != self.bsc.chainID:
+            if req_chain_id != self.eth.chainID:
                 self.wc_client.close()
                 raise InvalidOption("Chain ID is different.")
             request_message = (
                 "WalletConnect request from :\n\n"
                 f"{request_info['name']}\n\n"
-                f"Website   : {request_info['url']}\n"
+                f"website : {request_info['url']}\n"
                 f"Relay URL : {self.wc_client.get_relay_url()}\n"
             )
             approve = self.confirm_callback(request_message)
             if approve:
-                self.wc_client.reply_session_request(req_id, self.bsc.chainID, self.get_account())
+                self.wc_client.reply_session_request(req_id, self.eth.chainID, self.get_account())
             else:
                 self.wc_client.close()
                 raise InvalidOption("You just declined the WalletConnect request.")
@@ -404,7 +404,7 @@ class BSC_wallet:
 
     def get_account(self):
         # Read address to fund the wallet
-        return f"0x{self.bsc.address}"
+        return f"0x{self.eth.address}"
 
     # Process messages for WalletConnect
     # Get messages more often than balance
@@ -442,7 +442,7 @@ class BSC_wallet:
     def get_balance(self):
         # Get balance in base integer unit
         return (
-            str(self.bsc.getbalance(not self.bsc.BEP20) / (10 ** self.bsc.decimals))
+            str(self.eth.getbalance(not self.eth.ERC20) / (10 ** self.eth.decimals))
             + " "
             + self.coin
         )
@@ -454,12 +454,14 @@ class BSC_wallet:
     def history(self):
         # Get history page
         if self.network == "mainnet":
-            BSC_EXPLORER_URL = f"https://www.bscscan.com/address/0x{self.bsc.address}"
+            MATIC_EXPLORER_URL = f"https://polygonscan.com/address/0x{self.eth.address}"
         else:
-            BSC_EXPLORER_URL = f"https://testnet.bscscan.com/address/0x{self.bsc.address}"
-        if self.bsc.BEP20:
-            BSC_EXPLORER_URL += "#tokentxns"
-        return BSC_EXPLORER_URL
+            MATIC_EXPLORER_URL = (
+                f"https://{self.network}.polygonscan.com/address/0x{self.eth.address}"
+            )
+        if self.eth.ERC20:
+            MATIC_EXPLORER_URL += "#tokentxns"
+        return MATIC_EXPLORER_URL
 
     def exec_tx(self, amount, gazprice, ethgazlimit, account, data=None):
         """Build, sign, and broadcast a transaction.
@@ -468,10 +470,10 @@ class BSC_wallet:
         """
         if data is None:
             data = bytearray(b"")
-        hash_to_sign = self.bsc.prepare(account, amount, gazprice, ethgazlimit, data)
+        hash_to_sign = self.eth.prepare(account, amount, gazprice, ethgazlimit, data)
         tx_signature = self.current_device.sign(hash_to_sign)
-        tx_signed = self.bsc.add_signature(tx_signature)
-        return self.bsc.send(tx_signed)
+        tx_signed = self.eth.add_signature(tx_signature)
+        return self.eth.send(tx_signed)
 
     def process_sendtransaction(self, id_request, txdata):
         """Process a WalletConnect eth_sendTransaction call"""
@@ -483,14 +485,14 @@ class BSC_wallet:
         if gas_price != 0:
             gas_price = int(gas_price, 16) // GWEI_UNIT
         else:
-            gas_price = self.bsc.api.get_fee(1)
+            gas_price = self.eth.api.get_fee(1)
         gas_limit = txdata.get("gas", 90000)
         if gas_limit != 90000:
             gas_limit = int(gas_limit, 16)
         request_message = (
             "WalletConnect transaction request :\n\n"
             f" To    :  0x{to_addr}\n"
-            f" Value :  {value / (10 ** self.bsc.decimals)} {self.coin}\n"
+            f" Value :  {value / (10 ** self.eth.decimals)} {self.coin}\n"
             f" Gas price  : {gas_price} Gwei\n"
             f" Gas limit  : {gas_limit}\n"
             f"Max fee cost: {gas_limit*gas_price/GWEI_UNIT} {self.coin}\n"
@@ -503,28 +505,28 @@ class BSC_wallet:
 
     def transfer(self, amount, to_account, priority_fee):
         # Transfer x unit to an account, pay
-        if self.bsc.BEP20:
-            ethgazlimit = BSC_wallet.GAZ_LIMIT_ERC_20_TX
+        if self.eth.ERC20:
+            ethgazlimit = MATIC_wallet.GAZ_LIMIT_ERC_20_TX
         else:
-            ethgazlimit = BSC_wallet.GAZ_LIMIT_SIMPLE_TX
+            ethgazlimit = MATIC_wallet.GAZ_LIMIT_SIMPLE_TX
         if to_account.startswith("0x"):
             to_account = to_account[2:]
-        ethgazprice = self.bsc.api.get_fee(priority_fee)  # gwei per gaz unit
+        ethgazprice = self.eth.api.get_fee(priority_fee)  # gwei per gaz unit
         tx_hash = self.exec_tx(
-            shift_10(amount, self.bsc.decimals), ethgazprice, ethgazlimit, to_account
+            shift_10(amount, self.eth.decimals), ethgazprice, ethgazlimit, to_account
         )
         return "\nDONE, txID : " + tx_hash[2:]
 
     def transfer_inclfee(self, amount, to_account, fee_priority):
         # Transfer the amount in base unit minus fee, like the receiver paying the fee
-        if self.bsc.BEP20:
-            gazlimit = BSC_wallet.GAZ_LIMIT_ERC_20_TX
+        if self.eth.ERC20:
+            gazlimit = MATIC_wallet.GAZ_LIMIT_ERC_20_TX
         else:
-            gazlimit = BSC_wallet.GAZ_LIMIT_SIMPLE_TX
+            gazlimit = MATIC_wallet.GAZ_LIMIT_SIMPLE_TX
         if to_account.startswith("0x"):
             to_account = to_account[2:]
-        gazprice = self.bsc.api.get_fee(fee_priority)
-        if self.bsc.BEP20:
+        gazprice = self.eth.api.get_fee(fee_priority)
+        if self.eth.ERC20:
             fee = 0
         else:
             fee = int(gazlimit * gazprice * GWEI_UNIT)
@@ -533,5 +535,5 @@ class BSC_wallet:
 
     def transfer_all(self, to_account, fee_priority):
         # Transfer all the wallet to an address (minus fee)
-        all_amount = self.bsc.getbalance(not self.bsc.BEP20)
+        all_amount = self.eth.getbalance(not self.eth.ERC20)
         return self.transfer_inclfee(all_amount, to_account, fee_priority)

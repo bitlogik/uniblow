@@ -10,6 +10,8 @@ A **uni**versal **blo**ckchain **w**allet for cryptos
 * Fast and lightweight
 * Don't wait for confirmation, instant transactions
 * Multiple cryptos blockchains
+* Tokens ERC20/BEP20
+* WalletConnect
 * Multiple networks (testnets,...)
 * Multi platforms : PC, Mac and Linux
 * Open source GPLv3
@@ -22,9 +24,9 @@ methods mentioned in the developer section below.
 
 ![Uniblow screenshot](screenshot.png)
 
-Don't expect to make complicated DeFi transactions, nor advanced settings for
-the fees. This software provides an easy and basic wallet, focused on
-universality and ease in use, as it works on multiple blockchains and platforms.
+Don't expect to get advanced settings for the fees. This software provides an
+easy and basic wallet, focused on universality and ease in use, as it works on
+multiple blockchains and platforms.
 
 Compatible with the following blockchains :
 
@@ -36,15 +38,21 @@ Compatible with the following blockchains :
 * ETH
     * mainnet, Rinkeby, Ropsten, Kovan and Goerli networks
     * ERC20 tokens
+    * WalletConnect
+* MATIC
+    * Mainnet and Mumbai networks
+    * ERC20 tokens
+    * WalletConnect
+* BSC
+    * mainnet and testnet networks
+    * BEP20 tokens
+    * WalletConnect
 * LTC
     * mainnet and testnet networks
     * Standard wallet (P2PKH)
     * Segwit P2SH compatibility
 * DOGE
     * mainnet and testnet networks
-* BSC
-    * mainnet and testnet networks
-    * BEP20 tokens
 * EOS
     * K1 wallet
     * EOSio and Jungle3 networks
@@ -161,6 +169,19 @@ wallet and start a fresh one, delete this file. You can also rename it and that
 would start a new different HD wallet, and keep the first wallet aside. In this
 case, rename back to HDseed and you read back the first wallet.
 
+
+## Special wallet options
+
+### ERC20
+
+In ETH, BSC or MATIC, you can choose the ERC20 wallet account type option. Select a known preset token, or input an ERC20 token address.
+
+### WalletConnect
+
+In ETH, BSC or MATIC, Uniblow can connect to a Dapp using the WalletConnect system. Select WalletConnect in the wallet account type, input the wc URI and it will connect to the web3 app using WalletConnect.  
+Note that in this mode, Uniblow disables sending any transaction from the GUI. All the sending transactions have to be performed from the connected web app, after your approval in Uniblow. Else you have to connect to a standard (or token) account type to process a sending transaction using Uniblow directly.
+
+
 Run Uniblow - Use the GUI
 -------------------------
 
@@ -248,7 +269,10 @@ Development
 -   For ETH, put your Infura key in ETHwallet, or use the EtherscanAPI. The
     binaries have the InfuraKey embedded.
 
--   Run with `python3 uniblow.py`
+-   Run with `python3 uniblow.py -v`
+
+The '-v' argument enables the debug logging output for more verbose terminal output.
+
 
 ### Build binaries
 
