@@ -3,7 +3,14 @@ Uniblow versions history
 
 ## 0.9.0
 
-* Soon
+* WalletConnect compatible
+* Add MATIC
+* Tokens preset list
+* Refine GUI
+* SeedWatcher wallet can use all options
+* Improve address and amount check
+* Add logging
+* CLI -v arg for debug log output
 
 ## 0.8.0
 

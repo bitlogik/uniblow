@@ -76,7 +76,7 @@ generate new BIP39 mnemonic seeds. Then one can load a given asset wallet in the
 app to make some transactions.
 
 The seed generated within SeedWatcher is BIP39 only, and is not compatible with
-Electrum. You can\'t input a generated seed in an Electrum wallet without selecting
+Electrum. You can\'t input a seed generated iwith Uniblow in an Electrum wallet without selecting
 the BIP39 option in Electrum.
 
 Note that Seed Watcher only looks at the one given address index. If you used a
@@ -86,7 +86,7 @@ recomputed properly.
 Using the Electrum seed derivation, the same limitation applies : it can only look
 at one address account at a time. That means it may not see all your full Electrum
 account. You need to manually increase the account number. Additionally, the
-SeedWatcher can't generate an Electrum compatible seed, but it can read an Electrum
+SeedWatcher can't generate an Electrum compatible seed, still it can read an Electrum
 seed (of one single address account number).
 
 ### BasicFile device
@@ -98,7 +98,7 @@ with an encryption key derived from the user chosen password using [Argon2id
 (moderate
 settings)](https://raw.githubusercontent.com/P-H-C/phc-winner-argon2/master/argon2-specs.pdf).
 One can choose to use a default password. To do so, just left blank the password
-prompt input when asked the first time at device setting. Without your personal
+prompt input when asked the first time at device setting. Without a personal
 password, the security of the key is what your hard-drive computer offers for
 your files.  
 If you setup a password but forget it, there would be no way to recover your
@@ -145,7 +145,7 @@ initializing a new one, and get back you fund later.
 You can also import an existing wallet from a compatible wallet, and it will use
 the funds. Note that at this stage, there is a limitation on BTC, LTC and DOGE :
 it only uses one static address for all transactions on a given blockchain. And
-it won't retrieve your money if you use an other wallet with many transactions.
+it won't retrieve your money if you use some other HD wallets with many transactions.
 
 You can also export the saved words mnemonic in an other compatible wallet, and
 it should access and use all you funds.
