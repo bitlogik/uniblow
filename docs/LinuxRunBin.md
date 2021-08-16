@@ -57,14 +57,14 @@ gpg: WARNING: Using untrusted key!
 
 The most important part to check for presence is *Good signature from Antoine FERRON (BitLogiK)*.
 
-The warning message *untrusted* is because the key is not formally approved by *gpg*. But you are sure of the key since it was retrieved from the HTTPS BitLogiK editor website, protected by HTTPS, CAA, DNSSEC and your certificates store.
+The warning message *untrusted* is because the key is not formally approved by *gpg*. But you are sure of the key since it was retrieved from an HTTPS trusted website.
 
 Note that since you get the signed binary and the PGP key from 2 different sources (Github and the key server), a hacker would need to modify data in our Github account and our key. Else, you would notice with this signature check. Still, this doesn't protect our building process nor our PGP private key, there are dedicated security measures for those of course.
 
 
 ### Run it
 
-Before to run Uniblow, you have to set once the binary to be run, like tell Linux this is indeed an executable binary.
+Before to run Uniblow, you have to set as runnable once the binary, like tell Linux this is indeed an executable binary.
 
 In the GUI, with a file explorer like Files, Nautilus or Nemo : right-click on the Uniblow file, select Properties. Then in the Permissions tab, tick the checkbox *Allow executing file as program* for the Execute option. Then close the properties window.
 

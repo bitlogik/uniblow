@@ -76,8 +76,8 @@ generate new BIP39 mnemonic seeds. Then one can load a given asset wallet in the
 app to make some transactions.
 
 The seed generated within SeedWatcher is BIP39 only, and is not compatible with
-Electrum. You can\'t input a seed generated iwith Uniblow in an Electrum wallet without selecting
-the BIP39 option in Electrum.
+Electrum. You can\'t input a seed generated with Uniblow in an Electrum wallet without
+selecting the BIP39 option in Electrum.
 
 Note that Seed Watcher only looks at the one given address index. If you used a
 full HD wallet for BTC, LTC or DOGE (such as Electrum), the balance could not be
