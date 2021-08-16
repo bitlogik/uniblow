@@ -15,7 +15,11 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 
-from ctypes import windll
+try:
+    from ctypes import windll
+except ImportError:
+    # Not Windows, anyway
+    pass
 from importlib import import_module
 from logging import basicConfig, DEBUG, getLogger
 from io import BytesIO
@@ -673,9 +677,7 @@ if __name__ == "__main__":
     if "-v" in argv[1:]:
         basicConfig(level=DEBUG)
 
-    try:
+    if "windll" in globals():
         windll.shcore.SetProcessDpiAwareness(True)
-    except Exception:
-        pass
 
     start_main_app()
