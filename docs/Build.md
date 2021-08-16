@@ -19,7 +19,7 @@ The pysha3 library may require the Microsoft Visual C++ 14.x build tools.
 * Install required packages
 ```
 sudo apt update
-sudo apt -y install libsdl2-2.0-0 python3-venv python3-pip python3-pyscard
+sudo apt install -y libsdl2-2.0-0 python3-venv python3-pip python3-pyscard
 ```
 
 * Get the source files

@@ -20,7 +20,7 @@ for softr in "${softs_req[@]}"; do
   if [ "$(is_installed $softr)" == 'not' ]; then
     echo ERROR :
     echo $softr needs to be installed
-    echo run sudo apt -y install $softr 
+    echo run sudo apt install -y $softr 
     exit 1
   fi
 done
