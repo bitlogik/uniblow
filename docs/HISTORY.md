@@ -1,6 +1,11 @@
 
 Uniblow versions history
 
+## 0.9.2
+
+* First MacOS binary package
+* Many fixes for MacOS GUI
+
 ## 0.9.0
 
 * WalletConnect compatible
