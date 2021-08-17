@@ -138,7 +138,6 @@ class TopPanel ( wx.Panel ):
         self.hist_button = wx.BitmapButton( self, wx.ID_ANY, wx.NullBitmap, wx.DefaultPosition, wx.DefaultSize, wx.BU_AUTODRAW|wx.BORDER_NONE )
 
         self.hist_button.SetBitmap( wx.NullBitmap )
-        self.hist_button.SetBitmapPressed( wx.NullBitmap )
         self.hist_button.Enable( False )
 
         bSizer19.Add( self.hist_button, 0, wx.LEFT, 25 )
@@ -146,7 +145,6 @@ class TopPanel ( wx.Panel ):
         self.copy_button = wx.BitmapButton( self, wx.ID_ANY, wx.NullBitmap, wx.DefaultPosition, wx.DefaultSize, wx.BU_AUTODRAW|wx.BORDER_NONE )
 
         self.copy_button.SetBitmap( wx.NullBitmap )
-        self.copy_button.SetBitmapPressed( wx.NullBitmap )
         self.copy_button.Enable( False )
 
         bSizer19.Add( self.copy_button, 0, wx.LEFT, 75 )
@@ -247,7 +245,6 @@ class TopPanel ( wx.Panel ):
         self.send_button = wx.BitmapButton( self, wx.ID_ANY, wx.NullBitmap, wx.DefaultPosition, wx.DefaultSize, wx.BU_AUTODRAW|wx.BORDER_NONE )
 
         self.send_button.SetBitmap( wx.NullBitmap )
-        self.send_button.SetBitmapPressed( wx.NullBitmap )
         self.send_button.Enable( False )
 
         bSizer7.Add( self.send_button, 0, wx.TOP|wx.LEFT, 8 )
@@ -258,7 +255,6 @@ class TopPanel ( wx.Panel ):
         self.send_all = wx.BitmapButton( self, wx.ID_ANY, wx.NullBitmap, wx.DefaultPosition, wx.DefaultSize, wx.BU_AUTODRAW|wx.BORDER_NONE )
 
         self.send_all.SetBitmap( wx.NullBitmap )
-        self.send_all.SetBitmapPressed( wx.NullBitmap )
         self.send_all.Enable( False )
 
         bSizer7.Add( self.send_all, 0, wx.LEFT|wx.TOP, 8 )

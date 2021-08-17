@@ -57,7 +57,6 @@ class MainPanel ( wx.Panel ):
         self.m_button_gen = wx.BitmapButton( self, wx.ID_ANY, wx.NullBitmap, wx.DefaultPosition, wx.DefaultSize, wx.BU_AUTODRAW|wx.BORDER_NONE )
 
         self.m_button_gen.SetBitmap( wx.NullBitmap )
-        self.m_button_gen.SetBitmapPressed( wx.NullBitmap )
         bSizer31.Add( self.m_button_gen, 0, wx.ALL, 10 )
 
         m_choice_nwordsChoices = []
@@ -154,7 +153,6 @@ class MainPanel ( wx.Panel ):
         self.m_btnseek = wx.BitmapButton( self, wx.ID_ANY, wx.NullBitmap, wx.DefaultPosition, wx.DefaultSize, wx.BU_AUTODRAW|wx.BORDER_NONE )
 
         self.m_btnseek.SetBitmap( wx.NullBitmap )
-        self.m_btnseek.SetBitmapPressed( wx.NullBitmap )
         bSizer11.Add( self.m_btnseek, 0, wx.ALL|wx.ALIGN_CENTER_HORIZONTAL, 14 )
 
         self.m_staticTextcopy = wx.StaticText( self, wx.ID_ANY, u"Right click on asset line to open menu", wx.DefaultPosition, wx.DefaultSize, 0 )

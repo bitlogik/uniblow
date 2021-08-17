@@ -830,7 +830,7 @@
                                                         <property name="pin_button">1</property>
                                                         <property name="pos"></property>
                                                         <property name="position"></property>
-                                                        <property name="pressed">Load From File; </property>
+                                                        <property name="pressed"></property>
                                                         <property name="resize">Resizable</property>
                                                         <property name="show">1</property>
                                                         <property name="size"></property>
@@ -902,7 +902,7 @@
                                                         <property name="pin_button">1</property>
                                                         <property name="pos"></property>
                                                         <property name="position"></property>
-                                                        <property name="pressed">Load From File; </property>
+                                                        <property name="pressed"></property>
                                                         <property name="resize">Resizable</property>
                                                         <property name="show">1</property>
                                                         <property name="size"></property>
@@ -1702,7 +1702,7 @@
                                         <property name="pin_button">1</property>
                                         <property name="pos"></property>
                                         <property name="position"></property>
-                                        <property name="pressed">Load From File; </property>
+                                        <property name="pressed"></property>
                                         <property name="resize">Resizable</property>
                                         <property name="show">1</property>
                                         <property name="size"></property>
@@ -1784,7 +1784,7 @@
                                         <property name="pin_button">1</property>
                                         <property name="pos"></property>
                                         <property name="position"></property>
-                                        <property name="pressed">Load From File; </property>
+                                        <property name="pressed"></property>
                                         <property name="resize">Resizable</property>
                                         <property name="show">1</property>
                                         <property name="size"></property>
