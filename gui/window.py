@@ -335,7 +335,7 @@ class HDPanel ( wx.Panel ):
         bSizer11.Add( bSizer15, 1, wx.EXPAND, 5 )
 
         self.m_textCtrl_mnemo = wx.TextCtrl( self, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, wx.TE_MULTILINE )
-        self.m_textCtrl_mnemo.SetFont( wx.Font( 11, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, False, wx.EmptyString ) )
+        self.m_textCtrl_mnemo.SetFont( wx.Font( 12, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, False, wx.EmptyString ) )
 
         bSizer11.Add( self.m_textCtrl_mnemo, 1, wx.EXPAND|wx.LEFT|wx.RIGHT, 16 )
 
@@ -379,7 +379,7 @@ class HDPanel ( wx.Panel ):
         self.m_staticText151 = wx.StaticText( self, wx.ID_ANY, u"Validate this first proposal,\nor insert your mnemonic and settings to import an existing HD wallet.", wx.DefaultPosition, wx.DefaultSize, 0 )
         self.m_staticText151.Wrap( -1 )
 
-        self.m_staticText151.SetFont( wx.Font( 9, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, False, wx.EmptyString ) )
+        self.m_staticText151.SetFont( wx.Font( 10, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, False, wx.EmptyString ) )
 
         bSizer11.Add( self.m_staticText151, 0, wx.ALIGN_CENTER_HORIZONTAL|wx.LEFT|wx.RIGHT, 24 )
 
