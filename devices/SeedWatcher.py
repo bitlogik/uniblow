@@ -228,7 +228,7 @@ class SeedWatcherPanel(gui.swgui.MainPanel):
             self.PopupMenu(ContextOptionsMenu(self))
 
     def copy_account(self, event):
-        if TheClipboard.Open():
+        if TheClipboard.IsOpened() or TheClipboard.Open():
             TheClipboard.Clear()
             sel_row = self.m_dataViewListCtrl1.GetSelectedRow()
             if sel_row == NOT_FOUND:

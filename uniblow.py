@@ -93,6 +93,7 @@ def get_device_class(device_str):
 
 
 def display_balance():
+    logger.debug("Checking for wallet balance")
     try:
         balance = app.wallet.get_balance()
     except IOError as exc:
@@ -231,7 +232,7 @@ def copy_account(ev):
         copy_result("No wallet")
         return
     try:
-        if wx.TheClipboard.Open():
+        if wx.TheClipboard.IsOpened() or wx.TheClipboard.Open():
             wx.TheClipboard.Clear()
             addr = app.gui_panel.account_addr.GetValue()
             wx.TheClipboard.SetData(wx.TextDataObject(addr))
