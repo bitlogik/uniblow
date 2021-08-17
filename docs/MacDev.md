@@ -8,16 +8,7 @@ When running from the source files, for ETH, you can put your Infura key in
 ETHwallet, or use the EtherscanAPI.
 
 There are specific instructions and scripts to build uniblow binaries for the
-Windows and Debian platforms in the [Build document](Build.md).
-
-**Note** : The MacOS support for Uniblow is for now experimental. There are some
-issues and the app can freeze.
-
-Known issues :
-
--   No contect menu in SeedWatcher
--   App window freezes after the error modal shown
-
+Windows, Debian and MacOS platforms in the [Build document](Build.md).
 
 #### Install prerequisites
 

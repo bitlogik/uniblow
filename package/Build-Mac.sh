@@ -1,13 +1,14 @@
 #!/bin/sh
 
-# Build uniblow Debian 10 binary package release
-
-# EXPERIMENTAL
+# Build uniblow MacOS binary package release
 
 # Requires Xcode developer tools
 # Python 3.9
 # if needed, python3 -m venv unibenvi should trigger the dev tools installation
 
+
+rm -Rf build
+rm -Rf dist
 
 echo Initializing venv ...
 python3 -m venv unibenv
@@ -28,3 +29,6 @@ deactivate
 
 echo Compilation done.
 echo Binary result is in the dist folder.
+
+echo "Now need : code sign, notarization, dmg bundling, and notarization of the bundle."
+echo "DMG building requires biplist and dmgbuild."

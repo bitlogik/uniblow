@@ -201,12 +201,23 @@ described in [this instructions document](docs/LinuxRunBin.md).
 On **Windows** :
 
 -   Download the Uniblow binary [in the latest Github
-    release](https://github.com/bitlogik/uniblow/releases/latest)
+    release](https://github.com/bitlogik/uniblow/releases/latest).
 
 To increase the security, the Windows exe releases are signed with our [Extended
 Validation
 certificate](https://en.wikipedia.org/wiki/Code_signing#Extended_validation_(EV)_code_signing),
 bringing even greater confidence in the integrity of the application.
+
+On **MacOS**
+
+-   Download the Uniblow dmg package [in the latest Github
+    release](https://github.com/bitlogik/uniblow/releases/latest).
+-   Open the dmg to mount it.
+-   Drag and drop Uniblow (on the left) to the Applications icon on right.
+-   Eject the dmg disk and you can delete the dmg file.
+
+To increase the security, the Mac dmg package and also the uniblow app are signed (stapled) and notarized by Apple, bringing even greater confidence in the integrity of the application.
+
 
 The SecuBoost seed derivation type
 ----------------------------------
@@ -257,7 +268,7 @@ Development
         then run `pip3 install wxPython==4.1.1`
 
     -   **MacOS** : Read the [MacDev document](docs/MacDev.md) for more
-        details. The Mac version is not stable for now.
+        details.
 
     -   **Linux** : Read the [LinuxDev document](docs/LinuxDev.md) for more
         details
@@ -283,7 +294,6 @@ Windows and Debian platforms in a dedicated [build document](docs/Build.md).
 
 Future features :
 
--   A working MacOS version.
 -   Full HD wallet device, avoiding address reuse, and discover in all account
     chains (external and internal change).
 

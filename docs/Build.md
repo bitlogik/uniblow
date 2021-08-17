@@ -1,7 +1,7 @@
 
 # Building uniblow
 
-This document provides specific instructions and scripts to build uniblow binaries for the Windows and the Debian platforms.
+This document provides specific instructions and scripts to build uniblow binaries for the Windows, Debian and MacOS platforms.
 
 ## Windows 10
 
@@ -43,4 +43,25 @@ git checkout $BRANCH
 * Start the build script
 ```
 bash package/Build-Debian.sh
+```
+
+## MacOS
+
+* Install prerequisites, your MacOS system needs :
+
+    -   [Python 3.9
+    pkg](https://www.python.org/ftp/python/3.9.6/python-3.9.6-macos11.pkg)
+    installed
+
+    -   XCode and developer tools
+
+* Get the uniblow source
+```
+git clone https://github.com/bitlogik/uniblow.git
+cd uniblow
+```
+
+* Build uniblow
+```
+./package/Build-Mac.sh
 ```
