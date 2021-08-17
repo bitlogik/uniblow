@@ -280,6 +280,8 @@ def start_seedwatcher(app, cb_wallet):
     app.gui_panel.devices_choice.SetSelection(0)
     app.gui_frame.Hide()
     app.panel_sw = SeedWatcherPanel(app.frame_sw)
+    if sys.platform.startswith('darwin'):
+        app.panel_sw.m_staticTextcopy.SetLabel("Select asset line, then right click on it to open menu")
 
     app.panel_sw.m_button_gen.SetBitmap(Bitmap(file_path("gui/GenSeed.png"), BITMAP_TYPE_PNG))
     app.panel_sw.m_button_gen.SetBitmapPressed(

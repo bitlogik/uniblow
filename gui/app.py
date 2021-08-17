@@ -198,6 +198,8 @@ def start_app(app, version, coins_list, devices_list):
     wicon = IconBundle(icon_path)
     HAND_CURSOR = Cursor(CURSOR_HAND)
     app.gui_frame = gui.window.TopFrame(None)
+    if sys.platform.startswith('darwin'):
+        app.gui_frame.SetSize((996,418))
     app.gui_panel = gui.window.TopPanel(app.gui_frame)
     app.gui_frame.SetIcons(wicon)
     app.gui_frame.SetTitle(f"  Uniblow  -  {version}")
