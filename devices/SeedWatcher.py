@@ -97,15 +97,15 @@ class ContextOptionsMenu(Menu):
         Menu.__init__(self)
         self.parent = parent
 
-        men1 = MenuItem(self, 0, "Copy Address")
+        men1 = MenuItem(self, 1, "Copy Address")
         self.Append(men1)
         self.Bind(EVT_MENU, self.parent.copy_account, men1)
 
-        men2 = MenuItem(self, 1, "Open block explorer")
+        men2 = MenuItem(self, 2, "Open block explorer")
         self.Append(men2)
         self.Bind(EVT_MENU, self.parent.open_explorer, men2)
 
-        men3 = MenuItem(self, 2, "Open in wallet")
+        men3 = MenuItem(self, 3, "Open in wallet")
         self.Append(men3)
         self.Bind(EVT_MENU, self.parent.open_wallet, men3)
 
