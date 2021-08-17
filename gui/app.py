@@ -46,7 +46,7 @@ class InfoBox(gui.infodialog.InfoDialog):
         self.m_textCtrl.SetBackgroundColour(self.GetBackgroundColour())
         self.m_textCtrl.SetValue(self.message)
         self.m_textCtrl.SelectNone()
-        self.ShowModal()
+        self.Show()
 
     def copy_text_dialog(self, event):
         event.Skip()
