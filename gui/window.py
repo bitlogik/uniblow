@@ -117,7 +117,7 @@ class TopPanel ( wx.Panel ):
         self.account_label = wx.StaticText( self, wx.ID_ANY, u"Account", wx.DefaultPosition, wx.DefaultSize, 0 )
         self.account_label.Wrap( -1 )
 
-        self.account_label.SetFont( wx.Font( 12, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, False, wx.EmptyString ) )
+        self.account_label.SetFont( wx.Font( 14, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, False, wx.EmptyString ) )
 
         bSizer5.Add( self.account_label, 0, wx.TOP|wx.RIGHT|wx.LEFT, 5 )
 
@@ -157,16 +157,16 @@ class TopPanel ( wx.Panel ):
         self.balance_label = wx.StaticText( self, wx.ID_ANY, u"Balance :", wx.DefaultPosition, wx.DefaultSize, 0 )
         self.balance_label.Wrap( -1 )
 
-        self.balance_label.SetFont( wx.Font( 14, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, False, wx.EmptyString ) )
+        self.balance_label.SetFont( wx.Font( 15, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, False, wx.EmptyString ) )
 
-        bSizer16.Add( self.balance_label, 0, wx.LEFT|wx.TOP, 20 )
+        bSizer16.Add( self.balance_label, 0, wx.ALIGN_BOTTOM|wx.TOP|wx.LEFT, 20 )
 
         self.balance_info = wx.StaticText( self, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, 0 )
         self.balance_info.Wrap( -1 )
 
-        self.balance_info.SetFont( wx.Font( 16, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, False, wx.EmptyString ) )
+        self.balance_info.SetFont( wx.Font( 15, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, False, wx.EmptyString ) )
 
-        bSizer16.Add( self.balance_info, 0, wx.TOP|wx.LEFT, 16 )
+        bSizer16.Add( self.balance_info, 0, wx.ALIGN_BOTTOM|wx.TOP|wx.LEFT, 16 )
 
 
         bSizer18.Add( bSizer16, 0, wx.TOP, 16 )
