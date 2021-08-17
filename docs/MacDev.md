@@ -10,14 +10,6 @@ ETHwallet, or use the EtherscanAPI.
 There are specific instructions and scripts to build uniblow binaries for the
 Windows and Debian platforms in the [Build document](Build.md).
 
-**Note** : The MacOS support for Uniblow is for now experimental. There are some
-issues and the app can freeze.
-
-Known issues :
-
--   No contect menu in SeedWatcher
--   App window freezes after the error modal shown
-
 
 #### Install prerequisites
 
@@ -61,6 +53,8 @@ python -m pip install -e .
 ```
 python uniblow.py
 ```
+
+For development purpose, you can activate the debug output verbosity using an additional argument -v.
 
 #### Quit the venv
 ```
