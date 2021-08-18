@@ -19,6 +19,7 @@ import os.path
 from webbrowser import open as wopen
 
 from wx import (
+    App,
     IconBundle,
     TextDataObject,
     TheClipboard,
@@ -28,6 +29,7 @@ from wx import (
     Cursor,
     CURSOR_HAND,
     BITMAP_TYPE_PNG,
+    EVT_ACTIVATE_APP,
 )
 
 import gui.window
@@ -189,41 +191,61 @@ class app_option_panel(gui.window.OptionPanel):
     def SetTitle(self, title):
         self.GetParent().SetTitle(title)
 
+class UniblowApp(App):
+    def __init__(self, *args, **kwargs):
+        App.__init__(self, *args, **kwargs)
+        self.Bind(EVT_ACTIVATE_APP, self.OnActivate)
 
-def start_app(app, version, coins_list, devices_list):
-    icon_path = file_path(ICON_FILE)
-    if not os.path.isfile(icon_path):
-        print("Icon not found. Run uniblow from its directory.")
-        return "ERR"
-    wicon = IconBundle(icon_path)
-    HAND_CURSOR = Cursor(CURSOR_HAND)
-    app.gui_frame = gui.window.TopFrame(None)
-    if sys.platform.startswith("darwin"):
-        app.gui_frame.SetSize((996, 418))
-    app.gui_panel = gui.window.TopPanel(app.gui_frame)
-    app.gui_frame.SetIcons(wicon)
-    app.gui_frame.SetTitle(f"  Uniblow  -  {version}")
-    load_coins_list(app, coins_list)
-    load_devices(app, devices_list)
+    def OnInit(self):
+        icon_path = file_path(ICON_FILE)
+        if not os.path.isfile(icon_path):
+            print("Icon not found. Run uniblow from its directory.")
+            return "ERR"
+        wicon = IconBundle(icon_path)
+        HAND_CURSOR = Cursor(CURSOR_HAND)
+        self.gui_frame = gui.window.TopFrame(None)
+        self.SetTopWindow(self.gui_frame)
+        if sys.platform.startswith("darwin"):
+            self.gui_frame.SetSize((996, 418))
+        self.gui_panel = gui.window.TopPanel(self.gui_frame)
+        self.gui_frame.SetIcons(wicon)
+        self.gui_panel.hist_button.SetBitmap(Bitmap(file_path("gui/histo.png"), BITMAP_TYPE_PNG))
+        self.gui_panel.hist_button.SetBitmapPressed(
+            Bitmap(file_path("gui/histodn.png"), BITMAP_TYPE_PNG)
+        )
+        self.gui_panel.copy_button.SetBitmap(Bitmap(file_path("gui/copy.png"), BITMAP_TYPE_PNG))
+        self.gui_panel.copy_button.SetBitmapPressed(Bitmap(file_path("gui/copydn.png"), BITMAP_TYPE_PNG))
+        self.gui_panel.send_button.SetBitmap(Bitmap(file_path("gui/send.png"), BITMAP_TYPE_PNG))
+        self.gui_panel.send_button.SetBitmapPressed(Bitmap(file_path("gui/senddn.png"), BITMAP_TYPE_PNG))
+        self.gui_panel.send_all.SetBitmap(Bitmap(file_path("gui/swipe.png"), BITMAP_TYPE_PNG))
+        self.gui_panel.send_all.SetBitmapPressed(Bitmap(file_path("gui/swipedn.png"), BITMAP_TYPE_PNG))
+        self.gui_panel.devices_choice.SetCursor(HAND_CURSOR)
+        self.gui_panel.coins_choice.SetCursor(HAND_CURSOR)
+        self.gui_panel.network_choice.SetCursor(HAND_CURSOR)
+        self.gui_panel.wallopt_choice.SetCursor(HAND_CURSOR)
+        self.gui_panel.hist_button.SetCursor(HAND_CURSOR)
+        self.gui_panel.copy_button.SetCursor(HAND_CURSOR)
+        self.gui_panel.send_button.SetCursor(HAND_CURSOR)
+        self.gui_panel.send_all.SetCursor(HAND_CURSOR)
+        return True
 
-    app.gui_panel.hist_button.SetBitmap(Bitmap(file_path("gui/histo.png"), BITMAP_TYPE_PNG))
-    app.gui_panel.hist_button.SetBitmapPressed(
-        Bitmap(file_path("gui/histodn.png"), BITMAP_TYPE_PNG)
-    )
-    app.gui_panel.copy_button.SetBitmap(Bitmap(file_path("gui/copy.png"), BITMAP_TYPE_PNG))
-    app.gui_panel.copy_button.SetBitmapPressed(Bitmap(file_path("gui/copydn.png"), BITMAP_TYPE_PNG))
-    app.gui_panel.send_button.SetBitmap(Bitmap(file_path("gui/send.png"), BITMAP_TYPE_PNG))
-    app.gui_panel.send_button.SetBitmapPressed(Bitmap(file_path("gui/senddn.png"), BITMAP_TYPE_PNG))
-    app.gui_panel.send_all.SetBitmap(Bitmap(file_path("gui/swipe.png"), BITMAP_TYPE_PNG))
-    app.gui_panel.send_all.SetBitmapPressed(Bitmap(file_path("gui/swipedn.png"), BITMAP_TYPE_PNG))
+    def BringWindowToFront(self):
+        try:
+            self.GetTopWindow().Raise()
+        except:
+            pass
+        
+    def OnActivate(self, event):
+        if event.GetActive():
+            self.BringWindowToFront()
+        event.Skip()
+    
+    def MacReopenApp(self):
+        self.BringWindowToFront()
 
-    app.gui_panel.devices_choice.SetCursor(HAND_CURSOR)
-    app.gui_panel.coins_choice.SetCursor(HAND_CURSOR)
-    app.gui_panel.network_choice.SetCursor(HAND_CURSOR)
-    app.gui_panel.wallopt_choice.SetCursor(HAND_CURSOR)
-    app.gui_panel.hist_button.SetCursor(HAND_CURSOR)
-    app.gui_panel.copy_button.SetCursor(HAND_CURSOR)
-    app.gui_panel.send_button.SetCursor(HAND_CURSOR)
-    app.gui_panel.send_all.SetCursor(HAND_CURSOR)
-
-    app.gui_frame.Show()
+    def start_app(self, version, coins_list, devices_list):
+        """Initialize the app"""
+        self.gui_frame.SetTitle(f"  Uniblow  -  {version}")
+        load_coins_list(self, coins_list)
+        load_devices(self, devices_list)
+        self.gui_frame.Show()

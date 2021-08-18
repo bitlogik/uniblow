@@ -650,11 +650,7 @@ def send_all(ev):
 
 
 def start_main_app():
-
-    ret = gui.app.start_app(app, VERSION, SUPPORTED_COINS, DEVICES_LIST)
-    if ret == "ERR":
-        return
-
+    app.start_app(VERSION, SUPPORTED_COINS, DEVICES_LIST)
     app.gui_panel.devices_choice.Bind(wx.EVT_CHOICE, device_selected)
     app.gui_panel.coins_choice.Bind(wx.EVT_CHOICE, coin_selected)
     app.gui_panel.network_choice.Bind(wx.EVT_CHOICE, net_selected)
@@ -666,11 +662,10 @@ def start_main_app():
     app.gui_panel.hist_button.Bind(wx.EVT_BUTTON, disp_history)
     app.gui_panel.copy_button.Bind(wx.EVT_BUTTON, copy_account)
     app.gui_panel.fee_slider.Bind(wx.EVT_SCROLL_CHANGED, fee_changed)
-
     app.MainLoop()
 
 
-app = wx.App()
+app = gui.app.UniblowApp()
 
 
 if __name__ == "__main__":
