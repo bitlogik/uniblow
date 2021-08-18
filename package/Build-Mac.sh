@@ -26,6 +26,7 @@ python -m pip install pyinstaller==4.4
 echo Building package ...
 python -OO -m PyInstaller package/uniblow.spec
 deactivate
+rm -Rf dist/uniblow-bundle
 
 echo Compilation done.
 echo Binary result is in the dist folder.

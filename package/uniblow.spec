@@ -105,15 +105,17 @@ else:
 exe_options = [a.scripts]
 
 if os_platform == "mac":
+    bins_apart = True
     BIN_PKG_NAME = "uniblow"
 else:
+    bins_apart = False
     exe_options += [a.binaries, a.zipfiles, a.datas]
 
 exe = EXE(
     pyz,
     *exe_options,
     [],
-    exclude_binaries=True,
+    exclude_binaries=bins_apart,
     name=BIN_PKG_NAME,
     icon=ICON,
     debug=False,
@@ -128,7 +130,7 @@ exe = EXE(
 
 if os_platform == "mac":
     coll = COLLECT(
-        exe, a.binaries, a.zipfiles, a.datas, strip=False, upx=True, upx_exclude=[], name="uniblow"
+        exe, a.binaries, a.zipfiles, a.datas, strip=False, upx=True, upx_exclude=[], name="uniblow-bundle"
     )
 
     app = BUNDLE(
@@ -144,6 +146,8 @@ if os_platform == "mac":
             "CFBundleIdentifier": "fr.bitlogik.uniblow",
             "CFBundleName": "uniblow",
             "CFBundleDisplayName": "uniblow",
+            "CFBundleVersion": VERSION,
             "CFBundleShortVersionString": VERSION,
+            "NSHumanReadableCopyright": "Copyright (C) 2021 BitLogiK",
         },
     )
