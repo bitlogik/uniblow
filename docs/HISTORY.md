@@ -5,6 +5,7 @@ Uniblow versions history
 
 * First MacOS binary package
 * Many fixes for MacOS GUI
+* Update packaging scripts
 
 ## 0.9.0
 
