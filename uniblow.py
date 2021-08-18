@@ -304,7 +304,7 @@ def device_selected(device):
     app.gui_panel.network_choice.Clear()
     app.gui_panel.wallopt_choice.Clear()
     erase_info()
-    gui.app.load_coins_list(app, SUPPORTED_COINS)
+    app.load_coins_list(SUPPORTED_COINS)
     sel_device = device.GetInt()
     device_sel_name = DEVICES_LIST[sel_device - 1]
     if sel_device == 1:
@@ -351,7 +351,7 @@ def device_selected(device):
                     # HD means also mnemonic can be imported
                     mnemonic = device_loaded.generate_mnemonic()  # mnemonic proposal
                     # Get settings from the user
-                    HDwallet_settings = gui.app.set_mnemonic(app, mnemonic)
+                    HDwallet_settings = app.set_mnemonic(mnemonic)
                     if HDwallet_settings is None:
                         app.gui_panel.devices_choice.SetSelection(0)
                         return
@@ -650,7 +650,8 @@ def send_all(ev):
 
 
 def start_main_app():
-    app.start_app(VERSION, SUPPORTED_COINS, DEVICES_LIST)
+    app.load_devices(DEVICES_LIST)
+    app.load_coins_list(SUPPORTED_COINS)
     app.gui_panel.devices_choice.Bind(wx.EVT_CHOICE, device_selected)
     app.gui_panel.coins_choice.Bind(wx.EVT_CHOICE, coin_selected)
     app.gui_panel.network_choice.Bind(wx.EVT_CHOICE, net_selected)
@@ -662,10 +663,10 @@ def start_main_app():
     app.gui_panel.hist_button.Bind(wx.EVT_BUTTON, disp_history)
     app.gui_panel.copy_button.Bind(wx.EVT_BUTTON, copy_account)
     app.gui_panel.fee_slider.Bind(wx.EVT_SCROLL_CHANGED, fee_changed)
-    app.MainLoop()
+    app.gui_frame.Show()
 
 
-app = gui.app.UniblowApp()
+app = gui.app.UniblowApp(VERSION)
 
 
 if __name__ == "__main__":
@@ -677,3 +678,4 @@ if __name__ == "__main__":
         windll.shcore.SetProcessDpiAwareness(True)
 
     start_main_app()
+    app.MainLoop()

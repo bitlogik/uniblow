@@ -69,20 +69,6 @@ def file_path(fpath):
     return fpath
 
 
-def load_devices(app, devices_list):
-    app.gui_panel.devices_choice.Append("Choose your device")
-    for device in devices_list:
-        app.gui_panel.devices_choice.Append(device)
-    app.gui_panel.devices_choice.SetSelection(0)
-
-
-def load_coins_list(app, coins_list):
-    app.gui_panel.coins_choice.Clear()
-    app.gui_panel.coins_choice.Append("Select blockchain")
-    for coin in coins_list:
-        app.gui_panel.coins_choice.Append(coin)
-    app.gui_panel.coins_choice.SetSelection(0)
-
 
 def show_history(history_url):
     wopen(history_url, new=1, autoraise=True)
@@ -120,30 +106,6 @@ class HDsetting_panel(gui.window.HDPanel):
     def hd_cancel(self, event):
         event.Skip()
         self.GetParent().EndModal(ID_CANCEL)
-
-
-def set_mnemonic(app, proposal):
-    app.gui_hdframe = gui.window.HDDialog(app.gui_frame)
-    app.gui_hdpanel = HDsetting_panel(app.gui_hdframe)
-    app.gui_hdpanel.GOOD_BMP = Bitmap(file_path("gui/good.bmp"))
-    app.gui_hdpanel.BAD_BMP = Bitmap(file_path("gui/bad.bmp"))
-    app.gui_hdpanel.m_bitmapHDwl.SetBitmap(app.gui_hdpanel.BAD_BMP)
-    app.gui_hdpanel.m_bitmapHDcs.SetBitmap(app.gui_hdpanel.BAD_BMP)
-    app.gui_hdpanel.m_textCtrl_mnemo.SetValue(proposal)
-    HAND_CURSOR = Cursor(CURSOR_HAND)
-    app.gui_hdpanel.m_checkBox_secboost.SetCursor(HAND_CURSOR)
-    app.gui_hdpanel.m_butOK.SetCursor(HAND_CURSOR)
-    app.gui_hdpanel.m_butcancel.SetCursor(HAND_CURSOR)
-    ret = app.gui_hdframe.ShowModal()
-    if ret == ID_OK:
-        wallet_settings = app.gui_hdpanel.hd_wallet_settings
-        # Removal of stored settings
-        app.gui_hdframe.DestroyChildren()
-        app.gui_hdframe.Destroy()
-        del app.gui_hdframe
-        return wallet_settings
-    else:
-        return None
 
 
 class app_option_panel(gui.window.OptionPanel):
@@ -192,15 +154,13 @@ class app_option_panel(gui.window.OptionPanel):
         self.GetParent().SetTitle(title)
 
 class UniblowApp(App):
-    def __init__(self, *args, **kwargs):
-        App.__init__(self, *args, **kwargs)
+    def __init__(self, version):
+        self.version = version
+        App.__init__(self)
         self.Bind(EVT_ACTIVATE_APP, self.OnActivate)
 
     def OnInit(self):
         icon_path = file_path(ICON_FILE)
-        if not os.path.isfile(icon_path):
-            print("Icon not found. Run uniblow from its directory.")
-            return "ERR"
         wicon = IconBundle(icon_path)
         HAND_CURSOR = Cursor(CURSOR_HAND)
         self.gui_frame = gui.window.TopFrame(None)
@@ -209,6 +169,7 @@ class UniblowApp(App):
             self.gui_frame.SetSize((996, 418))
         self.gui_panel = gui.window.TopPanel(self.gui_frame)
         self.gui_frame.SetIcons(wicon)
+        self.gui_frame.SetTitle(f"  Uniblow  -  {self.version}")
         self.gui_panel.hist_button.SetBitmap(Bitmap(file_path("gui/histo.png"), BITMAP_TYPE_PNG))
         self.gui_panel.hist_button.SetBitmapPressed(
             Bitmap(file_path("gui/histodn.png"), BITMAP_TYPE_PNG)
@@ -242,10 +203,39 @@ class UniblowApp(App):
     
     def MacReopenApp(self):
         self.BringWindowToFront()
+        
+    def load_devices(self, devices_list):
+        self.gui_panel.devices_choice.Append("Choose your device")
+        for device in devices_list:
+            self.gui_panel.devices_choice.Append(device)
+        self.gui_panel.devices_choice.SetSelection(0)
 
-    def start_app(self, version, coins_list, devices_list):
-        """Initialize the app"""
-        self.gui_frame.SetTitle(f"  Uniblow  -  {version}")
-        load_coins_list(self, coins_list)
-        load_devices(self, devices_list)
-        self.gui_frame.Show()
+    def load_coins_list(self, coins_list):
+        self.gui_panel.coins_choice.Clear()
+        self.gui_panel.coins_choice.Append("Select blockchain")
+        for coin in coins_list:
+            self.gui_panel.coins_choice.Append(coin)
+        self.gui_panel.coins_choice.SetSelection(0)
+    
+    def set_mnemonic(self, proposal):
+        self.gui_hdframe = gui.window.HDDialog(self.gui_frame)
+        self.gui_hdpanel = HDsetting_panel(self.gui_hdframe)
+        self.gui_hdpanel.GOOD_BMP = Bitmap(file_path("gui/good.bmp"))
+        self.gui_hdpanel.BAD_BMP = Bitmap(file_path("gui/bad.bmp"))
+        self.gui_hdpanel.m_bitmapHDwl.SetBitmap(self.gui_hdpanel.BAD_BMP)
+        self.gui_hdpanel.m_bitmapHDcs.SetBitmap(self.gui_hdpanel.BAD_BMP)
+        self.gui_hdpanel.m_textCtrl_mnemo.SetValue(proposal)
+        HAND_CURSOR = Cursor(CURSOR_HAND)
+        self.gui_hdpanel.m_checkBox_secboost.SetCursor(HAND_CURSOR)
+        self.gui_hdpanel.m_butOK.SetCursor(HAND_CURSOR)
+        self.gui_hdpanel.m_butcancel.SetCursor(HAND_CURSOR)
+        ret = self.gui_hdframe.ShowModal()
+        if ret == ID_OK:
+            wallet_settings = self.gui_hdpanel.hd_wallet_settings
+            # Removal of stored settings
+            self.gui_hdframe.DestroyChildren()
+            self.gui_hdframe.Destroy()
+            del self.gui_hdframe
+            return wallet_settings
+        else:
+            return None
