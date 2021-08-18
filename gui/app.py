@@ -197,7 +197,7 @@ class UniblowApp(App):
             pass
         
     def OnActivate(self, event):
-        if event.GetActive():
+        if event.GetActive() and sys.platform != "linux":
             self.BringWindowToFront()
         event.Skip()
     
