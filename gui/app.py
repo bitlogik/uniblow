@@ -69,7 +69,6 @@ def file_path(fpath):
     return fpath
 
 
-
 def show_history(history_url):
     wopen(history_url, new=1, autoraise=True)
 
@@ -153,6 +152,7 @@ class app_option_panel(gui.window.OptionPanel):
     def SetTitle(self, title):
         self.GetParent().SetTitle(title)
 
+
 class UniblowApp(App):
     def __init__(self, version):
         self.version = version
@@ -175,11 +175,17 @@ class UniblowApp(App):
             Bitmap(file_path("gui/histodn.png"), BITMAP_TYPE_PNG)
         )
         self.gui_panel.copy_button.SetBitmap(Bitmap(file_path("gui/copy.png"), BITMAP_TYPE_PNG))
-        self.gui_panel.copy_button.SetBitmapPressed(Bitmap(file_path("gui/copydn.png"), BITMAP_TYPE_PNG))
+        self.gui_panel.copy_button.SetBitmapPressed(
+            Bitmap(file_path("gui/copydn.png"), BITMAP_TYPE_PNG)
+        )
         self.gui_panel.send_button.SetBitmap(Bitmap(file_path("gui/send.png"), BITMAP_TYPE_PNG))
-        self.gui_panel.send_button.SetBitmapPressed(Bitmap(file_path("gui/senddn.png"), BITMAP_TYPE_PNG))
+        self.gui_panel.send_button.SetBitmapPressed(
+            Bitmap(file_path("gui/senddn.png"), BITMAP_TYPE_PNG)
+        )
         self.gui_panel.send_all.SetBitmap(Bitmap(file_path("gui/swipe.png"), BITMAP_TYPE_PNG))
-        self.gui_panel.send_all.SetBitmapPressed(Bitmap(file_path("gui/swipedn.png"), BITMAP_TYPE_PNG))
+        self.gui_panel.send_all.SetBitmapPressed(
+            Bitmap(file_path("gui/swipedn.png"), BITMAP_TYPE_PNG)
+        )
         self.gui_panel.devices_choice.SetCursor(HAND_CURSOR)
         self.gui_panel.coins_choice.SetCursor(HAND_CURSOR)
         self.gui_panel.network_choice.SetCursor(HAND_CURSOR)
@@ -195,15 +201,15 @@ class UniblowApp(App):
             self.GetTopWindow().Raise()
         except:
             pass
-        
+
     def OnActivate(self, event):
         if event.GetActive() and sys.platform != "linux":
             self.BringWindowToFront()
         event.Skip()
-    
+
     def MacReopenApp(self):
         self.BringWindowToFront()
-        
+
     def load_devices(self, devices_list):
         self.gui_panel.devices_choice.Append("Choose your device")
         for device in devices_list:
@@ -216,7 +222,7 @@ class UniblowApp(App):
         for coin in coins_list:
             self.gui_panel.coins_choice.Append(coin)
         self.gui_panel.coins_choice.SetSelection(0)
-    
+
     def set_mnemonic(self, proposal):
         self.gui_hdframe = gui.window.HDDialog(self.gui_frame)
         self.gui_hdpanel = HDsetting_panel(self.gui_hdframe)

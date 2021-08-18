@@ -130,7 +130,14 @@ exe = EXE(
 
 if os_platform == "mac":
     coll = COLLECT(
-        exe, a.binaries, a.zipfiles, a.datas, strip=False, upx=True, upx_exclude=[], name="uniblow-bundle"
+        exe,
+        a.binaries,
+        a.zipfiles,
+        a.datas,
+        strip=False,
+        upx=True,
+        upx_exclude=[],
+        name="uniblow-bundle",
     )
 
     app = BUNDLE(
