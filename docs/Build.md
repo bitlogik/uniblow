@@ -7,12 +7,13 @@ This document provides specific instructions and scripts to build uniblow binari
 
 * Install [Python 3.8](https://www.python.org/ftp/python/3.8.10/python-3.8.10-amd64.exe)
 
+* Install Microsoft Visual C++ 14.x build tools. Required for bootloader installer and pysha3 library compilation.
+
 * Get the [source files](https://github.com/bitlogik/uniblow/archive/refs/heads/master.zip), unzip.
     * You can alternatively clone this repository using your favorite Git client.
 
 * Start the **Build-Windows** batch script in the *package* directory, double-click on this bat file to start it.
 
-The pysha3 library may require the Microsoft Visual C++ 14.x build tools.
 
 ## Debian Buster
 

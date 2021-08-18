@@ -5,3 +5,5 @@
 package/version_info
 unibenv
 Uniblow.egg-info
+pyinstaller_src
+pyinstaller-*.zip

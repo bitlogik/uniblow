@@ -36,7 +36,7 @@ python -m pip install -U -f https://extras.wxpython.org/wxPython4/extras/linux/g
 python -m pip install -U pip setuptools-rust < /dev/null
 
 python setup.py install
-python -m pip install pyinstaller==4.4
+python -m pip install pyinstaller==4.5.1
 
 echo Building package ...
 python -OO -m PyInstaller package/uniblow.spec

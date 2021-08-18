@@ -8,20 +8,38 @@ CD ..
 
 RMDIR /S /Q dist
 
+SET PYINSTALLER_VER=4.5.1
 SET python_bin="%UserProfile%\AppData\Local\Programs\Python\Python38\python.exe"
 SET python_env="unibenv\Scripts\python"
 
-%python_bin% -m venv unibenv
 
+echo Preparing environment and dependencies
+%python_bin% -m venv unibenv
 %python_env% -m pip install -U pip
+%python_env% -m pip install wheel
 %python_env% -m pip install wxPython==4.1.1
 %python_env% setup.py install
 
-%python_env% -m pip install PyInstaller==4.4
+echo Getting PyInstaller source
+%python_env% package/get-pyinst-src.py %PYINSTALLER_VER%
+REM Unzip source at C: root as a workaround to pyinstaller issue #4824
+%python_env% -m zipfile -e pyinstaller-%PYINSTALLER_VER%.zip C:\pyinstaller_src\
+echo Compile the bootloader
+SET INSTALLDIR=%cd%
+cd C:\pyinstaller_src\pyinstaller-%PYINSTALLER_VER%
+del PyInstaller\bootloader\Windows-64bit\*.exe
+cd bootloader
+%INSTALLDIR%\%python_env% waf distclean
+%INSTALLDIR%\%python_env% waf --target-arch 64bit all
+cd ..
+echo Installing PyInstaller %PYINSTALLER_VER%
+%INSTALLDIR%\%python_env% setup.py install
+
+echo Packaging Uniblow
+cd %INSTALLDIR%
 %python_env% -O -m PyInstaller .\package\uniblow.spec
 
 POPD
-
 echo Compilation done.
 echo Binary result is in the dist folder.
 
