@@ -14,8 +14,8 @@ Additionally, there are specific instructions and scripts to build uniblow binar
 This document presents instructions how to run uniblow from source on the following Linux flavors :
 
 * [Debian](#debian)
-* [Ubuntu / Mint](#ubuntu-mint)
-* [Fedora / RHEL / CentOS](#fedora-rhel-centos)
+* [Ubuntu / Mint](#ubuntu--mint)
+* [Fedora / RHEL / CentOS](#fedora--rhel--centos)
 
 ## Debian
 
