@@ -37,7 +37,7 @@ def icon_from_app(app_path):
     return os.path.join(app_path, "Contents", "Resources", icon_name)
 
 
-filename = f"dist/uniblow_{VERSION}.dmg"
+filename = f"dist/Uniblow-mac-{VERSION}.dmg"
 volume_name = f"uniblow {VERSION} install disk image"
 format = defines.get("format", "UDBZ")
 compression_level = 9
