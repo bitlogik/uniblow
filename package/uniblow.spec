@@ -45,6 +45,9 @@ BIN_PKG_NAME = f"Uniblow-{os_platform}-{plt_arch}-{VERSION}"
 additional_imports = [f"wallets.{coinpkg}wallet" for coinpkg in SUPPORTED_COINS]
 additional_imports += [f"devices.{device}" for device in DEVICES_LIST]
 
+if os_platform == "mac":
+    additional_imports.append("certifi")
+
 pkgs_remove = ["sqlite3", "tcl85", "tk85", "_sqlite3", "_tkinter", "libopenblas", "libdgamln"]
 
 a = Analysis(
