@@ -58,7 +58,8 @@ class sochain_api:
             raise IOError(e)
         except Exception:
             raise IOError(
-                f"Error while processing request:\n{self.url}{command}/{self.coin}/{param}?{params_enc}"
+                "Error while processing request:\n"
+                f"{self.url}{command}/{self.coin}/{param}?{params_enc}"
             )
 
     def checkapiresp(self):
