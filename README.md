@@ -297,10 +297,11 @@ Future features :
 -   Full HD wallet device, avoiding address reuse, and discover in all account
     chains (external and internal change).
 
-### Add more cryptos
+### Programming interface class
 
-For developers, one can easily add any crypto in this wallet, following this
-Python3 programming interface class :
+The coin wallet interface is simple and provides an abstraction layer for any underlying blockchain.
+
+The class can be used to integrate the uniblow code to automate transactions in your backend. It can also be used to extend uniblow to add a new blockchain. Developers can easily add any crypto in this wallet, following this Python3 programming interface class.
 
 ```Python
 class newCOINwallet:
