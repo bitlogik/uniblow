@@ -323,7 +323,11 @@ class ETHwalletCore:
         else:
             maxspendable = self.getbalance() - ((gprice * glimit) * GWEI_UNIT)
         if paymentvalue > maxspendable or paymentvalue < 0:
-            raise Exception(f"Not enough {self.token_symbol} tokens for the tx")
+            if self.ERC20:
+                sym = self.token_symbol
+            else:
+                sym = "native ETH"
+            raise Exception(f"Not enough {sym} tokens for the tx")
         self.nonce = int2bytearray(self.getnonce())
         self.gasprice = int2bytearray(gprice * GWEI_UNIT)
         self.startgas = int2bytearray(glimit)
