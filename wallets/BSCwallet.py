@@ -373,9 +373,10 @@ class BSC_wallet:
                 if hasattr(self, "wc_client"):
                     self.wc_client.close()
                 raise InvalidOption(exc)
-            if req_chain_id != self.bsc.chainID:
-                self.wc_client.close()
-                raise InvalidOption("Chain ID is different.")
+            if req_chain_id is not None:
+                if req_chain_id != self.bsc.chainID:
+                    self.wc_client.close()
+                    raise InvalidOption("Chain ID is different.")
             request_message = (
                 "WalletConnect request from :\n\n"
                 f"{request_info['name']}\n\n"
