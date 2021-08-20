@@ -422,7 +422,7 @@ class BSC_wallet:
             parameters = wc_message[2]
             if "wc_sessionUpdate" == method:
                 if parameters[0].get("approved") is False:
-                    raise Exception("Disconnected by the web app service")
+                    raise Exception("Disconnected by the web app service.")
             elif "personal_sign" == method:
                 # Not implemented
                 pass

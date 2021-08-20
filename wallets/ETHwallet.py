@@ -491,7 +491,7 @@ class ETH_wallet:
             request_message = (
                 "WalletConnect request from :\n\n"
                 f"{request_info['name']}\n\n"
-                f"website : {request_info['url']}\n"
+                f"website   : {request_info['url']}\n"
                 f"Relay URL : {self.wc_client.get_relay_url()}\n"
             )
             approve = self.confirm_callback(request_message)
@@ -533,7 +533,7 @@ class ETH_wallet:
             parameters = wc_message[2]
             if "wc_sessionUpdate" == method:
                 if parameters[0].get("approved") is False:
-                    raise Exception("Disconnected by the web app service")
+                    raise Exception("Disconnected by the web app service.")
             elif "personal_sign" == method:
                 # Not implemented
                 pass

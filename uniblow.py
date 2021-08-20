@@ -107,6 +107,7 @@ def display_balance():
     app.gui_panel.copy_button.Enable()
     bal_str = balance.split(" ")[0]
     if (
+        # No fund in the wallet
         bal_str not in ("0", "0.0")
         # EOS when register pubkey mode : disable sending
         and not bal_str.startswith("Register")
@@ -133,10 +134,10 @@ def erase_info():
     app.gui_panel.amount.Disable()
     app.gui_panel.send_all.Disable()
     app.gui_panel.send_button.Disable()
-    app.gui_panel.network_label.Disable()
-    app.gui_panel.network_choice.Disable()
+    app.gui_panel.network_choice.SetSelection(0)
     app.gui_panel.wallopt_label.Disable()
     app.gui_panel.wallopt_choice.Disable()
+    app.gui_panel.wallopt_choice.SetSelection(0)
     app.gui_panel.qrimg.SetBitmap(wx.Bitmap())
     if hasattr(app, "wallet"):
         del app.wallet
@@ -252,13 +253,13 @@ def disp_history(ev):
 
 
 def watch_messages():
-    """Watch for messages recveives.
+    """Watch for messages received.
     For some wallet types such as WalletConnect.
     """
     try:
         app.wallet.get_messages()
     except Exception as exc:
-        wallet_error(exc)
+        wallet_error(exc, "fromwatch")
 
 
 def close_device():
@@ -428,13 +429,18 @@ def wallet_fallback():
     wx.CallLater(180, process_coin_select, coin_sel, net_sel, wallet_type_fallback)
 
 
-def wallet_error(exc):
+def wallet_error(exc, level="hard"):
     """Process wallet exception"""
-    app.gui_panel.network_choice.Clear()
-    app.gui_panel.wallopt_choice.Clear()
-    app.gui_panel.coins_choice.SetSelection(0)
+    if level == "hard":
+        app.gui_panel.network_choice.Clear()
+        app.gui_panel.coins_choice.SetSelection(0)
+        app.gui_panel.wallopt_choice.Clear()
+    else:
+        app.gui_panel.wallopt_choice.SetSelection(0)
     erase_info()
     logger.error("Error in the wallet : %s", str(exc), exc_info=exc, stack_info=True)
+    if level == "fromwatch":
+        exc = str(exc) + "\nYou can reconnect by selecting the network option."
     warn_modal(str(exc))
 
 
