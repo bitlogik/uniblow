@@ -1,6 +1,12 @@
 
 Uniblow versions history
 
+## 0.9.3
+
+* Fix possible bad message when not enough balance
+* Allow null chainID from web3 dapp
+* Improve UI/UX recover on error
+
 ## 0.9.2
 
 * First MacOS binary package
