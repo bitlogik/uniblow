@@ -294,6 +294,7 @@ Windows and Debian platforms in a dedicated [build document](docs/Build.md).
 
 Future features :
 
+-   User wallet management (custom name, listing).
 -   Full HD wallet device, avoiding address reuse, and discover in all account
     chains (external and internal change).
 
