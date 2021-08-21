@@ -16,6 +16,9 @@ A **uni**versal **blo**ckchain **w**allet for cryptos
 * Multi platforms : PC, Mac and Linux
 * Open source GPLv3
 
+Official web site : https://uniblow.org  
+(also https://uniblow.app)
+
 The Uniblow software can also be used integrated in your services, as it
 provides a unified, multi-platforms and blockchain agnostic interface to manage
 many different wallets. By using the wallet class, this is as simple as :
@@ -187,9 +190,6 @@ Run Uniblow - Use the GUI
 
 On **Debian / Tails** :
 
--   Download the Uniblow *deb* binary [from the latest Github
-    release](https://github.com/bitlogik/uniblow/releases/latest)
-
 -   Follow the [dedicated instructions
     page](docs/LinuxRunBin.md).
 
@@ -200,8 +200,7 @@ described in [this instructions document](docs/LinuxRunBin.md).
 
 On **Windows** :
 
--   Download the Uniblow binary [in the latest Github
-    release](https://github.com/bitlogik/uniblow/releases/latest).
+-   Download the Uniblow binary [from the uniblow official website](https://uniblow.org/get).
 
 To increase the security, the Windows exe releases are signed with our [Extended
 Validation
@@ -210,8 +209,7 @@ bringing even greater confidence in the integrity of the application.
 
 On **MacOS**
 
--   Download the Uniblow dmg package [in the latest Github
-    release](https://github.com/bitlogik/uniblow/releases/latest).
+-   Download the Uniblow dmg package for Mac [from the uniblow official website](https://uniblow.org/get).
 -   Open the dmg to mount it.
 -   Drag and drop Uniblow (on the left) to the Applications icon on right.
 -   Eject the dmg disk and you can delete the dmg file.
