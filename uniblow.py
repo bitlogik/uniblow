@@ -120,7 +120,7 @@ def display_balance():
         app.gui_panel.send_all.Enable()
 
 
-def erase_info():
+def erase_info(reset=False):
     if hasattr(app, "balance_timer"):
         app.balance_timer.Stop()
     if hasattr(app, "wallet") and hasattr(app.wallet, "wc_timer"):
@@ -134,10 +134,11 @@ def erase_info():
     app.gui_panel.amount.Disable()
     app.gui_panel.send_all.Disable()
     app.gui_panel.send_button.Disable()
-    app.gui_panel.network_choice.SetSelection(0)
     app.gui_panel.wallopt_label.Disable()
     app.gui_panel.wallopt_choice.Disable()
-    app.gui_panel.wallopt_choice.SetSelection(0)
+    if reset:
+        app.gui_panel.network_choice.SetSelection(0)
+        app.gui_panel.wallopt_choice.SetSelection(0)
     app.gui_panel.qrimg.SetBitmap(wx.Bitmap())
     if hasattr(app, "wallet"):
         del app.wallet
@@ -304,7 +305,7 @@ def device_selected(device):
     app.gui_panel.coins_choice.SetSelection(0)
     app.gui_panel.network_choice.Clear()
     app.gui_panel.wallopt_choice.Clear()
-    erase_info()
+    erase_info(True)
     app.load_coins_list(SUPPORTED_COINS)
     sel_device = device.GetInt()
     device_sel_name = DEVICES_LIST[sel_device - 1]
@@ -415,7 +416,7 @@ def device_selected(device):
         app.gui_panel.coins_choice.ShowWithEffect(wx.SHOW_EFFECT_ROLL_TO_RIGHT, 750)
         app.gui_panel.coins_choice.SetFocus()
     else:
-        erase_info()
+        erase_info(True)
 
 
 def wallet_fallback():
@@ -435,9 +436,7 @@ def wallet_error(exc, level="hard"):
         app.gui_panel.network_choice.Clear()
         app.gui_panel.coins_choice.SetSelection(0)
         app.gui_panel.wallopt_choice.Clear()
-    else:
-        app.gui_panel.wallopt_choice.SetSelection(0)
-    erase_info()
+    erase_info(app.wallet.coin != "BTC")
     logger.error("Error in the wallet : %s", str(exc), exc_info=exc, stack_info=True)
     if level == "fromwatch":
         exc = str(exc) + "\nYou can reconnect by selecting the network option."
@@ -526,7 +525,7 @@ def process_coin_select(coin, sel_network, sel_wallettype):
 def coin_selected(coin_sel):
     app.gui_panel.network_choice.Clear()
     app.gui_panel.wallopt_choice.Clear()
-    erase_info()
+    erase_info(True)
     if coin_sel.GetInt() > 0:
         coin_name = coin_sel.GetString()
         networks = get_coin_class(coin_name).get_networks()
