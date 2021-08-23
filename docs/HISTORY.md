@@ -1,6 +1,10 @@
 
 Uniblow versions history
 
+## 0.9.4
+
+* Fix GUI : options selection displayed
+
 ## 0.9.3
 
 * Fix possible bad message when not enough balance
