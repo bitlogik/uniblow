@@ -179,7 +179,7 @@ class SeedWatcherPanel(gui.swgui.MainPanel):
             # Electrum special path
             if coin["name"][:8] != "Bitcoin ":
                 # Use only Bitcoin for the Electrum seed
-                self.m_btnseek.Enable()
+                self.enable_inputs()
                 return
             if coin["type"] == 0:
                 # standard
@@ -202,7 +202,18 @@ class SeedWatcherPanel(gui.swgui.MainPanel):
         if coin_idx < len(coins_list) - 1:
             self.async_getcoininfo_idx(coin_idx + 1, wallet)
         else:
-            self.m_btnseek.Enable()
+            # List is finished
+            self.enable_inputs()
+
+    def disable_inputs(self):
+        self.m_btnseek.Disable()
+        self.m_staticTextcopy.Disable()
+        self.Disable()
+
+    def enable_inputs(self):
+        self.m_btnseek.Enable()
+        self.m_staticTextcopy.Enable()
+        self.Enable()
 
     def async_getcoininfo_idx(self, coin_idx, wallet):
         getcoin = Thread(target=self.get_coin_info, args=[coin_idx, wallet])
@@ -222,9 +233,8 @@ class SeedWatcherPanel(gui.swgui.MainPanel):
 
     def seek_assets(self, event):
         event.Skip()
-        self.m_btnseek.Disable()
-        self.m_staticTextcopy.Disable()
         self.m_dataViewListCtrl1.DeleteAllItems()
+        self.disable_inputs()
         self.coins = []
         mnemo_txt = self.m_textCtrl_mnemo.GetValue()
         password = self.m_textpwd.GetValue()
