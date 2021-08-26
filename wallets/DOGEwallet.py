@@ -22,7 +22,7 @@ import re
 
 import cryptolib.coins
 from cryptolib.base58 import decode_base58
-from wallets.wallets_utils import shift_10
+from wallets.wallets_utils import shift_10, NotEnoughTokens
 
 
 class sochain_api:
@@ -155,7 +155,7 @@ class DOGEwalletCore:
         balance = self.balance_fmutxos(utxos)
         maxspendable = balance - fee
         if paymentvalue > maxspendable or paymentvalue < 0:
-            raise Exception("Not enough fund for the tx")
+            raise NotEnoughTokens("Not enough fund for the tx")
         inputs = self.selectutxos(paymentvalue + fee, utxos)
         invalue = self.balance_fmutxos(inputs)
         changevalue = invalue - paymentvalue - fee
@@ -202,7 +202,7 @@ class DOGEwalletCore:
         if 0 >= amount:
             return sel_utxos
         else:
-            raise Exception("Not enough utxos values for the tx")
+            raise NotEnoughTokens("Not enough utxos values for the tx")
 
 
 DOGE_units = 8

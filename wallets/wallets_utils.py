@@ -55,3 +55,7 @@ def compare_eth_addresses(addr1, addr2):
 
 class InvalidOption(Exception):
     pass
+
+
+class NotEnoughTokens(Exception):
+    pass

@@ -30,6 +30,7 @@ from cryptolib.coins.eos import (
     near_future_iso_str,
 )
 from cryptolib.cryptography import public_key_recover, decompress_pubkey, sha2
+from wallets.wallets_utils import NotEnoughTokens
 
 
 def compute_eos_address(pubkey, key_type="K1"):
@@ -166,7 +167,7 @@ class EOSwalletCore:
         bal_str = self.getbalance()
         balance = float(bal_str[0][:-4]) if len(bal_str) > 0 else 0.0
         if (float(POWER_UP_PAYMENT) + value) > balance:
-            raise Exception("Not enough fund for the tx and the powerup")
+            raise NotEnoughTokens("Not enough fund for the tx and the powerup")
         args = {
             "payer": self.account,
             "receiver": self.account,
@@ -230,11 +231,11 @@ class EOSwalletCore:
         bal_str = self.getbalance()
         balance = float(bal_str[0][:-4]) if len(bal_str) > 0 else 0.0
         if pay_value > balance or pay_value < 0:
-            raise Exception("Not enough fund for the tx")
+            raise NotEnoughTokens("Not enough fund for the tx")
         if isinstance(pay_value, (int, float)):
             qty = "%.4f %s" % (pay_value, "EOS")
         else:
-            raise Exception("to_account variable must be int or float")
+            raise Exception("pay_value must be int or float")
         args = {
             "from": self.account,
             "to": to_account,

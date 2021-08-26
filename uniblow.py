@@ -30,7 +30,7 @@ import qrcode
 import gui.app
 from devices.SeedWatcher import start_seedwatcher
 from devices.SingleKey import SKdevice
-from wallets.wallets_utils import InvalidOption
+from wallets.wallets_utils import InvalidOption, NotEnoughTokens
 from version import VERSION
 
 SUPPORTED_COINS = [
@@ -259,6 +259,8 @@ def watch_messages():
     """
     try:
         app.wallet.get_messages()
+    except NotEnoughTokens as exc:
+        warn_modal(str(exc))
     except Exception as exc:
         wallet_error(exc, "fromwatch")
 

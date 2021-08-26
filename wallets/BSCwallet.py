@@ -22,7 +22,7 @@ import urllib.request
 
 from cryptolib.cryptography import public_key_recover, decompress_pubkey, sha3
 from cryptolib.coins.ethereum import rlp_encode, int2bytearray, uint256, read_string
-from wallets.wallets_utils import shift_10, compare_eth_addresses, InvalidOption
+from wallets.wallets_utils import shift_10, compare_eth_addresses, InvalidOption, NotEnoughTokens
 from wallets.BSCtokens import tokens_values
 from pywalletconnect import WCClient, WCClientInvalidOption
 
@@ -225,7 +225,7 @@ class BSCwalletCore:
             maxspendable = self.getbalance(False)
             balance_bsc = self.getbalance()
             if balance_bsc < ((gprice * glimit) * GWEI_UNIT):
-                raise Exception("Not enough native BSC funding for the tx fee")
+                raise NotEnoughTokens("Not enough native BSC funding for the tx fee")
         else:
             maxspendable = self.getbalance() - ((gprice * glimit) * GWEI_UNIT)
         if paymentvalue > maxspendable or paymentvalue < 0:
@@ -233,7 +233,7 @@ class BSCwalletCore:
                 sym = self.token_symbol
             else:
                 sym = "native BSC"
-            raise Exception(f"Not enough {sym} tokens for the tx")
+            raise NotEnoughTokens(f"Not enough {sym} tokens for the tx")
         self.nonce = int2bytearray(self.getnonce())
         self.gasprice = int2bytearray(gprice * GWEI_UNIT)
         self.startgas = int2bytearray(glimit)

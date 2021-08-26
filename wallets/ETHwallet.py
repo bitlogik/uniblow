@@ -23,9 +23,9 @@ import urllib.request
 
 from cryptolib.cryptography import public_key_recover, decompress_pubkey, sha3
 from cryptolib.coins.ethereum import rlp_encode, int2bytearray, uint256, read_string
-from wallets.wallets_utils import shift_10, compare_eth_addresses, InvalidOption
+from wallets.wallets_utils import shift_10, compare_eth_addresses, InvalidOption, NotEnoughTokens
 from wallets.ETHtokens import tokens_values
-from pywalletconnect import WCClient, WCClientInvalidOption
+from pywalletconnect import WCClient, WCClientInvalidOption, WCClientException
 
 
 ETH_units = 18
@@ -319,7 +319,7 @@ class ETHwalletCore:
             maxspendable = self.getbalance(False)
             balance_eth = self.getbalance()
             if balance_eth < ((gprice * glimit) * GWEI_UNIT):
-                raise Exception("Not enough native ETH funding for the tx fee")
+                raise NotEnoughTokens("Not enough native ETH funding for the tx fee")
         else:
             maxspendable = self.getbalance() - ((gprice * glimit) * GWEI_UNIT)
         if paymentvalue > maxspendable or paymentvalue < 0:
@@ -327,7 +327,7 @@ class ETHwalletCore:
                 sym = self.token_symbol
             else:
                 sym = "native ETH"
-            raise Exception(f"Not enough {sym} tokens for the tx")
+            raise NotEnoughTokens(f"Not enough {sym} tokens for the tx")
         self.nonce = int2bytearray(self.getnonce())
         self.gasprice = int2bytearray(gprice * GWEI_UNIT)
         self.startgas = int2bytearray(glimit)
@@ -480,7 +480,7 @@ class ETH_wallet:
             try:
                 self.wc_client = WCClient.from_wc_uri(wc_uri)
                 req_id, req_chain_id, request_info = self.wc_client.open_session()
-            except WCClientInvalidOption as exc:
+            except (WCClientInvalidOption, WCClientException) as exc:
                 if hasattr(self, "wc_client"):
                     self.wc_client.close()
                 raise InvalidOption(exc)

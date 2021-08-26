@@ -21,7 +21,7 @@ import urllib.parse
 import urllib.request
 
 from cryptolib.base58 import encode_base58, decode_base58
-from wallets.wallets_utils import shift_10
+from wallets.wallets_utils import shift_10, NotEnoughTokens
 
 try:
     import nacl.signing
@@ -171,7 +171,7 @@ class XTZwalletCore:
             fee = 2 * fee
         maxspendable = balance - fee
         if paymentvalue > maxspendable or paymentvalue < 0:
-            raise Exception("Not enough fund for the tx")
+            raise NotEnoughTokens("Not enough fund for the tx")
         self.nonce = int(self.getnonce())
         self.glimit = glimit
         self.value = str(int(paymentvalue))
