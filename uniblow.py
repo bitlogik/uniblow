@@ -441,7 +441,11 @@ def wallet_error(exc, level="hard"):
         app.gui_panel.network_choice.Clear()
         app.gui_panel.coins_choice.SetSelection(0)
         app.gui_panel.wallopt_choice.Clear()
-    erase_info(app.wallet.coin != "BTC")
+    if hasattr(app, "wallet"):
+        erase_option = app.wallet.coin != "BTC"
+    else:
+        erase_option = False
+    erase_info(erase_option)
     logger.error("Error in the wallet : %s", str(exc), exc_info=exc, stack_info=True)
     if level == "fromwatch":
         exc = str(exc) + "\nYou can reconnect by selecting the network option."
