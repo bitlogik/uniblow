@@ -18,6 +18,7 @@
 from functools import partial
 from logging import getLogger
 import sys
+from threading import Thread
 import webbrowser
 from wx import (
     Menu,
@@ -162,15 +163,54 @@ class SeedWatcherPanel(gui.swgui.MainPanel):
             coin_info = [coin.name, coin.wallet.get_account(), coin.wallet.get_balance()]
         except Exception as exc:
             logger.error("Error when reading info for %s (skipped) : ", coin.name, exc_info=exc)
+            raise
         else:
             self.m_dataViewListCtrl1.AppendItem(coin_info)
 
-    def display_coins(self):
-        for coin in self.coins:
-            self.add_coin(coin)
+    def display_coin(self, coin):
+        self.add_coin(coin)
         self.m_staticTextcopy.Enable()
-        self.m_btnseek.Enable()
         self.m_dataViewListCtrl1.SetRowHeight(28)
+
+    def get_coin_info(self, coin_idx, wallet):
+        coin = coins_list[coin_idx]
+        cpath = coin["path"]
+        if self.m_typechoice.GetSelection() == 1:
+            # Electrum special path
+            if coin["name"][:8] != "Bitcoin ":
+                # Use only Bitcoin for the Electrum seed
+                self.m_btnseek.Enable()
+                return
+            if coin["type"] == 0:
+                # standard
+                cpath = "m/0/"
+            elif coin["type"] == 1:
+                # p2wsh
+                cpath = "m/1'/0/"
+            elif coin["type"] == 2:
+                # segwit
+                cpath = "m/0'/0/"
+        account_idx = str(self.m_account.GetValue())
+        path = cpath + account_idx
+        coin_key = SeedDevice(wallet.derive_key(path))
+        try:
+            coin_wallet = blockchainWallet(coin, coin_key)
+            self.display_coin(coin_wallet)
+            self.coins.append(coin_wallet)
+        except Exception as exc:
+            logger.error("Error when getting coin info : %s", str(exc), exc_info=exc)
+        if coin_idx < len(coins_list) - 1:
+            self.async_getcoininfo_idx(coin_idx + 1, wallet)
+        else:
+            self.m_btnseek.Enable()
+
+    def async_getcoininfo_idx(self, coin_idx, wallet):
+        getcoin = Thread(target=self.get_coin_info, args=[coin_idx, wallet])
+        getcoin.start()
+
+    def compute_seed(self, *args):
+        wallet = HD_Wallet.from_mnemonic(*args)
+        self.async_getcoininfo_idx(0, wallet)
 
     def check_mnemonic(self):
         """Recompute HD wallet keys"""
@@ -185,42 +225,17 @@ class SeedWatcherPanel(gui.swgui.MainPanel):
         self.m_btnseek.Disable()
         self.m_staticTextcopy.Disable()
         self.m_dataViewListCtrl1.DeleteAllItems()
+        self.coins = []
+        mnemo_txt = self.m_textCtrl_mnemo.GetValue()
+        password = self.m_textpwd.GetValue()
         if self.m_typechoice.GetSelection() == 2:
             derivation = "BOOST"
         elif self.m_typechoice.GetSelection() == 1:
             derivation = "Electrum"
         else:
             derivation = "BIP39"
-        mnemo_txt = self.m_textCtrl_mnemo.GetValue()
-        password = self.m_textpwd.GetValue()
-        account_idx = str(self.m_account.GetValue())
-        wallet = HD_Wallet.from_mnemonic(mnemo_txt, password, derivation)
-        self.coins = []
-        for coin in coins_list:
-            cpath = coin["path"]
-            if derivation == "Electrum":
-                if coin["name"][:8] != "Bitcoin ":
-                    # Use only Bitcoin for the Electrum seed
-                    continue
-                if coin["type"] == 0:
-                    # standard
-                    cpath = "m/0/"
-                elif coin["type"] == 1:
-                    # p2wsh
-                    cpath = "m/1'/0/"
-                elif coin["type"] == 2:
-                    # segwit
-                    cpath = "m/0'/0/"
-            coin_key = SeedDevice(wallet.derive_key(cpath + account_idx))
-            try:
-                coin_wallet = blockchainWallet(coin, coin_key)
-                self.coins.append(coin_wallet)
-            except Exception as exc:
-                if not getattr(sys, "frozen", False):
-                    # output the exception when dev environment
-                    print(exc)
-
-        self.display_coins()
+        task_compute_seed = Thread(target=self.compute_seed, args=(mnemo_txt, password, derivation))
+        task_compute_seed.start()
 
     def pop_menu(self, event):
         event.Skip()
