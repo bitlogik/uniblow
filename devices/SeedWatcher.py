@@ -305,6 +305,7 @@ def start_seedwatcher(app, cb_wallet):
     app.gui_panel.devices_choice.SetSelection(0)
     app.gui_frame.Hide()
     app.panel_sw = SeedWatcherPanel(app.frame_sw)
+    app.panel_sw.m_textCtrl_mnemo.SetFocus()
     if sys.platform.startswith("darwin"):
         app.panel_sw.m_staticTextcopy.SetLabel(
             "Select asset line, then right click on it to open menu"
