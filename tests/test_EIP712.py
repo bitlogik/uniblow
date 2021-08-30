@@ -1,6 +1,20 @@
 from wallets.typed_data_hash import encode_data, type_hash, hash_struct, typed_sign_hash
 
 
+# Tests for EIP712 typed structured data hashing
+
+
+def test_eip712_simple():
+    mail_struct = {
+        "Mail": [
+            {"name": "from", "type": "address"},
+            {"name": "to", "type": "address"},
+            {"name": "contents", "type": "string"},
+        ],
+    }
+    mail_enc = type_hash("Mail", mail_struct)
+    assert mail_enc.hex() == "536e54c54e6699204b424f41f6dea846ee38ac369afec3e7c141d2c92c65e67f"
+
 
 def test_eip712_A():
 

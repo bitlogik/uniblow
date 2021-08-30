@@ -116,7 +116,7 @@ def encode_value(vtype, value, go):
         # check is list
         elements = [encode_value(vtype[:-2], val, go) for val in value]
         return sha3(b"".join(elements))
-    # should be a struct
+    # Should be a struct finally
     # test if value is dict
     return hash_struct(vtype, go, value)
 

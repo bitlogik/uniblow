@@ -25,8 +25,8 @@ from cryptolib.cryptography import public_key_recover, decompress_pubkey, sha3
 from cryptolib.coins.ethereum import rlp_encode, int2bytearray, uint256, read_string
 from wallets.wallets_utils import shift_10, compare_eth_addresses, InvalidOption, NotEnoughTokens
 from wallets.ETHtokens import tokens_values
+from wallets.typed_data_hash import typed_sign_hash, print_text_query
 from pywalletconnect import WCClient, WCClientInvalidOption, WCClientException
-
 
 ETH_units = 18
 GWEI_UNIT = 10 ** 9
@@ -550,23 +550,23 @@ class ETH_wallet:
             id_request = wc_message[0]
             method = wc_message[1]
             parameters = wc_message[2]
-            if "wc_sessionUpdate" == method:
+            if method == "wc_sessionUpdate":
                 if parameters[0].get("approved") is False:
                     raise Exception("Disconnected by the web app service.")
-            elif "personal_sign" == method or "eth_sign" == method:
+            elif method == "personal_sign" or method == "eth_sign":
                 if compare_eth_addresses(parameters[1], self.get_account()):
                     self.process_sign_message(id_request, parameters[0])
-            elif "eth_signTypedData" == method:
-                # Not implemented
-                pass
-            elif "eth_sendTransaction" == method:
+            elif method == "eth_signTypedData":
+                if compare_eth_addresses(parameters[1], self.get_account()):
+                    self.process_sign_typeddata(id_request, parameters[0])
+            elif method == "eth_sendTransaction":
                 tx_to_sign = parameters[0]
                 if compare_eth_addresses(tx_to_sign["from"], self.get_account()):
                     self.process_sendtransaction(id_request, tx_to_sign)
-            elif "eth_signTransaction" == method:
+            elif method == "eth_signTransaction":
                 # Not implemented
                 pass
-            elif "eth_sendRawTransaction" == method:
+            elif method == "eth_sendRawTransaction":
                 # Not implemented
                 pass
             wc_message = self.wc_client.get_message()
@@ -619,6 +619,20 @@ class ETH_wallet:
         if self.confirm_callback(sign_request):
             msg_header = MESSAGE_HEADER + str(len(data_bin)).encode("ascii")
             hash_sign = sha3(msg_header + data_bin)
+            der_signature = self.current_device.sign(hash_sign)
+            signature_bin = self.eth.encode_datasign(hash_sign, der_signature)
+            self.wc_client.reply(id_request, f"0x{signature_bin.hex()}")
+
+    def process_sign_typeddata(self, id_request, data_bin):
+        """Process a WalletConnect eth_signTypedData call"""
+        data_obj = json.loads(data_bin)
+        hash_sign = typed_sign_hash(data_obj, self.eth.chainID)
+        sign_request = (
+            "WalletConnect signature request :\n\n"
+            f"- Data to sign (typed) :\n"
+            f"{print_text_query(data_obj)}"
+        )
+        if self.confirm_callback(sign_request):
             der_signature = self.current_device.sign(hash_sign)
             signature_bin = self.eth.encode_datasign(hash_sign, der_signature)
             self.wc_client.reply(id_request, f"0x{signature_bin.hex()}")
