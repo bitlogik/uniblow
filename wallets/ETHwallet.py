@@ -43,6 +43,9 @@ SYMBOL_FUNCTION = "95d89b41"
 TRANSFERT_FUNCTION = "a9059cbb"
 
 
+MESSAGE_HEADER = b"\x19Ethereum Signed Message:\n"
+
+
 class infura_api:
     def __init__(self, api_key, network):
         # https://ropsten.infura.io/v3/YOUR-PROJECT-ID
@@ -361,6 +364,7 @@ class ETHwalletCore:
         return self.datahash
 
     def add_signature(self, signature_der):
+        """Add a DER signature into the built transaction."""
         # Signature decoding
         lenr = int(signature_der[3])
         lens = int(signature_der[5 + lenr])
@@ -389,6 +393,21 @@ class ETHwalletCore:
             ]
         )
         return tx_final.hex()
+
+    def encode_datasign(self, datahash, signature_der):
+        """Encode a message signature from the DER sig."""
+        # Signature decoding
+        lenr = int(signature_der[3])
+        lens = int(signature_der[5 + lenr])
+        r = int.from_bytes(signature_der[4 : lenr + 4], "big")
+        s = int.from_bytes(signature_der[lenr + 6 : lenr + 6 + lens], "big")
+        # Parity recovery
+        v = 27
+        h = int.from_bytes(datahash, "big")
+        if public_key_recover(h, r, s, v) != self.pubkey:
+            v += 1
+        # Signature encoding
+        return uint256(r) + uint256(s) + bytes([v])
 
     def send(self, tx_hex):
         """Upload the tx"""
@@ -534,12 +553,9 @@ class ETH_wallet:
             if "wc_sessionUpdate" == method:
                 if parameters[0].get("approved") is False:
                     raise Exception("Disconnected by the web app service.")
-            elif "personal_sign" == method:
-                # Not implemented
-                pass
-            elif "eth_sign" == method:
-                # Not implemented
-                pass
+            elif "personal_sign" == method or "eth_sign" == method:
+                if compare_eth_addresses(parameters[1], self.get_account()):
+                    self.process_sign_message(id_request, parameters[0])
             elif "eth_signTypedData" == method:
                 # Not implemented
                 pass
@@ -588,6 +604,24 @@ class ETH_wallet:
         tx_signature = self.current_device.sign(hash_to_sign)
         tx_signed = self.eth.add_signature(tx_signature)
         return self.eth.send(tx_signed)
+
+    def process_sign_message(self, id_request, data_hex):
+        """Process a WalletConnect personal_sign and eth_sign call"""
+        # sign(keccak256("\x19Ethereum Signed Message:\n" + len(message) + message)))
+        data_bin = bytes.fromhex(data_hex[2:])
+        sign_request = (
+            "WalletConnect signature request :\n\n"
+            f"- Data to sign (hex) :\n"
+            f"- {data_hex}\n"
+            f"\n Data to sign (ASCII/UTF8) :\n"
+            f" {data_bin.decode('utf8')}\n"
+        )
+        if self.confirm_callback(sign_request):
+            msg_header = MESSAGE_HEADER + str(len(data_bin)).encode("ascii")
+            hash_sign = sha3(msg_header + data_bin)
+            der_signature = self.current_device.sign(hash_sign)
+            signature_bin = self.eth.encode_datasign(hash_sign, der_signature)
+            self.wc_client.reply(id_request, f"0x{signature_bin.hex()}")
 
     def process_sendtransaction(self, id_request, txdata):
         """Process a WalletConnect eth_sendTransaction call"""
