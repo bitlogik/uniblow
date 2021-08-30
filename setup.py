@@ -27,12 +27,12 @@ setup(
     python_requires=">=3.6",
     install_requires=[
         "wxPython==4.1.1",
-        "cryptography==3.4.7",
+        "cryptography>=3.3",
         "pysha3==1.0.2",
         "qrcode==6.1",
         "PyNaCl==1.4.0",
         "OpenPGPpy==0.4",
-        "pyWalletConnect==1.0.0",
+        "pyWalletConnect==1.1.1",
     ],
     package_data={
         "gui": [
