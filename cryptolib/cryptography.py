@@ -114,7 +114,9 @@ def Hash160(data):
 
 
 def HMAC_SHA512(key, data):
-    return hmac.digest(key, data, hashlib.sha512)
+    hmac512 = hmac.new(key, digestmod=hashlib.sha512)
+    hmac512.update(data)
+    return hmac512.digest()
 
 
 def PBKDF2_SHA512(salt):
