@@ -54,7 +54,9 @@ class infura_api:
         self.url = f"https://{network}.infura.io/v3/{self.apikey}"
         self.jsres = []
 
-    def getData(self, method, params=[]):
+    def getData(self, method, params=None):
+        if params is None:
+            params = []
         if isinstance(params, str):
             params = [params]
         data = {"jsonrpc": "2.0", "method": method, "params": params, "id": 1}
@@ -283,15 +285,14 @@ class ETHwalletCore:
         if native:
             # ETH native balance
             return self.api.get_balance(self.address, 0)
-        else:
-            # ERC20 token balance
-            balraw = self.api.call(
-                self.ERC20, BALANCEOF_FUNCTION, "000000000000000000000000" + self.address
-            )
-            if balraw == [] or balraw == "0x":
-                return 0
-            balance = int(balraw[2:], 16)
-            return balance
+        # ERC20 token balance
+        balraw = self.api.call(
+            self.ERC20, BALANCEOF_FUNCTION, "000000000000000000000000" + self.address
+        )
+        if balraw == [] or balraw == "0x":
+            return 0
+        balance = int(balraw[2:], 16)
+        return balance
 
     def get_decimals(self):
         if self.ERC20:
@@ -299,8 +300,7 @@ class ETHwalletCore:
             if balraw == [] or balraw == "0x":
                 return 1
             return int(balraw[2:], 16)
-        else:
-            return ETH_units
+        return ETH_units
 
     def get_symbol(self):
         if self.ERC20:
