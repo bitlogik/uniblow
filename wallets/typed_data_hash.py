@@ -37,6 +37,8 @@ def collect_sub_types(name, types_obj, list_types=None):
     """Collect all types of a struct."""
     if not list_types:
         list_types = []
+    if name.endswith("[]"):
+        name = name[:-2]
     if name in list_types:
         return list_types
     if name not in types_obj.keys():
@@ -64,6 +66,9 @@ def encode_types(types_list, types_dict):
     """Provide the struct type string signature (encodeType)."""
     types_enc = ""
     for type_key in types_list:
+        print(type_key)
+        if type_key.endswith("[]"):
+            type_key = type_key[:-2]
         types_enc += encode_atype(type_key, types_dict[type_key])
     return types_enc
 
@@ -72,46 +77,61 @@ def type_hash(name, types_obj):
     """Compute typeHash (hash of the encodeType type string)."""
     subtypes_list = collect_sub_types(name, types_obj)
     subtypes_list.sort()
+    print("subtypes", subtypes_list)
     types_list = [name, *subtypes_list]
+    print(encode_types(types_list, types_obj).encode("utf8"))
     return sha3(encode_types(types_list, types_obj).encode("utf8"))
 
 
-def encode_value(vtype, value):
+def encode_value(vtype, value, go):
     """Encode a value in Python bytes."""
     if vtype == "bool":
+        # check is bool
         return uint256(1) if value else uint256(0)
     if vtype == "address":
+        # check is hex 40 chars
         return uint256(int(value[2:], 16))
     if vtype in int_types or vtype in uint_types:
+        # check is int
         if value > 0:
             intval_bin = uint256(value)
         else:
             intval_bin = uint256(2 ** 256 + value)
         return intval_bin
     if vtype in bytes_types:
+        # check is 0x hex
         out = bytes.fromhex(value[2:])
         while len(out) < 32:
             out += b"\0"
         return out
     if vtype == "bytes":
+        # check is 0x hex
         out = bytes.fromhex(value[2:])
         return sha3(out)
     if vtype == "string":
+        # check is str
         return sha3(value.encode("utf8"))
     # array not implemented
-    raise NotImplementedError("Array encoding not implemented.")
+    if vtype.endswith("[]"):
+        # check is list
+        elements = [encode_value(vtype[:-2], val, go) for val in value]
+        return sha3(b"".join(elements))
+    # should be a struct
+    # test if value is dict
+    return hash_struct(vtype, go, value)
 
 
 def encode_data(name, types_obj, data_obj):
     """encodeData : Encode all the data of the members values."""
     out = b""
     for member in types_obj[name]:
-        mtype = member["type"]
-        mvalue = data_obj[member["name"]]
-        if isinstance(mvalue, dict):
-            out += hash_struct(mtype, types_obj, mvalue)
-        else:
-            out += encode_value(mtype, mvalue)
+        if "name" in member:
+            mvalue = data_obj[member["name"]]
+            mtype = member["type"]
+            if isinstance(mvalue, dict):
+                out += hash_struct(mtype, types_obj, mvalue)
+            else:
+                out += encode_value(mtype, mvalue, types_obj)
     return out
 
 
