@@ -158,23 +158,24 @@ class SeedWatcherPanel(gui.swgui.MainPanel):
     def fill_mnemonic(self, mnemo):
         self.m_textCtrl_mnemo.SetValue(mnemo)
 
-    def add_coin(self, coin):
+    def display_coin(self, coin):
         try:
             coin_info = [coin.name, coin.wallet.get_account(), coin.wallet.get_balance()]
         except Exception as exc:
             logger.error("Error when reading info for %s (skipped) : ", coin.name, exc_info=exc)
             raise
         else:
-            self.m_dataViewListCtrl1.AppendItem(coin_info)
-
-    def display_coin(self, coin):
-        self.add_coin(coin)
-        self.m_staticTextcopy.Enable()
-        self.m_dataViewListCtrl1.SetRowHeight(28)
+            if self.__nonzero__():
+                self.m_dataViewListCtrl1.AppendItem(coin_info)
+                self.m_staticTextcopy.Enable()
+                self.m_dataViewListCtrl1.SetRowHeight(28)
 
     def get_coin_info(self, coin_idx, wallet):
         coin = coins_list[coin_idx]
         cpath = coin["path"]
+        if not self.__nonzero__():
+            # Panel was closed
+            return
         if self.m_typechoice.GetSelection() == 1:
             # Electrum special path
             if coin["name"][:8] != "Bitcoin ":
@@ -199,7 +200,7 @@ class SeedWatcherPanel(gui.swgui.MainPanel):
             self.coins.append(coin_wallet)
         except Exception as exc:
             logger.error("Error when getting coin info : %s", str(exc), exc_info=exc)
-        if coin_idx < len(coins_list) - 1:
+        if coin_idx < len(coins_list) - 1 and self.__nonzero__():
             self.async_getcoininfo_idx(coin_idx + 1, wallet)
         else:
             # List is finished
@@ -211,9 +212,10 @@ class SeedWatcherPanel(gui.swgui.MainPanel):
         self.Disable()
 
     def enable_inputs(self):
-        self.m_btnseek.Enable()
-        self.m_staticTextcopy.Enable()
-        self.Enable()
+        if self.__nonzero__():
+            self.m_btnseek.Enable()
+            self.m_staticTextcopy.Enable()
+            self.Enable()
 
     def async_getcoininfo_idx(self, coin_idx, wallet):
         getcoin = Thread(target=self.get_coin_info, args=[coin_idx, wallet])
