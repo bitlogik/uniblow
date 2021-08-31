@@ -27,6 +27,7 @@ from sys import version_info
 from cryptolib.cryptography import sha3
 from cryptolib.coins.ethereum import uint256
 
+
 uint_types = [f"uint{l}" for l in range(8, 257)]
 int_types = [f"int{l}" for l in range(8, 257)]
 bytes_types = [f"bytes{l}" for l in range(1, 33)]
@@ -66,7 +67,6 @@ def encode_types(types_list, types_dict):
     """Provide the struct type string signature (encodeType)."""
     types_enc = ""
     for type_key in types_list:
-        print(type_key)
         if type_key.endswith("[]"):
             type_key = type_key[:-2]
         types_enc += encode_atype(type_key, types_dict[type_key])
@@ -77,47 +77,68 @@ def type_hash(name, types_obj):
     """Compute typeHash (hash of the encodeType type string)."""
     subtypes_list = collect_sub_types(name, types_obj)
     subtypes_list.sort()
-    print("subtypes", subtypes_list)
     types_list = [name, *subtypes_list]
-    print(encode_types(types_list, types_obj).encode("utf8"))
     return sha3(encode_types(types_list, types_obj).encode("utf8"))
 
 
 def encode_value(vtype, value, go):
-    """Encode a value in Python bytes."""
+    """Encode a given value in Python bytes."""
     if vtype == "bool":
-        # check is bool
+        if not isinstance(value, bool):
+            raise ValueError("bool type is not a bool value.")
         return uint256(1) if value else uint256(0)
     if vtype == "address":
-        # check is hex 40 chars
-        return uint256(int(value[2:], 16))
+        if not isinstance(value, str):
+            raise ValueError("address type is not a str value.")
+        if len(value) != 42 or value[:2] != "0x":
+            raise ValueError("address is not a 0x hex value.")
+        try:
+            int_value = int(value[2:], 16)
+        except ValueError:
+            raise ValueError("address is not a 0x hex value.")
+        return uint256(int_value)
     if vtype in int_types or vtype in uint_types:
-        # check is int
+        if not isinstance(value, int):
+            raise ValueError(vtype + " type is not a int value.")
         if value > 0:
             intval_bin = uint256(value)
         else:
             intval_bin = uint256(2 ** 256 + value)
         return intval_bin
     if vtype in bytes_types:
-        # check is 0x hex
-        out = bytes.fromhex(value[2:])
+        if not isinstance(value, str):
+            raise ValueError("bytes type is not a str value.")
+        if value[:2] != "0x":
+            raise ValueError("bytes is not a 0x hex value.")
+        try:
+            out = bytes.fromhex(value[2:])
+        except ValueError:
+            raise ValueError("bytes is not a 0x hex value.")
         while len(out) < 32:
             out += b"\0"
         return out
     if vtype == "bytes":
-        # check is 0x hex
-        out = bytes.fromhex(value[2:])
+        if not isinstance(value, str):
+            raise ValueError("bytes type is not a str value.")
+        if value[:2] != "0x":
+            raise ValueError("bytes is not a 0x hex value.")
+        try:
+            out = bytes.fromhex(value[2:])
+        except ValueError:
+            raise ValueError("bytes is not a 0x hex value.")
         return sha3(out)
     if vtype == "string":
-        # check is str
+        if not isinstance(value, str):
+            raise ValueError("string type is not a str value.")
         return sha3(value.encode("utf8"))
-    # array not implemented
     if vtype.endswith("[]"):
-        # check is list
+        if not isinstance(value, list):
+            raise ValueError("array type is not a list value.")
         elements = [encode_value(vtype[:-2], val, go) for val in value]
         return sha3(b"".join(elements))
     # Should be a struct finally
-    # test if value is dict
+    if not isinstance(value, dict):
+        raise ValueError("struct type is not a dict value.")
     return hash_struct(vtype, go, value)
 
 
@@ -145,21 +166,21 @@ def typed_sign_hash(query_obj, chain_id=None):
 
     # Checking the query format
     if "primaryType" not in query_obj:
-        raise Exception("Missing primaryType in typedhash query.")
+        raise ValueError("Missing primaryType in typedhash query.")
     if "types" not in query_obj:
-        raise Exception("Missing types in typedhash query.")
+        raise ValueError("Missing types in typedhash query.")
     if "EIP712Domain" not in query_obj["types"]:
-        raise Exception("Missing EIP712Domain in typedhash.types.")
+        raise ValueError("Missing EIP712Domain in typedhash.types.")
     if query_obj["primaryType"] not in query_obj["types"]:
         if query_obj["primaryType"] not in std_types:
-            raise Exception("Missing primary type in typedhash.types query.")
+            raise ValueError("Missing primary type in typedhash.types query.")
     if "message" not in query_obj:
-        raise Exception("Missing message in typedhash query.")
+        raise ValueError("Missing message in typedhash query.")
     if "domain" not in query_obj:
-        raise Exception("Missing domain in typedhash query.")
+        raise ValueError("Missing domain in typedhash query.")
     if chain_id is not None and "chainId" in query_obj["domain"]:
         if chain_id != query_obj["domain"]["chainId"]:
-            raise Exception("ChainID is not matching the current active chain.")
+            raise ValueError("ChainID is not matching the current active chain.")
     hash_msg = hash_struct(query_obj["primaryType"], query_obj["types"], query_obj["message"])
 
     # Compute the hash to sign
