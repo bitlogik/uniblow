@@ -98,9 +98,15 @@ def encode_value(vtype, value, go):
             raise ValueError("address is not a 0x hex value.")
         return uint256(int_value)
     if vtype in int_types or vtype in uint_types:
+        if isinstance(value, str):
+            # Fallback for dapp encoding uint as string
+            try:
+                value = int(value, 10)
+            except ValueError:
+                raise ValueError(vtype + " is not a valid string.")
         if not isinstance(value, int):
-            raise ValueError(vtype + " type is not a int value.")
-        if value > 0:
+            raise ValueError(vtype + " type is not a int nor str value.")
+        if value >= 0:
             intval_bin = uint256(value)
         else:
             intval_bin = uint256(2 ** 256 + value)
