@@ -24,7 +24,8 @@ from cryptolib.cryptography import public_key_recover, decompress_pubkey, sha3
 from cryptolib.coins.ethereum import rlp_encode, int2bytearray, uint256, read_string
 from wallets.wallets_utils import shift_10, compare_eth_addresses, InvalidOption, NotEnoughTokens
 from wallets.BSCtokens import tokens_values
-from pywalletconnect import WCClient, WCClientInvalidOption
+from wallets.typed_data_hash import typed_sign_hash, print_text_query
+from pywalletconnect import WCClient, WCClientInvalidOption, WCClientException
 
 
 BSC_units = 18
@@ -42,6 +43,9 @@ SYMBOL_FUNCTION = "95d89b41"
 TRANSFERT_FUNCTION = "a9059cbb"
 
 
+MESSAGE_HEADER = b"\x19Ethereum Signed Message:\n"
+
+
 class web3_api:
     def __init__(self, network):
         self.url = "https://bsc-dataseed2.binance.org/"
@@ -49,7 +53,9 @@ class web3_api:
             self.url = "https://data-seed-prebsc-2-s1.binance.org:8545/"
         self.jsres = []
 
-    def getData(self, method, params=[]):
+    def getData(self, method, params=None):
+        if params is None:
+            params = []
         if isinstance(params, str):
             params = [params]
         data = {"jsonrpc": "2.0", "method": method, "params": params, "id": 1}
@@ -186,15 +192,14 @@ class BSCwalletCore:
         if native:
             # BSC native balance
             return self.api.get_balance(self.address, 0)
-        else:
-            # BEP20 token balance
-            balraw = self.api.call(
-                self.BEP20, BALANCEOF_FUNCTION, "000000000000000000000000" + self.address
-            )
-            if balraw == [] or balraw == "0x":
-                return 0
-            balance = int(balraw[2:], 16)
-            return balance
+        # BEP20 token balance
+        balraw = self.api.call(
+            self.BEP20, BALANCEOF_FUNCTION, "000000000000000000000000" + self.address
+        )
+        if balraw == [] or balraw == "0x":
+            return 0
+        balance = int(balraw[2:], 16)
+        return balance
 
     def get_decimals(self):
         if self.BEP20:
@@ -202,8 +207,7 @@ class BSCwalletCore:
             if balraw == [] or balraw == "0x":
                 return 1
             return int(balraw[2:], 16)
-        else:
-            return BSC_units
+        return BSC_units
 
     def get_symbol(self):
         if self.BEP20:
@@ -267,6 +271,7 @@ class BSCwalletCore:
         return self.datahash
 
     def add_signature(self, signature_der):
+        """Add a DER signature into the built transaction."""
         # Signature decoding
         lenr = int(signature_der[3])
         lens = int(signature_der[5 + lenr])
@@ -295,6 +300,21 @@ class BSCwalletCore:
             ]
         )
         return tx_final.hex()
+
+    def encode_datasign(self, datahash, signature_der):
+        """Encode a message signature from the DER sig."""
+        # Signature decoding
+        lenr = int(signature_der[3])
+        lens = int(signature_der[5 + lenr])
+        r = int.from_bytes(signature_der[4 : lenr + 4], "big")
+        s = int.from_bytes(signature_der[lenr + 6 : lenr + 6 + lens], "big")
+        # Parity recovery
+        v = 27
+        h = int.from_bytes(datahash, "big")
+        if public_key_recover(h, r, s, v) != self.pubkey:
+            v += 1
+        # Signature encoding
+        return uint256(r) + uint256(s) + bytes([v])
 
     def send(self, tx_hex):
         """Upload the tx"""
@@ -369,7 +389,7 @@ class BSC_wallet:
             try:
                 self.wc_client = WCClient.from_wc_uri(wc_uri)
                 req_id, req_chain_id, request_info = self.wc_client.open_session()
-            except WCClientInvalidOption as exc:
+            except (WCClientInvalidOption, WCClientException) as exc:
                 if hasattr(self, "wc_client"):
                     self.wc_client.close()
                 raise InvalidOption(exc)
@@ -420,28 +440,42 @@ class BSC_wallet:
             id_request = wc_message[0]
             method = wc_message[1]
             parameters = wc_message[2]
-            if "wc_sessionUpdate" == method:
+            if method == "wc_sessionUpdate":
                 if parameters[0].get("approved") is False:
                     raise Exception("Disconnected by the web app service.")
-            elif "personal_sign" == method:
-                # Not implemented
-                pass
-            elif "eth_sign" == method:
-                # Not implemented
-                pass
-            elif "eth_signTypedData" == method:
-                # Not implemented
-                pass
-            elif "eth_sendTransaction" == method:
-                tx_to_sign = parameters[0]
-                if compare_eth_addresses(tx_to_sign["from"], self.get_account()):
-                    self.process_sendtransaction(id_request, tx_to_sign)
-            elif "eth_signTransaction" == method:
-                # Not implemented
-                pass
-            elif "eth_sendRawTransaction" == method:
-                # Not implemented
-                pass
+            elif method == "personal_sign":
+                if compare_eth_addresses(parameters[1], self.get_account()):
+                    signature = self.process_sign_message(parameters[0])
+                    if signature is not None:
+                        self.wc_client.reply(id_request, f"0x{signature.hex()}")
+            elif method == "eth_sign":
+                if compare_eth_addresses(parameters[0], self.get_account()):
+                    signature = self.process_sign_message(parameters[1])
+                    if signature is not None:
+                        self.wc_client.reply(id_request, f"0x{signature.hex()}")
+            elif method == "eth_signTypedData":
+                if compare_eth_addresses(parameters[0], self.get_account()):
+                    signature = self.process_sign_typeddata(parameters[1])
+                    if signature is not None:
+                        self.wc_client.reply(id_request, f"0x{signature.hex()}")
+            elif method == "eth_sendTransaction":
+                # sign and sendRaw
+                tx_obj_tosign = parameters[0]
+                if compare_eth_addresses(tx_obj_tosign["from"], self.get_account()):
+                    tx_signed = self.process_signtransaction(tx_obj_tosign)
+                    if tx_signed is not None:
+                        tx_hash = self.broadcast_tx(tx_signed)
+                        self.wc_client.reply(id_request, tx_hash)
+            elif method == "eth_signTransaction":
+                tx_obj_tosign = parameters[0]
+                if compare_eth_addresses(tx_obj_tosign["from"], self.get_account()):
+                    tx_signed = self.process_signtransaction(tx_obj_tosign)
+                    if tx_signed is not None:
+                        self.wc_client.reply(id_request, f"0x{tx_signed}")
+            elif method == "eth_sendRawTransaction":
+                tx_data = parameters[0]
+                tx_hash = self.broadcast_tx(tx_data)
+                self.wc_client.reply(id_request, tx_hash)
             wc_message = self.wc_client.get_message()
 
     def get_balance(self):
@@ -466,20 +500,52 @@ class BSC_wallet:
             BSC_EXPLORER_URL += "#tokentxns"
         return BSC_EXPLORER_URL
 
-    def exec_tx(self, amount, gazprice, ethgazlimit, account, data=None):
-        """Build, sign, and broadcast a transaction.
+    def build_tx(self, amount, gazprice, ethgazlimit, account, data=None):
+        """Build and sign a transaction.
         Used to transfer tokens native or ERC20 with the given parameters.
-        Return the tx hash broadcasted as 0xhhhhhhhh.
         """
         if data is None:
             data = bytearray(b"")
         hash_to_sign = self.bsc.prepare(account, amount, gazprice, ethgazlimit, data)
         tx_signature = self.current_device.sign(hash_to_sign)
-        tx_signed = self.bsc.add_signature(tx_signature)
-        return self.bsc.send(tx_signed)
+        return self.bac.add_signature(tx_signature)
 
-    def process_sendtransaction(self, id_request, txdata):
-        """Process a WalletConnect eth_sendTransaction call"""
+    def broadcast_tx(self, txdata):
+        """Broadcast and return the tx hash as 0xhhhhhhhh"""
+        return self.bsc.send(txdata)
+
+    def process_sign_message(self, data_hex):
+        """Process a WalletConnect personal_sign and eth_sign call"""
+        # sign(keccak256("\x19Ethereum Signed Message:\n" + len(message) + message)))
+        data_bin = bytes.fromhex(data_hex[2:])
+        sign_request = (
+            "WalletConnect signature request :\n\n"
+            f"- Data to sign (hex) :\n"
+            f"- {data_hex}\n"
+            f"\n Data to sign (ASCII/UTF8) :\n"
+            f" {data_bin.decode('utf8')}\n"
+        )
+        if self.confirm_callback(sign_request):
+            msg_header = MESSAGE_HEADER + str(len(data_bin)).encode("ascii")
+            hash_sign = sha3(msg_header + data_bin)
+            der_signature = self.current_device.sign(hash_sign)
+            return self.bsc.encode_datasign(hash_sign, der_signature)
+
+    def process_sign_typeddata(self, data_bin):
+        """Process a WalletConnect eth_signTypedData call"""
+        data_obj = json.loads(data_bin)
+        hash_sign = typed_sign_hash(data_obj, self.bsc.chainID)
+        sign_request = (
+            "WalletConnect signature request :\n\n"
+            f"- Data to sign (typed) :\n"
+            f"{print_text_query(data_obj)}"
+        )
+        if self.confirm_callback(sign_request):
+            der_signature = self.current_device.sign(hash_sign)
+            return self.bsc.encode_datasign(hash_sign, der_signature)
+
+    def process_signtransaction(self, txdata):
+        """"Build a signed tx, for WalletConnect eth_sendTransaction and eth_signTransaction call"""
         to_addr = txdata.get("to", "  New contract")[2:]
         value = txdata.get("value", 0)
         if value != 0:
@@ -503,8 +569,7 @@ class BSC_wallet:
         if self.confirm_callback(request_message):
             data_hex = txdata.get("data", "0x")
             data = bytearray.fromhex(data_hex[2:])
-            tx_hash = self.exec_tx(value, gas_price, gas_limit, to_addr, data)
-            self.wc_client.reply(id_request, tx_hash)
+            return self.build_tx(value, gas_price, gas_limit, to_addr, data)
 
     def transfer(self, amount, to_account, priority_fee):
         # Transfer x unit to an account, pay
@@ -515,10 +580,10 @@ class BSC_wallet:
         if to_account.startswith("0x"):
             to_account = to_account[2:]
         ethgazprice = self.bsc.api.get_fee(priority_fee)  # gwei per gaz unit
-        tx_hash = self.exec_tx(
+        tx_data = self.build_tx(
             shift_10(amount, self.bsc.decimals), ethgazprice, ethgazlimit, to_account
         )
-        return "\nDONE, txID : " + tx_hash[2:]
+        return "\nDONE, txID : " + self.broadcast_tx(tx_data)[2:]
 
     def transfer_inclfee(self, amount, to_account, fee_priority):
         # Transfer the amount in base unit minus fee, like the receiver paying the fee
@@ -533,8 +598,8 @@ class BSC_wallet:
             fee = 0
         else:
             fee = int(gazlimit * gazprice * GWEI_UNIT)
-        tx_hash = self.exec_tx(amount - fee, gazprice, gazlimit, to_account)
-        return "\nDONE, txID : " + tx_hash[2:]
+        tx_data = self.build_tx(amount - fee, gazprice, gazlimit, to_account)
+        return "\nDONE, txID : " + self.broadcast_tx(tx_data)[2:]
 
     def transfer_all(self, to_account, fee_priority):
         # Transfer all the wallet to an address (minus fee)
