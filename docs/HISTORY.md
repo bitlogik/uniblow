@@ -1,6 +1,15 @@
 
 Uniblow versions history
 
+## 0.9.6
+
+* Improve GUI UX
+* SeedWatcher wallets seeking done in background
+* Works on Python 3.6
+* Full WalletConnect support
+* WalletConnect auto reconnect
+* Build in Gitlab Actions
+
 ## 0.9.4
 
 * Fix GUI : options selection displayed
