@@ -1,0 +1,39 @@
+
+name: Building Uniblow binaries
+
+
+on:
+  #release:
+  #  types: [created]
+  push:
+    branches: [ cicd ]
+
+
+jobs:
+
+  build_win:
+
+    runs-on: windows-2019
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.8'
+        architecture: 'x64'
+    - name: Insert Infura key
+      env:
+        INFURA_APIKEY: ${{ secrets.INFURA_APIKEY }}
+      run: |
+        (Get-Content wallets\ETHwallet.py) -Replace '"xxx" # Put your Infura key here', ('"' + $Env:INFURA_APIKEY +'"') | Set-Content wallets\ETHwallet.py
+    - name: Build bin package
+      run: |
+        cd package
+        ./Build-Windows.bat
+    - name: 'Archive windows bin (unsigned!)'
+      uses: actions/upload-artifact@v2
+      with:
+        name: windist
+        path: |
+          dist/
