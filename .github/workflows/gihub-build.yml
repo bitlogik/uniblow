@@ -41,6 +41,7 @@ jobs:
 
   build_linux:
 
+    runs-on: ubuntu-latest
     container: node:14.16
 
     steps:
