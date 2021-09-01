@@ -45,15 +45,21 @@ jobs:
     container: debian:buster
 
     steps:
+    - name: Prepare Debian system
+      run: |
+        sudo apt update
+        sudo apt install -y libsdl2-2.0-0 python3-venv python3-pip python3-pyscard
+    - name: Get project sources
+      run: |
+        BRANCHTAG=$GITHUB_REF
+        curl -LOJ https://github.com/bitlogik/uniblow/archive/$BRANCHTAG.tar.gz
+        tar -xzf uniblow-$BRANCHTAG.tar.gz
+        cd uniblow-$BRANCHTAG
     - name: Insert Infura key
       env:
         INFURA_APIKEY: ${{ secrets.INFURA_APIKEY }}
       run: |
         sed -i 's/"xxx" # Put your Infura key here/'"$INFURA_APIKEY"'/g' wallets/ETHwallet.py
-    - name: Prepare Debian system
-      run: |
-        sudo apt update
-        sudo apt install -y libsdl2-2.0-0 python3-venv python3-pip python3-pyscard
     - name: Build bin package
       run: |
         bash package/Build-Debian.sh
