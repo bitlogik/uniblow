@@ -42,14 +42,14 @@ jobs:
   build_linux:
 
     runs-on: ubuntu-latest
-    container: node:14.16
+    container: debian:buster
 
     steps:
     - name: Insert Infura key
       env:
         INFURA_APIKEY: ${{ secrets.INFURA_APIKEY }}
       run: |
-        sed -i 's/"xxx" # Put your Infura key here/'"$INFURA_APIKEY"'/g' wallets\ETHwallet.py
+        sed -i 's/"xxx" # Put your Infura key here/'"$INFURA_APIKEY"'/g' wallets/ETHwallet.py
     - name: Prepare Debian system
       run: |
         sudo apt update
