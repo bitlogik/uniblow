@@ -21,6 +21,7 @@ import sys
 from threading import Thread
 import webbrowser
 from wx import (
+    CallAfter,
     Menu,
     MenuItem,
     EVT_MENU,
@@ -196,7 +197,7 @@ class SeedWatcherPanel(gui.swgui.MainPanel):
         coin_key = SeedDevice(wallet.derive_key(path))
         try:
             coin_wallet = blockchainWallet(coin, coin_key)
-            self.display_coin(coin_wallet)
+            CallAfter(self.display_coin, coin_wallet)
             self.coins.append(coin_wallet)
         except Exception as exc:
             logger.error("Error when getting coin info : %s", str(exc), exc_info=exc)
@@ -204,7 +205,7 @@ class SeedWatcherPanel(gui.swgui.MainPanel):
             self.async_getcoininfo_idx(coin_idx + 1, wallet)
         else:
             # List is finished
-            self.enable_inputs()
+            CallAfter(self.enable_inputs)
 
     def disable_inputs(self):
         self.m_btnseek.Disable()
