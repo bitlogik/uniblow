@@ -1,7 +1,7 @@
 
 # Building uniblow
 
-This document provides specific instructions and scripts to build uniblow binaries for the Windows, Debian and MacOS platforms.
+This document provides specific instructions and scripts to build uniblow binaries for the Windows, Ubuntu/Debian and MacOS platforms.
 
 ## Windows 10
 

@@ -188,12 +188,12 @@ Note that in this mode, Uniblow disables sending any transaction from the GUI. A
 Run Uniblow - Use the GUI
 -------------------------
 
-On **Debian / Tails** :
+On **Debian / Tails / Ubuntu** :
 
 -   Follow the [dedicated instructions
     page](docs/LinuxRunBin.md).
 
-To increase the security, the Debian/Tails binaries releases are [signed with
+To increase the security, the Linux binaries releases are [signed with
 our PGP key](https://bitlogik.fr/pgp/bitlogik.asc), bringing even greater
 confidence in the integrity of the application. The checking process is
 described in [this instructions document](docs/LinuxRunBin.md).

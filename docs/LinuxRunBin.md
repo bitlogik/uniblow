@@ -2,12 +2,14 @@
 # Uniblow on Debian or Tails
 
 
-We provide a Linux binary file which can be used directly on Tails OS and the Debian 10 Linux distribution, for the common x86/64 *AMD64* architecture.
+We provide a Linux binary file which can be used directly on Ubuntu, Debian or Tails OS Linux distributions, for the common x86/64 *AMD64* architecture.
 
 For the following Linux OS :
 
-* Tails v4.20, should work on any v4.x
+* Ubuntu 16 to 20 should work
+* Ubuntu derivatives, like Mint
 * Debian Buster 10.10, should work on any 10.x "Buster"
+* Tails v4.20, should work on any v4.x
 
 
 ### Download the binary
@@ -43,7 +45,7 @@ In Tails, using the Files explorer, you can right click on the sig file and sele
 *Uniblow : Untrusted Valid Signature*  
 *Valid but untrusted signature by Antoine FERRON <antoine...*
 
-OR alternatively using the Terminal, in Debian (also valid for Tails) :
+OR alternatively using the Terminal, in Debian/Ubuntu (also valid for Tails) :
 ```
 UniblowFile=Uniblow-deb-x86_64-0.9.4
 gpg --verify --trust-model always $UniblowFile.sig $UniblowFile
@@ -83,7 +85,7 @@ torsocks ./Uniblow-deb-x86_64-0.9.4
 ```
 
 
-In **Debian**, you can directly run it from the file explorer GUI : double-click on the Uniblow binary icon to start it.
+In **Debian or Ubuntu**, you can directly run it from the file explorer GUI : double-click on the Uniblow binary icon to start it.
 
 If nothing happens after some seconds, open a terminal in the current directory and type `./Uniblow-deb-x86_64-0.9.4`
 
