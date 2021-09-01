@@ -3,9 +3,9 @@ name: Building Uniblow binaries
 
 
 on:
-  #release:
-  #  types: [created]
   push:
+    tags:
+      - '*'
     branches: [ cicd ]
 
 
