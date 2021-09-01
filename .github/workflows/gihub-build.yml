@@ -52,24 +52,24 @@ jobs:
         apt install -y python3-venv python3-pip python3-pyscard
     - name: Get project sources
       run: |
-        BRANCHTAG=${GITHUB_REF##*/}
-        curl -LOJ https://github.com/bitlogik/uniblow/archive/$GITHUB_REF.tar.gz
-        tar -xzf uniblow-$BRANCHTAG.tar.gz
+        curl -L https://github.com/bitlogik/uniblow/archive/$GITHUB_REF.tar.gz > uniblow.tar.gz
+        tar -xzf uniblow.tar.gz
+        mv uniblow-* uniblow
     - name: Insert Infura key
       env:
         INFURA_APIKEY: ${{ secrets.INFURA_APIKEY }}
       run: |
-        sed -i 's/"xxx" # Put your Infura key here/"'"$INFURA_APIKEY"'"/g' uniblow-${GITHUB_REF##*/}/wallets/ETHwallet.py
+        sed -i 's/"xxx" # Put your Infura key here/"'"$INFURA_APIKEY"'"/g' uniblow/wallets/ETHwallet.py
     - name: Build bin package
       run: |
-        cd uniblow-${GITHUB_REF##*/}
-        xvfb-run --server-args='-screen 0, 1024x768x16' bash package/Build-Debian.sh
+        cd uniblow
+        xvfb-run --server-args='-screen 0, 1024x768x24' bash package/Build-Debian.sh
     - name: 'Archive linux bin (unsigned!)'
       uses: actions/upload-artifact@v2
       with:
         name: nuxdist-unsigned
         path: |
-          uniblow-*/dist/
+          uniblow/dist/
 
 
   build_mac:
