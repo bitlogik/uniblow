@@ -51,8 +51,8 @@ jobs:
         apt install -y curl libsdl2-2.0-0 python3-venv python3-pip python3-pyscard
     - name: Get project sources
       run: |
-        BRANCHTAG=$GITHUB_REF
-        curl -LOJ https://github.com/bitlogik/uniblow/archive/$BRANCHTAG.tar.gz
+        BRANCHTAG=${GITHUB_REF##*/}
+        curl -LOJ https://github.com/bitlogik/uniblow/archive/$GITHUB_REF.tar.gz
         tar -xzf uniblow-$BRANCHTAG.tar.gz
         cd uniblow-$BRANCHTAG
     - name: Insert Infura key
