@@ -47,8 +47,8 @@ jobs:
     steps:
     - name: Prepare Debian system
       run: |
-        sudo apt update
-        sudo apt install -y libsdl2-2.0-0 python3-venv python3-pip python3-pyscard
+        apt update
+        apt install -y libsdl2-2.0-0 python3-venv python3-pip python3-pyscard
     - name: Get project sources
       run: |
         BRANCHTAG=$GITHUB_REF
