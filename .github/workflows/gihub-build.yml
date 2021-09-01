@@ -58,7 +58,7 @@ jobs:
       env:
         INFURA_APIKEY: ${{ secrets.INFURA_APIKEY }}
       run: |
-        sed -i 's/"xxx" # Put your Infura key here/'"$INFURA_APIKEY"'/g' uniblow-${GITHUB_REF##*/}/wallets/ETHwallet.py
+        sed -i 's/"xxx" # Put your Infura key here/"'"$INFURA_APIKEY"'"/g' uniblow-${GITHUB_REF##*/}/wallets/ETHwallet.py
     - name: Build bin package
       run: |
         cd uniblow-${GITHUB_REF##*/}
