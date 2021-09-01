@@ -48,7 +48,7 @@ jobs:
     - name: Prepare Debian system
       run: |
         apt update
-        apt install -y curl libnotify4 libgtk-3-0 libsdl2-2.0-0 libpcsclite1
+        apt install -y xvfb curl libnotify4 libgtk-3-0 libsdl2-2.0-0 libpcsclite1
         apt install -y python3-venv python3-pip python3-pyscard
     - name: Get project sources
       run: |
@@ -63,7 +63,7 @@ jobs:
     - name: Build bin package
       run: |
         cd uniblow-${GITHUB_REF##*/}
-        bash package/Build-Debian.sh
+        xvfb-run --server-args='-screen 0, 1024x768x16' bash package/Build-Debian.sh
     - name: 'Archive linux bin (unsigned!)'
       uses: actions/upload-artifact@v2
       with:
