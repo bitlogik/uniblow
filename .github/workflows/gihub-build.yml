@@ -48,7 +48,7 @@ jobs:
     - name: Prepare Debian system
       run: |
         apt update
-        apt install -y curl libgtk-3-0 libsdl2-2.0-0 python3-venv python3-pip python3-pyscard
+        apt install -y curl libnotify4 libgtk-3-0 libsdl2-2.0-0 python3-venv python3-pip python3-pyscard
     - name: Get project sources
       run: |
         BRANCHTAG=${GITHUB_REF##*/}
