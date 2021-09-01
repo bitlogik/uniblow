@@ -34,7 +34,7 @@ jobs:
     # - name: 'Archive windows bin (unsigned!)'
       # uses: actions/upload-artifact@v2
       # with:
-        # name: windist
+        # name: windist-unsigned
         # path: |
           # dist/
 
@@ -67,7 +67,7 @@ jobs:
     # - name: 'Archive linux bin (unsigned!)'
       # uses: actions/upload-artifact@v2
       # with:
-        # name: nuxdist
+        # name: nuxdist-unsigned
         # path: |
           # uniblow-*/dist/
 
@@ -89,6 +89,6 @@ jobs:
     - name: 'Archive MacOS bin (unsigned!)'
       uses: actions/upload-artifact@v2
       with:
-        name: windist
+        name: macdist-unsigned
         path: |
           dist/
