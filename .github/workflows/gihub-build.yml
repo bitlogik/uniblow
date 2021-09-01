@@ -11,65 +11,65 @@ on:
 
 jobs:
 
-  # build_win:
+  build_win:
 
-    # runs-on: windows-2019
+    runs-on: windows-2019
 
-    # steps:
-    # - uses: actions/checkout@v2
-    # - name: Set up Python
-      # uses: actions/setup-python@v2
-      # with:
-        # python-version: '3.8'
-        # architecture: 'x64'
-    # - name: Insert Infura key
-      # env:
-        # INFURA_APIKEY: ${{ secrets.INFURA_APIKEY }}
-      # run: |
-        # (Get-Content wallets\ETHwallet.py) -Replace '"xxx" # Put your Infura key here', ('"' + $Env:INFURA_APIKEY +'"') | Set-Content wallets\ETHwallet.py
-    # - name: Build bin package
-      # run: |
-        # cd package
-        # ./Build-Windows.bat
-    # - name: 'Archive windows bin (unsigned!)'
-      # uses: actions/upload-artifact@v2
-      # with:
-        # name: windist-unsigned
-        # path: |
-          # dist/
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.8'
+        architecture: 'x64'
+    - name: Insert Infura key
+      env:
+        INFURA_APIKEY: ${{ secrets.INFURA_APIKEY }}
+      run: |
+        (Get-Content wallets\ETHwallet.py) -Replace '"xxx" # Put your Infura key here', ('"' + $Env:INFURA_APIKEY +'"') | Set-Content wallets\ETHwallet.py
+    - name: Build bin package
+      run: |
+        cd package
+        ./Build-Windows.bat
+    - name: 'Archive windows bin (unsigned!)'
+      uses: actions/upload-artifact@v2
+      with:
+        name: windist-unsigned
+        path: |
+          dist/
 
 
-  # build_linux:
+  build_linux:
 
-    # runs-on: ubuntu-latest
-    # container: debian:buster
+    runs-on: ubuntu-latest
+    container: debian:buster
 
-    # steps:
-    # - name: Prepare Debian system
-      # run: |
-        # apt update
-        # apt install -y xvfb curl libnotify4 libgtk-3-0 libsdl2-2.0-0 libpcsclite1
-        # apt install -y python3-venv python3-pip python3-pyscard
-    # - name: Get project sources
-      # run: |
-        # BRANCHTAG=${GITHUB_REF##*/}
-        # curl -LOJ https://github.com/bitlogik/uniblow/archive/$GITHUB_REF.tar.gz
-        # tar -xzf uniblow-$BRANCHTAG.tar.gz
-    # - name: Insert Infura key
-      # env:
-        # INFURA_APIKEY: ${{ secrets.INFURA_APIKEY }}
-      # run: |
-        # sed -i 's/"xxx" # Put your Infura key here/"'"$INFURA_APIKEY"'"/g' uniblow-${GITHUB_REF##*/}/wallets/ETHwallet.py
-    # - name: Build bin package
-      # run: |
-        # cd uniblow-${GITHUB_REF##*/}
-        # xvfb-run --server-args='-screen 0, 1024x768x16' bash package/Build-Debian.sh
-    # - name: 'Archive linux bin (unsigned!)'
-      # uses: actions/upload-artifact@v2
-      # with:
-        # name: nuxdist-unsigned
-        # path: |
-          # uniblow-*/dist/
+    steps:
+    - name: Prepare Debian system
+      run: |
+        apt update
+        apt install -y xvfb curl libnotify4 libgtk-3-0 libsdl2-2.0-0 libpcsclite1
+        apt install -y python3-venv python3-pip python3-pyscard
+    - name: Get project sources
+      run: |
+        BRANCHTAG=${GITHUB_REF##*/}
+        curl -LOJ https://github.com/bitlogik/uniblow/archive/$GITHUB_REF.tar.gz
+        tar -xzf uniblow-$BRANCHTAG.tar.gz
+    - name: Insert Infura key
+      env:
+        INFURA_APIKEY: ${{ secrets.INFURA_APIKEY }}
+      run: |
+        sed -i 's/"xxx" # Put your Infura key here/"'"$INFURA_APIKEY"'"/g' uniblow-${GITHUB_REF##*/}/wallets/ETHwallet.py
+    - name: Build bin package
+      run: |
+        cd uniblow-${GITHUB_REF##*/}
+        xvfb-run --server-args='-screen 0, 1024x768x16' bash package/Build-Debian.sh
+    - name: 'Archive linux bin (unsigned!)'
+      uses: actions/upload-artifact@v2
+      with:
+        name: nuxdist-unsigned
+        path: |
+          uniblow-*/dist/
 
 
   build_mac:
