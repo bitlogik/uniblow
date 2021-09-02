@@ -168,7 +168,6 @@ class SeedWatcherPanel(gui.swgui.MainPanel):
         else:
             if self.__nonzero__():
                 self.m_dataViewListCtrl1.AppendItem(coin_info)
-                self.m_staticTextcopy.Enable()
                 self.m_dataViewListCtrl1.SetRowHeight(28)
 
     def get_coin_info(self, coin_idx, wallet):
@@ -197,8 +196,8 @@ class SeedWatcherPanel(gui.swgui.MainPanel):
         coin_key = SeedDevice(wallet.derive_key(path))
         try:
             coin_wallet = blockchainWallet(coin, coin_key)
-            CallAfter(self.display_coin, coin_wallet)
             self.coins.append(coin_wallet)
+            CallAfter(self.display_coin, coin_wallet)
         except Exception as exc:
             logger.error("Error when getting coin info : %s", str(exc), exc_info=exc)
         if coin_idx < len(coins_list) - 1 and self.__nonzero__():
@@ -210,13 +209,15 @@ class SeedWatcherPanel(gui.swgui.MainPanel):
     def disable_inputs(self):
         self.m_btnseek.Disable()
         self.m_staticTextcopy.Disable()
+        self.m_account.Disable()
         self.Disable()
 
     def enable_inputs(self):
         if self.__nonzero__():
             self.m_btnseek.Enable()
             self.m_staticTextcopy.Enable()
-            self.Enable()
+            self.m_account.Enable()
+            CallAfter(self.Enable)
 
     def async_getcoininfo_idx(self, coin_idx, wallet):
         getcoin = Thread(target=self.get_coin_info, args=[coin_idx, wallet])
