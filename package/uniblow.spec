@@ -35,7 +35,16 @@ additional_imports += [f"devices.{device}" for device in DEVICES_LIST]
 if os_platform == "mac":
     additional_imports.append("certifi")
 
-pkgs_remove = ["sqlite3", "tcl85", "tk85", "_sqlite3", "_tkinter", "libopenblas", "libdgamln"]
+pkgs_remove = [
+    "sqlite3",
+    "tcl85",
+    "tk85",
+    "_sqlite3",
+    "_tkinter",
+    "libopenblas",
+    "libdgamln",
+    "libdbus",
+]
 
 a = Analysis(
     ["../uniblow.py"],
