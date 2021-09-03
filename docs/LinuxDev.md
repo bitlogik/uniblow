@@ -29,9 +29,9 @@ sudo apt install -y git libnotify4 libgtk-3-0 libpcsclite1 libsdl2-2.0-0 python3
 
 #### Install required packages 
 ```
-python3 -m pip install -U pip
-python3 -m pip install -U -f https://extras.wxpython.org/wxPython4/extras/linux/gtk3/debian-10/wxPython-4.1.1-cp37-cp37m-linux_x86_64.whl wxPython
-python3 -m pip install -U pip setuptools-rust
+python3 -m pip install -U pip < /dev/null
+python3 -m pip install https://extras.wxpython.org/wxPython4/extras/linux/gtk3/debian-10/wxPython-4.1.1-cp37-cp37m-linux_x86_64.whl < /dev/null
+python3 -m pip install -U pip setuptools-rust < /dev/null
 ```
 
 #### Get the uniblow source
@@ -86,8 +86,8 @@ sudo apt install -y git python3-venv python3-pip < /dev/null
 #### Install required packages (Ubuntu 20.04)
 ```
 sudo apt install -y libsdl2-dev < /dev/null
-python3 -m pip install -U pip
-sudo pip3 install -U -f https://extras.wxpython.org/wxPython4/extras/linux/gtk3/ubuntu-20.04 wxPython < /dev/null
+python3 -m pip install -U pip < /dev/null
+sudo pip3 install https://extras.wxpython.org/wxPython4/extras/linux/gtk3/ubuntu-20.04/wxPython-4.1.1-cp38-cp38-linux_x86_64.whl < /dev/null
 sudo apt install -y python3-pyscard < /dev/null
 ```
 
