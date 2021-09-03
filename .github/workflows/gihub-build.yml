@@ -46,9 +46,9 @@ jobs:
     - uses: actions/checkout@v2
     - name: Prepare Linux system
       run: |
-        apt update
-        apt install -y xvfb curl libnotify4 libgtk-3-0 libsdl2-2.0-0 libpcsclite1
-        apt install -y python3-venv python3-pip python3-pyscard
+        sudo apt update
+        sudo apt install -y xvfb curl libnotify4 libgtk-3-0 libsdl2-2.0-0 libpcsclite1
+        sudo apt install -y python3-venv python3-pip python3-pyscard
     - name: Insert Infura key
       env:
         INFURA_APIKEY: ${{ secrets.INFURA_APIKEY }}
