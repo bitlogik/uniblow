@@ -31,8 +31,9 @@ python -m pip install -U pip
 
 echo Installing pip dependencies ...
 
-python -m pip install https://extras.wxpython.org/wxPython4/extras/linux/gtk3/debian-10/wxPython-4.1.1-cp37-cp37m-linux_x86_64.whl < /dev/null
-python -m pip install -U pip setuptools-rust < /dev/null
+# python -m pip install https://extras.wxpython.org/wxPython4/extras/linux/gtk3/debian-10/wxPython-4.1.1-cp37-cp37m-linux_x86_64.whl
+python -m pip install https://extras.wxpython.org/wxPython4/extras/linux/gtk3/ubuntu-18.04/wxPython-4.1.1-cp36-cp36m-linux_x86_64.whl
+python -m pip install -U pip setuptools-rust
 
 python setup.py install
 python -m pip install pyinstaller==4.5.1
