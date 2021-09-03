@@ -28,9 +28,9 @@ from cryptolib.cryptography import sha3
 from cryptolib.coins.ethereum import uint256
 
 
-uint_types = [f"uint{l}" for l in range(8, 257)]
-int_types = [f"int{l}" for l in range(8, 257)]
-bytes_types = [f"bytes{l}" for l in range(1, 33)]
+uint_types = [f"uint{type_len}" for type_len in range(8, 257)]
+int_types = [f"int{type_len}" for type_len in range(8, 257)]
+bytes_types = [f"bytes{type_len}" for type_len in range(1, 33)]
 std_types = ["bool", *uint_types, *int_types, "address", *bytes_types, "bytes", "string"]
 
 

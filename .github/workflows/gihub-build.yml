@@ -26,7 +26,7 @@ jobs:
       env:
         INFURA_APIKEY: ${{ secrets.INFURA_APIKEY }}
       run: |
-        (Get-Content wallets\ETHwallet.py) -Replace '"xxx" # Put your Infura key here', ('"' + $Env:INFURA_APIKEY +'"') | Set-Content wallets\ETHwallet.py
+        (Get-Content wallets\ETHwallet.py) -Replace '"xxx"  # Put your Infura key here', ('"' + $Env:INFURA_APIKEY +'"') | Set-Content wallets\ETHwallet.py
     - name: Build bin package
       run: |
         cd package
@@ -59,7 +59,7 @@ jobs:
       env:
         INFURA_APIKEY: ${{ secrets.INFURA_APIKEY }}
       run: |
-        sed -i 's/"xxx" # Put your Infura key here/"'"$INFURA_APIKEY"'"/g' uniblow/wallets/ETHwallet.py
+        sed -i 's/"xxx"  # Put your Infura key here/"'"$INFURA_APIKEY"'"/g' uniblow/wallets/ETHwallet.py
     - name: Build bin package
       run: |
         cd uniblow
@@ -82,7 +82,7 @@ jobs:
       env:
         INFURA_APIKEY: ${{ secrets.INFURA_APIKEY }}
       run: |
-        sed -i '' 's/"xxx" # Put your Infura key here/"'"$INFURA_APIKEY"'"/g' wallets/ETHwallet.py
+        sed -i '' 's/"xxx"  # Put your Infura key here/"'"$INFURA_APIKEY"'"/g' wallets/ETHwallet.py
     - name: Build bin package
       run: |
         ./package/Build-Mac.sh

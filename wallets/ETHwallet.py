@@ -474,7 +474,7 @@ class ETH_wallet:
         self.current_device = device
         self.confirm_callback = confirm_callback
         pubkey_hex = self.current_device.get_public_key()
-        INFURA_KEY = "xxx" # Put your Infura key here
+        INFURA_KEY = "xxx"  # Put your Infura key here
         if INFURA_KEY == "xxx":
             raise Exception(
                 "To use Uniblow from source, bring your own Infura key, or use etherscan_api"
