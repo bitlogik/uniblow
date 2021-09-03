@@ -240,8 +240,8 @@ def copy_account(ev):
             wx.TheClipboard.Clear()
             addr = app.gui_panel.account_addr.GetValue()
             wx.TheClipboard.SetData(wx.TextDataObject(addr))
-            wx.TheClipboard.Close()
             wx.TheClipboard.Flush()
+            wx.TheClipboard.Close()
             copy_result("Copied")
         else:
             copy_result("No Access")
