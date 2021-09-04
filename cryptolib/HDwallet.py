@@ -20,12 +20,12 @@ import unicodedata
 from cryptolib.cryptography import (
     sha2,
     HMAC_SHA512,
-    EC_key_pair,
     PBKDF2_SHA512,
     SecuBoost_KDF,
     CURVES_ORDER,
     random_generator,
 )
+from cryptolib.ECKeyPair import EC_key_pair
 
 # BIP39 : mnemonic <-> seed
 
@@ -145,7 +145,7 @@ class BIP32node:
     def __init__(self, i, depth, pvkey, chaincode, curve, parent_fingerprint):
         # self.vpub_bytes = bytes.fromhex("0488B21E")  # testnet 0x043587CF
         self.curve = curve.upper()
-        self.pv_key = EC_key_pair(pvkey)
+        self.pv_key = EC_key_pair(pvkey, self.curve)
         self.chain_code = chaincode
         self.child_number = i
         self.parent_fingerprint = parent_fingerprint
@@ -158,21 +158,28 @@ class BIP32node:
             data = bytes([0]) + self.pv_key.ser256() + BIP32node.ser32(i)
         else:
             # standard (non-hardened)
+            if self.curve == "ED":
+                raise Exception("Ed25519 derivation can't be done with a non-hardened normal child")
             data = self.pv_key.get_public_key() + BIP32node.ser32(i)
         key_valid = False
-        n_order = CURVES_ORDER.get(self.curve)
-        if n_order is None:
-            raise Exception("Curve not supported, input R1 ou K1")
+        if self.curve != "ED":
+            n_order = CURVES_ORDER.get(self.curve)
+            if n_order is None:
+                raise Exception("Curve not supported, input R1, K1 or ED")
         fingerprint = 0  # Hash160(privkey_to_pubkey(self.pv_key, self.curve, True))[:4]
         while not key_valid:  # SLIP10
             deriv = HMAC_SHA512(self.chain_code, data)
             derIL = int.from_bytes(deriv[:32], "big")
-            newkey = (derIL + self.pv_key.pv_int()) % n_order
-            if derIL >= n_order or newkey == 0:
-                data = bytes([1]) + deriv[32:] + BIP32node.ser32(i)
-                deriv = HMAC_SHA512(self.chain_code, data)
-            else:
+            if self.curve == "ED":
+                newkey = derIL
                 key_valid = True
+            else:
+                newkey = (derIL + self.pv_key.pv_int()) % n_order
+                if derIL >= n_order or newkey == 0:
+                    data = bytes([1]) + deriv[32:] + BIP32node.ser32(i)
+                    deriv = HMAC_SHA512(self.chain_code, data)
+                else:
+                    key_valid = True
         return BIP32node(i, self.depth + 1, newkey, deriv[32:], self.curve, fingerprint)
 
     def __eq__(self, other):
@@ -200,16 +207,19 @@ class BIP32node:
             curve_string = b"Bitcoin seed"
         elif curve.upper() == "R1":
             curve_string = b"Nist256p1 seed"
+        elif curve.upper() == "ED":
+            curve_string = b"ed25519 seed"
         else:
-            raise Exception("unsupported curve for BIP32")
-        n_order = CURVES_ORDER.get(curve.upper())
-        if n_order is None:
-            raise Exception("Curve not supported, input R1 ou K1")
+            raise Exception("unsupported curve for SLIP10/BIP32")
+        if curve_string != b"ed25519 seed":
+            n_order = CURVES_ORDER.get(curve.upper())
+            if n_order is None:
+                raise Exception("Curve not supported, input R1, K1 or ED")
         key_invalid = True
         while key_invalid:  # SLIP10
             result = HMAC_SHA512(curve_string, seed)
             derIL = int.from_bytes(result[:32], "big")
-            if derIL >= n_order or derIL == 0:
+            if curve_string != b"ed25519 seed" and derIL >= n_order or derIL == 0:
                 seed = result
             else:
                 key_invalid = False
@@ -248,11 +258,11 @@ class HD_Wallet:
         self.master_node = mk
 
     @classmethod
-    def from_seed(cls, seed):
-        return cls(BIP32node.master_node(seed, "K1"))
+    def from_seed(cls, seed, ptype="K1"):
+        return cls(BIP32node.master_node(seed, ptype))
 
     @classmethod
-    def from_mnemonic(cls, mnemonic, passw="", std="BIP39"):
+    def from_mnemonic(cls, mnemonic, passw="", std="BIP39", ptype="K1"):
         """Mnemonic to master key (BIP39 or BOOST)"""
         pprefix = b"mnemonic"
         if std == "BIP39":
@@ -269,7 +279,7 @@ class HD_Wallet:
         seed = mnemonic_to_seed(
             mnemonic, passphrasestr=passw, passphrase_prefix=pprefix, method=method
         )
-        return HD_Wallet.from_seed(seed)
+        return HD_Wallet.from_seed(seed, ptype)
 
     def derive_key(self, path):
         """Derive the private key crypto object from the path string"""

@@ -25,11 +25,10 @@ except Exception:
     raise Exception("Requires PySHA3 : pip3 install pysha3")
 
 from .ECP256k1 import ECPoint, inverse_mod
-from cryptography.hazmat import backends
-from cryptography.hazmat.primitives import serialization, hashes
-from cryptography.hazmat.primitives.asymmetric import ec, utils
+from cryptography.hazmat.primitives import hashes
 from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
 from nacl.hashlib import scrypt
+
 
 # Cryptography
 
@@ -53,38 +52,6 @@ def public_key_recover(h, r, s, par=0):
     Q = inverse_mod(r, n) * R.dual_mult(-h % n, s)
     # Uncompressed format 04 X Y
     return Q.encode_output(False)
-
-
-# EC key pair (private, public)
-
-
-class EC_key_pair:
-    """ECDSA 256 k1 key pair"""
-
-    def __init__(self, pv_key_int):
-        """A EllipticCurvePrivateKey object"""
-        self.key_obj = ec.derive_private_key(pv_key_int, ec.SECP256K1(), backends.default_backend())
-
-    def pv_int(self):
-        """output private key as a integer"""
-        return self.key_obj.private_numbers().private_value
-
-    def ser256(self):
-        return self.pv_int().to_bytes(32, "big")
-
-    def sign(self, hash_data):
-        """Sign pre-hashed data, in DER format"""
-        sign_alg = ec.ECDSA(utils.Prehashed(hashes.SHA256()))
-        return makeup_sig(self.key_obj.sign(hash_data, sign_alg))
-
-    def get_public_key(self, compressed=True):
-        """public key output X962 from the private key object"""
-        out_format = (
-            serialization.PublicFormat.CompressedPoint
-            if compressed
-            else serialization.PublicFormat.UncompressedPoint
-        )
-        return self.key_obj.public_key().public_bytes(serialization.Encoding.X962, out_format)
 
 
 def sha2(raw_message):
@@ -167,11 +134,13 @@ def encode_int_der(intarray):
     return [2, len(intarray), *intarray]
 
 
-def encode_der_s(int_r, int_s):
+def encode_der_s(int_r, int_s, curve_param):
     """Encode raw signature R|S (2x EC size bytes) into ASN1 DER"""
     array_r = encode_int_der(int_r.to_bytes(32, byteorder="big"))
     # Enforce low S
-    n_limit = CURVES_ORDER["K1"]
+    n_limit = CURVES_ORDER.get(curve_param)
+    if n_limit is None:
+        Exception("Encode DER signature to low S is only supported for K1 or R1.")
     if int_s > (n_limit >> 1):
         s_data = (n_limit - int_s).to_bytes(32, byteorder="big")
         array_s = encode_int_der(s_data)
@@ -180,7 +149,7 @@ def encode_der_s(int_r, int_s):
     return bytes([0x30, len(array_r) + len(array_s), *array_r, *array_s])
 
 
-def makeup_sig(sig):
+def makeup_sig(sig, curve_param):
     """Blockchain signature : DER to DER with low S"""
     if sig[0] != 0x30:
         raise Exception("Wrong signature header")
@@ -192,4 +161,4 @@ def makeup_sig(sig):
     s_value = int.from_bytes(sig[6 + rlen : 6 + rlen + slen], "big")
     if sig[1] != 4 + rlen + slen or len(sig) != 6 + rlen + slen:
         raise Exception("Wrong signature encoding")
-    return encode_der_s(r_value, s_value)
+    return encode_der_s(r_value, s_value, curve_param)

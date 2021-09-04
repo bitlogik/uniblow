@@ -16,39 +16,49 @@
 
 
 from secrets import randbelow
-from cryptolib.cryptography import EC_key_pair, CURVES_ORDER
+from cryptolib.cryptography import CURVES_ORDER
+from cryptolib.ECKeyPair import EC_key_pair
 
 
 CURVE_K1_ORDER = CURVES_ORDER["K1"]
+CURVE_R1_ORDER = CURVES_ORDER["R1"]
 EC_BYTES_SIZE = 32
 
 
 class SKdevice:
-    # Using Python cryptography lib
 
     has_password = True
     has_admin_password = False
     is_HD = False
 
-    def __init__(self):
+    def __init__(self, ktype="K1"):
+        # KType is K1, R1 or ED
+        self.ktype = ktype
         self.created = False
         self.has_hardware_button = False
 
     def open_account_fromint(self, key_int):
-        self.eckey = EC_key_pair(key_int)
+        self.eckey = EC_key_pair(key_int, self.ktype)
 
     def load_key(self, ecpair_obj):
         self.eckey = ecpair_obj
 
     def initialize_device(self):
         # Generate a new key
-        pvkey_int = randbelow(CURVE_K1_ORDER)
+        if self.ktype == "K1":
+            pvkey_int = randbelow(CURVE_K1_ORDER)
+        elif self.ktype == "R1":
+            pvkey_int = randbelow(CURVE_R1_ORDER)
+        else:
+            pvkey_int = randbelow(2 ** 256)
         self.open_account_fromint(pvkey_int)
         self.created = True
         return pvkey_int
 
     def get_public_key(self, compressed=True):
+        # compressed has no effect if type id Ed
         return self.eckey.get_public_key(compressed).hex()
 
     def sign(self, hashed_msg):
+        # If Ed, hashed_msg is the full message
         return self.eckey.sign(hashed_msg)
