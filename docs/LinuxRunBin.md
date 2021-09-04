@@ -24,8 +24,8 @@ From the uniblow website :
 
 **OR** using the terminal, in Tails you need to prepend *torsocks* to these commands :
 ```
-curl -LOJ https://uniblow.org/dist/Uniblow-linux-x86_64-0.9.7
-curl -LOJ https://uniblow.org/dist/Uniblow-linux-x86_64-0.9.7.sig
+wget https://uniblow.org/dist/Uniblow-linux-x86_64-0.9.7
+wget https://uniblow.org/dist/Uniblow-linux-x86_64-0.9.7.sig
 ```
 
 ### Check authenticity
@@ -33,8 +33,8 @@ curl -LOJ https://uniblow.org/dist/Uniblow-linux-x86_64-0.9.7.sig
 The binary is signed with the PGP key of the editor's developer. You have to check the authenticity of the binary. This way, you can be sure it is the official approved binary from the editor, and was not altered in any way.
 
 **Get the public key** :  
-Tails  : `gpg --import <(torsocks curl https://keys.openpgp.org//vks/v1/by-email/antoine.ferron%40bitlogik.fr)`  
-Debian : `gpg --import <(curl https://keys.openpgp.org//vks/v1/by-email/antoine.ferron%40bitlogik.fr)`
+Tails   : `gpg --import <(torsocks wget -O - https://keys.openpgp.org//vks/v1/by-email/antoine.ferron%40bitlogik.fr)`  
+Debian/Ubuntu : `gpg --import <(wget -O - https://keys.openpgp.org//vks/v1/by-email/antoine.ferron%40bitlogik.fr)`
 
 When the public key download is successful, it says `Total number processed/imported : 1`.
 
