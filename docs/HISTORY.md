@@ -1,6 +1,14 @@
 
 Uniblow versions history
 
+## 0.9.7
+
+* Improve Linux build
+* Fix History open on some Linux
+* Fix Copy clipboard on MacOS
+* Add internal EC pair for R1 and Ed (SLIP10)
+* Fix BSC transactions
+
 ## 0.9.6
 
 * Improve GUI UX
