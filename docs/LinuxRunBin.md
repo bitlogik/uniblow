@@ -6,25 +6,26 @@ We provide a Linux binary file which can be used directly on Ubuntu, Debian or T
 
 For the following Linux OS :
 
-* Ubuntu 16 to 20 should work
-* Ubuntu derivatives, like Mint
-* Debian Buster 10.10, should work on any 10.x "Buster"
+* Ubuntu 18 to 20 should work
+* Ubuntu derivatives, like Mint or PureOS
+* Debian Buster 10 and Bullseye 11, should work on any Debian older than 10.x
 * Tails v4.20, should work on any v4.x
 
+It may run on other Linux, as RHEL or Fedora. But without any testing and no guarantee.
 
 ### Download the binary
 
 Get the binary and its signature file.
 
 From the uniblow website :  
-[Uniblow program](https://uniblow.org/dist/Uniblow-deb-x86_64-0.9.7)  
+[Uniblow program](https://uniblow.org/dist/Uniblow-linux-x86_64-0.9.7)  
  and its  
-[PGP signature](https://uniblow.org/dist/Uniblow-deb-x86_64-0.9.7.sig)
+[PGP signature](https://uniblow.org/dist/Uniblow-linux-x86_64-0.9.7.sig)
 
 **OR** using the terminal, in Tails you need to prepend *torsocks* to these commands :
 ```
-curl -LOJ https://uniblow.org/dist/Uniblow-deb-x86_64-0.9.7
-curl -LOJ https://uniblow.org/dist/Uniblow-deb-x86_64-0.9.7.sig
+curl -LOJ https://uniblow.org/dist/Uniblow-linux-x86_64-0.9.7
+curl -LOJ https://uniblow.org/dist/Uniblow-linux-x86_64-0.9.7.sig
 ```
 
 ### Check authenticity
@@ -47,7 +48,7 @@ In Tails, using the Files explorer, you can right click on the sig file and sele
 
 OR alternatively using the Terminal, in Debian/Ubuntu (also valid for Tails) :
 ```
-UniblowFile=Uniblow-deb-x86_64-0.9.7
+UniblowFile=Uniblow-linux-x86_64-0.9.7
 gpg --verify --trust-model always $UniblowFile.sig $UniblowFile
 ```
 
@@ -74,18 +75,18 @@ In the GUI, with a file explorer like Files, Nautilus or Nemo : right-click on t
 
 OR within the terminal :
 ```
-chmod +x Uniblow-deb-*
+chmod +x Uniblow-linux-*
 ```
 
 Now, you can run Uniblow.
 
 In **Tails**, the *torsocks* software is required to wrap the internet queries of the Uniblow app. Else you get the network error message *Network is unreachable*.
 ```
-torsocks ./Uniblow-deb-x86_64-0.9.7
+torsocks ./Uniblow-linux-x86_64-0.9.7
 ```
 
 
 In **Debian or Ubuntu**, you can directly run it from the file explorer GUI : double-click on the Uniblow binary icon to start it.
 
-If nothing happens after some seconds, open a terminal in the current directory and type `./Uniblow-deb-x86_64-0.9.7`
+If nothing happens after some seconds, open a terminal in the current directory and type `./Uniblow-linux-x86_64-0.9.7`
 
