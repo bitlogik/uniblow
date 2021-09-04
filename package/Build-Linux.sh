@@ -3,13 +3,16 @@
 # Build uniblow Debian/Ubuntu binary package release
 
 
+if ! (cat /etc/os-release | grep -E "18\.04(\.[0-9]+)? LTS \(Bionic Beaver\)" > /dev/null ) then
+  echo "This Uniblow building script only runs on Ubuntu 18.04."
+  exit 1
+fi
+
 function is_installed {
   if [ $(dpkg-query -W -f='${Status}' $1 2>/dev/null | grep -c "ok installed") -eq 0 ]; then
       echo 'not'
     fi
 }
-
-
 
 softs_req=('libnotify4' 'libgtk-3-0' 'libpcsclite1' 'libsdl2-2.0-0' 'python3-venv' 'python3-pip' 'python3-pyscard')
 
@@ -31,7 +34,6 @@ python -m pip install -U pip
 
 echo Installing pip dependencies ...
 
-# python -m pip install https://extras.wxpython.org/wxPython4/extras/linux/gtk3/debian-10/wxPython-4.1.1-cp37-cp37m-linux_x86_64.whl
 python -m pip install https://extras.wxpython.org/wxPython4/extras/linux/gtk3/ubuntu-18.04/wxPython-4.1.1-cp36-cp36m-linux_x86_64.whl
 python -m pip install -U pip setuptools-rust
 

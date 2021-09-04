@@ -15,10 +15,11 @@ This document provides specific instructions and scripts to build uniblow binari
 * Start the **Build-Windows** batch script in the *package* directory, double-click on this bat file to start it.
 
 
-## Debian Buster
+## Linux (Ubuntu 18.04)
 
 * Install required packages
 ```
+sudo add-apt-repository universe
 sudo apt update
 sudo apt install -y libnotify4 libgtk-3-0 libpcsclite1 libsdl2-2.0-0 python3-venv python3-pip python3-pyscard
 ```
@@ -26,7 +27,7 @@ sudo apt install -y libnotify4 libgtk-3-0 libpcsclite1 libsdl2-2.0-0 python3-ven
 * Get the source files
 ```
 BRANCH=master
-curl -LOJ https://github.com/bitlogik/uniblow/archive/$BRANCH.tar.gz
+wget -O uniblow-$BRANCH.tar.gz https://github.com/bitlogik/uniblow/archive/$BRANCH.tar.gz
 tar -xzf uniblow-$BRANCH.tar.gz
 cd uniblow-$BRANCH
 ```
@@ -43,7 +44,7 @@ git checkout $BRANCH
 
 * Start the build script
 ```
-bash package/Build-Debian.sh
+bash package/Build-Linux.sh
 ```
 
 ## MacOS
