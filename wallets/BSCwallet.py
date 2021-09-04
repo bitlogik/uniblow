@@ -508,7 +508,7 @@ class BSC_wallet:
             data = bytearray(b"")
         hash_to_sign = self.bsc.prepare(account, amount, gazprice, ethgazlimit, data)
         tx_signature = self.current_device.sign(hash_to_sign)
-        return self.bac.add_signature(tx_signature)
+        return self.bsc.add_signature(tx_signature)
 
     def broadcast_tx(self, txdata):
         """Broadcast and return the tx hash as 0xhhhhhhhh"""
