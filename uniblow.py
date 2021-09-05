@@ -288,7 +288,7 @@ def cb_open_wallet(wallet_obj, pkey, waltype, sw_frame):
     app.gui_panel.wallopt_choice.Clear()
     app.gui_panel.network_choice.Enable()
     app.gui_panel.network_label.Enable()
-    if app.wallet.coin != "BTC":
+    if app.wallet.coin not in ["BTC", "XTZ"]:
         app.gui_panel.wallopt_choice.Enable()
         app.gui_panel.wallopt_label.Enable()
     networks = app.wallet.get_networks()
@@ -428,6 +428,19 @@ def wallet_fallback():
     """Called when a user option failed"""
     # Reset the wallet to the first type
     wallet_type_fallback = 0
+    # If Tezos, which have 2 different key types, must stick on the previous keytype
+    if app.gui_panel.coins_choice.GetStringSelection() == "XTZ" and hasattr(
+        app.device, "get_key_type"
+    ):
+        device_key_type = app.device.get_key_type()
+        if device_key_type:
+            # Inverse of XTZ get_key_type to set back the type selector
+            if device_key_type == "ED":
+                # tz1 first choice
+                wallet_type_fallback = 0
+            elif device_key_type == "K1":
+                # tz2 second choice
+                wallet_type_fallback = 1
     app.gui_panel.wallopt_choice.SetSelection(wallet_type_fallback)
     # Act like the user selected back the first wallet type
     coin_sel = app.gui_panel.coins_choice.GetStringSelection()
@@ -468,13 +481,16 @@ def set_coin(coin, network, wallet_type):
                 option_preset = option_info.get("preset")
                 option_value = get_option(network, option_info["prompt"], option_preset)
                 if option_value is None:
-                    wallet_fallback()
+                    wx.CallAfter(wallet_fallback)
                     return
+        key_type = get_coin_class(coin).get_key_type(wallet_type)
         if app.device.is_HD:
             current_path = (
                 get_coin_class(coin).get_path(network, wallet_type) + app.device.get_address_index()
             )
-            app.device.derive_key(current_path)
+            app.device.derive_key(current_path, key_type)
+        else:
+            app.device.set_key_type(key_type)
         if option_info is not None:
             option_arg = {
                 option_info["option_name"]: option_value,
@@ -487,7 +503,7 @@ def set_coin(coin, network, wallet_type):
             app.wallet.wc_timer.Notify = watch_messages
     except InvalidOption as exc:
         warn_modal(str(exc))
-        wallet_fallback()
+        wx.CallAfter(wallet_fallback)
         return
     except Exception as exc:
         wallet_error(exc)

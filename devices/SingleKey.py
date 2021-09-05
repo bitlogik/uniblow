@@ -18,10 +18,9 @@
 from secrets import randbelow
 from cryptolib.cryptography import CURVES_ORDER
 from cryptolib.ECKeyPair import EC_key_pair
-
+from wallets.wallets_utils import InvalidOption
 
 CURVE_K1_ORDER = CURVES_ORDER["K1"]
-CURVE_R1_ORDER = CURVES_ORDER["R1"]
 EC_BYTES_SIZE = 32
 
 
@@ -31,32 +30,59 @@ class SKdevice:
     has_admin_password = False
     is_HD = False
 
-    def __init__(self, ktype="K1"):
-        # KType is K1, R1 or ED
-        self.ktype = ktype
+    def __init__(self):
+        self.ktype = None
+        self.eckey = None
         self.created = False
         self.has_hardware_button = False
 
     def open_account_fromint(self, key_int):
-        self.eckey = EC_key_pair(key_int, self.ktype)
+        self.eckey_k1 = EC_key_pair(key_int, "K1")
+        # self.eckey_r1 = EC_key_pair(key_int, "R1")
+        self.eckey_ed = EC_key_pair(key_int, "ED")
+
+    def try_keep_keytype(self, keytype):
+        if self.eckey is None or self.eckey.curve != keytype:
+            raise InvalidOption("SingleKey device key type can't be changed.")
+
+    def get_key_type(self):
+        if self.eckey is None:
+            return None
+        return self.eckey.curve
+
+    def set_key_type(self, ktype):
+        """Select the key type to use"""
+        if ktype == "K1":
+            if hasattr(self, "eckey_k1"):
+                self.eckey = self.eckey_k1
+            else:
+                self.try_keep_keytype(ktype)
+        # if ktype == "R1":
+        # if hasattr(self, "eckey_r1"):
+        # self.eckey = self.eckey_r1
+        # else:
+        # self.try_keep_keytype(ktype)
+        elif ktype == "ED":
+            if hasattr(self, "eckey_ed"):
+                self.eckey = self.eckey_ed
+            else:
+                self.try_keep_keytype(ktype)
+        else:
+            raise Exception("SingleKey only manages K1 or ED key type")
 
     def load_key(self, ecpair_obj):
         self.eckey = ecpair_obj
 
-    def initialize_device(self):
-        # Generate a new key
-        if self.ktype == "K1":
-            pvkey_int = randbelow(CURVE_K1_ORDER)
-        elif self.ktype == "R1":
-            pvkey_int = randbelow(CURVE_R1_ORDER)
-        else:
-            pvkey_int = randbelow(2 ** 256)
+    def initialize_device(self, ktype):
+        """Generate a new key"""
+        # K1 cardinal is used whatever the key type
+        pvkey_int = randbelow(CURVE_K1_ORDER)
         self.open_account_fromint(pvkey_int)
         self.created = True
         return pvkey_int
 
     def get_public_key(self, compressed=True):
-        # compressed has no effect if type id Ed
+        # compressed has no effect if type is Ed
         return self.eckey.get_public_key(compressed).hex()
 
     def sign(self, hashed_msg):

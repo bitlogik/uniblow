@@ -43,7 +43,6 @@ class NotinitException(Exception):
 
 
 class HDdevice:
-    # Using Python cryptography lib
 
     has_password = True
     has_admin_password = False
@@ -80,10 +79,15 @@ class HDdevice:
             idx = key_content.get("account_number")
             if idx:
                 self.aindex = idx
-            # Compute master key from seed
-            self.master_node = HD_Wallet.from_seed(seed)
+            self.compute_masterkeys(seed)
         else:
             raise NotinitException()
+
+    def compute_masterkeys(self, seed):
+        """Compute master keys from seed"""
+        self.master_node_k1 = HD_Wallet.from_seed(seed, "K1")
+        # self.master_node_r1 = HD_Wallet.from_seed(seed, "R1")
+        self.master_node_ed = HD_Wallet.from_seed(seed, "ED")
 
     def generate_mnemonic(self):
         return generate_mnemonic(12)
@@ -117,14 +121,25 @@ class HDdevice:
         key_file.close()
         self.aindex = settings["account_index"]
         self.created = True
-        self.master_node = HD_Wallet.from_seed(seedg)
+        self.compute_masterkeys(seedg)
 
     def get_address_index(self):
         """Get the account address index, last BIP44 derivation number as str"""
         return self.aindex
 
-    def derive_key(self, path):
-        self.pvkey = self.master_node.derive_key(path)
+    def derive_key(self, path, key_type):
+        pathc = path
+        if key_type == "K1":
+            mnode = self.master_node_k1
+        # elif key_type == "R1":
+        # mnode = self.master_node_r1
+        elif key_type == "ED":
+            # Needs all the path except last with '
+            pathc += "'"
+            mnode = self.master_node_ed
+        else:
+            raise Exception("HDdevice support only K1 and Ed derivations.")
+        self.pvkey = mnode.derive_key(pathc)
 
     def get_public_key(self):
         return self.pvkey.get_public_key().hex()

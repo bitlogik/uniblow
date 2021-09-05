@@ -427,6 +427,11 @@ class MATIC_wallet:
     def get_path(cls, network_name, wtype):
         return cls.derive_paths[network_name][0]
 
+    @classmethod
+    def get_key_type(cls, wtype):
+        # No list, it's all k1
+        return "K1"
+
     def get_account(self):
         # Read address to fund the wallet
         return f"0x{self.eth.address}"

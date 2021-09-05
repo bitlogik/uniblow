@@ -258,11 +258,11 @@ class HD_Wallet:
         self.master_node = mk
 
     @classmethod
-    def from_seed(cls, seed, ptype="K1"):
+    def from_seed(cls, seed, ptype):
         return cls(BIP32node.master_node(seed, ptype))
 
     @classmethod
-    def from_mnemonic(cls, mnemonic, passw="", std="BIP39", ptype="K1"):
+    def seed_from_mnemonic(cls, mnemonic, passw="", std="BIP39"):
         """Mnemonic to master key (BIP39 or BOOST)"""
         pprefix = b"mnemonic"
         if std == "BIP39":
@@ -279,7 +279,7 @@ class HD_Wallet:
         seed = mnemonic_to_seed(
             mnemonic, passphrasestr=passw, passphrase_prefix=pprefix, method=method
         )
-        return HD_Wallet.from_seed(seed, ptype)
+        return seed
 
     def derive_key(self, path):
         """Derive the private key crypto object from the path string"""

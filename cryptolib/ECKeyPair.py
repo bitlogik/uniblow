@@ -31,7 +31,7 @@ from cryptolib.cryptography import makeup_sig
 class EC_key_pair:
     """EC 256k1, 256r1 or Ed 25519 key pair"""
 
-    def __init__(self, pv_key_int, curve="K1"):
+    def __init__(self, pv_key_int, curve):
         """A EllipticCurvePrivateKey object"""
         self.curve = curve
         if self.curve == "K1":

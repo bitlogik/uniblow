@@ -126,17 +126,39 @@ def testaddr(xtz_addr):
 
 class XTZwalletCore:
 
-    SIG256K1_PREFIX = bytes([13, 115, 101, 19, 63])  # spsig
-    ADDRESS_HEADER = bytes([6, 161, 161])  # tz2
-    PUBKEY_HEADER = bytes([3, 254, 226, 86])  # sppk
+    key_types = [
+        "ED",
+        "K1",
+    ]
 
-    def __init__(self, pubkey, network, api):
+    SIGED_HEADER = bytes([9, 245, 205, 134, 18])  # edsig
+    ADDRESS_ED_HEADER = bytes([6, 161, 159])  # tz1
+    PUBKEY_ED_HEADER = bytes([13, 15, 37, 217])  # edpk
+    SIGK1_HEADER = bytes([13, 115, 101, 19, 63])  # spsig
+    ADDRESS_K1_HEADER = bytes([6, 161, 161])  # tz2
+    PUBKEY_K1_HEADER = bytes([3, 254, 226, 86])  # sppk
+    # SIGR1_HEADER = bytes([54, 240, 44, 52])  # p2sig
+    # ADDRESS_R1_HEADER = bytes([6, 161, 164])  # tz3
+    # PUBKEY_R1_HEADER = bytes([3, 178, 139, 127])  # p2pk
+
+    def __init__(self, pubkey, network, wtype, api):
         self.pubkey = pubkey
+        if wtype == 0:
+            # tz1 Ed
+            self.SIG_HEADER = XTZwalletCore.SIGED_HEADER
+            PUBKEY_HEADER = XTZwalletCore.PUBKEY_ED_HEADER
+            ADDRESS_HEADER = XTZwalletCore.ADDRESS_ED_HEADER
+        else:
+            # tz2 k1
+            self.SIG_HEADER = XTZwalletCore.SIGK1_HEADER
+            PUBKEY_HEADER = XTZwalletCore.PUBKEY_K1_HEADER
+            ADDRESS_HEADER = XTZwalletCore.ADDRESS_K1_HEADER
+        self.key_type = XTZwalletCore.key_types[wtype]
         self.pubkey_b58 = encode_base58(
-            XTZwalletCore.PUBKEY_HEADER + bytes.fromhex(self.pubkey),
+            PUBKEY_HEADER + bytes.fromhex(self.pubkey),
         )
-        pubkey_hash = blake2b(bytes.fromhex(pubkey), 20)
-        self.address = encode_base58(XTZwalletCore.ADDRESS_HEADER + pubkey_hash)
+        pubkey_hashed = blake2b(bytes.fromhex(pubkey), 20)
+        self.address = encode_base58(ADDRESS_HEADER + pubkey_hashed)
         self.api = api
         self.network = network
 
@@ -149,7 +171,9 @@ class XTZwalletCore:
     def getpublickey(self):
         # is revealed ?
         pkr = self.api.get_contract_key(self.address)
-        if isinstance(pkr, str) and pkr.startswith("sppk"):
+        if isinstance(pkr, str) and self.key_type == "K1" and pkr.startswith("sppk"):
+            return pkr
+        if isinstance(pkr, str) and self.key_type == "ED" and pkr.startswith("edpk"):
             return pkr
         if pkr and "key" in pkr:
             return pkr["key"]
@@ -214,12 +238,17 @@ class XTZwalletCore:
 
     def send(self, signature_der):
         # Signature decoding
-        lenr = int(signature_der[3])
-        lens = int(signature_der[5 + lenr])
-        r = int.from_bytes(signature_der[4 : lenr + 4], "big")
-        s = int.from_bytes(signature_der[lenr + 6 : lenr + 6 + lens], "big")
+        if self.key_type == "K1":
+            lenr = int(signature_der[3])
+            lens = int(signature_der[5 + lenr])
+            r = int.from_bytes(signature_der[4 : lenr + 4], "big")
+            s = int.from_bytes(signature_der[lenr + 6 : lenr + 6 + lens], "big")
+            rs_bin = r.to_bytes(32, "big") + s.to_bytes(32, "big")
+        else:
+            r = int.from_bytes(signature_der[:32], "big")
+            s = int.from_bytes(signature_der[32:], "big")
         rs_bin = r.to_bytes(32, "big") + s.to_bytes(32, "big")
-        sig_b58 = encode_base58(XTZwalletCore.SIG256K1_PREFIX + rs_bin)
+        sig_b58 = encode_base58(self.SIG_HEADER + rs_bin)
         self.operation["operation"]["signature"] = sig_b58
 
         # Simulate tx
@@ -251,16 +280,19 @@ class XTZ_wallet:
     ]
 
     wtypes = [
+        "tz1",
         "tz2",
     ]
 
     derive_paths = [
         # mainnet
         [
+            "m/44'/1729'/0'/",
             "m/44'/1729'/0'/0/",
         ],
         # testnet
         [
+            "m/44'/1'/0'/",
             "m/44'/1'/0'/0/",
         ],
     ]
@@ -272,7 +304,7 @@ class XTZ_wallet:
         self.network = XTZ_wallet.networks[network].lower()
         self.current_device = device
         pubkey = self.current_device.get_public_key()
-        self.xtz = XTZwalletCore(pubkey, self.network, RPC_api(self.network))
+        self.xtz = XTZwalletCore(pubkey, self.network, wtype, RPC_api(self.network))
 
     @classmethod
     def get_networks(cls):
@@ -285,6 +317,10 @@ class XTZ_wallet:
     @classmethod
     def get_path(cls, network_name, wtype):
         return cls.derive_paths[network_name][wtype]
+
+    @classmethod
+    def get_key_type(cls, wtype):
+        return XTZwalletCore.key_types[wtype]
 
     def get_account(self):
         # Read address to fund the wallet
@@ -310,6 +346,7 @@ class XTZ_wallet:
 
     def raw_tx(self, amount, fee, gazlimit, account):
         hash_to_sign = self.xtz.prepare(account, amount, fee, gazlimit)
+        # For Ed, the signed message is the hash also
         tx_signature = self.current_device.sign(hash_to_sign)
         return self.xtz.send(tx_signature)
 

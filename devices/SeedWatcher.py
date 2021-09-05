@@ -66,7 +66,8 @@ coins_list = [
     {"name": "Litecoin", "path": "m/44'/2'/0'/0/", "wallet_lib": LTC_wallet},
     {"name": "Dogecoin", "path": "m/44'/3'/0'/0/", "wallet_lib": DOGE_wallet},
     # {"name": "EOSio", "path": "m/44'/194'/0'/0/", "wallet_lib": EOS_wallet},
-    {"name": "Tezos", "path": "m/44'/1729'/0'/0/", "wallet_lib": XTZ_wallet},
+    {"name": "Tezos tz1", "path": "m/44'/1729'/0'/", "wallet_lib": XTZ_wallet, "type": 0},
+    {"name": "Tezos tz2", "path": "m/44'/1729'/0'/0/", "wallet_lib": XTZ_wallet, "type": 1},
 ]
 
 WORDSLEN_LIST = ["12 words", "15 words", "18 words", "21 words", "24 words"]
@@ -170,7 +171,7 @@ class SeedWatcherPanel(gui.swgui.MainPanel):
                 self.m_dataViewListCtrl1.AppendItem(coin_info)
                 self.m_dataViewListCtrl1.SetRowHeight(28)
 
-    def get_coin_info(self, coin_idx, wallet):
+    def get_coin_info(self, coin_idx, seed):
         coin = coins_list[coin_idx]
         cpath = coin["path"]
         if not self.__nonzero__():
@@ -193,6 +194,11 @@ class SeedWatcherPanel(gui.swgui.MainPanel):
                 cpath = "m/0'/0/"
         account_idx = str(self.m_account.GetValue())
         path = cpath + account_idx
+        key_type = coin["wallet_lib"].get_key_type(coin.get("type", 0))
+        if key_type == "ED":
+            # Only for last, means all the index down to m shall be hardened
+            path += "'"
+        wallet = HD_Wallet.from_seed(seed, key_type)
         coin_key = SeedDevice(wallet.derive_key(path))
         try:
             coin_wallet = blockchainWallet(coin, coin_key)
@@ -201,7 +207,8 @@ class SeedWatcherPanel(gui.swgui.MainPanel):
         except Exception as exc:
             logger.error("Error when getting coin info : %s", str(exc), exc_info=exc)
         if coin_idx < len(coins_list) - 1 and self.__nonzero__():
-            self.async_getcoininfo_idx(coin_idx + 1, wallet)
+            # Call for next
+            self.async_getcoininfo_idx(coin_idx + 1, seed)
         else:
             # List is finished
             CallAfter(self.enable_inputs)
@@ -219,13 +226,13 @@ class SeedWatcherPanel(gui.swgui.MainPanel):
             self.m_account.Enable()
             CallAfter(self.Enable)
 
-    def async_getcoininfo_idx(self, coin_idx, wallet):
-        getcoin = Thread(target=self.get_coin_info, args=[coin_idx, wallet])
+    def async_getcoininfo_idx(self, coin_idx, seed):
+        getcoin = Thread(target=self.get_coin_info, args=[coin_idx, seed])
         getcoin.start()
 
     def compute_seed(self, *args):
-        wallet = HD_Wallet.from_mnemonic(*args)
-        self.async_getcoininfo_idx(0, wallet)
+        wallet_seed = HD_Wallet.seed_from_mnemonic(*args)
+        self.async_getcoininfo_idx(0, wallet_seed)
 
     def check_mnemonic(self):
         """Recompute HD wallet keys"""

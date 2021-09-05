@@ -252,6 +252,11 @@ class DOGE_wallet:
         # To be changed to the first one available, needs scanning
         return cls.derive_paths[network_name][wtype]
 
+    @classmethod
+    def get_key_type(cls, wtype):
+        # No list, it's all k1
+        return "K1"
+
     def get_account(self):
         # Read address to fund the wallet
         return self.doge.address
