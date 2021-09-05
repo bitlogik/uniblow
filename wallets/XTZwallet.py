@@ -247,7 +247,7 @@ class XTZ_wallet:
 
     networks = [
         "Mainnet",
-        "EdoNet",
+        "FlorenceNet",
     ]
 
     wtypes = [
@@ -302,7 +302,7 @@ class XTZ_wallet:
         # Get history page
         if self.network == "mainnet":
             XTZ_EXPLORER_URL = f"https://tzstats.com/{self.xtz.address}#transfers"
-        else:  # Edo[Net]
+        else:  # Florence[Net]
             XTZ_EXPLORER_URL = (
                 f"https://{self.network[:-3]}.tzstats.com/{self.xtz.address}#transfers"
             )
