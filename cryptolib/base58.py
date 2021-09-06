@@ -62,6 +62,8 @@ def encode_base58_header(bin_data, header=0):
 
 
 def base58_to_bin(base58_str):
+    if not all(x in b58chars for x in base58_str):
+        raise ValueError("Base58 string contains invalid characters")
     int_data = 0
     pwr_rank = 1
     for i in range(-1, -len(base58_str) - 1, -1):
