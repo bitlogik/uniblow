@@ -41,6 +41,7 @@ SUPPORTED_COINS = [
     "LTC",
     "DOGE",
     "EOS",
+    "SOL",
     "XTZ",
 ]
 
