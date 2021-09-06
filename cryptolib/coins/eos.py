@@ -23,21 +23,6 @@ from math import ceil
 # Little endian integers binary conversion for EOS
 
 
-def uint2bin(n, sz_out):
-    """Integer to n bytes for uint type"""
-    return n.to_bytes(sz_out, byteorder="little")
-
-
-def uint16(n):
-    """Unsigned integer to 16 bits"""
-    return uint2bin(n, 2)
-
-
-def uint32(n):
-    """Unsigned integer to 32 bits"""
-    return uint2bin(n, 4)
-
-
 def uintvar(n):
     """Unsigned integer, adaptative size"""
     lenn = ceil(n.bit_length() / 8)
@@ -57,19 +42,6 @@ def string_to_binname(s):
     if i > 12:
         name |= BASE32_EOS.find(s[11]) & 0x0F
     return uintvar(name)
-
-
-def encode_varuint(varuint):
-    """Unsigned LEB128 Encoder"""
-    val = int(varuint)
-    buf = b""
-    while True:
-        bufi = val & 0x7F
-        val >>= 7
-        if val <= 0:
-            return buf + uint2bin(bufi, 1)
-        bufi |= 0x80
-        buf += uint2bin(bufi, 1)
 
 
 def near_future_iso_str(n_sec):

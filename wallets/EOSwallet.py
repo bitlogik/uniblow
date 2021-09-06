@@ -20,15 +20,8 @@ import re
 import urllib.request
 
 from cryptolib.base58 import bin_to_base58_eos
-from cryptolib.coins.eos import (
-    uint2bin,
-    uint16,
-    uint32,
-    string_to_binname,
-    encode_varuint,
-    expiration_string_epoch_int,
-    near_future_iso_str,
-)
+from cryptolib.uintEncode import uint8, uint16, uint32, encode_varuint
+from cryptolib.coins.eos import string_to_binname, expiration_string_epoch_int, near_future_iso_str
 from cryptolib.cryptography import public_key_recover, decompress_pubkey, sha2
 from wallets.wallets_utils import NotEnoughTokens
 
@@ -49,22 +42,22 @@ def serialize_tx(tx_obj):
     ref_blk = uint16(tx_obj["ref_block_num"] & 0xFFFF)
     ref_block_prefix = uint32(tx_obj["ref_block_prefix"])
     net_usage_words = encode_varuint(tx_obj["max_net_usage_words"])
-    max_cpu_usage_ms = uint2bin(tx_obj["max_cpu_usage_ms"], 1)
+    max_cpu_usage_ms = uint8(tx_obj["max_cpu_usage_ms"])
     delay_sec = encode_varuint(tx_obj["delay_sec"])
     tx_header = exp + ref_blk + ref_block_prefix + net_usage_words + max_cpu_usage_ms + delay_sec
     # Encode actions (1)
     action_account = tx_obj["actions"][0]["account"]
     action_name = tx_obj["actions"][0]["name"]
-    tx_actions = uint2bin(1, 1) + string_to_binname(action_account) + string_to_binname(action_name)
+    tx_actions = uint8(1) + string_to_binname(action_account) + string_to_binname(action_name)
     # Encode authorizations (1)
     auth_actor = tx_obj["actions"][0]["authorization"][0]["actor"]
     auth_perm = tx_obj["actions"][0]["authorization"][0]["permission"]
-    tx_auths = uint2bin(1, 1) + string_to_binname(auth_actor) + string_to_binname(auth_perm)
+    tx_auths = uint8(1) + string_to_binname(auth_actor) + string_to_binname(auth_perm)
     # Encode action data
     tx_data_rawhex = tx_obj["actions"][0]["data"]
     tx_data = encode_varuint(len(tx_data_rawhex) // 2) + bytes.fromhex(tx_data_rawhex)
     #        Header | Context actions | Actions : authorizations , Data | Extensions
-    return tx_header + uint2bin(0, 1) + tx_actions + tx_auths + tx_data + uint2bin(0, 1)
+    return tx_header + uint8(0) + tx_actions + tx_auths + tx_data + uint8(0)
 
 
 def compute_sig_hash(tx_bin, chain_id):
