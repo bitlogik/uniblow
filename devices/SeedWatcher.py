@@ -273,8 +273,8 @@ class SeedWatcherPanel(gui.swgui.MainPanel):
                 return
             addr = self.m_dataViewListCtrl1.GetTextValue(sel_row, 1)
             TheClipboard.SetData(TextDataObject(addr))
-            TheClipboard.Close()
             TheClipboard.Flush()
+            TheClipboard.Close()
             copied_modal = MessageDialog(
                 self,
                 f"Account address {addr}\nwas copied in the clipboard",
