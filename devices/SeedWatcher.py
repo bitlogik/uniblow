@@ -68,6 +68,7 @@ coins_list = [
     {"name": "Dogecoin", "path": "m/44'/3'/0'/0/", "wallet_lib": DOGE_wallet},
     # {"name": "EOSio", "path": "m/44'/194'/0'/0/", "wallet_lib": EOS_wallet},
     {"name": "Solana", "path": "m/44'/501'/0'/", "wallet_lib": SOL_wallet},
+    {"name": "Solana (alt. deriv)", "path": "m/44'/501'/", "wallet_lib": SOL_wallet},
     {"name": "Tezos tz1", "path": "m/44'/1729'/0'/", "wallet_lib": XTZ_wallet, "type": 0},
     {"name": "Tezos tz2", "path": "m/44'/1729'/0'/0/", "wallet_lib": XTZ_wallet, "type": 1},
 ]
