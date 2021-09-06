@@ -1,6 +1,14 @@
 
 Uniblow versions history
 
+## 0.9.8
+
+* Full compliant with SLIP10 : k1, r1 and Ed keys
+* Add SOL
+* Add Tezos tz1
+* Tezos testnet changed to Florence
+* Fix clipboard in SeedWatcher
+
 ## 0.9.7
 
 * Improve Linux build

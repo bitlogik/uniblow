@@ -59,9 +59,12 @@ Compatible with the following blockchains :
 * EOS
     * K1 wallet
     * EOSio and Jungle3 networks
+* SOL
+    * mainnet and testnet networks
 * XTZ
+    * tz1 wallet
     * tz2 wallet
-    * Main Tezos and Edo testnet networks
+    * Main Tezos and Florence testnet networks
 
 
 ## Devices
