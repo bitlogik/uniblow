@@ -278,8 +278,8 @@ Development
 
     -   `python3 setup.py install --user`
 
--   For ETH, put your Infura key in ETHwallet, or use the EtherscanAPI. The
-    binaries have the InfuraKey embedded.
+-   For ETH testnets, put your Infura key in ETHwallet. The
+    binaries have an Infura key embedded.
 
 -   Run with `python3 uniblow.py -v`
 

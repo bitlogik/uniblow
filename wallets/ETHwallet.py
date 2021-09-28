@@ -46,12 +46,12 @@ TRANSFERT_FUNCTION = "a9059cbb"
 MESSAGE_HEADER = b"\x19Ethereum Signed Message:\n"
 
 
-class infura_api:
+class web3_api:
     def __init__(self, api_key, network):
-        # https://ropsten.infura.io/v3/YOUR-PROJECT-ID
-        #         mainnet
-        self.apikey = api_key
-        self.url = f"https://{network}.infura.io/v3/{self.apikey}"
+        if network == "mainnet":
+            self.url = f"https://cloudflare-eth.com"
+        else:
+            self.url = f"https://{network}.infura.io/v3/{api_key}"
         self.jsres = []
 
     def getData(self, method, params=None):
@@ -123,92 +123,6 @@ class infura_api:
         if priority == 2:
             return int(gaz_price * 1.6)
         raise Exception("bad priority argument for get_fee, must be 0, 1 or 2")
-
-    def getKey(self, keychar):
-        out = self.jsres
-        path = keychar.split("/")
-        for key in path:
-            if key.isdigit():
-                key = int(key)
-            try:
-                out = out[key]
-            except Exception:
-                out = []
-        return out
-
-
-class etherscan_api:
-    def __init__(self, api_key, network):
-        self.apikey = api_key
-        # https://api.etherscan.io/api?module=account&action=balance&address=0xde0b295669a9fd93d5f28d9ec85e40f4cb697bae&tag=latest&apikey=YourApiKeyToken
-        if network == "mainnet":
-            self.url = "https://api.etherscan.io/api"
-        else:
-            self.url = f"https://api-{network}.etherscan.io/api"
-        self.params = {"token": self.apikey}
-        self.params = {}
-        self.jsres = []
-
-    def getData(self, parameters={}):
-        parameters.update(self.params)
-        params_enc = urllib.parse.urlencode(parameters)
-        # data = {"jsonrpc":"2.0","method":method,"params":params ,"id":1}
-        try:
-            # Enforce 5s per query without apikey
-            time.sleep(5)
-            req = urllib.request.Request(
-                self.url + "?" + params_enc,
-                headers={
-                    "User-Agent": "Mozilla/5.0",
-                    "Content-Type": "application/json",
-                },
-                # data = json.dumps(data).encode('utf-8')
-            )
-            self.webrsc = urllib.request.urlopen(req)
-            self.jsres = json.load(self.webrsc)
-        except Exception:
-            raise IOError(
-                "Error while processing request:\n%s"
-                % (self.url + "->" + parameters + " : " + str(self.params))
-            )
-
-    def checkapiresp(self):
-        if "error" in self.jsres:
-            print(" !! ERROR :")
-            raise Exception(self.jsres["error"])
-        if "errors" in self.jsres:
-            print(" !! ERRORS :")
-            raise Exception(self.jsres["errors"])
-
-    def get_balance(self, addr, nconf):  # nconf 0 or 1
-        self.getData({"module": "account", "action": "balance", "address": "0x" + addr})
-        balraw = self.getKey("result")
-        if balraw == []:
-            return 0
-        balance = int(balraw)
-        return balance
-
-    def call(self, contract, command_code, data=""):
-        raise NotImplementedError()
-
-    def pushtx(self, txhex):
-        self.getData({"module": "proxy", "action": "eth_sendRawTransaction", "hex": "0x" + txhex})
-        self.checkapiresp()
-        return self.getKey("result")
-
-    def get_tx_num(self, addr, blocks):
-        self.getData(
-            {
-                "module": "proxy",
-                "action": "eth_getTransactionCount",
-                "address": f"0x{addr}",
-            }
-        )
-        self.checkapiresp()
-        return int(self.getKey("result")[2:], 16)
-
-    def get_fee(self, priority):
-        raise Exception("Not yet implemented for this API")
 
     def getKey(self, keychar):
         out = self.jsres
@@ -475,9 +389,10 @@ class ETH_wallet:
         self.confirm_callback = confirm_callback
         pubkey_hex = self.current_device.get_public_key()
         INFURA_KEY = "xxx"  # Put your Infura key here
-        if INFURA_KEY == "xxx":
+        if INFURA_KEY == "xxx" and self.network != "mainnet":
             raise Exception(
-                "To use Uniblow from source, bring your own Infura key, or use etherscan_api"
+                "To use Uniblow from source with an Ethereum testnet, "
+                "bring your own Infura key."
             )
         if contract_addr is not None:
             if len(contract_addr) == 42 and "0x" == contract_addr[:2]:
@@ -491,7 +406,7 @@ class ETH_wallet:
         else:
             contract_addr_str = None
         self.eth = ETHwalletCore(
-            pubkey_hex, self.network, infura_api(INFURA_KEY, self.network), contract_addr_str
+            pubkey_hex, self.network, web3_api(INFURA_KEY, self.network), contract_addr_str
         )
         if contract_addr_str is not None:
             self.coin = self.eth.token_symbol

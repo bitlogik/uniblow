@@ -48,7 +48,7 @@ MESSAGE_HEADER = b"\x19Ethereum Signed Message:\n"
 
 class web3_api:
     def __init__(self, network):
-        self.url = "https://rpc-mainnet.maticvigil.com/"
+        self.url = "https://polygon-rpc.com/"
         if network.lower() == "mumbai":
             self.url = "https://rpc-mumbai.maticvigil.com/"
         self.jsres = []
