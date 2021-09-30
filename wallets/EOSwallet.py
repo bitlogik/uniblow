@@ -332,6 +332,11 @@ class EOS_wallet:
     def get_path(cls, network_name, wtype):
         return cls.derive_paths[network_name][wtype]
 
+    @classmethod
+    def get_key_type(cls, wtype):
+        # No list, it's all k1, r1 not still supported
+        return "K1"
+
     def get_account(self):
         # Read account to fund the wallet
         return self.eos.account if self.eos.account else self.eos.address
