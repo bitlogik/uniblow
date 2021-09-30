@@ -17,7 +17,6 @@
 
 
 import json
-import time
 import urllib.parse
 import urllib.request
 
@@ -49,7 +48,7 @@ MESSAGE_HEADER = b"\x19Ethereum Signed Message:\n"
 class web3_api:
     def __init__(self, api_key, network):
         if network == "mainnet":
-            self.url = f"https://cloudflare-eth.com"
+            self.url = "https://cloudflare-eth.com"
         else:
             self.url = f"https://{network}.infura.io/v3/{api_key}"
         self.jsres = []
@@ -391,8 +390,7 @@ class ETH_wallet:
         INFURA_KEY = "xxx"  # Put your Infura key here
         if INFURA_KEY == "xxx" and self.network != "mainnet":
             raise Exception(
-                "To use Uniblow from source with an Ethereum testnet, "
-                "bring your own Infura key."
+                "To use Uniblow from source with an Ethereum testnet, bring your own Infura key."
             )
         if contract_addr is not None:
             if len(contract_addr) == 42 and "0x" == contract_addr[:2]:

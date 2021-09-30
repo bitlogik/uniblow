@@ -85,7 +85,7 @@ tokens_values = [
         "WAX Token (WAX)": "0x39bb259f66e1c59d5abef88375979b4d20d98022",
         "DENT (DENT)": "0x3597bfd533a99c9aa083587b074434e61eb0a258",
         "Swipe (SXP)": "0x8ce9137d39326ad0cd6491fb5cc0cba0e089b6a9",
-        "SingularityNET (AGIX)": "0x5b7533812759b45c2b44c19e320ba2cd2681b542", 
+        "SingularityNET (AGIX)": "0x5b7533812759b45c2b44c19e320ba2cd2681b542",
         "Gnosis (GNO)": "0x6810e776880c02933d47db1b9fc05908e5386b96",
         "XY Oracle (XYO)": "0x55296f69f40ea6d20e478533c15a6b08b654e758",
         "AlphaToken (ALPHA)": "0xa1faa113cbe53436df28ff0aee54275c13b40975",

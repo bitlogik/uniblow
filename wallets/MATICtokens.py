@@ -58,7 +58,7 @@ tokens_values = [
         "Ocean Token (OCEAN)": "0x282d8efce846a88b159800bd4130ad77443fa1a1",
         "Swipe (SXP)": "0x6abb753c1893194de4a83c6e8b4eadfc105fd5f5",
         "Wootrade Network (WOO)": "0x1b815d120b3ef02039ee11dc2d33de7aa4a8c603",
-        "SingularityNET Token (AGIX)": "0x190eb8a183d22a4bdf278c6791b152228857c033", 
+        "SingularityNET Token (AGIX)": "0x190eb8a183d22a4bdf278c6791b152228857c033",
         "Gnosis (GNO)": "0x5ffd62d3c3ee2e81c00a7b9079fb248e7df024a8",
         "Energy Web Token Bridged (EWTB)": "0x43e4b063f96c33f0433863a927f5bad34bb4b03d",
         "XY Oracle (XYO)": "0xd2507e7b5794179380673870d88b22f94da6abe0",

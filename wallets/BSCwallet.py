@@ -550,7 +550,7 @@ class BSC_wallet:
             return self.bsc.encode_datasign(hash_sign, der_signature)
 
     def process_signtransaction(self, txdata):
-        """"Build a signed tx, for WalletConnect eth_sendTransaction and eth_signTransaction call"""
+        """Build a signed tx, for WalletConnect eth_sendTransaction and eth_signTransaction call"""
         to_addr = txdata.get("to", "  New contract")[2:]
         value = txdata.get("value", 0)
         if value != 0:
