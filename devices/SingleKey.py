@@ -73,7 +73,7 @@ class SKdevice:
     def load_key(self, ecpair_obj):
         self.eckey = ecpair_obj
 
-    def initialize_device(self, ktype):
+    def initialize_device(self):
         """Generate a new key"""
         # K1 cardinal is used whatever the key type
         pvkey_int = randbelow(CURVE_K1_ORDER)
