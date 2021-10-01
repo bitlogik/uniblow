@@ -112,7 +112,7 @@ tokens_values = [
     {
         "Tether USD (USDT)": "0x0736d0c130b2ead47476cc262dbed90d7c4eeabd",
         "USDCircle (USDC)": "0x07865c6e87b9f70255377e024ace6630c1eaa37f",
-        "Dai Stablecoin (DAI)": "0x5592ec0cfb4dbc12d3ab100b257153436a1f0fea",
+        "Dai Stablecoin (DAI)": "0xad6d458402f60fd3bd25163575031acdce07538d",
     },
     # Kovan
     {},
