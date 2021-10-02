@@ -18,6 +18,7 @@
 from datetime import datetime as dt
 from datetime import timedelta
 from math import ceil
+from cryptolib.uintEncode import uint2bin
 
 
 # Little endian integers binary conversion for EOS
