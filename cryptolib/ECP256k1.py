@@ -189,15 +189,8 @@ p_p1_half = (_p + 1) >> 2
 
 def inverse_mod(a, n):
     """Modular inverse (with a modular prime)"""
-    if a < 0 or n <= a:
-        a = a % n
-    u, v = a, n
-    xa, xb = 1, 0
-    while u != 1:
-        q, r = divmod(v, u)
-        x = xb - q * xa
-        v, u, xb, xa = u, r, xa, x
-    return xa % n
+    # n prime => ^-1 <> ^( n-2 )
+    return pow(a, n-2, n)
 
 
 def point_y(px, parity_hint=0):
