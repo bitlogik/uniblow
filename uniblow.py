@@ -38,6 +38,7 @@ SUPPORTED_COINS = [
     "ETH",
     "BSC",
     "MATIC",
+    "ARB",
     "LTC",
     "DOGE",
     "EOS",
