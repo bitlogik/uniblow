@@ -50,6 +50,10 @@ Compatible with the following blockchains :
     * mainnet and testnet networks
     * BEP20 tokens
     * WalletConnect
+* ARB
+    * Arbitrum mainnet
+    * ERC20 tokens
+    * WalletConnect
 * LTC
     * mainnet and testnet networks
     * Standard wallet (P2PKH)
