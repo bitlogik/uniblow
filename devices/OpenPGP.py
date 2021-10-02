@@ -88,7 +88,6 @@ class OpenPGP:
         if ktype != "K1":
             raise Exception("Incompatible key type. OpenPGP is set to EC 256k1.")
 
-
     def set_admin(self, admin_password):
         self.PIN3 = admin_password
         if self.PIN3 == "NoPasswd":
@@ -138,7 +137,7 @@ class OpenPGP:
         # Generate key for sign
         self.PGPdevice.gen_key("B600")
         try:
-            # Set UIF for sign : require a push button and OpenGPG v3
+            # Set UIF for sign : require a push button and OpenPGP v3
             self.PGPdevice.put_data("00D6", "0120")
         except OpenPGPpy.PGPCardException as exc:
             if exc.sw_code != 0x6A88:  # card just doesnt support UIF ?

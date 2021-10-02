@@ -4,14 +4,13 @@
 # Uniblow : setup data
 # Copyright (C) 2021  BitLogiK
 
-import sys
+
 from setuptools import setup, find_packages
 from version import VERSION
 
 with open("README.md") as readme_file:
     readme = readme_file.read()
 
-is_venv = sys.prefix != sys.base_prefix
 
 setup(
     name="Uniblow",

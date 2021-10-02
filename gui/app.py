@@ -199,7 +199,7 @@ class UniblowApp(App):
     def BringWindowToFront(self):
         try:
             self.GetTopWindow().Raise()
-        except:
+        except Exception:
             pass
 
     def OnActivate(self, event):
