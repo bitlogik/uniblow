@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 # -*- coding: utf8 -*-
 
-# UNIBLOW ETH wallet with with BlockCypher, Etherscan or Infura API REST
+# UNIBLOW ETH wallet with RPC API REST
 # Copyright (C) 2021 BitLogiK
 
 # This program is free software: you can redistribute it and/or modify
@@ -17,15 +17,15 @@
 
 
 import json
-import urllib.parse
-import urllib.request
 
 from cryptolib.cryptography import public_key_recover, decompress_pubkey, sha3
 from cryptolib.coins.ethereum import rlp_encode, int2bytearray, uint256, read_string
 from wallets.wallets_utils import shift_10, compare_eth_addresses, InvalidOption, NotEnoughTokens
 from wallets.ETHtokens import tokens_values
 from wallets.typed_data_hash import typed_sign_hash, print_text_query
+from pyweb3 import Web3Client
 from pywalletconnect import WCClient, WCClientInvalidOption, WCClientException
+
 
 ETH_units = 18
 GWEI_UNIT = 10 ** 9
@@ -43,97 +43,6 @@ TRANSFERT_FUNCTION = "a9059cbb"
 
 
 MESSAGE_HEADER = b"\x19Ethereum Signed Message:\n"
-
-
-class web3_api:
-    def __init__(self, api_key, network):
-        if network == "mainnet":
-            self.url = "https://cloudflare-eth.com"
-        else:
-            self.url = f"https://{network}.infura.io/v3/{api_key}"
-        self.jsres = []
-
-    def getData(self, method, params=None):
-        if params is None:
-            params = []
-        if isinstance(params, str):
-            params = [params]
-        data = {"jsonrpc": "2.0", "method": method, "params": params, "id": 1}
-        try:
-            req = urllib.request.Request(
-                self.url,
-                headers={"User-Agent": "Uniblow/1", "Content-Type": "application/json"},
-                data=json.dumps(data).encode("utf-8"),
-            )
-            self.webrsc = urllib.request.urlopen(req)
-            self.jsres = json.load(self.webrsc)
-        except urllib.error.HTTPError as e:
-            strerr = e.read()
-            raise IOError(f"{e.code}  :  {strerr.decode('utf8')}")
-        except urllib.error.URLError as e:
-            raise IOError(e)
-        except Exception:
-            raise IOError(f"Error while processing request:\n {self.url}  :  {method} ,  {params}")
-
-    def checkapiresp(self):
-        if "error" in self.jsres:
-            print(" !! ERROR :")
-            raise Exception(self.jsres["error"])
-        if "errors" in self.jsres:
-            print(" !! ERRORS :")
-            raise Exception(self.jsres["errors"])
-
-    def get_balance(self, addr, nconf):  # nconf 0 or 1
-        if nconf == 0:
-            datap = "pending"
-        if nconf == 1:
-            datap = "latest"
-        self.getData("eth_getBalance", ["0x" + addr, datap])
-        balraw = self.getKey("result")[2:]
-        if balraw == [] or balraw == "":
-            return 0
-        balance = int(balraw, 16)
-        return balance
-
-    def call(self, contract, command_code, data=""):
-        datab = f"0x{command_code}{data}"
-        self.getData("eth_call", [{"to": contract, "data": datab}, "pending"])
-        return self.getKey("result")
-
-    def pushtx(self, txhex):
-        self.getData("eth_sendRawTransaction", ["0x" + txhex])
-        self.checkapiresp()
-        return self.getKey("result")
-
-    def get_tx_num(self, addr, blocks):
-        self.getData("eth_getTransactionCount", ["0x" + addr, blocks])
-        self.checkapiresp()
-        return int(self.getKey("result")[2:], 16)
-
-    def get_fee(self, priority):
-        """Get the gas price in Gwei units"""
-        self.getData("eth_gasPrice")
-        self.checkapiresp()
-        gaz_price = int(self.getKey("result")[2:], 16) / GWEI_UNIT
-        if priority == 0:
-            return int(gaz_price * 0.9)
-        if priority == 1:
-            return int(gaz_price * 1.1)
-        if priority == 2:
-            return int(gaz_price * 1.6)
-        raise Exception("bad priority argument for get_fee, must be 0, 1 or 2")
-
-    def getKey(self, keychar):
-        out = self.jsres
-        path = keychar.split("/")
-        for key in path:
-            if key.isdigit():
-                key = int(key)
-            try:
-                out = out[key]
-            except Exception:
-                out = []
-        return out
 
 
 def has_checksum(addr):
@@ -175,32 +84,23 @@ def testaddr(eth_addr):
 
 
 class ETHwalletCore:
-    def __init__(self, pubkey, network, api, ERC20=None):
+    def __init__(self, pubkey, network, api, chainID, ERC20=None):
         self.pubkey = decompress_pubkey(pubkey)
         key_hash = sha3(self.pubkey[1:])
         self.address = format_checksum_address(key_hash.hex()[-40:])
         self.ERC20 = ERC20
         self.api = api
-        if network == "mainnet":
-            self.chainID = 1
-        if network == "ropsten":
-            self.chainID = 3
-        if network == "rinkeby":
-            self.chainID = 4
-        if network == "goerli":
-            self.chainID = 5
-        if network == "kovan":
-            self.chainID = 42
         self.decimals = self.get_decimals()
         self.token_symbol = self.get_symbol()
+        self.chainID = chainID
 
     def getbalance(self, native=True):
         if native:
             # ETH native balance
-            return self.api.get_balance(self.address, 0)
+            return self.api.get_balance(f"0x{self.address}", "pending")
         # ERC20 token balance
         balraw = self.api.call(
-            self.ERC20, BALANCEOF_FUNCTION, "000000000000000000000000" + self.address
+            self.ERC20, BALANCEOF_FUNCTION, f"000000000000000000000000{self.address}", "pending"
         )
         if balraw == [] or balraw == "0x":
             return 0
@@ -383,15 +283,35 @@ class ETH_wallet:
     def __init__(
         self, network, wtype, device, contract_addr=None, wc_uri=None, confirm_callback=None
     ):
-        self.network = ETH_wallet.networks[network].lower()
-        self.current_device = device
-        self.confirm_callback = confirm_callback
-        pubkey_hex = self.current_device.get_public_key()
+        self.network = self.networks[network].lower()
+        if self.network == "mainnet":
+            self.chainID = 1
+        if self.network == "ropsten":
+            self.chainID = 3
+        if self.network == "rinkeby":
+            self.chainID = 4
+        if self.network == "goerli":
+            self.chainID = 5
+        if self.network == "kovan":
+            self.chainID = 42
         INFURA_KEY = "xxx"  # Put your Infura key here
         if INFURA_KEY == "xxx" and self.network != "mainnet":
             raise Exception(
                 "To use Uniblow from source with an Ethereum testnet, bring your own Infura key."
             )
+        if self.network == "mainnet":
+            rpc_endpoint = "https://cloudflare-eth.com/"
+            self.explorer = "https://etherscan.io/address/0x"
+        else:
+            rpc_endpoint = f"https://{self.network}.infura.io/v3/{INFURA_KEY}"
+            self.explorer = f"https://{self.network}.etherscan.io/address/0x"
+        self.load_base(rpc_endpoint, device, contract_addr, wc_uri, confirm_callback)
+
+    def load_base(self, rpc_endpoint, device, contract_addr, wc_uri, confirm_callback):
+        self.current_device = device
+        self.confirm_callback = confirm_callback
+        pubkey_hex = self.current_device.get_public_key()
+
         if contract_addr is not None:
             if len(contract_addr) == 42 and "0x" == contract_addr[:2]:
                 contract_addr_str = contract_addr.lower()
@@ -404,7 +324,11 @@ class ETH_wallet:
         else:
             contract_addr_str = None
         self.eth = ETHwalletCore(
-            pubkey_hex, self.network, web3_api(INFURA_KEY, self.network), contract_addr_str
+            pubkey_hex,
+            self.network,
+            Web3Client(rpc_endpoint, "Uniblow/1"),
+            self.chainID,
+            contract_addr_str,
         )
         if contract_addr_str is not None:
             self.coin = self.eth.token_symbol
@@ -428,7 +352,7 @@ class ETH_wallet:
             )
             approve = self.confirm_callback(request_message)
             if approve:
-                self.wc_client.reply_session_request(req_id, self.eth.chainID, self.get_account())
+                self.wc_client.reply_session_request(req_id, self.chainID, self.get_account())
             else:
                 self.wc_client.close()
                 raise InvalidOption("You just declined the WalletConnect request.")
@@ -520,13 +444,10 @@ class ETH_wallet:
 
     def history(self):
         # Get history page
-        if self.network == "mainnet":
-            ETH_EXPLORER_URL = f"https://etherscan.io/address/0x{self.eth.address}"
-        else:
-            ETH_EXPLORER_URL = f"https://{self.network}.etherscan.io/address/0x{self.eth.address}"
+        explorer_url = f"{self.explorer}{self.eth.address}"
         if self.eth.ERC20:
-            ETH_EXPLORER_URL += "#tokentxns"
-        return ETH_EXPLORER_URL
+            explorer_url += "#tokentxns"
+        return explorer_url
 
     def build_tx(self, amount, gazprice, ethgazlimit, account, data=None):
         """Build and sign a transaction.
@@ -562,7 +483,7 @@ class ETH_wallet:
     def process_sign_typeddata(self, data_bin):
         """Process a WalletConnect eth_signTypedData call"""
         data_obj = json.loads(data_bin)
-        hash_sign = typed_sign_hash(data_obj, self.eth.chainID)
+        hash_sign = typed_sign_hash(data_obj, self.chainID)
         sign_request = (
             "WalletConnect signature request :\n\n"
             f"- Data to sign (typed) :\n"
@@ -582,7 +503,7 @@ class ETH_wallet:
         if gas_price != 0:
             gas_price = int(gas_price, 16) // GWEI_UNIT
         else:
-            gas_price = self.eth.api.get_fee(1)
+            gas_price = self.eth.api.get_gasprice() // GWEI_UNIT
         gas_limit = txdata.get("gas", 90000)
         if gas_limit != 90000:
             gas_limit = int(gas_limit, 16)
@@ -599,19 +520,27 @@ class ETH_wallet:
             data = bytearray.fromhex(data_hex[2:])
             return self.build_tx(value, gas_price, gas_limit, to_addr, data)
 
-    def transfer(self, amount, to_account, priority_fee):
+    def transfer(self, amount, to_account, fee_priority):
         # Transfer x unit to an account, pay
         if self.eth.ERC20:
-            ethgazlimit = ETH_wallet.GAZ_LIMIT_ERC_20_TX
+            gazlimit = ETH_wallet.GAZ_LIMIT_ERC_20_TX
         else:
-            ethgazlimit = ETH_wallet.GAZ_LIMIT_SIMPLE_TX
+            gazlimit = ETH_wallet.GAZ_LIMIT_SIMPLE_TX
         if to_account.startswith("0x"):
             to_account = to_account[2:]
-        ethgazprice = self.eth.api.get_fee(priority_fee)  # gwei per gaz unit
+        gaz_price = self.eth.api.get_gasprice() // GWEI_UNIT  # gwei per gaz unit
+        if fee_priority == 0:
+            gaz_price = int(gaz_price * 0.9)
+        elif fee_priority == 1:
+            gaz_price = int(gaz_price * 1.1)
+        elif fee_priority == 2:
+            gaz_price = int(gaz_price * 1.6)
+        else:
+            Exception("fee_priority must be 0, 1 or 2 (slow, normal, fast)")
         tx_data = self.build_tx(
-            shift_10(amount, self.eth.decimals), ethgazprice, ethgazlimit, to_account
+            shift_10(amount, self.eth.decimals), gaz_price, gazlimit, to_account
         )
-        return "\nDONE, txID : " + self.broadcast_tx(tx_data)[2:]
+        return "\nDONE, txID : " + self.broadcast_tx(tx_data)
 
     def transfer_inclfee(self, amount, to_account, fee_priority):
         # Transfer the amount in base unit minus fee, like the receiver paying the fee
@@ -621,13 +550,21 @@ class ETH_wallet:
             gazlimit = ETH_wallet.GAZ_LIMIT_SIMPLE_TX
         if to_account.startswith("0x"):
             to_account = to_account[2:]
-        gazprice = self.eth.api.get_fee(fee_priority)
+        gaz_price = self.eth.api.get_gasprice() // GWEI_UNIT
+        if fee_priority == 0:
+            gaz_price = int(gaz_price * 0.9)
+        elif fee_priority == 1:
+            gaz_price = int(gaz_price * 1.1)
+        elif fee_priority == 2:
+            gaz_price = int(gaz_price * 1.6)
+        else:
+            Exception("fee_priority must be 0, 1 or 2 (slow, normal, fast)")
         if self.eth.ERC20:
             fee = 0
         else:
-            fee = int(gazlimit * gazprice * GWEI_UNIT)
-        tx_data = self.build_tx(amount - fee, gazprice, gazlimit, to_account)
-        return "\nDONE, txID : " + self.broadcast_tx(tx_data)[2:]
+            fee = int(gazlimit * gaz_price * GWEI_UNIT)
+        tx_data = self.build_tx(amount - fee, gaz_price, gazlimit, to_account)
+        return "\nDONE, txID : " + self.broadcast_tx(tx_data)
 
     def transfer_all(self, to_account, fee_priority):
         # Transfer all the wallet to an address (minus fee)

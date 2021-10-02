@@ -97,7 +97,7 @@ def display_balance():
     logger.debug("Checking for wallet balance")
     try:
         balance = app.wallet.get_balance()
-    except IOError as exc:
+    except Exception as exc:
         erase_info()
         err_msg = f"Network error when getting info.\nCheck your Internet connection.\n{str(exc)}"
         logger.error("Error in display_balance : %s", err_msg, exc_info=exc, stack_info=True)

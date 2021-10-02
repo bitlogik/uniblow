@@ -77,7 +77,7 @@ tokens_values = [
         "Gemini dollar (GUSD)": "0xc8a94a3d3d2dabc3c1caffffdca6a7543c3e3e65",
         "Automata (ATA)": "0x0df0f72ee0e5c9b7ca761ecec42754992b2da5bf",
         "Kyber Network Crystal v2 (KNC)": "0x1c954e8fe737f99f68fa1ccda3e51ebdb291948c",
-        "Ankr Eth2 Reward Bearing Certificate (aETHc)": "0xc4e82ba0fe6763cbe5e9cbca0ba7cbd6f91c6018",
+        "Ankr Eth2 Reward Bearing Certif (aETHc)": "0xc4e82ba0fe6763cbe5e9cbca0ba7cbd6f91c6018",
         "EthLend (LEND)": "0x313d009888329c9d1cf4f75ca3f32566335bd604",
         "PowerLedger (POWR)": "0x0aab8dc887d34f00d50e19aee48371a941390d14",
         "Everipedia IQ (IQ)": "0xb9638272ad6998708de56bbc0a290a1de534a578",
