@@ -269,7 +269,7 @@ Development
     with your system binaries wheels.
 
     -   **Windows** : Install
-        [Python3](https://www.python.org/ftp/python/3.8.10/python-3.8.10-amd64.exe),
+        [Python3](https://www.python.org/ftp/python/3.9.7/python-3.9.7-amd64.exe),
         then run `pip3 install wxPython==4.1.1`
 
     -   **MacOS** : Read the [MacDev document](docs/MacDev.md) for more

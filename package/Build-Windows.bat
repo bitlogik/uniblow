@@ -13,7 +13,7 @@ SET PYINSTALLER_VER=4.5.1
 REM Detect if run in Github Action
 IF "%GITHUB_ACTION%"=="" (
   REM Building in a standard machine
-  SET python_bin="%UserProfile%\AppData\Local\Programs\Python\Python38\python.exe"
+  SET python_bin="%UserProfile%\AppData\Local\Programs\Python\Python39\python.exe"
   SET pyinst_dest="C:\pyinstaller_src"
 ) ELSE (
   REM Building in a Github Action VM

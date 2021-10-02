@@ -5,7 +5,7 @@ This document provides specific instructions and scripts to build uniblow binari
 
 ## Windows 10
 
-* Install [Python 3.8](https://www.python.org/ftp/python/3.8.10/python-3.8.10-amd64.exe)
+* Install [Python 3.9](https://www.python.org/ftp/python/3.9.7/python-3.9.7-amd64.exe)
 
 * Install Microsoft Visual C++ 14.x build tools. Required for bootloader installer and pysha3 library compilation.
 
