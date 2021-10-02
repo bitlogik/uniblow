@@ -32,7 +32,7 @@ setup(
         "qrcode==6.1",
         "PyNaCl==1.4.0",
         "OpenPGPpy==0.4",
-        "pyWalletConnect==1.1.2",
+        "pyWalletConnect==1.1.3",
     ],
     package_data={
         "gui": [
