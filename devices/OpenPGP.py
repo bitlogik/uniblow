@@ -84,6 +84,11 @@ class OpenPGP:
                 del self.PGPdevice.connection
             del self.PGPdevice
 
+    def set_key_type(self, ktype):
+        if ktype != "K1":
+            raise Exception("Incompatible key type. OpenPGP is set to EC 256k1.")
+
+
     def set_admin(self, admin_password):
         self.PIN3 = admin_password
         if self.PIN3 == "NoPasswd":
