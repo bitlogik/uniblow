@@ -1,6 +1,18 @@
 
 Uniblow versions history
 
+## 1.0.0
+
+* Add ARB
+* Unify Ethereum compliant wallets
+* External pyWeb3 lib
+* Update RPC endpoints selection
+* Update preset tokens list
+* Fix EOS wallet
+* Fix BasicFile creation
+* Fix OpenPGP wallet
+* Python 3.9 in Windows
+
 ## 0.9.8
 
 * Full compliant with SLIP10 : k1, r1 and Ed keys
