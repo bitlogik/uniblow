@@ -1,5 +1,5 @@
 
-# Uniblow on Debian or Tails
+# Uniblow on Ubuntu, Debian or Tails
 
 
 We provide a Linux binary file which can be used directly on Ubuntu, Debian or Tails OS Linux distributions, for the common x86/64 *AMD64* architecture.
