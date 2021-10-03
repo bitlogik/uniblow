@@ -15,7 +15,7 @@ def test_eth_tx():
     # 1 ETH to 0x3535, nonce = 9, gas price = 20
     ETHwalletCore.get_decimals = lambda _: 18
     ETHwalletCore.get_symbol = lambda _: "ETH"
-    wl = ETHwalletCore(dummy_pubkey, "mainnet", fake_api)
+    wl = ETHwalletCore(dummy_pubkey, "mainnet", fake_api, 1)
     wl.getbalance = dummy_balance
     wl.getnonce = lambda: 9
     to_addr = "3535353535353535353535353535353535353535"
@@ -31,10 +31,9 @@ def test_erc20_tx():
     # 2 DAI to 0x5322, gas price = 42, gas limit = 78009
     ETHwalletCore.get_decimals = lambda _: 18
     ETHwalletCore.get_symbol = lambda _: "DAI"
-    wl = ETHwalletCore(dummy_pubkey, "other network", fake_api, ERC20_contract)
+    wl = ETHwalletCore(dummy_pubkey, "other network", fake_api, 52, ERC20_contract)
     wl.getbalance = dummy_balance
     wl.getnonce = lambda: 0
-    wl.chainID = 52
     to_addr = "5322b34c88ed0691971bf52a7047448f0f4efc84"
     amount_value = 2000000000000000000
     gas_price = 42

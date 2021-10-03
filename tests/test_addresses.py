@@ -1,7 +1,6 @@
 from wallets.BTCwallet import testaddr as BTCtestaddr
 from wallets.ETHwallet import testaddr as ETHtestaddr
 from wallets.LTCwallet import testaddr as LTCtestaddr
-from wallets.BSCwallet import testaddr as BSCtestaddr
 from wallets.DOGEwallet import testaddr as DOGEtestaddr
 from wallets.EOSwallet import testaddr as EOStestaddr
 from wallets.XTZwallet import testaddr as XTZtestaddr
@@ -289,13 +288,6 @@ def test_eth_addresses():
         assert ETHtestaddr(eth_addr_test[0]) == eth_addr_test[1]
         # and also "0x" removed
         assert ETHtestaddr(eth_addr_test[0][2:]) == eth_addr_test[1]
-
-
-def test_bsc_addresses():
-    for bsc_addr_test in ETH_ADDR_TEST_DATA:
-        assert BSCtestaddr(bsc_addr_test[0]) == bsc_addr_test[1]
-        # and also "0x" removed
-        assert BSCtestaddr(bsc_addr_test[0][2:]) == bsc_addr_test[1]
 
 
 def test_ltc_addresses():
