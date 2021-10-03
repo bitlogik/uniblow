@@ -190,7 +190,7 @@ p_p1_half = (_p + 1) >> 2
 def inverse_mod(a, n):
     """Modular inverse (with a modular prime)"""
     # n prime => ^-1 <> ^( n-2 )
-    return pow(a, n-2, n)
+    return pow(a, n - 2, n)
 
 
 def point_y(px, parity_hint=0):
