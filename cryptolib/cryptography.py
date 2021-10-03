@@ -108,7 +108,7 @@ def b58checksum(data):
 
 def random_generator():
     """Generate 256 bits highly random"""
-    # Read 3072 bytes of TRNG
+    # Read 3072 bits of TRNG
     random_raw = urandom(384)
     assert len(random_raw) == 384
     rnd_list = []

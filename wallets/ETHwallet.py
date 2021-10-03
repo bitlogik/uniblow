@@ -308,6 +308,7 @@ class ETH_wallet:
         self.load_base(rpc_endpoint, device, contract_addr, wc_uri, confirm_callback)
 
     def load_base(self, rpc_endpoint, device, contract_addr, wc_uri, confirm_callback):
+        """Finish initialization, second part common for all chains"""
         self.current_device = device
         self.confirm_callback = confirm_callback
         pubkey_hex = self.current_device.get_public_key()
