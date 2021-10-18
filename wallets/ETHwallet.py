@@ -88,7 +88,6 @@ class ETHwalletCore:
         self.pubkey = decompress_pubkey(pubkey)
         key_hash = sha3(self.pubkey[1:])
         self.address = format_checksum_address(key_hash.hex()[-40:])
-        self.address_api = self.address.lower()
         self.ERC20 = ERC20
         self.api = api
         self.decimals = self.get_decimals()
@@ -96,20 +95,15 @@ class ETHwalletCore:
         self.chainID = chainID
 
     def getbalance(self, native=True):
-        if self.chainID in [1, 3, 4, 5, 42]:
-            # ETH and its testnets
-            block_state = "pending"
-        else:
-            # Polygon, BSC or Artbitrum
-            block_state = "latest"
+        block_state = "latest"
         if native:
             # ETH native balance
-            return self.api.get_balance(f"0x{self.address_api}", block_state)
+            return self.api.get_balance(f"0x{self.address}", block_state)
         # ERC20 token balance
         balraw = self.api.call(
             self.ERC20,
             BALANCEOF_FUNCTION,
-            f"000000000000000000000000{self.address_api}",
+            f"000000000000000000000000{self.address}",
             block_state,
         )
         if balraw == [] or balraw == "0x":
@@ -133,7 +127,7 @@ class ETHwalletCore:
             return read_string(balraw)
 
     def getnonce(self):
-        numtx = self.api.get_tx_num(self.address_api, "pending")
+        numtx = self.api.get_tx_num(self.address, "pending")
         return numtx
 
     def prepare(self, toaddr, paymentvalue, gprice, glimit, data=bytearray(b"")):
