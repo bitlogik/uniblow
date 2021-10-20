@@ -319,4 +319,4 @@ def test_real_dapp():
             },
         },
     }
-    global_hash = typed_sign_hash(data)
+    typed_sign_hash(data)
