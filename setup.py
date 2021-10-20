@@ -30,7 +30,7 @@ setup(
         "pysha3==1.0.2",
         "qrcode==6.1",
         "PyNaCl==1.4.0",
-        "pyweb3==0.1.0",
+        "pyweb3==0.1.2",
         "OpenPGPpy==0.4",
         "pyWalletConnect==1.1.3",
     ],
