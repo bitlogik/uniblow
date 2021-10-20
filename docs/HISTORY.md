@@ -1,6 +1,11 @@
 
 Uniblow versions history
 
+## 1.0.2
+
+* Improve ETH node queries reliability
+* Better WalletConnect compatibility w/o chainID control
+
 ## 1.0.0
 
 * Add ARB
