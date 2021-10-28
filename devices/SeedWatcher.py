@@ -287,26 +287,32 @@ class SeedWatcherPanel(gui.swgui.MainPanel):
         sel_row = self.m_dataViewListCtrl1.GetSelectedRow()
         if sel_row == NOT_FOUND:
             return
-        open_explorer(self.coins[sel_row].wallet.history())
+        sel_wallet = self.seekfor_row_wallet(sel_row)
+        if sel_wallet is None:
+            return
+        open_explorer(self.coins[sel_wallet].wallet.history())
+
+    def seekfor_row_wallet(self, row_index):
+        """Give the coins_list index from the row index"""
+        target_name = self.m_dataViewListCtrl1.GetTextValue(row_index, 0)
+        coins_wallet_index = 0
+        while coins_list[coins_wallet_index]["name"] != target_name:
+            coins_wallet_index += 1
+            if coins_wallet_index >= len(coins_list):
+                print("finished")
+                return None
+        return coins_wallet_index
 
     def open_wallet(self, evt):
         sel_row = self.m_dataViewListCtrl1.GetSelectedRow()
         if sel_row == NOT_FOUND:
             return
-
-        # Seek in coinslist for the right wallet
-        # It can be shifted because of a missing wallet (from a silent exception)
-        sel_wallet = sel_row
-        while coins_list[sel_wallet]["wallet_lib"].__qualname__ != str(
-            type(self.coins[sel_row].wallet).__name__
-        ):
-            sel_wallet += 1
-            if sel_wallet > len(coins_list):
-                return
-
+        sel_wallet = self.seekfor_row_wallet(sel_row)
+        if sel_wallet is None:
+            return
         wallet_type = coins_list[sel_wallet].get("type", 0)
         wallet_open = partial(coins_list[sel_wallet]["wallet_lib"], 0, wallet_type)
-        key = self.coins[sel_row].wallet.current_device.ecpair
+        key = self.coins[sel_wallet].wallet.current_device.ecpair
         self.cb_wallet(wallet_open, key, wallet_type, self.GetParent())
 
 
