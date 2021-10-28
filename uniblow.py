@@ -77,7 +77,10 @@ for coin_lib in SUPPORTED_COINS:
 
 
 def get_coin_class(coin_name):
-    return getattr(wallets[f"{coin_name}wallet"], f"{coin_name}_wallet")
+    cname = coin_name
+    if coin_name == "ARB/ETH":
+        cname = "ARB"
+    return getattr(wallets[f"{cname}wallet"], f"{cname}_wallet")
 
 
 devices = {}

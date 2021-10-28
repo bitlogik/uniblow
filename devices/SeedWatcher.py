@@ -46,14 +46,12 @@ from wallets.BTCwallet import BTC_wallet
 from wallets.ETHwallet import ETH_wallet
 from wallets.MATICwallet import MATIC_wallet
 from wallets.BSCwallet import BSC_wallet
+from wallets.ARBwallet import ARB_wallet
 from wallets.LTCwallet import LTC_wallet
 from wallets.DOGEwallet import DOGE_wallet
 from wallets.SOLwallet import SOL_wallet
 from wallets.XTZwallet import XTZ_wallet
-
-
-# from wallets.EOSwallet import EOS_wallet
-# from wallets.BNBwallet import BNB_wallet
+from wallets.EOSwallet import EOS_wallet
 
 
 coins_list = [
@@ -63,10 +61,10 @@ coins_list = [
     {"name": "Ethereum", "path": "m/44'/60'/0'/0/", "wallet_lib": ETH_wallet},
     {"name": "MATIC", "path": "m/44'/60'/0'/0/", "wallet_lib": MATIC_wallet},
     {"name": "BSC", "path": "m/44'/60'/0'/0/", "wallet_lib": BSC_wallet},
-    # {"name": "Binance", "path": "m/44'/714'/0'/0/", "wallet_lib": BNB_wallet},
+    {"name": "ARB", "path": "m/44'/60'/0'/0/", "wallet_lib": ARB_wallet},
     {"name": "Litecoin", "path": "m/44'/2'/0'/0/", "wallet_lib": LTC_wallet},
     {"name": "Dogecoin", "path": "m/44'/3'/0'/0/", "wallet_lib": DOGE_wallet},
-    # {"name": "EOSio", "path": "m/44'/194'/0'/0/", "wallet_lib": EOS_wallet},
+    {"name": "EOSio", "path": "m/44'/194'/0'/0/", "wallet_lib": EOS_wallet},
     {"name": "Solana", "path": "m/44'/501'/0'/", "wallet_lib": SOL_wallet},
     {"name": "Solana (alt. deriv)", "path": "m/44'/501'/", "wallet_lib": SOL_wallet},
     {"name": "Tezos tz1", "path": "m/44'/1729'/0'/", "wallet_lib": XTZ_wallet, "type": 0},
