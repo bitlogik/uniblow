@@ -3,7 +3,7 @@
 # Build uniblow MacOS binary package release
 
 # Requires Xcode developer tools
-# Python 3.9
+# Python 3.8/3.9
 # if needed, python3 -m venv unibenvi should trigger the dev tools installation
 
 
@@ -25,7 +25,13 @@ python -m pip install pyinstaller==4.5.1
 echo Building package ...
 python -OO -m PyInstaller package/uniblow.spec
 deactivate
+
 rm -Rf dist/uniblow-bundle
+chmod +x dist/uniblow.app/Contents/MacOS/uniblow
+setopt +o nomatch
+rm -Rf dist/uniblow.app/Contents/MacOS/*-info
+rm -Rf dist/uniblow.app/Contents/Resources/*-info
+setopt -o nomatch
 
 echo Compilation done.
 echo Binary result is in the dist folder.
