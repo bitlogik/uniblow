@@ -8,7 +8,6 @@ A **uni**versal **blo**ckchain **w**allet for cryptos
 
 * Handy, almost 1-click
 * Fast and lightweight
-* Don't wait for confirmation, instant transactions
 * Multiple cryptos blockchains
 * Tokens ERC20/BEP20
 * WalletConnect
@@ -184,44 +183,12 @@ case, rename back to HDseed and you read back the first wallet.
 
 ### ERC20
 
-In ETH, BSC or MATIC, you can choose the ERC20 wallet account type option. Select a known preset token, or input an ERC20 token address.
+In ETH, BSC, MATIC or ARB, you can choose the ERC20 wallet account type option. Select a known preset token, or input an ERC20 token address.
 
 ### WalletConnect
 
-In ETH, BSC or MATIC, Uniblow can connect to a Dapp using the WalletConnect system. Select WalletConnect in the wallet account type, input the wc URI and it will connect to the web3 app using WalletConnect.  
+In ETH, BSC, MATIC or ARB, Uniblow can connect to a Dapp using the WalletConnect system. Select WalletConnect in the wallet account type, input the wc URI and it will connect to the web3 app using WalletConnect.  
 Note that in this mode, Uniblow disables sending any transaction from the GUI. All the sending transactions have to be performed from the connected web app, after your approval in Uniblow. Else you have to connect to a standard (or token) account type to process a sending transaction using Uniblow directly.
-
-
-Run Uniblow - Use the GUI
--------------------------
-
-On **Debian / Tails / Ubuntu** :
-
--   Follow the [dedicated instructions
-    page](docs/LinuxRunBin.md).
-
-To increase the security, the Linux binaries releases are [signed with
-our PGP key](https://bitlogik.fr/pgp/bitlogik.asc), bringing even greater
-confidence in the integrity of the application. The checking process is
-described in [this instructions document](docs/LinuxRunBin.md).
-
-On **Windows** :
-
--   Download the Uniblow binary [from the uniblow official website](https://uniblow.org/get).
-
-To increase the security, the Windows exe releases are signed with our [Extended
-Validation
-certificate](https://en.wikipedia.org/wiki/Code_signing#Extended_validation_(EV)_code_signing),
-bringing even greater confidence in the integrity of the application.
-
-On **MacOS**
-
--   Download the Uniblow dmg package for Mac [from the uniblow official website](https://uniblow.org/get).
--   Open the dmg to mount it.
--   Drag and drop Uniblow (on the left) to the Applications icon on right.
--   Eject the dmg disk and you can delete the dmg file.
-
-To increase the security, the Mac dmg package and also the uniblow app are signed (stapled) and notarized by Apple, bringing even greater confidence in the integrity of the application.
 
 
 The SecuBoost seed derivation type
@@ -259,6 +226,39 @@ be slowed down by this time factor.
 
 Note that this algorithm, per design, uses extensive resources : requires 1 GB
 RAM, and takes approximately 20 seconds on a desktop computer.
+
+
+Run Uniblow - Use the GUI
+-------------------------
+
+On **Debian / Tails / Ubuntu** :
+
+-   Follow the [dedicated instructions
+    page](docs/LinuxRunBin.md).
+
+To increase the security, the Linux binaries releases are [signed with
+our PGP key](https://bitlogik.fr/pgp/bitlogik.asc), bringing even greater
+confidence in the integrity of the application. The checking process is
+described in [this instructions document](docs/LinuxRunBin.md).
+
+On **Windows** :
+
+-   Download the Uniblow binary [from the uniblow official website](https://uniblow.org/get).
+
+To increase the security, the Windows exe releases are signed with our [Extended
+Validation
+certificate](https://en.wikipedia.org/wiki/Code_signing#Extended_validation_(EV)_code_signing),
+bringing even greater confidence in the integrity of the application.
+
+On **MacOS**
+
+-   Download the Uniblow dmg package for Mac [from the uniblow official website](https://uniblow.org/get).
+-   Open the dmg to mount it.
+-   Drag and drop Uniblow (on the left) to the Applications icon on right.
+-   Eject the dmg disk and you can delete the dmg file.
+
+To increase the security, the Mac dmg package and also the uniblow app are signed (stapled) and notarized by Apple, bringing even greater confidence in the integrity of the application.
+
 
 Development
 -----------
