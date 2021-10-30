@@ -1,6 +1,11 @@
 
 Uniblow versions history
 
+## 1.0.4
+
+* Add ARB and EOS in SeedWatcher
+* Fix SeedWatcher info shift
+
 ## 1.0.2
 
 * Improve ETH node queries reliability
