@@ -8,7 +8,7 @@ For the following Linux OS :
 
 * Ubuntu from version 18 should work
 * Ubuntu derivatives, like Mint or PureOS
-* Debian Buster 10 and Bullseye 11, should work on any Debian older than 10.x
+* Debian Buster 10 and Bullseye 11, untested on 9.x
 * Tails v4.20, should work on any v4.x
 
 It may run on other Linux, as RHEL or Fedora. But without any testing and no guarantee.
