@@ -684,7 +684,7 @@
                                 </object>
                                 <object class="sizeritem" expanded="1">
                                     <property name="border">16</property>
-                                    <property name="flag">wxBOTTOM|wxTOP|wxALIGN_CENTER_HORIZONTAL</property>
+                                    <property name="flag">wxTOP|wxBOTTOM</property>
                                     <property name="proportion">0</property>
                                     <object class="wxTextCtrl" expanded="1">
                                         <property name="BottomDockable">1</property>
@@ -732,7 +732,7 @@
                                         <property name="resize">Resizable</property>
                                         <property name="show">1</property>
                                         <property name="size">585,-1</property>
-                                        <property name="style">wxTE_CENTER|wxTE_READONLY</property>
+                                        <property name="style">wxTE_READONLY</property>
                                         <property name="subclass">; ; forward_declare</property>
                                         <property name="toolbar_pane">0</property>
                                         <property name="tooltip"></property>

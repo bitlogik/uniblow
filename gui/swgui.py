@@ -57,7 +57,7 @@ class MainPanel ( wx.Panel ):
         self.m_button_gen = wx.BitmapButton( self, wx.ID_ANY, wx.NullBitmap, wx.DefaultPosition, wx.DefaultSize, wx.BU_AUTODRAW|wx.BORDER_NONE )
 
         self.m_button_gen.SetBitmap( wx.NullBitmap )
-        bSizer31.Add( self.m_button_gen, 0, wx.ALL, 10 )
+        bSizer31.Add( self.m_button_gen, 0, wx.ALL|wx.ALIGN_CENTER_VERTICAL, 10 )
 
         m_choice_nwordsChoices = []
         self.m_choice_nwords = wx.Choice( self, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, m_choice_nwordsChoices, 0 )
@@ -81,7 +81,7 @@ class MainPanel ( wx.Panel ):
         self.m_staticText5 = wx.StaticText( self, wx.ID_ANY, u"  Words in list", wx.DefaultPosition, wx.DefaultSize, 0 )
         self.m_staticText5.Wrap( -1 )
 
-        bSizer3.Add( self.m_staticText5, 0, wx.ALIGN_BOTTOM|wx.ALL, 5 )
+        bSizer3.Add( self.m_staticText5, 0, wx.ALL|wx.ALIGN_BOTTOM, 5 )
 
         self.m_bitmap_wl = wx.StaticBitmap( self, wx.ID_ANY, wx.NullBitmap, wx.DefaultPosition, wx.DefaultSize, 0 )
         bSizer3.Add( self.m_bitmap_wl, 0, wx.ALIGN_BOTTOM|wx.BOTTOM, 7 )
@@ -100,7 +100,7 @@ class MainPanel ( wx.Panel ):
 
         bSizer11.Add( bSizer3, 0, wx.ALIGN_CENTER_HORIZONTAL, 5 )
 
-        self.m_textCtrl_mnemo = wx.TextCtrl( self, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.Size( -1,75 ), wx.TE_MULTILINE )
+        self.m_textCtrl_mnemo = wx.TextCtrl( self, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.Size( -1,75 ), wx.TE_MULTILINE|wx.TE_PROCESS_ENTER )
         self.m_textCtrl_mnemo.SetFont( wx.Font( 12, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, False, wx.EmptyString ) )
 
         bSizer11.Add( self.m_textCtrl_mnemo, 0, wx.ALL|wx.EXPAND, 5 )
@@ -115,7 +115,7 @@ class MainPanel ( wx.Panel ):
 
         bSizer4.Add( self.m_staticText51, 0, wx.ALL|wx.ALIGN_CENTER_VERTICAL, 5 )
 
-        self.m_textpwd = wx.TextCtrl( self, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.Size( 208,-1 ), 0 )
+        self.m_textpwd = wx.TextCtrl( self, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.Size( 208,-1 ), wx.TE_PROCESS_ENTER )
         bSizer4.Add( self.m_textpwd, 0, wx.ALL, 5 )
 
 
@@ -139,10 +139,10 @@ class MainPanel ( wx.Panel ):
 
         bSizer5 = wx.BoxSizer( wx.HORIZONTAL )
 
-        self.m_staticText61 = wx.StaticText( self, wx.ID_ANY, u"Account #", wx.DefaultPosition, wx.DefaultSize, 0 )
-        self.m_staticText61.Wrap( -1 )
+        self.m_staticTextAcct = wx.StaticText( self, wx.ID_ANY, u"Account #", wx.DefaultPosition, wx.DefaultSize, 0 )
+        self.m_staticTextAcct.Wrap( -1 )
 
-        bSizer5.Add( self.m_staticText61, 0, wx.ALIGN_CENTER_VERTICAL, 5 )
+        bSizer5.Add( self.m_staticTextAcct, 0, wx.ALIGN_CENTER_VERTICAL, 5 )
 
         self.m_account = wx.SpinCtrl( self, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.Size( 75,-1 ), wx.SP_ARROW_KEYS, 0, 2147483647, 0 )
         bSizer5.Add( self.m_account, 0, wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5 )
@@ -179,7 +179,9 @@ class MainPanel ( wx.Panel ):
         # Connect Events
         self.m_button_gen.Bind( wx.EVT_BUTTON, self.gen_new_mnemonic )
         self.m_textCtrl_mnemo.Bind( wx.EVT_TEXT, self.mnemo_changed )
+        self.m_textCtrl_mnemo.Bind( wx.EVT_TEXT_ENTER, self.seek_assets )
         self.m_textpwd.Bind( wx.EVT_TEXT, self.mnemo_changed )
+        self.m_textpwd.Bind( wx.EVT_TEXT_ENTER, self.seek_assets )
         self.m_typechoice.Bind( wx.EVT_CHOICE, self.mnemo_changed )
         self.m_account.Bind( wx.EVT_SPINCTRL, self.mnemo_changed )
         self.m_btnseek.Bind( wx.EVT_BUTTON, self.seek_assets )

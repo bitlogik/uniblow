@@ -121,10 +121,10 @@ class TopPanel ( wx.Panel ):
 
         bSizer5.Add( self.account_label, 0, wx.TOP|wx.RIGHT|wx.LEFT, 5 )
 
-        self.account_addr = wx.TextCtrl( self, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.Size( 585,-1 ), wx.TE_CENTER|wx.TE_READONLY|wx.BORDER_NONE )
+        self.account_addr = wx.TextCtrl( self, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.Size( 585,-1 ), wx.TE_READONLY|wx.BORDER_NONE )
         self.account_addr.SetFont( wx.Font( 14, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, False, wx.EmptyString ) )
 
-        bSizer5.Add( self.account_addr, 0, wx.BOTTOM|wx.TOP|wx.ALIGN_CENTER_HORIZONTAL, 16 )
+        bSizer5.Add( self.account_addr, 0, wx.TOP|wx.BOTTOM, 16 )
 
 
         bSizer3.Add( bSizer5, 0, wx.LEFT|wx.TOP|wx.ALIGN_CENTER_HORIZONTAL, 12 )
