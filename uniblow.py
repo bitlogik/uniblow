@@ -712,7 +712,7 @@ if __name__ == "__main__":
         basicConfig(level=DEBUG)
 
     if "windll" in globals():
-        windll.shcore.SetProcessDpiAwareness(True)
+        windll.shcore.SetProcessDpiAwareness(2)
 
     start_main_app()
     app.MainLoop()
