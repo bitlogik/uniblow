@@ -76,15 +76,15 @@ class MainPanel ( wx.Panel ):
 
         self.m_staticText12.SetFont( wx.Font( 12, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, False, wx.EmptyString ) )
 
-        bSizer3.Add( self.m_staticText12, 1, wx.ALIGN_CENTER|wx.RIGHT|wx.TOP|wx.ALIGN_CENTER_VERTICAL, 20 )
+        bSizer3.Add( self.m_staticText12, 1, wx.ALIGN_BOTTOM|wx.RIGHT, 40 )
 
         self.m_staticText5 = wx.StaticText( self, wx.ID_ANY, u"  Words in list", wx.DefaultPosition, wx.DefaultSize, 0 )
         self.m_staticText5.Wrap( -1 )
 
-        bSizer3.Add( self.m_staticText5, 0, wx.ALL|wx.ALIGN_BOTTOM, 5 )
+        bSizer3.Add( self.m_staticText5, 0, wx.ALL, 5 )
 
         self.m_bitmap_wl = wx.StaticBitmap( self, wx.ID_ANY, wx.NullBitmap, wx.DefaultPosition, wx.DefaultSize, 0 )
-        bSizer3.Add( self.m_bitmap_wl, 0, wx.ALIGN_BOTTOM|wx.BOTTOM, 7 )
+        bSizer3.Add( self.m_bitmap_wl, 0, wx.ALIGN_CENTER, 7 )
 
 
         bSizer3.Add( ( 0, 0), 0, wx.RIGHT, 8 )
@@ -92,15 +92,15 @@ class MainPanel ( wx.Panel ):
         self.m_staticText6 = wx.StaticText( self, wx.ID_ANY, u"  Checksum", wx.DefaultPosition, wx.DefaultSize, 0 )
         self.m_staticText6.Wrap( -1 )
 
-        bSizer3.Add( self.m_staticText6, 0, wx.ALIGN_BOTTOM|wx.ALL, 5 )
+        bSizer3.Add( self.m_staticText6, 0, wx.ALL, 5 )
 
         self.m_bitmap_cs = wx.StaticBitmap( self, wx.ID_ANY, wx.NullBitmap, wx.DefaultPosition, wx.DefaultSize, 0 )
-        bSizer3.Add( self.m_bitmap_cs, 0, wx.ALIGN_BOTTOM|wx.BOTTOM, 7 )
+        bSizer3.Add( self.m_bitmap_cs, 0, wx.ALIGN_CENTER_VERTICAL, 7 )
 
 
         bSizer11.Add( bSizer3, 0, wx.ALIGN_CENTER_HORIZONTAL, 5 )
 
-        self.m_textCtrl_mnemo = wx.TextCtrl( self, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.Size( -1,75 ), wx.TE_MULTILINE|wx.TE_PROCESS_ENTER )
+        self.m_textCtrl_mnemo = wx.TextCtrl( self, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.Size( -1,100 ), wx.TE_MULTILINE|wx.TE_PROCESS_ENTER|wx.BORDER_SIMPLE )
         self.m_textCtrl_mnemo.SetFont( wx.Font( 12, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, False, wx.EmptyString ) )
 
         bSizer11.Add( self.m_textCtrl_mnemo, 0, wx.ALL|wx.EXPAND, 5 )
