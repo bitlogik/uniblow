@@ -51,6 +51,7 @@ class HDdevice:
     def __init__(self):
         self.created = False
         self.has_hardware_button = False
+        self.account = "0"
         self.aindex = "0"
 
     def open_account(self, password):
@@ -76,7 +77,10 @@ class HDdevice:
                 )
             except nacl.exceptions.CryptoError:
                 raise pwdException("BadPass")
-            idx = key_content.get("account_number")
+            account_num = key_content.get("account_number")
+            if account_num:
+                self.account = account_num
+            idx = key_content.get("index_number")
             if idx:
                 self.aindex = idx
             self.compute_masterkeys(seed)
@@ -116,16 +120,28 @@ class HDdevice:
             seedg,
             nacl.utils.random(nacl.secret.SecretBox.NONCE_SIZE),
         )
+        # Build wallet info
+        self.account = settings["account"]
+        self.aindex = settings["index"]
+        account_info = {
+            "seed_enc": encrypted_content.hex(),
+            "salt": salt.hex(),
+            "account_number": self.account,
+            "index_number": self.aindex,
+        }
         # Save the encrypted data
-        json.dump({"seed_enc": encrypted_content.hex(), "salt": salt.hex()}, key_file)
+        json.dump(account_info, key_file)
         key_file.close()
-        self.aindex = settings["account_index"]
         self.created = True
         self.compute_masterkeys(seedg)
 
     def get_address_index(self):
         """Get the account address index, last BIP44 derivation number as str"""
         return self.aindex
+
+    def get_account(self):
+        """Get the account number, third BIP44 derivation number as str"""
+        return self.account
 
     def derive_key(self, path, key_type):
         pathc = path

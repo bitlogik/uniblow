@@ -145,7 +145,18 @@ class MainPanel ( wx.Panel ):
         bSizer5.Add( self.m_staticTextAcct, 0, wx.ALIGN_CENTER_VERTICAL, 5 )
 
         self.m_account = wx.SpinCtrl( self, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.Size( 75,-1 ), wx.SP_ARROW_KEYS, 0, 2147483647, 0 )
-        bSizer5.Add( self.m_account, 0, wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5 )
+        bSizer5.Add( self.m_account, 0, wx.ALL|wx.ALIGN_CENTER_VERTICAL, 5 )
+
+        self.is_change = wx.CheckBox( self, wx.ID_ANY, u"internal", wx.DefaultPosition, wx.DefaultSize, wx.ALIGN_RIGHT )
+        bSizer5.Add( self.is_change, 0, wx.LEFT|wx.ALIGN_CENTER_VERTICAL, 20 )
+
+        self.m_staticTextIdx = wx.StaticText( self, wx.ID_ANY, u"Index", wx.DefaultPosition, wx.DefaultSize, 0 )
+        self.m_staticTextIdx.Wrap( -1 )
+
+        bSizer5.Add( self.m_staticTextIdx, 0, wx.ALIGN_CENTER_VERTICAL|wx.LEFT, 25 )
+
+        self.m_index = wx.SpinCtrl( self, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.Size( 75,-1 ), wx.SP_ARROW_KEYS, 0, 2147483647, 0 )
+        bSizer5.Add( self.m_index, 0, wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5 )
 
 
         bSizer11.Add( bSizer5, 0, wx.ALIGN_CENTER, 5 )
@@ -184,6 +195,8 @@ class MainPanel ( wx.Panel ):
         self.m_textpwd.Bind( wx.EVT_TEXT_ENTER, self.seek_assets )
         self.m_typechoice.Bind( wx.EVT_CHOICE, self.mnemo_changed )
         self.m_account.Bind( wx.EVT_SPINCTRL, self.mnemo_changed )
+        self.is_change.Bind( wx.EVT_CHECKBOX, self.mnemo_changed )
+        self.m_index.Bind( wx.EVT_SPINCTRL, self.mnemo_changed )
         self.m_btnseek.Bind( wx.EVT_BUTTON, self.seek_assets )
         self.m_dataViewListCtrl1.Bind( wx.dataview.EVT_DATAVIEW_ITEM_CONTEXT_MENU, self.pop_menu, id = wx.ID_ANY )
 
@@ -198,11 +211,15 @@ class MainPanel ( wx.Panel ):
     def mnemo_changed( self, event ):
         event.Skip()
 
-
-
-
     def seek_assets( self, event ):
         event.Skip()
+
+
+
+
+
+
+
 
     def pop_menu( self, event ):
         event.Skip()

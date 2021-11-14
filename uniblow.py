@@ -491,7 +491,9 @@ def set_coin(coin, network, wallet_type):
         key_type = get_coin_class(coin).get_key_type(wallet_type)
         if app.device.is_HD:
             current_path = (
-                get_coin_class(coin).get_path(network, wallet_type) + app.device.get_address_index()
+                get_coin_class(coin)
+                .get_path(network, wallet_type)
+                .format(app.device.get_account(), app.device.get_address_index())
             )
             app.device.derive_key(current_path, key_type)
         else:

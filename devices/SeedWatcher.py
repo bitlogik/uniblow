@@ -55,20 +55,20 @@ from wallets.EOSwallet import EOS_wallet
 
 
 coins_list = [
-    {"name": "Bitcoin Legacy", "path": "m/44'/ 0'/0'/0/", "wallet_lib": BTC_wallet, "type": 0},
-    {"name": "Bitcoin P2WSH", "path": "m/49'/ 0'/0'/0/", "wallet_lib": BTC_wallet, "type": 1},
-    {"name": "Bitcoin SegWit", "path": "m/84'/ 0'/0'/0/", "wallet_lib": BTC_wallet, "type": 2},
-    {"name": "Ethereum", "path": "m/44'/60'/0'/0/", "wallet_lib": ETH_wallet},
-    {"name": "MATIC", "path": "m/44'/60'/0'/0/", "wallet_lib": MATIC_wallet},
-    {"name": "BSC", "path": "m/44'/60'/0'/0/", "wallet_lib": BSC_wallet},
-    {"name": "ARB", "path": "m/44'/60'/0'/0/", "wallet_lib": ARB_wallet},
-    {"name": "Litecoin", "path": "m/44'/2'/0'/0/", "wallet_lib": LTC_wallet},
-    {"name": "Dogecoin", "path": "m/44'/3'/0'/0/", "wallet_lib": DOGE_wallet},
-    {"name": "EOSio", "path": "m/44'/194'/0'/0/", "wallet_lib": EOS_wallet},
-    {"name": "Solana", "path": "m/44'/501'/0'/", "wallet_lib": SOL_wallet},
-    {"name": "Solana (alt. deriv)", "path": "m/44'/501'/", "wallet_lib": SOL_wallet},
-    {"name": "Tezos tz1", "path": "m/44'/1729'/0'/", "wallet_lib": XTZ_wallet, "type": 0},
-    {"name": "Tezos tz2", "path": "m/44'/1729'/0'/0/", "wallet_lib": XTZ_wallet, "type": 1},
+    {"name": "Bitcoin Legacy", "path": "m/44'/0'/{}'/{}/{}", "wallet_lib": BTC_wallet, "type": 0},
+    {"name": "Bitcoin P2WSH", "path": "m/49'/ 0'/{}'/{}/{}", "wallet_lib": BTC_wallet, "type": 1},
+    {"name": "Bitcoin SegWit", "path": "m/84'/ 0'/{}'/{}/{}", "wallet_lib": BTC_wallet, "type": 2},
+    {"name": "Ethereum", "path": "m/44'/60'/{}'/{}/{}", "wallet_lib": ETH_wallet},
+    {"name": "MATIC", "path": "m/44'/60'/{}'/{}/{}", "wallet_lib": MATIC_wallet},
+    {"name": "BSC", "path": "m/44'/60'/{}'/{}/{}", "wallet_lib": BSC_wallet},
+    {"name": "ARB", "path": "m/44'/60'/{}'/{}/{}", "wallet_lib": ARB_wallet},
+    {"name": "Litecoin", "path": "m/44'/2'/{}'/{}/{}", "wallet_lib": LTC_wallet},
+    {"name": "Dogecoin", "path": "m/44'/3'/{}'/{}/{}", "wallet_lib": DOGE_wallet},
+    {"name": "EOSio", "path": "m/44'/194'/{}'/{}/{}", "wallet_lib": EOS_wallet},
+    {"name": "Solana", "path": "m/44'/501'/{0}'/{2}", "wallet_lib": SOL_wallet},
+    {"name": "Solana (alt. deriv)", "path": "m/44'/501'/{2}", "wallet_lib": SOL_wallet},
+    {"name": "Tezos tz1", "path": "m/44'/1729'/{0}'/{2}", "wallet_lib": XTZ_wallet, "type": 0},
+    {"name": "Tezos tz2", "path": "m/44'/1729'/{}'/{}/{}", "wallet_lib": XTZ_wallet, "type": 1},
 ]
 
 WORDSLEN_LIST = ["12 words", "15 words", "18 words", "21 words", "24 words"]
@@ -186,15 +186,17 @@ class SeedWatcherPanel(gui.swgui.MainPanel):
                 return
             if coin["type"] == 0:
                 # standard
-                cpath = "m/0/"
-            elif coin["type"] == 1:
-                # p2wsh
-                cpath = "m/1'/0/"
-            elif coin["type"] == 2:
-                # segwit
-                cpath = "m/0'/0/"
+                cpath = "m/{1}/{2}"
+            elif coin["type"] == 1 or coin["type"] == 2:
+                # p2wsh and segwit
+                cpath = "m/{}'/{}/{}"
         account_idx = str(self.m_account.GetValue())
-        path = cpath + account_idx
+        is_change = self.is_change.GetValue()
+        address_idx = str(self.m_index.GetValue())
+        change_idx = 0
+        if is_change:
+            change_idx = 1
+        path = cpath.format(account_idx, change_idx, address_idx)
         key_type = coin["wallet_lib"].get_key_type(coin.get("type", 0))
         if key_type == "ED":
             # Only for last, means all the index down to m shall be hardened
@@ -218,6 +220,8 @@ class SeedWatcherPanel(gui.swgui.MainPanel):
         self.m_btnseek.Disable()
         self.m_staticTextcopy.Disable()
         self.m_account.Disable()
+        self.is_change.Enable()
+        self.m_index.Disable()
         self.Disable()
 
     def enable_inputs(self):
@@ -225,6 +229,8 @@ class SeedWatcherPanel(gui.swgui.MainPanel):
             self.m_btnseek.Enable()
             self.m_staticTextcopy.Enable()
             self.m_account.Enable()
+            self.is_change.Enable()
+            self.m_index.Enable()
             CallAfter(self.Enable)
 
     def async_getcoininfo_idx(self, coin_idx, seed):

@@ -367,8 +367,16 @@ class HDPanel ( wx.Panel ):
 
         bSizer14.Add( self.m_staticText14, 0, wx.ALIGN_CENTER_VERTICAL, 5 )
 
-        self.m_spinCtrl_accountidx = wx.SpinCtrl( self, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.Size( 75,-1 ), wx.SP_ARROW_KEYS, 0, 10, 0 )
-        bSizer14.Add( self.m_spinCtrl_accountidx, 0, wx.ALL, 5 )
+        self.m_spinCtrl_account = wx.SpinCtrl( self, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.Size( 75,-1 ), wx.SP_ARROW_KEYS, 0, 10, 0 )
+        bSizer14.Add( self.m_spinCtrl_account, 0, wx.ALL, 5 )
+
+        self.m_staticText141 = wx.StaticText( self, wx.ID_ANY, u"index", wx.DefaultPosition, wx.DefaultSize, 0 )
+        self.m_staticText141.Wrap( -1 )
+
+        bSizer14.Add( self.m_staticText141, 0, wx.LEFT|wx.ALIGN_CENTER_VERTICAL, 24 )
+
+        self.m_spinCtrl_index = wx.SpinCtrl( self, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.Size( 75,-1 ), wx.SP_ARROW_KEYS, 0, 10, 0 )
+        bSizer14.Add( self.m_spinCtrl_index, 0, wx.ALL, 5 )
 
 
         bSizer11.Add( bSizer14, 0, wx.ALIGN_CENTER_HORIZONTAL|wx.TOP, 16 )

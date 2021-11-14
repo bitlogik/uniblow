@@ -32,7 +32,7 @@ class ARB_wallet(ETH_wallet):
     derive_paths = [
         # mainnet
         [
-            "m/44'/60'/0'/0/",
+            "m/44'/60'/{}'/0/{}",
         ],
     ]
 

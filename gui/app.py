@@ -92,11 +92,13 @@ class HDsetting_panel(gui.window.HDPanel):
             derivation = "PBKDF2-2048-HMAC-SHA512"
         mnemo_txt = self.m_textCtrl_mnemo.GetValue()
         password = self.m_textCtrl_pwd.GetValue()
-        account_idx = str(self.m_spinCtrl_accountidx.GetValue())
+        account = str(self.m_spinCtrl_account.GetValue())
+        index = str(self.m_spinCtrl_index.GetValue())
         # Attach object to frame, so the modal inputs are synchroneous
         self.hd_wallet_settings = {
             "mnemonic": mnemo_txt,
-            "account_index": account_idx,
+            "account": account,
+            "index": index,
             "HD_password": password,
             "seed_gen": derivation,
         }
@@ -224,6 +226,7 @@ class UniblowApp(App):
         self.gui_panel.coins_choice.SetSelection(0)
 
     def set_mnemonic(self, proposal):
+        """Call the HD device creation window."""
         self.gui_hdframe = gui.window.HDDialog(self.gui_frame)
         self.gui_hdpanel = HDsetting_panel(self.gui_hdframe)
         self.gui_hdpanel.GOOD_BMP = Bitmap(file_path("gui/good.bmp"))
