@@ -59,6 +59,7 @@ coins_list = [
     {"name": "Bitcoin P2WSH", "path": "m/49'/ 0'/{}'/{}/{}", "wallet_lib": BTC_wallet, "type": 1},
     {"name": "Bitcoin SegWit", "path": "m/84'/ 0'/{}'/{}/{}", "wallet_lib": BTC_wallet, "type": 2},
     {"name": "Ethereum", "path": "m/44'/60'/{}'/{}/{}", "wallet_lib": ETH_wallet},
+    {"name": "Eth (alt. deriv)", "path": "m/44'/60'/{0}'/{2}", "wallet_lib": ETH_wallet},
     {"name": "MATIC", "path": "m/44'/60'/{}'/{}/{}", "wallet_lib": MATIC_wallet},
     {"name": "BSC", "path": "m/44'/60'/{}'/{}/{}", "wallet_lib": BSC_wallet},
     {"name": "ARB", "path": "m/44'/60'/{}'/{}/{}", "wallet_lib": ARB_wallet},
