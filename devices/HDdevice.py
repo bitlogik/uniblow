@@ -29,6 +29,7 @@ from cryptolib.HDwallet import (
     mnemonic_to_seed,
     generate_mnemonic,
 )
+from devices.file_path import WalletFile
 
 
 FILE_NAME = "HDseed.key"
@@ -55,13 +56,10 @@ class HDdevice:
         self.aindex = "0"
 
     def open_account(self, password):
-        if path.isfile(FILE_NAME):
+        wallet_file = WalletFile(FILE_NAME)
+        if path.isfile(wallet_file.file_path):
             # Open the current key from its file
-            key_file = open(FILE_NAME, "r")
-            try:
-                key_content = json.load(key_file)
-            finally:
-                key_file.close()
+            key_content = wallet_file.read_data()
             salt = bytes.fromhex(key_content["salt"])
             # decrypt
             decryption_key = nacl.pwhash.argon2id.kdf(
@@ -101,8 +99,6 @@ class HDdevice:
         return bip39_is_checksum_valid(mnemonic)
 
     def initialize_device(self, settings):
-        # Save the seed from the mnemonic in a file
-        key_file = open(FILE_NAME, "w")
         # compute the seed
         seedg = mnemonic_to_seed(
             settings["mnemonic"], settings["HD_password"], method=settings["seed_gen"]
@@ -129,9 +125,9 @@ class HDdevice:
             "account_number": self.account,
             "index_number": self.aindex,
         }
-        # Save the encrypted data
-        json.dump(account_info, key_file)
-        key_file.close()
+        # Save the encrypted data in a file
+        wallet_file = WalletFile(FILE_NAME)
+        wallet_file.save_data(account_info)
         self.created = True
         self.compute_masterkeys(seedg)
 

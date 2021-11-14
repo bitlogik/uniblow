@@ -22,6 +22,7 @@ from secrets import token_bytes
 import nacl.exceptions
 import nacl.pwhash
 import nacl.secret
+from devices.file_path import WalletFile
 from devices.SingleKey import SKdevice
 
 EC_BYTES_SIZE = 32
@@ -38,14 +39,13 @@ class NotinitException(Exception):
 
 
 class BasicFile(SKdevice):
+    """Single key wallet, with file read/save."""
+
     def open_account(self, password):
-        if path.isfile(FILE_NAME):
+        wallet_file = WalletFile(FILE_NAME)
+        if path.isfile(wallet_file.file_path):
             # Open the current key from its file
-            key_file = open(FILE_NAME, "r")
-            try:
-                key_content = json.load(key_file)
-            finally:
-                key_file.close()
+            key_content = wallet_file.read_data()
             salt = bytes.fromhex(key_content["salt"])
             # decrypt
             decryption_key = nacl.pwhash.argon2id.kdf(
@@ -84,7 +84,6 @@ class BasicFile(SKdevice):
             nacl.utils.random(nacl.secret.SecretBox.NONCE_SIZE),
         )
         # Save the encrypted data
-        key_file = open(FILE_NAME, "w")
-        json.dump({"keyenc": encrypted_content.hex(), "salt": salt.hex()}, key_file)
-        key_file.close()
+        wallet_file = WalletFile(FILE_NAME)
+        wallet_file.save_data({"keyenc": encrypted_content.hex(), "salt": salt.hex()})
         self.created = True
