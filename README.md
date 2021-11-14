@@ -70,6 +70,40 @@ Compatible with the following blockchains :
     * Main Tezos and Florence testnet networks
 
 
+Run Uniblow
+-----------
+
+On **Windows** :
+
+-   Download the Uniblow binary [from the uniblow official website](https://uniblow.org/get).
+
+To increase the security, the Windows exe releases are signed with our [Extended
+Validation
+certificate](https://en.wikipedia.org/wiki/Code_signing#Extended_validation_(EV)_code_signing),
+bringing even greater confidence in the integrity of the application.
+
+
+On **Debian / Tails / Ubuntu** :
+
+-   Follow the [dedicated instructions
+    page](docs/LinuxRunBin.md).
+
+To increase the security, the Linux binaries releases are [signed with
+our PGP key](https://bitlogik.fr/pgp/bitlogik.asc), bringing even greater
+confidence in the integrity of the application. The checking process is
+described in [this instructions document](docs/LinuxRunBin.md).
+
+
+On **MacOS**
+
+-   Download the Uniblow dmg package for Mac [from the uniblow official website](https://uniblow.org/get).
+-   Open the dmg to mount it.
+-   Drag and drop Uniblow (on the left) to the Applications icon on right.
+-   Eject the dmg disk and you can delete the dmg file.
+
+To increase the security, the Mac dmg package and also the uniblow app are signed (stapled) and notarized by Apple, bringing even greater confidence in the integrity of the application.
+
+
 ## Devices
 
 ### Seed Watcher
@@ -88,15 +122,15 @@ The seed generated within SeedWatcher is BIP39 only, and is not compatible with
 Electrum. You can\'t input a seed generated with Uniblow in an Electrum wallet without
 selecting the BIP39 option in Electrum.
 
-Note that Seed Watcher only looks at the one given address index. If you used a
-full HD wallet for BTC, LTC or DOGE (such as Electrum), the balance could not be
+Note that Seed Watcher only looks at the one given address account/index. If you used a
+full HD wallet for BTC, LTC or DOGE (such as Electrum), the whole balance could not be
 recomputed properly.
 
 Using the Electrum seed derivation, the same limitation applies : it can only look
 at one address account at a time. That means it may not see all your full Electrum
-account. You need to manually increase the account number. Additionally, the
+account. You need to manually increase the index number. Additionally, the
 SeedWatcher can't generate an Electrum compatible seed, still it can read an Electrum
-seed (of one single address account number).
+seed (of one single address).
 
 ### BasicFile device
 
@@ -113,13 +147,19 @@ your files.
 If you setup a password but forget it, there would be no way to recover your
 coins.
 
-Your key encrypted is stored in JSON and hex in the *BasicFileWallet.key* in the
-same folder as Uniblow. Hence the name "BasicFile" for this device. The key of
+The key is encrypted and stored in JSON and hex in the *BasicFileWallet.key* file, in the
+user data folder for Uniblow. Hence the name "BasicFile" for this device. The key of
 this wallet is in a file named *BasicFileWallet.key*, stored in the same uniblow
 current directory. To backup it, copy the file elsewhere. To remove this wallet
 and start a fresh one, delete this file. You can also rename it and that would
 start a new different file wallet, and keep the first wallet aside. In this
 case, rename back to BasicFileWallet and you read back the first wallet.
+
+The folder where the key file is stored, sits in the user data directory.
+
+* Windows :  C:\\Users\\\<username\>\\AppData\\Local\\BitLogiK\\Uniblow\\keys\\
+* Linux   :  ~/.local/share/Uniblow/keys/  or in $XDG_DATA_HOME if defined
+* MacOS   :  ~/Library/Application Support/Uniblow/keys/
 
 ### OpenPGP device
 
@@ -148,7 +188,7 @@ The Yubico 5 is a recommended OpenPGP device.
 
 ### HDdevice
 
-This wallet is compatible with BIP39/32/44 wallets. You can save 24 words when
+This wallet is compatible with BIP39/32/44 wallets. You can save 12/24 words when
 initializing a new one, and get back you fund later.
 
 You can also import an existing wallet from a compatible wallet, and it will use
@@ -172,12 +212,13 @@ If you setup a password but forget it, there would be no way to recover your
 coins from the backup file. But you can still initialize a new HD device wallet
 with the same words mnemonic.
 
-The seed of this wallet is in a file named *HDseed.key*, stored in the same
-uniblow current directory. To backup it, copy the file elsewhere. To remove this
+The seed of this wallet is encrypted and stored in a file named *HDseed.key*, in the
+user data folder for Uniblow. To backup it, copy the file elsewhere. To remove this
 wallet and start a fresh one, delete this file. You can also rename it and that
 would start a new different HD wallet, and keep the first wallet aside. In this
 case, rename back to HDseed and you read back the first wallet.
 
+To access the direcory where the HDseed is stored, see the *BasicFile device* section above.
 
 ## Special wallet options
 
@@ -226,38 +267,6 @@ be slowed down by this time factor.
 
 Note that this algorithm, per design, uses extensive resources : requires 1 GB
 RAM, and takes approximately 20 seconds on a desktop computer.
-
-
-Run Uniblow - Use the GUI
--------------------------
-
-On **Debian / Tails / Ubuntu** :
-
--   Follow the [dedicated instructions
-    page](docs/LinuxRunBin.md).
-
-To increase the security, the Linux binaries releases are [signed with
-our PGP key](https://bitlogik.fr/pgp/bitlogik.asc), bringing even greater
-confidence in the integrity of the application. The checking process is
-described in [this instructions document](docs/LinuxRunBin.md).
-
-On **Windows** :
-
--   Download the Uniblow binary [from the uniblow official website](https://uniblow.org/get).
-
-To increase the security, the Windows exe releases are signed with our [Extended
-Validation
-certificate](https://en.wikipedia.org/wiki/Code_signing#Extended_validation_(EV)_code_signing),
-bringing even greater confidence in the integrity of the application.
-
-On **MacOS**
-
--   Download the Uniblow dmg package for Mac [from the uniblow official website](https://uniblow.org/get).
--   Open the dmg to mount it.
--   Drag and drop Uniblow (on the left) to the Applications icon on right.
--   Eject the dmg disk and you can delete the dmg file.
-
-To increase the security, the Mac dmg package and also the uniblow app are signed (stapled) and notarized by Apple, bringing even greater confidence in the integrity of the application.
 
 
 Development
