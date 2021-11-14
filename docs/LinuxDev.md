@@ -91,6 +91,10 @@ sudo pip3 install https://extras.wxpython.org/wxPython4/extras/linux/gtk3/ubuntu
 sudo apt install -y python3-pyscard < /dev/null
 ```
 
+
+The wxPython link has to be changed for the good one that fits your ditro. Check [here in the list](https://extras.wxpython.org/wxPython4/extras/linux/gtk3/) for your distro. Also some modern Ubuntu based distros can work with the *whl* in [the ubuntu-18.04 directory](https://extras.wxpython.org/wxPython4/extras/linux/gtk3/ubuntu-18.04/). Because there's no *cp39* package in ubuntu-20.04, but there is one in ubuntu-18.04.
+
+
 #### Get the uniblow source
 ```
 git clone https://github.com/bitlogik/uniblow.git
