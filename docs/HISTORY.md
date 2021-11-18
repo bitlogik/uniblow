@@ -1,6 +1,16 @@
 
 Uniblow versions history
 
+## 1.2.0
+
+* Full account and index derivation options
+* Write wallet files in the user data directory
+* Various UI refinements
+* Add ETH alternative derivation in SeedWatcher
+* Change RPC for Polygon chain
+* Fix disappearing SeedWatcher taskbar on Linux
+* Mac build on Github Actions
+
 ## 1.0.4
 
 * Add ARB and EOS in SeedWatcher
