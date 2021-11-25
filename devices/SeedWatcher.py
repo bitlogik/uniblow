@@ -41,7 +41,12 @@ from wx import (
 )
 import gui.swgui
 from gui.app import file_path
-from cryptolib.HDwallet import HD_Wallet, generate_mnemonic, bip39_is_checksum_valid
+from cryptolib.HDwallet import (
+    HD_Wallet,
+    generate_mnemonic,
+    bip39_is_checksum_valid,
+    ElectrumOldWallet,
+)
 from wallets.BTCwallet import BTC_wallet
 from wallets.ETHwallet import ETH_wallet
 from wallets.MATICwallet import MATIC_wallet
@@ -191,6 +196,12 @@ class SeedWatcherPanel(gui.swgui.MainPanel):
             elif coin["type"] == 1 or coin["type"] == 2:
                 # p2wsh and segwit
                 cpath = "m/{}'/{}/{}"
+        if self.m_typechoice.GetSelection() == 2:
+            if coin["name"] != "Bitcoin Legacy":
+                # Use only Bitcoin legacy for the Electrum seed
+                self.enable_inputs()
+                return
+            cpath = "m/{1}/{2}"
         account_idx = str(self.m_account.GetValue())
         is_change = self.is_change.GetValue()
         address_idx = str(self.m_index.GetValue())
@@ -202,8 +213,15 @@ class SeedWatcherPanel(gui.swgui.MainPanel):
         if key_type == "ED":
             # Only for last, means all the index down to m shall be hardened
             path += "'"
-        wallet = HD_Wallet.from_seed(seed, key_type)
-        coin_key = SeedDevice(wallet.derive_key(path))
+
+        if self.m_typechoice.GetSelection() == 2:
+            wallet = ElectrumOldWallet.from_seed(seed)
+        else:
+            wallet = HD_Wallet.from_seed(seed, key_type)
+
+        pv_key = wallet.derive_key(path)
+
+        coin_key = SeedDevice(pv_key)
         try:
             coin_wallet = blockchainWallet(coin, coin_key)
             self.coins.append(coin_wallet)
@@ -239,7 +257,11 @@ class SeedWatcherPanel(gui.swgui.MainPanel):
         getcoin.start()
 
     def compute_seed(self, *args):
-        wallet_seed = HD_Wallet.seed_from_mnemonic(*args)
+        try:
+            wallet_seed = HD_Wallet.seed_from_mnemonic(*args)
+        except:
+            self.enable_inputs()
+            return
         self.async_getcoininfo_idx(0, wallet_seed)
 
     def check_mnemonic(self):
@@ -257,10 +279,12 @@ class SeedWatcherPanel(gui.swgui.MainPanel):
         self.coins = []
         mnemo_txt = self.m_textCtrl_mnemo.GetValue()
         password = self.m_textpwd.GetValue()
-        if self.m_typechoice.GetSelection() == 2:
+        if self.m_typechoice.GetSelection() == 3:
             derivation = "BOOST"
         elif self.m_typechoice.GetSelection() == 1:
             derivation = "Electrum"
+        elif self.m_typechoice.GetSelection() == 2:
+            derivation = "ElectrumOLD"
         else:
             derivation = "BIP39"
         task_compute_seed = Thread(target=self.compute_seed, args=(mnemo_txt, password, derivation))

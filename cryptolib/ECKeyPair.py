@@ -81,3 +81,9 @@ class EC_key_pair:
             return self.key_obj.public_key().public_bytes(serialization.Encoding.X962, out_format)
         # Ed25519 : 32 bytes public key
         return self.key_obj.verify_key.encode(RawEncoder)
+
+
+class EC_key_pair_uncpr(EC_key_pair):
+    def get_public_key(self, cmpr=None):
+        """Return the uncompressed public key"""
+        return super().get_public_key(False)

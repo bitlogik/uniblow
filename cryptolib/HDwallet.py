@@ -19,13 +19,15 @@ import unicodedata
 
 from cryptolib.cryptography import (
     sha2,
+    dbl_sha2,
     HMAC_SHA512,
     PBKDF2_SHA512,
     SecuBoost_KDF,
     CURVES_ORDER,
     random_generator,
 )
-from cryptolib.ECKeyPair import EC_key_pair
+from cryptolib.ECKeyPair import EC_key_pair, EC_key_pair_uncpr
+from cryptolib.ElectrumLegacy import decode_old_mnemonic
 
 # BIP39 : mnemonic <-> seed
 
@@ -261,8 +263,8 @@ class HD_Wallet:
     def from_seed(cls, seed, ptype):
         return cls(BIP32node.master_node(seed, ptype))
 
-    @classmethod
-    def seed_from_mnemonic(cls, mnemonic, passw="", std="BIP39"):
+    @staticmethod
+    def seed_from_mnemonic(mnemonic, passw="", std="BIP39"):
         """Mnemonic to master key (BIP39 or BOOST)"""
         pprefix = b"mnemonic"
         if std == "BIP39":
@@ -274,6 +276,8 @@ class HD_Wallet:
             mnemonic = mnemonic.lower()
             method = "PBKDF2-2048-HMAC-SHA512"
             pprefix = b"electrum"
+        elif std == "ElectrumOLD":
+            return decode_old_mnemonic(mnemonic)
         else:
             raise Exception("Mnemonic standard not valid")
         seed = mnemonic_to_seed(
@@ -284,3 +288,31 @@ class HD_Wallet:
     def derive_key(self, path):
         """Derive the private key crypto object from the path string"""
         return self.master_node.derive_path_private(path).pv_key
+
+
+class ElectrumOldWallet:
+    def __init__(self, pv_key):
+        self.master_private_key = pv_key
+
+    @classmethod
+    def from_seed(cls, seed):
+        seedh = seed.hex().encode("ascii")
+        orig_seedh = seedh
+        for _ in range(100000):
+            seedh = sha2(seedh + orig_seedh)
+        master_key = int.from_bytes(seedh, "big")
+        return cls(EC_key_pair_uncpr(master_key, "K1"))
+
+    def derive_key(self, path_str):
+        child_priv_int = self.master_private_key.pv_int()
+        if path_str[:2] != "m/":
+            raise Exception("Unvalid path string, must start with m/")
+        if len(path_str.split("/")) != 3:
+            raise Exception("Unvalid path string, must have exactly 2 levels for Old Electrum")
+        change, index = path_str.lstrip("m/").split("/")
+        data_hashed = (
+            f"{index}:{change}:".encode("ascii") + self.master_private_key.get_public_key()[1:]
+        )
+        child_priv_int += int.from_bytes(dbl_sha2(data_hashed), "big")
+        curve = "K1"
+        return EC_key_pair_uncpr(child_priv_int % CURVES_ORDER[curve], curve)
