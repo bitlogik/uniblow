@@ -514,9 +514,13 @@ def mk_p2w_scripthash_script(witver, witprog):
     """
     Used in converting a decoded pay to witness script hash address to output script
     """
-    assert 0 <= witver <= 16
+    if witver < 0 or witver > 16:
+        raise Exception("Bad Witness version number.")
     OP_n = witver + 0x50 if witver > 0 else 0
-    return bytes_to_hex_string([OP_n]) + "14" + (bytes_to_hex_string(witprog))
+    len_prog = len(witprog)
+    if len_prog < 2 or len_prog > 40:
+        raise Exception("Bad Witness program data length.")
+    return bytes_to_hex_string([OP_n]) + "%0.2X" % len_prog + (bytes_to_hex_string(witprog))
 
 
 def mk_p2wpkh_redeemscript(pubkey):

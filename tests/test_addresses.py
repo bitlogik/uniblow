@@ -55,12 +55,13 @@ BTC_ADDR_TEST_DATA = [
     ["bc1qw508d6qejxtdg4y5r3zarvary0c5xw7kv8f3t4", False, True],
     ["tb1qrp33g0q5c5txsp9arysrx4k6zdkfs4nce4xj0gdcccefvpysxf3q0sl5k7", True, True],
     ["tb1qqqqqp399et2xygdj5xreqhjjvcmzhxw4aywxecjdzew6hylgvsesrxh6hy", True, True],
-    ["bc1pw508d6qejxtdg4y5r3zarvary0c5xw7kw508d6qejxtdg4y5r3zarvary0c5xw7kt5nd6y", False, True],
     ["BC1SW50QGDZ25J", False, True],
     ["bc1zw508d6qejxtdg4y5r3zarvaryvaxxpcs", False, True],
     ["tb1pqqqqp399et2xygdj5xreqhjjvcmzhxw4aywxecjdzew6hylgvsesf3hn0c", True, True],
     ["bc1p2wsldez5mud2yam29q22wgfh9439spgduvct83k3pm50fcxa5dps59h4z5", False, True],
     ["bc1p0xlxvlhemja6c4dqv22uapctqupfhlxm9h8z3k2e72q4k9hcz7vqzk5jj0", False, True],
+    ["bc1pz37fc4cn9ah8anwm4xqqhvxygjf9rjf2resrw8h8w4tmvcs0863sa2e586", False, True],
+    ["bc1pwyjywgrd0ffr3tx8laflh6228dj98xkjj8rum0zfpd6h0e930h6saqxrrm", False, True],
     # Invalid bech32
     ["BC1QW508D6QEJXTDG4Y5r3ZARVARY0C5XW7KV8F3T4", False, False],
     ["bc1qw508d6qejxtdg4y5R3zarvary0c5xw7kv8f3t4", False, False],
@@ -86,6 +87,11 @@ BTC_ADDR_TEST_DATA = [
     ["tb1p0xlxvlhemja6c4dqv22uapctqupfhlxm9h8z3k2e72q4k9hcz7vq47Zagq", True, False],
     ["bc1p0xlxvlhemja6c4dqv22uapctqupfhlxm9h8z3k2e72q4k9hcz7v07qwwzcrf", False, False],
     ["tb1p0xlxvlhemja6c4dqv22uapctqupfhlxm9h8z3k2e72q4k9hcz7vpggkg4j", True, False],
+    ["tb1p1xlxvlhemja6c4dqv22uapctqupfhlxm9h8z3k2e72q4k9hcz7vpggkg4j", True, False],
+    ["tb1p0xlxvlhemja6c4dqv22uapctqupfhlxm9h8z3k2e72q4k9hcz7vpggkg4e", True, False],
+    ["bc1pwyjywgrd0ffr3tx8laflh6228dj98xkjj8rum0zfpd6h0e930h6saqxrsm", False, False],
+    ["bc1pwyjywhrd0ffr3tx8laflh6228dj98xkjj8rum0zfpd6h0e930h6saqxrrm", False, False],
+    ["bc1pw508d6qejxtdg4y5r3zarvary0c5xw7kw508d6qejxtdg4y5r3zarvary0c5xw7kt5nd6y", False, False],
     ["bc1gmk9yu", False, False],
 ]
 

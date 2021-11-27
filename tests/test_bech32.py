@@ -83,10 +83,6 @@ DATA_CODEC = [
         "00201863143c14c5166804bd19203356da136c985678cd4d27a1b8c6329604903262",
     ],
     [
-        "bc1pw508d6qejxtdg4y5r3zarvary0c5xw7kw508d6qejxtdg4y5r3zarvary0c5xw7kt5nd6y",
-        "5128751e76e8199196d454941c45d1b3a323f1433bd6751e76e8199196d454941c45d1b3a323f1433bd6",
-    ],
-    [
         "bc1p2wsldez5mud2yam29q22wgfh9439spgduvct83k3pm50fcxa5dps59h4z5",
         "512053a1f6e454df1aa2776a2814a721372d6258050de330b3c6d10ee8f4e0dda343",
     ],
@@ -103,6 +99,10 @@ DATA_CODEC = [
     [
         "bc1punvppl2stp38f7kwv2u2spltjuvuaayuqsthe34hd2dyy5w4g58qqfuag5",
         "5120e4d810fd50586274face62b8a807eb9719cef49c04177cc6b76a9a4251d5450e",
+    ],
+    [
+        "bc1pwyjywgrd0ffr3tx8laflh6228dj98xkjj8rum0zfpd6h0e930h6saqxrrm",
+        "5120712447206d7a5238acc7ff53fbe94a3b64539ad291c7cdbc490b7577e4b17df5",
     ],
 ]
 
