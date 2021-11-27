@@ -25,7 +25,7 @@
 CHARSET = "qpzry9x8gf2tvdw0s3jn54khce6mua7l"
 
 XOR_CONSTANT = 1
-# XOR_CONSTANT = 0x2bc830a3 # BIP350
+XOR_CONSTANT_M = 0x2BC830A3  # BIP350
 
 
 def bech32_polymod(values):
@@ -45,25 +45,25 @@ def bech32_hrp_expand(hrp):
     return [ord(x) >> 5 for x in hrp] + [0] + [ord(x) & 31 for x in hrp]
 
 
-def bech32_verify_checksum(hrp, data):
+def bech32_verify_checksum(hrp, data, xor_const=XOR_CONSTANT):
     """Verify a checksum given HRP and converted data characters."""
-    return bech32_polymod(bech32_hrp_expand(hrp) + data) == XOR_CONSTANT
+    return bech32_polymod(bech32_hrp_expand(hrp) + data) == xor_const
 
 
-def bech32_create_checksum(hrp, data):
+def bech32_create_checksum(hrp, data, xor_const=XOR_CONSTANT):
     """Compute the checksum values given HRP and data."""
     values = bech32_hrp_expand(hrp) + data
-    polymod = bech32_polymod(values + [0, 0, 0, 0, 0, 0]) ^ XOR_CONSTANT
+    polymod = bech32_polymod(values + [0, 0, 0, 0, 0, 0]) ^ xor_const
     return [(polymod >> 5 * (5 - i)) & 31 for i in range(6)]
 
 
-def bech32_encode(hrp, data):
+def bech32_encode(hrp, data, cs_value=XOR_CONSTANT):
     """Compute a Bech32 string given HRP and data values."""
-    combined = data + bech32_create_checksum(hrp, data)
+    combined = data + bech32_create_checksum(hrp, data, cs_value)
     return hrp + "1" + "".join([CHARSET[d] for d in combined])
 
 
-def bech32_decode(bech):
+def bech32_decode(bech, check_target=XOR_CONSTANT):
     """Validate a Bech32 string, and determine HRP and data."""
     if (any(ord(x) < 33 or ord(x) > 126 for x in bech)) or (
         bech.lower() != bech and bech.upper() != bech
@@ -77,7 +77,7 @@ def bech32_decode(bech):
         return (None, None)
     hrp = bech[:pos]
     data = [CHARSET.find(x) for x in bech[pos + 1 :]]
-    if not bech32_verify_checksum(hrp, data):
+    if not bech32_verify_checksum(hrp, data, check_target):
         return (None, None)
     return (hrp, data[:-6])
 
@@ -107,7 +107,14 @@ def convertbits(data, frombits, tobits, pad=True):
 
 def decode(hrp, addr):
     """Decode a segwit address :(witver, data)"""
-    hrpgot, data = bech32_decode(addr)
+    explen = len(hrp) + 1
+    if len(addr) < explen + 1:
+        return (None, None)
+    checksum_val = XOR_CONSTANT_M
+    # Witness v0 uses the old XOR checksum
+    if addr[explen].lower() == CHARSET[0]:
+        checksum_val = XOR_CONSTANT
+    hrpgot, data = bech32_decode(addr, checksum_val)
     if hrpgot != hrp:
         return (None, None)
     decoded = convertbits(data[1:], 5, 8, False)
@@ -141,4 +148,7 @@ def bech32_address(hrp, datahash):
 
 def bech32_address_btc(datahash, hrp="bc", witver=0):
     """Encode a segwit address"""
-    return bech32_encode(hrp, [witver] + convertbits(datahash, 8, 5))
+    checksum = XOR_CONSTANT_M
+    if witver == 0:
+        checksum = XOR_CONSTANT
+    return bech32_encode(hrp, [witver] + convertbits(datahash, 8, 5), checksum)
