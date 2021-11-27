@@ -34,6 +34,7 @@ from cryptolib.ElectrumLegacy import decode_old_mnemonic
 with open(
     os.path.join(os.path.dirname(os.path.realpath(__file__)), "wordslist/english.txt"),
     "r",
+    encoding="utf8",
 ) as fengmne:
     BIP39_WORDSLIST = [wd.strip() for wd in fengmne.readlines()]
 
@@ -51,7 +52,7 @@ def mnemonic_to_seed(
             passphrase_prefix + passphrase,
         )
         return pbkdf2.derive(mnemonic)
-    elif method == "SCRYPT":
+    if method == "SCRYPT":
         return SecuBoost_KDF(
             mnemonic,
             passphrase_prefix + passphrase,
@@ -183,11 +184,6 @@ class BIP32node:
                 else:
                     key_valid = True
         return BIP32node(i, self.depth + 1, newkey, deriv[32:], self.curve, fingerprint)
-
-    def __eq__(self, other):
-        if not isinstance(other, BIP32node):
-            return NotImplemented
-        return self.serialize_xpub() == other.serialize_xpub()
 
     def derive_path_private(self, path_str):
         if self.depth > 0:

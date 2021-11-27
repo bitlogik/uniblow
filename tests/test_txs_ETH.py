@@ -12,7 +12,7 @@ def dummy_balance(self=None, erc20=None):
 
 def test_eth_tx():
     # Test building an ETH transaction
-    # 1 ETH to 0x3535, nonce = 9, gas price = 20
+    # 1 ETH to 0x3535, gas price = 20, nonce = 9
     ETHwalletCore.get_decimals = lambda _: 18
     ETHwalletCore.get_symbol = lambda _: "ETH"
     wl = ETHwalletCore(dummy_pubkey, "mainnet", fake_api, 1)
@@ -27,7 +27,7 @@ def test_eth_tx():
 
 
 def test_erc20_tx():
-    # Test building an ERC20 transaction, on the network id = 52
+    # Test building an ERC20 transaction, on the CSC network id = 52
     # 2 DAI to 0x5322, gas price = 42, gas limit = 78009
     ETHwalletCore.get_decimals = lambda _: 18
     ETHwalletCore.get_symbol = lambda _: "DAI"
@@ -35,7 +35,7 @@ def test_erc20_tx():
     wl.getbalance = dummy_balance
     wl.getnonce = lambda: 0
     to_addr = "5322b34c88ed0691971bf52a7047448f0f4efc84"
-    amount_value = 2000000000000000000
+    amount_value = 2 * 1000000000000000000
     gas_price = 42
     gas_limit = 78009
     wl.prepare(to_addr, amount_value, gas_price, gas_limit)

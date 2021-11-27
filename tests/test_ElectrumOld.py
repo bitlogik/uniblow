@@ -1,5 +1,3 @@
-import pytest
-
 from cryptolib.HDwallet import HD_Wallet, ElectrumOldWallet
 from wallets.BTCwallet import BTC_wallet
 

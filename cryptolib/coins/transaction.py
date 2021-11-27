@@ -155,6 +155,7 @@ def decode(string, base):
     base = int(base)
     code_string = get_code_string(base)
     result = 0
+
     if base == 256:
 
         def extract(d, cs):
@@ -601,9 +602,7 @@ def serialize_script_unit(unit):
 
 def serialize_script(script):
     if json_is_base(script, 16):
-        return safe_hexlify(
-            serialize_script(json_changebase(script, lambda x: binascii.unhexlify(x)))
-        )
+        return safe_hexlify(serialize_script(json_changebase(script, binascii.unhexlify)))
     result = bytes()
     for b in map(serialize_script_unit, script):
         result += b if isinstance(b, bytes) else bytes(b, "utf-8")

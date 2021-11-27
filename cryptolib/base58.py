@@ -14,8 +14,9 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 
-from .cryptography import b58checksum, md160
 from math import ceil
+from .cryptography import b58checksum, md160
+
 
 BASE58 = 58
 b58chars = "123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz"
@@ -32,8 +33,8 @@ def bin_to_base58(bin_data):
         base58 = b58chars[int_data % BASE58] + base58
         int_data = int_data // BASE58
     base58 = b58chars[int_data % BASE58] + base58
-    for i in range(len(bin_data)):
-        if bin_data[i] == 0:
+    for charval in bin_data:
+        if charval == 0:
             base58 = "1" + base58
         else:
             break
@@ -70,8 +71,8 @@ def base58_to_bin(base58_str):
         int_data += b58chars.index(base58_str[i]) * pwr_rank
         pwr_rank *= 58
     out_data = int_data.to_bytes(ceil(int_data.bit_length() / 8), "big", signed=False)
-    for i in range(len(base58_str)):
-        if base58_str[i] == "1":
+    for charact in base58_str:
+        if charact == "1":
             out_data = b"\0" + out_data
         else:
             break

@@ -84,6 +84,6 @@ class EC_key_pair:
 
 
 class EC_key_pair_uncpr(EC_key_pair):
-    def get_public_key(self, cmpr=None):
+    def get_public_key(self, compressed=None):
         """Return the uncompressed public key"""
         return super().get_public_key(False)

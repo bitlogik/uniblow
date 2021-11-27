@@ -15,24 +15,23 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 
-def rlp_encode(input):
-    if isinstance(input, int):
-        if input < 0:
+def rlp_encode(input_data):
+    if isinstance(input_data, int):
+        if input_data < 0:
             raise ValueError("RLP deconding error : integer must be positive or null")
-        return rlp_encode(to_binary(input))
-    elif isinstance(input, bytearray):
-        if len(input) == 1 and input[0] == 0:
+        return rlp_encode(to_binary(input_data))
+    if isinstance(input_data, bytearray):
+        if len(input_data) == 1 and input_data[0] == 0:
             return bytearray(b"\x80")
-        if len(input) == 1 and input[0] < 0x80:
-            return input
-        else:
-            return encode_length(len(input), 0x80) + input
-    elif isinstance(input, list):
+        if len(input_data) == 1 and input_data[0] < 0x80:
+            return input_data
+        return encode_length(len(input_data), 0x80) + input_data
+    if isinstance(input_data, list):
         output = bytearray([])
-        for item in input:
+        for item in input_data:
             output += rlp_encode(item)
         return encode_length(len(output), 0xC0) + output
-    raise ValueError("Bad input type : int, list or bytearray required")
+    raise ValueError("Bad input_data type : int, list or bytearray required")
 
 
 def encode_length(L, offset):
@@ -45,8 +44,7 @@ def encode_length(L, offset):
 def to_binary(x):
     if x == 0:
         return bytearray([])
-    else:
-        return to_binary(int(x // 256)) + bytearray([x % 256])
+    return to_binary(int(x // 256)) + bytearray([x % 256])
 
 
 def int2bytearray(i):

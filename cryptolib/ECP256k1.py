@@ -33,10 +33,7 @@ class ECPoint:
         self.__y = y
 
     def __eq__(self, other):
-        if self.__x == other.__x and self.__y == other.__y:
-            return True
-        else:
-            return False
+        return bool(self.__x == other.__x and self.__y == other.__y)
 
     def __add__(self, other):
         if other == INFINITY:
@@ -46,8 +43,7 @@ class ECPoint:
         if self.__x == other.__x:
             if (self.__y + other.__y) % _p == 0:
                 return INFINITY
-            else:
-                return self.double()
+            return self.double()
         slope = ((other.__y - self.__y) * inverse_mod(other.__x - self.__x, _p)) % _p
         x3 = (slope * slope - self.__x - other.__x) % _p
         return ECPoint(x3, (slope * (self.__x - x3) - self.__y) % _p)

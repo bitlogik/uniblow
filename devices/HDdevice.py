@@ -15,7 +15,6 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 
-import json
 from os import path
 from secrets import token_bytes
 import nacl.exceptions
