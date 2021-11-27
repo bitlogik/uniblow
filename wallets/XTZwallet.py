@@ -275,7 +275,8 @@ class XTZ_wallet:
 
     networks = [
         "Mainnet",
-        "FlorenceNet",
+        "GranadaNet",
+        "HangzhouNet",
     ]
 
     wtypes = [
@@ -294,10 +295,14 @@ class XTZ_wallet:
             "m/44'/1'/{}'/{}",
             "m/44'/1'/{}'/0/{}",
         ],
+        [
+            "m/44'/1'/{}'/{}",
+            "m/44'/1'/{}'/0/{}",
+        ],
     ]
 
-    OPERATION_FEE = 400
-    GAZ_LIMIT_SIMPLE_TX = "2500"
+    OPERATION_FEE = 1290
+    GAZ_LIMIT_SIMPLE_TX = "10200"
 
     def __init__(self, network, wtype, device):
         self.network = XTZ_wallet.networks[network].lower()
@@ -337,7 +342,7 @@ class XTZ_wallet:
         # Get history page
         if self.network == "mainnet":
             XTZ_EXPLORER_URL = f"https://tzstats.com/{self.xtz.address}#transfers"
-        else:  # Florence[Net]
+        else:  # Granada[Net] and Hangzhou[Net]
             XTZ_EXPLORER_URL = (
                 f"https://{self.network[:-3]}.tzstats.com/{self.xtz.address}#transfers"
             )
