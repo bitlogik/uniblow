@@ -53,6 +53,6 @@ class BSC_wallet(ETH_wallet):
             self.explorer = "https://www.bscscan.com/address/0x"
         if self.network == "testnet":
             self.chainID = 97
-            rpc_endpoint = "https://data-seed-prebsc-2-s1.binance.org:8545/"
+            rpc_endpoint = "https://data-seed-prebsc-2-s2.binance.org:8545/"
             self.explorer = "https://testnet.bscscan.com/address/0x"
         self.load_base(rpc_endpoint, device, contract_addr, wc_uri, confirm_callback)
