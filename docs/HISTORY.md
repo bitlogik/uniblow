@@ -1,6 +1,13 @@
 
 Uniblow versions history
 
+## 1.2.2
+
+* BTC : Send to Taproot address P2TR (BIP341)
+* Add full Bech32m BIP350 support
+* Update XTZ networks and parameters
+* Adding Electrum Old mnemonic in SeedWatcher
+
 ## 1.2.0
 
 * Full account and index derivation options

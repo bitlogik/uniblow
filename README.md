@@ -37,6 +37,7 @@ Compatible with the following blockchains :
     * Standard wallet (P2PKH)
     * Segwit P2SH compatibility
     * Full Segwit bech32 (P2WPKH)
+    * Send to Taproot Bech32m address (P2TR)
 * ETH
     * mainnet, Rinkeby, Ropsten, Kovan and Goerli networks
     * ERC20 tokens
@@ -67,7 +68,7 @@ Compatible with the following blockchains :
 * XTZ
     * tz1 wallet
     * tz2 wallet
-    * Main Tezos and Florence testnet networks
+    * Main Tezos, testnet Granada and Hangzhou networks
 
 
 Run Uniblow
@@ -148,16 +149,15 @@ If you setup a password but forget it, there would be no way to recover your
 coins.
 
 The key is encrypted and stored in JSON and hex in the *BasicFileWallet.key* file, in the
-user data folder for Uniblow. Hence the name "BasicFile" for this device. The key of
-this wallet is in a file named *BasicFileWallet.key*, stored in the same uniblow
-current directory. To backup it, copy the file elsewhere. To remove this wallet
+user data folder for Uniblow. Hence the name "BasicFile" for this device. To backup this
+wallet key, copy the file elsewhere. To remove this wallet
 and start a fresh one, delete this file. You can also rename it and that would
 start a new different file wallet, and keep the first wallet aside. In this
 case, rename back to BasicFileWallet and you read back the first wallet.
 
 The folder where the key file is stored, sits in the user data directory.
 
-* Windows :  C:\\Users\\\<username\>\\AppData\\Local\\BitLogiK\\Uniblow\\keys\\
+* Windows :  C:\\Users\\<username\>\\AppData\\Local\\BitLogiK\\Uniblow\\keys\\
 * Linux   :  ~/.local/share/Uniblow/keys/  or in $XDG_DATA_HOME if defined
 * MacOS   :  ~/Library/Application Support/Uniblow/keys/
 
