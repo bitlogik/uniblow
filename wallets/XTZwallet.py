@@ -63,7 +63,6 @@ class RPC_api:
                 data=data,
             )
             webrsp = urllib.request.urlopen(req, timeout=6)
-            # return json.load(webrsp)
             resp = json.load(webrsp)
             return resp
         except Exception as exc:
