@@ -166,7 +166,7 @@ class TopPanel ( wx.Panel ):
 
         self.balance_info.SetFont( wx.Font( 15, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, False, wx.EmptyString ) )
 
-        bSizer16.Add( self.balance_info, 0, wx.ALIGN_BOTTOM|wx.TOP|wx.LEFT, 16 )
+        bSizer16.Add( self.balance_info, 0, wx.ALIGN_BOTTOM|wx.TOP|wx.LEFT, 20 )
 
 
         bSizer18.Add( bSizer16, 0, wx.TOP, 16 )
