@@ -1,6 +1,13 @@
 
 Uniblow versions history
 
+## 1.3.0
+
+* Add FTM, CELO and AVAX-c
+* Gas price compatible with less than a Gwei
+* RPC calls more reliable
+* Enforce check on WalletConnect version
+
 ## 1.2.2
 
 * BTC : Send to Taproot address P2TR (BIP341)
