@@ -132,15 +132,15 @@ class ETHwalletCore:
     def prepare(self, toaddr, paymentvalue, gprice, glimit, data=bytearray(b"")):
         """Build a transaction to be signed.
         toaddr in hex without 0x
-        value in wei, gprice in Gwei
+        value in wei, gprice in Wei
         """
         if self.ERC20:
             maxspendable = self.getbalance(False)
             balance_eth = self.getbalance()
-            if balance_eth < ((gprice * glimit) * GWEI_UNIT):
+            if balance_eth < (gprice * glimit):
                 raise NotEnoughTokens("Not enough native ETH funding for the tx fee")
         else:
-            maxspendable = self.getbalance() - ((gprice * glimit) * GWEI_UNIT)
+            maxspendable = self.getbalance() - (gprice * glimit)
         if paymentvalue > maxspendable or paymentvalue < 0:
             if self.ERC20:
                 sym = self.token_symbol
@@ -148,7 +148,7 @@ class ETHwalletCore:
                 sym = "native ETH"
             raise NotEnoughTokens(f"Not enough {sym} tokens for the tx")
         self.nonce = int2bytearray(self.getnonce())
-        self.gasprice = int2bytearray(gprice * GWEI_UNIT)
+        self.gasprice = int2bytearray(gprice)
         self.startgas = int2bytearray(glimit)
         if self.ERC20:
             self.to = bytearray.fromhex(self.ERC20[2:])
@@ -504,9 +504,9 @@ class ETH_wallet:
             value = int(value, 16)
         gas_price = txdata.get("gasPrice", 0)
         if gas_price != 0:
-            gas_price = int(gas_price, 16) // GWEI_UNIT
+            gas_price = int(gas_price, 16)
         else:
-            gas_price = self.eth.api.get_gasprice() // GWEI_UNIT
+            gas_price = self.eth.api.get_gasprice()
         gas_limit = txdata.get("gas", 90000)
         if gas_limit != 90000:
             gas_limit = int(gas_limit, 16)
@@ -514,9 +514,9 @@ class ETH_wallet:
             "WalletConnect transaction request :\n\n"
             f" To    :  0x{to_addr}\n"
             f" Value :  {value / (10 ** self.eth.decimals)} {self.coin}\n"
-            f" Gas price  : {gas_price} Gwei\n"
+            f" Gas price  : {gas_price / GWEI_UNIT} Gwei\n"
             f" Gas limit  : {gas_limit}\n"
-            f"Max fee cost: {gas_limit*gas_price/GWEI_UNIT} {self.coin}\n"
+            f"Max fee cost: {gas_limit*gas_price / (10 ** self.eth.decimals)} {self.coin}\n"
         )
         if self.confirm_callback(request_message):
             data_hex = txdata.get("data", "0x")
@@ -531,7 +531,7 @@ class ETH_wallet:
             gazlimit = ETH_wallet.GAZ_LIMIT_SIMPLE_TX
         if to_account.startswith("0x"):
             to_account = to_account[2:]
-        gaz_price = self.eth.api.get_gasprice() // GWEI_UNIT  # gwei per gaz unit
+        gaz_price = self.eth.api.get_gasprice()  # wei per gaz unit
         if fee_priority == 0:
             gaz_price = int(gaz_price * 0.9)
         elif fee_priority == 1:
@@ -553,7 +553,7 @@ class ETH_wallet:
             gazlimit = ETH_wallet.GAZ_LIMIT_SIMPLE_TX
         if to_account.startswith("0x"):
             to_account = to_account[2:]
-        gaz_price = self.eth.api.get_gasprice() // GWEI_UNIT
+        gaz_price = self.eth.api.get_gasprice()
         if fee_priority == 0:
             gaz_price = int(gaz_price * 0.9)
         elif fee_priority == 1:
@@ -565,7 +565,7 @@ class ETH_wallet:
         if self.eth.ERC20:
             fee = 0
         else:
-            fee = int(gazlimit * gaz_price * GWEI_UNIT)
+            fee = int(gazlimit * gaz_price)
         tx_data = self.build_tx(amount - fee, gaz_price, gazlimit, to_account)
         return "\nDONE, txID : " + self.broadcast_tx(tx_data)
 
