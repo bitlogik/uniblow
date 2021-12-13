@@ -42,18 +42,36 @@ Compatible with the following blockchains :
     * mainnet, Rinkeby, Ropsten, Kovan and Goerli networks
     * ERC20 tokens
     * WalletConnect
-* MATIC
-    * Mainnet and Mumbai networks
-    * ERC20 tokens
-    * WalletConnect
 * BSC
     * mainnet and testnet networks
     * BEP20 tokens
     * WalletConnect
+* MATIC
+    * Mainnet and Mumbai networks
+    * ERC20 tokens
+    * WalletConnect
+* FTM
+    * Mainnet and Testnet networks
+    * ERC20 tokens
+    * WalletConnect Dapps
+* CELO
+    Mainnet, Alfajores and Baklava networks
+    ERC20 tokens
+    WalletConnect Dapps
 * ARB
     * Arbitrum mainnet
     * ERC20 tokens
     * WalletConnect
+* AVAX
+    * Mainnet and Fuji testnet networks
+    * ERC20 tokens
+    * WalletConnect
+* SOL
+    * mainnet and testnet networks
+* XTZ
+    * tz1 wallet
+    * tz2 wallet
+    * Main Tezos, testnet Granada and Hangzhou networks
 * LTC
     * mainnet and testnet networks
     * Standard wallet (P2PKH)
@@ -63,12 +81,6 @@ Compatible with the following blockchains :
 * EOS
     * K1 wallet
     * EOSio and Jungle3 networks
-* SOL
-    * mainnet and testnet networks
-* XTZ
-    * tz1 wallet
-    * tz2 wallet
-    * Main Tezos, testnet Granada and Hangzhou networks
 
 
 Run Uniblow
@@ -224,11 +236,11 @@ To access the direcory where the HDseed is stored, see the *BasicFile device* se
 
 ### ERC20
 
-In ETH, BSC, MATIC or ARB, you can choose the ERC20 wallet account type option. Select a known preset token, or input an ERC20 token address.
+In ETH, BSC, MATIC, FTM, CELO, AVAX or ARB, you can choose the ERC20 wallet account type option. Select a known preset token, or input an ERC20 token address.
 
 ### WalletConnect
 
-In ETH, BSC, MATIC or ARB, Uniblow can connect to a Dapp using the WalletConnect system. Select WalletConnect in the wallet account type, input the wc URI and it will connect to the web3 app using WalletConnect.  
+In ETH, BSC, MATIC, FTM, CELO, AVAX or ARB, Uniblow can connect to a Dapp using the WalletConnect system. Select WalletConnect in the wallet account type, input the wc URI and it will connect to the web3 app using WalletConnect.  
 Note that in this mode, Uniblow disables sending any transaction from the GUI. All the sending transactions have to be performed from the connected web app, after your approval in Uniblow. Else you have to connect to a standard (or token) account type to process a sending transaction using Uniblow directly.
 
 
