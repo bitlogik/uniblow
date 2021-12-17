@@ -79,8 +79,8 @@ coins_list = [
     {"name": "EOSio", "path": "m/44'/194'/{}'/{}/{}", "wallet_lib": EOS_wallet},
     {"name": "Solana", "path": "m/44'/501'/{0}'/{2}", "wallet_lib": SOL_wallet},
     {"name": "Solana (alt. deriv)", "path": "m/44'/501'/{2}", "wallet_lib": SOL_wallet},
-    {"name": "Tezos tz1", "path": "m/44'/1729'/{0}'/{2}", "wallet_lib": XTZ_wallet, "type": 0},
-    {"name": "Tezos tz2", "path": "m/44'/1729'/{}'/{}/{}", "wallet_lib": XTZ_wallet, "type": 1},
+    {"name": "Tezos tz1", "path": "m/44'/1729'/{0}'/{2}", "wallet_lib": XTZ_wallet, "type": 1},
+    {"name": "Tezos tz2", "path": "m/44'/1729'/{}'/{}/{}", "wallet_lib": XTZ_wallet, "type": 0},
 ]
 
 WORDSLEN_LIST = ["12 words", "15 words", "18 words", "21 words", "24 words"]

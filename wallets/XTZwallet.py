@@ -125,8 +125,8 @@ def testaddr(xtz_addr):
 class XTZwalletCore:
 
     key_types = [
-        "ED",
         "K1",
+        "ED",
     ]
 
     SIGED_HEADER = bytes([9, 245, 205, 134, 18])  # edsig
@@ -141,7 +141,7 @@ class XTZwalletCore:
 
     def __init__(self, pubkey, network, wtype, api):
         self.pubkey = pubkey
-        if wtype == 0:
+        if wtype == 1:
             # tz1 Ed
             self.SIG_HEADER = XTZwalletCore.SIGED_HEADER
             PUBKEY_HEADER = XTZwalletCore.PUBKEY_ED_HEADER
@@ -279,24 +279,24 @@ class XTZ_wallet:
     ]
 
     wtypes = [
-        "tz1",
         "tz2",
+        "tz1",
     ]
 
     derive_paths = [
         # mainnet
         [
-            "m/44'/1729'/{}'/{}",
             "m/44'/1729'/{}'/0/{}",
+            "m/44'/1729'/{}'/{}",
         ],
         # testnet
         [
-            "m/44'/1'/{}'/{}",
             "m/44'/1'/{}'/0/{}",
+            "m/44'/1'/{}'/{}",
         ],
         [
-            "m/44'/1'/{}'/{}",
             "m/44'/1'/{}'/0/{}",
+            "m/44'/1'/{}'/{}",
         ],
     ]
 
