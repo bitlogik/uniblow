@@ -1,6 +1,10 @@
 
 Uniblow versions history
 
+## 1.3.1
+
+* Update XTZ wallet
+
 ## 1.3.0
 
 * Add FTM, CELO and AVAX-c
