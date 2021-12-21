@@ -46,7 +46,10 @@ class RPC_api:
     BASE_BLOCK_URL = "/chains/main/blocks/head"
 
     def __init__(self, network):
-        self.url = f"https://{network}.smartpy.io"
+        if network == "mainnet":
+            self.url = f"https://mainnet-tezos.giganode.io"
+        else:
+            self.url = f"https://{network}.smartpy.io"
         self.chainID = self.getData("/chains/main/chain_id")
         self.protocol = self.getData(f"{RPC_api.BASE_BLOCK_URL}/protocols")["protocol"]
 
