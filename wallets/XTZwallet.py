@@ -68,9 +68,9 @@ class RPC_api:
             webrsp = urllib.request.urlopen(req, timeout=6)
             resp = json.load(webrsp)
             return resp
-        except Exception as exc:
+        except urllib.error.HTTPError as e:
             try:
-                err = json.load(exc)
+                err = json.load(e)
             except Exception:
                 err = ""
             if err and err != []:
@@ -78,6 +78,10 @@ class RPC_api:
                 if key not in err[0]:
                     key = "id"
                 raise IOError(f"Error in the node processing :\n{err[0][key]}")
+            raise IOError(f"Error code {e.code}")
+        except urllib.error.URLError as e:
+            raise IOError(e)
+        except Exception:
             raise IOError(f"Error while processing request :\n{full_url}:{str(data)}")
 
     def get_balance(self, addr):
