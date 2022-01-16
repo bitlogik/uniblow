@@ -177,7 +177,7 @@ class ETHwalletCore:
             ]
         )
         self.datahash = sha3(signing_tx)
-        return self.datahash
+        return (signing_tx, self.datahash)
 
     def add_signature(self, signature_der):
         """Add a DER signature into the built transaction."""
@@ -195,6 +195,27 @@ class ETHwalletCore:
         v = int2bytearray(2 * self.chainID + i)
         r = int2bytearray(r)
         s = int2bytearray(s)
+        tx_final = rlp_encode(
+            [
+                self.nonce,
+                self.gasprice,
+                self.startgas,
+                self.to,
+                self.value,
+                self.data,
+                v,
+                r,
+                s,
+            ]
+        )
+        return tx_final.hex()
+
+    def add_vrs(self, vrs):
+        # v from Ledger hardware device is only the 8 bits LSB
+        v_high = self.chainID >> 7
+        v = int2bytearray(256 * v_high + vrs[0])
+        r = int2bytearray(vrs[1])
+        s = int2bytearray(vrs[2])
         tx_final = rlp_encode(
             [
                 self.nonce,
@@ -458,9 +479,13 @@ class ETH_wallet:
         """
         if data is None:
             data = bytearray(b"")
-        hash_to_sign = self.eth.prepare(account, amount, gazprice, ethgazlimit, data)
-        tx_signature = self.current_device.sign(hash_to_sign)
-        return self.eth.add_signature(tx_signature)
+        tx_bin, hash_to_sign = self.eth.prepare(account, amount, gazprice, ethgazlimit, data)
+        if hasattr(self.current_device, "is_hardware") and self.current_device.is_hardware:
+            vrs = self.current_device.sign(tx_bin)
+            return self.eth.add_vrs(vrs)
+        else:
+            tx_signature = self.current_device.sign(hash_to_sign)
+            return self.eth.add_signature(tx_signature)
 
     def broadcast_tx(self, txdata):
         """Broadcast and return the tx hash as 0xhhhhhhhh"""
