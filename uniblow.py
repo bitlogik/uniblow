@@ -54,6 +54,7 @@ DEVICES_LIST = [
     "BasicFile",
     "OpenPGP",
     "HDdevice",
+    "Ledger",
 ]
 
 FEES_PRORITY_TEXT = [
