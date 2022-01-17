@@ -139,7 +139,11 @@ class HIDDongleHIDAPI(Dongle, DongleWait):
         start = time.time()
         data = ""
         while len(data) == 0:
-            data = self.device.read(65)
+            try:
+                data = self.device.read(65)
+            except OSError:
+                self.close()
+                raise BTChipException("Ledger was disconnected.")
             if not len(data):
                 if time.time() - start > timeout:
                     raise BTChipException("Timeout")
@@ -163,6 +167,8 @@ class DongleSmartcard(Dongle):
         logger.debug("Ledger smartcard connected")
 
     def exchange(self, apdu, timeout=20000):
+        if not self.opened:
+            raise BTChipException("Ledger was disconnected.")
         logger.debug(" Sending => %s" % apdu.hex())
         response, sw1, sw2 = self.device.transmit(toBytes(hexlify(apdu)))
         sw = (sw1 << 8) | sw2
@@ -188,7 +194,7 @@ class DongleServer(Dongle):
         try:
             self.socket.connect((self.server, self.port))
         except Exception:
-            raise BTChipException("Proxy connection failed")
+            raise BTChipException("Ledger Proxy connection failed")
         logger.debug("Ledger server connected")
 
     def exchange(self, apdu, timeout=20000):
@@ -261,7 +267,5 @@ def getDongle():
     if (os.getenv("LEDGER_PROXY_ADDRESS") is not None) and (
         os.getenv("LEDGER_PROXY_PORT") is not None
     ):
-        return DongleServer(
-            os.getenv("LEDGER_PROXY_ADDRESS"), int(os.getenv("LEDGER_PROXY_PORT")), debug
-        )
+        return DongleServer(os.getenv("LEDGER_PROXY_ADDRESS"), int(os.getenv("LEDGER_PROXY_PORT")))
     raise BTChipException("No dongle found")

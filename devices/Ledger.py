@@ -57,9 +57,6 @@ class Ledger:
         self.bin_path = parse_bip32_path(path[2:])
 
     def get_public_key(self):
-        #  Invalid status 6b0c -> Locked
-        #  Invalid status 6511 -> No app started
-        #  Invalid status 6A15 -> Bad app started
         result = {}
         showOnScreen = False
         # P2 : 00 not returning chain code, 01 give chain code
@@ -72,7 +69,11 @@ class Ledger:
                 raise Exception("Ledger is locked. Unlock it and retry.")
             if exc.sw == 0x6511:
                 raise Exception("No app started in the Ledger.")
-            raise Exception(exc.sw)
+            if exc.sw == 0x6A15:
+                raise Exception("Error in Ledger. Did you open the right app in the Ledger?")
+            if exc.sw == 0x6F00:
+                raise Exception(exc.message)
+            raise Exception(f"Ledger error {hex(exc.sw)}")
         offset = 0
         result["publicKey"] = response[offset + 1 : offset + 1 + response[offset]]
         offset = offset + 1 + response[offset]
@@ -81,8 +82,6 @@ class Ledger:
         return result["publicKey"].hex()
 
     def sign(self, transaction):
-        #  Invalid status 6a80 -> Require to enable blind signing in the app settings
-        #  Invalid status 6985 -> User rejected the tx
         apdu = [0xE0, 0x04, 0x00, 0x00, len(self.bin_path) + len(transaction)]
         apdu.extend(self.bin_path)
         apdu.extend(transaction)
@@ -90,9 +89,7 @@ class Ledger:
             vrs_bin = self.ledger_device.exchange(bytearray(apdu))
         except BTChipException as exc:
             if exc.sw == 0x6A80:
-                raise Exception(
-                    "This transaction requires to enable blind signing in the app settings."
-                )
+                raise Exception("This transaction requires to enable blind signing in the app settings.")
             if exc.sw == 0x6985:
                 raise Exception("You rejected the transaction.")
             raise Exception(exc.sw)
