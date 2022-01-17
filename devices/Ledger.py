@@ -20,6 +20,10 @@ from devices.btchip.btchipHelpers import parse_bip32_path, read_uint8, read_uint
 from devices.btchip.btchipException import BTChipException
 
 
+class NotinitException(Exception):
+    pass
+
+
 class Ledger:
 
     has_password = False
