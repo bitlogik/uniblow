@@ -21,6 +21,7 @@ from abc import ABCMeta, abstractmethod
 from .btchipException import BTChipException
 from .ledgerWrapper import wrapCommandAPDU, unwrapResponseAPDU
 from binascii import hexlify
+from logging import getLogger
 import time
 import os
 import struct
@@ -41,6 +42,9 @@ try:
     SCARD = True
 except ImportError:
     SCARD = False
+
+
+logger = getLogger(__name__)
 
 
 class DongleWait(object):
@@ -67,16 +71,17 @@ class Dongle(object):
 
 
 class HIDDongleHIDAPI(Dongle, DongleWait):
-    def __init__(self, device, ledger=False, debug=False):
+    def __init__(self, device, ledger=False):
         self.device = device
         self.ledger = ledger
-        self.debug = debug
         self.waitImpl = self
         self.opened = True
+        logger.debug("Ledger HID connected")
 
     def exchange(self, apdu, timeout=20000):
-        if self.debug:
-            print("=> %s" % hexlify(apdu))
+        if not self.opened:
+            raise BTChipException("Ledger was disconnected.")
+        logger.debug(" Sending => %s" % apdu.hex())
         if self.ledger:
             apdu = wrapCommandAPDU(0x0101, apdu, 64)
         padSize = len(apdu) % 64
@@ -125,8 +130,7 @@ class HIDDongleHIDAPI(Dongle, DongleWait):
                 result.extend(bytearray(self.device.read(65)))
         sw = (result[swOffset] << 8) + result[swOffset + 1]
         response = result[dataStart : dataLength + dataStart]
-        if self.debug:
-            print("<= %s%.2x" % (hexlify(response), sw))
+        logger.debug(" Receiving <= %s%.2x" % (response.hex(), sw))
         if sw != 0x9000:
             raise BTChipException("Invalid status %04x" % sw, sw)
         return response
@@ -152,19 +156,17 @@ class HIDDongleHIDAPI(Dongle, DongleWait):
 
 
 class DongleSmartcard(Dongle):
-    def __init__(self, device, debug=False):
+    def __init__(self, device):
         self.device = device
-        self.debug = debug
         self.waitImpl = self
         self.opened = True
+        logger.debug("Ledger smartcard connected")
 
     def exchange(self, apdu, timeout=20000):
-        if self.debug:
-            print("=> %s" % hexlify(apdu))
+        logger.debug(" Sending => %s" % apdu.hex())
         response, sw1, sw2 = self.device.transmit(toBytes(hexlify(apdu)))
         sw = (sw1 << 8) | sw2
-        if self.debug:
-            print("<= %s%.2x" % (toHexString(response).replace(" ", ""), sw))
+        logger.debug(" Receiving <= %s%.2x" % (response.hex(), sw))
         if sw != 0x9000:
             raise BTChipException("Invalid status %04x" % sw, sw)
         return bytearray(response)
@@ -179,26 +181,24 @@ class DongleSmartcard(Dongle):
 
 
 class DongleServer(Dongle):
-    def __init__(self, server, port, debug=False):
+    def __init__(self, server, port):
         self.server = server
         self.port = port
-        self.debug = debug
         self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         try:
             self.socket.connect((self.server, self.port))
         except Exception:
             raise BTChipException("Proxy connection failed")
+        logger.debug("Ledger server connected")
 
     def exchange(self, apdu, timeout=20000):
-        if self.debug:
-            print("=> %s" % hexlify(apdu))
+        logger.debug(" Sending => %s" % apdu.hex())
         self.socket.send(struct.pack(">I", len(apdu)))
         self.socket.send(apdu)
         size = struct.unpack(">I", self.socket.recv(4))[0]
         response = self.socket.recv(size)
         sw = struct.unpack(">H", self.socket.recv(2))[0]
-        if self.debug:
-            print("<= %s%.2x" % (hexlify(response), sw))
+        logger.debug(" Sending <= %s%.2x" % (response.hex(), sw))
         if sw != 0x9000:
             raise BTChipException("Invalid status %04x" % sw, sw)
         return bytearray(response)
@@ -210,7 +210,7 @@ class DongleServer(Dongle):
             pass
 
 
-def getDongle(debug=False):
+def getDongle():
     dev = None
     hidDevicePath = None
     ledger = False
@@ -236,7 +236,7 @@ def getDongle(debug=False):
         dev = hid.device()
         dev.open_path(hidDevicePath)
         dev.set_nonblocking(True)
-        return HIDDongleHIDAPI(dev, ledger, debug)
+        return HIDDongleHIDAPI(dev, ledger)
 
     if SCARD:
         connection = None
@@ -257,7 +257,7 @@ def getDongle(debug=False):
                 connection = None
                 pass
         if connection is not None:
-            return DongleSmartcard(connection, debug)
+            return DongleSmartcard(connection)
     if (os.getenv("LEDGER_PROXY_ADDRESS") is not None) and (
         os.getenv("LEDGER_PROXY_PORT") is not None
     ):

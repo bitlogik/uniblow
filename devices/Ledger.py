@@ -37,7 +37,7 @@ class Ledger:
 
     def open_account(self):
         try:
-            self.ledger_device = getDongle(True)
+            self.ledger_device = getDongle()
         except:
             raise Exception("Ledger not found. In Linux, allow udev rules.")
 
