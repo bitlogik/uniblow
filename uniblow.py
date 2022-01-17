@@ -94,6 +94,7 @@ for device_name in DEVICES_LIST:
 def get_device_class(device_str):
     global pwdException, NotinitException
     device_class = getattr(devices[device_str], device_str)
+    pwdException = ValueError  # Fake value to filter out
     if device_class.has_password:
         pwdException = getattr(devices[device_str], "pwdException")
     NotinitException = getattr(devices[device_str], "NotinitException")
