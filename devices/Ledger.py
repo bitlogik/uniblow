@@ -89,7 +89,9 @@ class Ledger:
             vrs_bin = self.ledger_device.exchange(bytearray(apdu))
         except BTChipException as exc:
             if exc.sw == 0x6A80:
-                raise Exception("This transaction requires to enable blind signing in the app settings.")
+                raise Exception(
+                    "This transaction requires to enable blind signing in the app settings."
+                )
             if exc.sw == 0x6985:
                 raise Exception("You rejected the transaction.")
             raise Exception(exc.sw)

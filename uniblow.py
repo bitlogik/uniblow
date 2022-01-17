@@ -466,9 +466,7 @@ def device_error(exc):
     app.gui_panel.wallopt_choice.Clear()
     app.gui_panel.wallopt_choice.Disable()
     app.gui_panel.devices_choice.SetSelection(0)
-    logger.error(
-        "Error with device : %s", str(exc), exc_info=exc, stack_info=True
-    )
+    logger.error("Error with device : %s", str(exc), exc_info=exc, stack_info=True)
     warn_modal(str(exc))
     return
 
