@@ -418,12 +418,7 @@ def device_selected(device):
                     app.gui_panel.devices_choice.SetSelection(0)
                     return
             except Exception as exc:
-                app.gui_panel.devices_choice.SetSelection(0)
-                warn_modal(str(exc))
-                logger.error(
-                    "Error during device PIN/pwd : %s", str(exc), exc_info=exc, stack_info=True
-                )
-                return
+                return device_error(exc)
         wx.MilliSleep(100)
         app.device = device_loaded
         if app.device.created:
@@ -463,12 +458,28 @@ def wallet_fallback():
     wx.CallLater(180, process_coin_select, coin_sel, net_sel, wallet_type_fallback)
 
 
+def device_error(exc):
+    app.gui_panel.coins_choice.Disable()
+    app.gui_panel.coins_choice.SetSelection(0)
+    app.gui_panel.network_choice.Clear()
+    app.gui_panel.network_choice.Disable()
+    app.gui_panel.wallopt_choice.Clear()
+    app.gui_panel.wallopt_choice.Disable()
+    app.gui_panel.devices_choice.SetSelection(0)
+    logger.error(
+        "Error with device : %s", str(exc), exc_info=exc, stack_info=True
+    )
+    warn_modal(str(exc))
+    return
+
+
 def wallet_error(exc, level="hard"):
     """Process wallet exception"""
     if level == "hard":
         app.gui_panel.network_choice.Clear()
         app.gui_panel.coins_choice.SetSelection(0)
         app.gui_panel.wallopt_choice.Clear()
+        app.gui_panel.wallopt_choice.Disable()
     if hasattr(app, "wallet"):
         erase_option = app.wallet.coin != "BTC"
     else:
@@ -523,7 +534,10 @@ def set_coin(coin, network, wallet_type):
         wx.CallAfter(wallet_fallback)
         return
     except Exception as exc:
-        wallet_error(exc)
+        if str(exc).endswith("disconnected."):
+            device_error(exc)
+        else:
+            wallet_error(exc)
         return
     display_coin(account_id)
 
