@@ -44,7 +44,7 @@ class Ledger(BaseDevice):
         try:
             self.ledger_device = getDongle()
         except:
-            raise Exception("Ledger not found. In Linux, allow udev rules.")
+            raise Exception("Ledger not found. Connect it and unlock. In Linux, allow udev rules.")
         try:
             apdu = [0xE0, 0x06, 0x00, 0x00, 0x00, 0x04]
             eth_app_info = self.ledger_device.exchange(bytearray(apdu))
