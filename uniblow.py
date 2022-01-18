@@ -727,7 +727,9 @@ def transfer(to, amount):
                 exc_info=exc,
                 stack_info=True,
             )
-            if str(exc) == "Error status : 0x6600":
+            if str(exc).endswith("disconnected."):
+                device_error(exc)
+            elif str(exc) == "Error status : 0x6600":
                 warn_modal("User button on PGP device timeout")
             else:
                 warn_modal(str(exc))

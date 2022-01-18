@@ -130,7 +130,7 @@ class Ledger(BaseDevice):
                 )
             if exc.sw == 0x6985:
                 raise Exception("You rejected the transaction.")
-            raise Exception(exc.sw)
+            raise Exception(str(exc))
         v = read_uint8(vrs_bin, 0)
         r = read_uint256(vrs_bin, 1)
         s = read_uint256(vrs_bin, 33)
