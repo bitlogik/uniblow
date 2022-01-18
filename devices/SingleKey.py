@@ -34,6 +34,9 @@ class SKdevice(BaseDevice):
         self.ktype = None
         self.eckey = None
 
+    def open_account(self):
+        raise InvalidOption("SingleKey device can't be opened using this method.")
+
     def open_account_fromint(self, key_int):
         self.eckey_k1 = EC_key_pair(key_int, "K1")
         # self.eckey_r1 = EC_key_pair(key_int, "R1")
