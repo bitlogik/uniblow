@@ -81,3 +81,5 @@ tokens_values = [
         "Wootrade Network (WOO)": "0xcafcd85d8ca7ad1e1c6f82f651fa15e33aefd07b",
     }
 ]
+
+ledger_tokens = {}

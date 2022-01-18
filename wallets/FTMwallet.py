@@ -17,7 +17,7 @@
 
 from copy import deepcopy
 from wallets.ETHwallet import ETH_wallet
-from wallets.FTMtokens import tokens_values
+from wallets.FTMtokens import tokens_values, ledger_tokens
 
 
 class FTM_wallet(ETH_wallet):
@@ -56,3 +56,4 @@ class FTM_wallet(ETH_wallet):
             rpc_endpoint = "https://rpc.testnet.fantom.network/"
             self.explorer = "https://testnet.ftmscan.com//address/0x"
         self.load_base(rpc_endpoint, device, contract_addr, wc_uri, confirm_callback)
+        self.ledger_tokens = ledger_tokens
