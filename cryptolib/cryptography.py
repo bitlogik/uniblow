@@ -40,6 +40,9 @@ CURVES_ORDER = {
 
 def decompress_pubkey(pubkey_hex_compr):
     """From a public key X962 hex compressed to X962 bin uncompressed"""
+    # Key already decompressed ?
+    if len(pubkey_hex_compr) == 130 and pubkey_hex_compr[0] == 4:
+        return pubkey_hex_compr
     ECPub = ECPoint.from_hex(pubkey_hex_compr)
     return ECPub.encode_output(False)
 
