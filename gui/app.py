@@ -223,6 +223,7 @@ class UniblowApp(App):
         self.gui_panel.copy_button.SetCursor(HAND_CURSOR)
         self.gui_panel.send_button.SetCursor(HAND_CURSOR)
         self.gui_panel.send_all.SetCursor(HAND_CURSOR)
+        self.gui_panel.btn_chkaddr.SetCursor(HAND_CURSOR)
         return True
 
     def BringWindowToFront(self):
