@@ -49,7 +49,6 @@ class Ledger(BaseDevice):
             apdu = [0xE0, 0x06, 0x00, 0x00, 0x00, 0x04]
             eth_app_info = self.ledger_device.exchange(bytearray(apdu))
         except BTChipException as exc:
-            print("Init resp app cfg", hex(exc.sw))
             if exc.sw == 0x6D00:
                 raise Exception("Error in Ledger. Did you open the Ethereum app in the Ledger?")
             if exc.sw == 0x6D02:

@@ -774,8 +774,6 @@ def send_all(ev):
 
 
 def end_checkwallet(modal, result):
-    print("end cw")
-    print(modal)
     wx.MilliSleep(200)
     modal.Update(100, "done")
     wx.MilliSleep(200)
@@ -784,7 +782,6 @@ def end_checkwallet(modal, result):
 
 
 def check_wallet(evt):
-    print("check wallet")
     progress_modal = wx.ProgressDialog(
         "",
         "",
