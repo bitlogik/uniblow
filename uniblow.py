@@ -20,6 +20,7 @@ try:
 except ImportError:
     # Not Windows, anyway
     pass
+from copy import copy as ccopy
 from functools import partial
 from importlib import import_module
 from logging import basicConfig, DEBUG, getLogger
@@ -360,7 +361,7 @@ def device_selected(device):
     erase_info(True)
     sel_device = device.GetInt()
     device_sel_name = DEVICES_LIST[sel_device - 1]
-    coins_list = SUPPORTED_COINS
+    coins_list = ccopy(SUPPORTED_COINS)
     if device_sel_name == "Ledger":
         coins_list = [
             "ETH",
