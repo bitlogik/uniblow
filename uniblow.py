@@ -20,6 +20,7 @@ try:
 except ImportError:
     # Not Windows, anyway
     pass
+from functools import partial
 from importlib import import_module
 from logging import basicConfig, DEBUG, getLogger
 from io import BytesIO
@@ -181,6 +182,7 @@ def erase_info(reset=False):
     app.gui_panel.send_button.Disable()
     app.gui_panel.wallopt_label.Disable()
     app.gui_panel.wallopt_choice.Disable()
+    app.gui_panel.btn_chkaddr.Hide()
     if reset:
         app.gui_panel.network_choice.SetSelection(0)
         app.gui_panel.wallopt_choice.SetSelection(0)
@@ -322,6 +324,7 @@ def cb_open_wallet(wallet_obj, pkey, waltype, sw_frame):
     app.device = key_device
     app.wallet = wallet_obj(key_device)
     sw_frame.Close()
+    app.gui_panel.btn_chkaddr.Hide()
     app.gui_panel.devices_choice.SetSelection(1)
     app.gui_panel.coins_choice.Clear()
     app.gui_panel.coins_choice.Append(app.wallet.coin)
@@ -348,15 +351,29 @@ def cb_open_wallet(wallet_obj, pkey, waltype, sw_frame):
 def device_selected(device):
     global DEFAULT_PASSWORD
     close_device()
+    app.gui_panel.btn_chkaddr.Hide()
     app.gui_panel.coins_choice.Disable()
     app.gui_panel.coins_choice.SetSelection(0)
     app.gui_panel.network_choice.Clear()
     app.gui_panel.network_choice.Disable()
     app.gui_panel.wallopt_choice.Clear()
     erase_info(True)
-    app.load_coins_list(SUPPORTED_COINS)
     sel_device = device.GetInt()
     device_sel_name = DEVICES_LIST[sel_device - 1]
+    coins_list = SUPPORTED_COINS
+    if device_sel_name == "Ledger":
+        coins_list = [
+            "ETH",
+            "BSC",
+            "MATIC",
+            "FTM",
+            "CELO",
+            "ARB",
+            "AVAX",
+        ]
+    if device_sel_name == "OpenPGP":
+        coins_list.remove("SOL")
+    app.load_coins_list(coins_list)
     if sel_device == 1:
         # Seed Watcher
         start_seedwatcher(app, cb_open_wallet)
@@ -494,6 +511,8 @@ def device_error(exc):
     app.gui_panel.wallopt_choice.Clear()
     app.gui_panel.wallopt_choice.Disable()
     app.gui_panel.devices_choice.SetSelection(0)
+    app.gui_panel.btn_chkaddr.Hide()
+    erase_info(True)
     logger.error("Error with device : %s", str(exc), exc_info=exc, stack_info=True)
     warn_modal(str(exc))
     return
@@ -573,6 +592,8 @@ def set_coin(coin, network, wallet_type):
         return
     if not check_coin_consistency(network_num=network):
         return
+    if app.device.__class__.__name__ == "Ledger":
+        app.gui_panel.btn_chkaddr.Show()
     display_coin(account_id)
 
 
@@ -749,6 +770,35 @@ def send_all(ev):
     transfer(to, "ALL")
 
 
+def end_checkwallet(modal, result):
+    print("end cw")
+    print(modal)
+    wx.MilliSleep(200)
+    modal.Update(100, "done")
+    wx.MilliSleep(200)
+    if not result:
+        warn_modal("The address verification was rejected on the Ledger.")
+
+
+def check_wallet(evt):
+    print("check wallet")
+    progress_modal = wx.ProgressDialog(
+        "",
+        "",
+        style=wx.PD_APP_MODAL | wx.PD_AUTO_HIDE | wx.PD_SMOOTH,
+    )
+    wx.MilliSleep(100)
+    wait_msg = "Verify the address on the Ledger screen."
+    progress_modal.Update(50, wait_msg)
+    wx.MilliSleep(100)
+    try:
+        app.device.get_public_key(partial(end_checkwallet, progress_modal))
+    except Exception as exc:
+        progress_modal.Update(100, "failure")
+        wx.MilliSleep(200)
+        wx.CallAfter(device_error, exc)
+
+
 def start_main_app():
     app.load_devices(DEVICES_LIST)
     app.load_coins_list(SUPPORTED_COINS)
@@ -763,6 +813,8 @@ def start_main_app():
     app.gui_panel.hist_button.Bind(wx.EVT_BUTTON, disp_history)
     app.gui_panel.copy_button.Bind(wx.EVT_BUTTON, copy_account)
     app.gui_panel.fee_slider.Bind(wx.EVT_SCROLL_CHANGED, fee_changed)
+    app.gui_panel.btn_chkaddr.Bind(wx.EVT_BUTTON, check_wallet)
+    app.gui_panel.btn_chkaddr.Hide()
     app.gui_frame.Show()
 
 

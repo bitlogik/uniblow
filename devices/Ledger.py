@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 # -*- coding: utf8 -*-
 
-# UNIBLOW Ledger hardware device
+# UNIBLOW Ledger hardware device for EVM
 # Copyright (C) 2021 BitLogiK
 
 # This program is free software: you can redistribute it and/or modify
@@ -56,30 +56,36 @@ class Ledger:
     def derive_key(self, path, key_type):
         self.bin_path = parse_bip32_path(path[2:])
 
-    def get_public_key(self):
+    def get_public_key(self, showOnScreenCB=None):
         result = {}
-        showOnScreen = False
-        # P2 : 00 not returning chain code, 01 give chain code
-        apdu = [0xE0, 0x02, 0x01 if showOnScreen else 0x00, 00, len(self.bin_path)]
+        apdu = [0xE0, 0x02, 0x00 if showOnScreenCB is None else 0x01, 00, len(self.bin_path)]
         apdu.extend(self.bin_path)
+        approved = False
         try:
             response = self.ledger_device.exchange(bytearray(apdu))
+            approved = True
         except BTChipException as exc:
             if exc.sw == 0x6B0C:
                 raise Exception("Ledger is locked. Unlock it and retry.")
             if exc.sw == 0x6511:
-                raise Exception("No app started in the Ledger.")
+                raise Exception(
+                    "No app started in the Ledger. Install and open the Ethereum app in the Ledger."
+                )
             if exc.sw == 0x6A15:
-                raise Exception("Error in Ledger. Did you open the right app in the Ledger?")
+                raise Exception("Error in Ledger. Did you open the Ethereum app in the Ledger?")
             if exc.sw == 0x6F00:
                 raise Exception(exc.message)
-            raise Exception(f"Ledger error {hex(exc.sw)}")
-        offset = 0
-        result["publicKey"] = response[offset + 1 : offset + 1 + response[offset]]
-        offset = offset + 1 + response[offset]
-        result["address"] = str(response[offset + 1 : offset + 1 + response[offset]])
-        offset = offset + 1 + response[offset]
-        return result["publicKey"].hex()
+            if exc.sw != 0x6985:
+                raise Exception(f"Ledger error {hex(exc.sw)}")
+        if showOnScreenCB is not None:
+            showOnScreenCB(approved)
+        if approved:
+            offset = 0
+            result["publicKey"] = response[offset + 1 : offset + 1 + response[offset]]
+            offset = offset + 1 + response[offset]
+            result["address"] = str(response[offset + 1 : offset + 1 + response[offset]])
+            offset = offset + 1 + response[offset]
+            return result["publicKey"].hex()
 
     def sign(self, transaction):
         apdu = [0xE0, 0x04, 0x00, 0x00, len(self.bin_path) + len(transaction)]
@@ -90,7 +96,7 @@ class Ledger:
         except BTChipException as exc:
             if exc.sw == 0x6A80:
                 raise Exception(
-                    "This transaction requires to enable blind signing in the app settings."
+                    "This transaction requires to enable blind signing in the Ledger app settings."
                 )
             if exc.sw == 0x6985:
                 raise Exception("You rejected the transaction.")

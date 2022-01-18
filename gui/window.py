@@ -114,12 +114,22 @@ class TopPanel ( wx.Panel ):
 
         bSizer5 = wx.BoxSizer( wx.VERTICAL )
 
+        bSizer201 = wx.BoxSizer( wx.HORIZONTAL )
+
         self.account_label = wx.StaticText( self, wx.ID_ANY, u"Account", wx.DefaultPosition, wx.DefaultSize, 0 )
         self.account_label.Wrap( -1 )
 
         self.account_label.SetFont( wx.Font( 14, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, False, wx.EmptyString ) )
 
-        bSizer5.Add( self.account_label, 0, wx.TOP|wx.RIGHT|wx.LEFT, 5 )
+        bSizer201.Add( self.account_label, 0, wx.ALIGN_CENTER_VERTICAL|wx.RIGHT|wx.LEFT, 5 )
+
+        self.btn_chkaddr = wx.Button( self, wx.ID_ANY, u"Check on Ledger screen", wx.DefaultPosition, wx.DefaultSize, 0 )
+        self.btn_chkaddr.SetFont( wx.Font( 10, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, False, wx.EmptyString ) )
+
+        bSizer201.Add( self.btn_chkaddr, 0, wx.LEFT|wx.ALIGN_CENTER_VERTICAL, 80 )
+
+
+        bSizer5.Add( bSizer201, 0, 0, 5 )
 
         self.account_addr = wx.TextCtrl( self, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.Size( 585,-1 ), wx.TE_READONLY|wx.BORDER_NONE )
         self.account_addr.SetFont( wx.Font( 14, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, False, wx.EmptyString ) )
