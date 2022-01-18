@@ -2,6 +2,7 @@
 *******************************************************************************
 *   BTChip Bitcoin Hardware Wallet Python API
 *   (c) 2014 BTChip
+*   (c) 2022 BitLogiK
 *
 *  Licensed under the Apache License, Version 2.0 (the "License");
 *  you may not use this file except in compliance with the License.
@@ -34,9 +35,8 @@ except ImportError:
     HID = False
 
 try:
-    from smartcard.Exceptions import NoCardException
     from smartcard.System import readers
-    from smartcard.util import toHexString, toBytes
+    from smartcard.util import toBytes
 
     SCARD = True
 except ImportError:
@@ -46,7 +46,7 @@ except ImportError:
 logger = getLogger(__name__)
 
 
-class DongleWait(object):
+class DongleWait:
     __metaclass__ = ABCMeta
 
     @abstractmethod
@@ -54,7 +54,7 @@ class DongleWait(object):
         pass
 
 
-class Dongle(object):
+class Dongle:
     __metaclass__ = ABCMeta
 
     @abstractmethod
@@ -70,6 +70,8 @@ class Dongle(object):
 
 
 class HIDDongleHIDAPI(Dongle, DongleWait):
+    """Ledger dongle through HID."""
+
     def __init__(self, device, ledger=False):
         self.device = device
         self.ledger = ledger
@@ -80,7 +82,7 @@ class HIDDongleHIDAPI(Dongle, DongleWait):
     def exchange(self, apdu, timeout=20000):
         if not self.opened:
             raise BTChipException("Ledger was disconnected.")
-        logger.debug(" Sending => %s" % apdu.hex())
+        logger.debug(" Sending => %s", apdu.hex())
         if self.ledger:
             apdu = wrapCommandAPDU(0x0101, apdu, 64)
         padSize = len(apdu) % 64
@@ -129,7 +131,7 @@ class HIDDongleHIDAPI(Dongle, DongleWait):
                 result.extend(bytearray(self.device.read(65)))
         sw = (result[swOffset] << 8) + result[swOffset + 1]
         response = result[dataStart : dataLength + dataStart]
-        logger.debug(" Receiving <= %s%.2x" % (response.hex(), sw))
+        logger.debug(" Receiving <= %s%.2x", response.hex(), sw)
         if sw != 0x9000:
             raise BTChipException("Invalid status %04x" % sw, sw)
         return response
@@ -159,6 +161,8 @@ class HIDDongleHIDAPI(Dongle, DongleWait):
 
 
 class DongleSmartcard(Dongle):
+    """Ledger dongle through smartcard CCID."""
+
     def __init__(self, device):
         self.device = device
         self.waitImpl = self
@@ -168,10 +172,10 @@ class DongleSmartcard(Dongle):
     def exchange(self, apdu, timeout=20000):
         if not self.opened:
             raise BTChipException("Ledger was disconnected.")
-        logger.debug(" Sending => %s" % apdu.hex())
+        logger.debug(" Sending => %s", apdu.hex())
         response, sw1, sw2 = self.device.transmit(toBytes(apdu.hex()))
         sw = (sw1 << 8) | sw2
-        logger.debug(" Receiving <= %s%.2x" % (response.hex(), sw))
+        logger.debug(" Receiving <= %s%.2x", response.hex(), sw)
         if sw != 0x9000:
             raise BTChipException("Invalid status %04x" % sw, sw)
         return bytearray(response)
@@ -186,6 +190,8 @@ class DongleSmartcard(Dongle):
 
 
 class DongleServer(Dongle):
+    """Ledger dongle through HTTP gateway."""
+
     def __init__(self, server, port):
         self.server = server
         self.port = port
@@ -197,13 +203,13 @@ class DongleServer(Dongle):
         logger.debug("Ledger server connected")
 
     def exchange(self, apdu, timeout=20000):
-        logger.debug(" Sending => %s" % apdu.hex())
+        logger.debug(" Sending => %s", apdu.hex())
         self.socket.send(struct.pack(">I", len(apdu)))
         self.socket.send(apdu)
         size = struct.unpack(">I", self.socket.recv(4))[0]
         response = self.socket.recv(size)
         sw = struct.unpack(">H", self.socket.recv(2))[0]
-        logger.debug(" Sending <= %s%.2x" % (response.hex(), sw))
+        logger.debug(" Sending <= %s%.2x", response.hex(), sw)
         if sw != 0x9000:
             raise BTChipException("Invalid status %04x" % sw, sw)
         return bytearray(response)
