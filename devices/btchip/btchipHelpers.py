@@ -39,7 +39,7 @@ def parse_bip32_path(path):
             result += writeUint32BE(int(element[0]))
         else:
             result += writeUint32BE(0x80000000 | int(element[0]))
-    return bytearray([len(elements)]) + result
+    return bytes([len(elements)]) + result
 
 
 def read_uint8(data, offset):

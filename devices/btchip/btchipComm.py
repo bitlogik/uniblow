@@ -20,7 +20,6 @@
 from abc import ABCMeta, abstractmethod
 from .btchipException import BTChipException
 from .ledgerWrapper import wrapCommandAPDU, unwrapResponseAPDU
-from binascii import hexlify
 from logging import getLogger
 import time
 import os
@@ -170,7 +169,7 @@ class DongleSmartcard(Dongle):
         if not self.opened:
             raise BTChipException("Ledger was disconnected.")
         logger.debug(" Sending => %s" % apdu.hex())
-        response, sw1, sw2 = self.device.transmit(toBytes(hexlify(apdu)))
+        response, sw1, sw2 = self.device.transmit(toBytes(apdu.hex()))
         sw = (sw1 << 8) | sw2
         logger.debug(" Receiving <= %s%.2x" % (response.hex(), sw))
         if sw != 0x9000:
