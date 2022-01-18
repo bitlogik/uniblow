@@ -14,28 +14,29 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
+from logging import getLogger
 
+from devices.BaseDevice import BaseDevice
 from devices.btchip.btchipComm import getDongle
 from devices.btchip.btchipHelpers import parse_bip32_path, read_uint8, read_uint256
 from devices.btchip.btchipException import BTChipException
+
+
+logger = getLogger(__name__)
 
 
 class NotinitException(Exception):
     pass
 
 
-class Ledger:
+class Ledger(BaseDevice):
 
-    has_password = False
-    has_admin_password = False
     is_HD = True
     is_hardware = True
+    has_hardware_button = True
 
     def __init__(self):
         self.created = False
-        self.has_hardware_button = True
-        self.account = "0"
-        self.aindex = "0"
         self.ledger_device = None
         self.bin_path = None
 
@@ -44,6 +45,20 @@ class Ledger:
             self.ledger_device = getDongle()
         except:
             raise Exception("Ledger not found. In Linux, allow udev rules.")
+        try:
+            apdu = [0xE0, 0x06, 0x00, 0x00, 0x00, 0x04]
+            eth_app_info = self.ledger_device.exchange(bytearray(apdu))
+        except BTChipException as exc:
+            print("Init resp app cfg", hex(exc.sw))
+            if exc.sw == 0x6D00:
+                raise Exception("Error in Ledger. Did you open the Ethereum app in the Ledger?")
+            if exc.sw == 0x6D02:
+                raise Exception(
+                    "No app started in the Ledger. Install and open the Ethereum app in the Ledger."
+                )
+            raise Exception(f"Error {hex(exc.sw)} in Ledger.")
+        eth_version = f"{eth_app_info[1]}.{eth_app_info[2]}.{eth_app_info[3]}"
+        logger.debug(f"Ledger ETH app version {eth_version}")
 
     def get_address_index(self):
         """Get the account address index, last BIP44 derivation number as str"""
