@@ -2,6 +2,7 @@
 *******************************************************************************
 *   BTChip Bitcoin Hardware Wallet Python API
 *   (c) 2014 BTChip
+*   (c) 2022 BitLogiK
 *
 *  Licensed under the Apache License, Version 2.0 (the "License");
 *  you may not use this file except in compliance with the License.
