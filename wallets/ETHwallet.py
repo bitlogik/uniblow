@@ -20,7 +20,7 @@ import json
 from cryptolib.cryptography import public_key_recover, decompress_pubkey, sha3
 from cryptolib.coins.ethereum import rlp_encode, int2bytearray, uint256, read_string
 from wallets.wallets_utils import shift_10, compare_eth_addresses, InvalidOption, NotEnoughTokens
-from wallets.ETHtokens import tokens_values
+from wallets.ETHtokens import tokens_values, ledger_tokens
 from wallets.typed_data_hash import typed_sign_hash, print_text_query
 from pyweb3 import Web3Client
 from pywalletconnect import WCClient, WCClientInvalidOption, WCClientException
@@ -333,6 +333,7 @@ class ETH_wallet:
             # If an Infura key is provided, also use it for mainnet
             rpc_endpoint = f"https://{self.network}.infura.io/v3/{INFURA_KEY}"
         self.load_base(rpc_endpoint, device, contract_addr, wc_uri, confirm_callback)
+        self.ledger_tokens = ledger_tokens
 
     def load_base(self, rpc_endpoint, device, contract_addr, wc_uri, confirm_callback):
         """Finish initialization, second part common for all chains"""
@@ -481,6 +482,16 @@ class ETH_wallet:
             data = bytearray(b"")
         tx_bin, hash_to_sign = self.eth.prepare(account, amount, gazprice, ethgazlimit, data)
         if self.current_device.is_hardware:
+            if self.eth.ERC20:
+                # Token known by Ledger ?
+                ledger_info = self.ledger_tokens.get(self.eth.ERC20)
+                if ledger_info:
+                    # Known token : provide the trusted info to the device
+                    name = ledger_info["ticker"]
+                    data_sig = ledger_info["signature"]
+                    self.current_device.register_token(
+                        name, self.eth.ERC20[2:], self.eth.decimals, self.chainID, data_sig
+                    )
             vrs = self.current_device.sign(tx_bin)
             return self.eth.add_vrs(vrs)
         else:

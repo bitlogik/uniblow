@@ -17,7 +17,7 @@
 
 from copy import deepcopy
 from wallets.ETHwallet import ETH_wallet
-from wallets.CELOtokens import tokens_values
+from wallets.CELOtokens import tokens_values, ledger_tokens
 
 
 class CELO_wallet(ETH_wallet):
@@ -64,3 +64,4 @@ class CELO_wallet(ETH_wallet):
             rpc_endpoint = "https://baklava-forno.celo-testnet.org/"
             self.explorer = "https://baklava-blockscout.celo-testnet.org/address/0x"
         self.load_base(rpc_endpoint, device, contract_addr, wc_uri, confirm_callback)
+        self.ledger_tokens = ledger_tokens

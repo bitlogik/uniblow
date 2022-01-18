@@ -45,3 +45,5 @@ tokens_values = [
         "Celo Euro (cEUR)": "0xf9ecE301247aD2CE21894941830A2470f4E774ca",
     },
 ]
+
+ledger_tokens = {}

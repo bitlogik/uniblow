@@ -17,7 +17,7 @@
 
 from copy import deepcopy
 from wallets.ETHwallet import ETH_wallet
-from wallets.ARBtokens import tokens_values
+from wallets.ARBtokens import tokens_values, ledger_tokens
 
 
 class ARB_wallet(ETH_wallet):
@@ -46,3 +46,4 @@ class ARB_wallet(ETH_wallet):
         rpc_endpoint = "https://arb1.arbitrum.io/rpc/"
         self.explorer = "https://arbiscan.io/address/0x"
         self.load_base(rpc_endpoint, device, contract_addr, wc_uri, confirm_callback)
+        self.ledger_tokens = ledger_tokens

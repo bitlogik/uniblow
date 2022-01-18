@@ -95,3 +95,5 @@ tokens_values = [
     # Testnet
     {},
 ]
+
+ledger_tokens = {}
