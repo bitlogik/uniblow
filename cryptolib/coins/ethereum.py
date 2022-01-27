@@ -18,7 +18,7 @@
 def rlp_encode(input_data):
     if isinstance(input_data, int):
         if input_data < 0:
-            raise ValueError("RLP deconding error : integer must be positive or null")
+            raise ValueError("RLP encoding error : integer must be positive or null")
         return rlp_encode(to_binary(input_data))
     if isinstance(input_data, bytearray):
         if len(input_data) == 1 and input_data[0] == 0:
@@ -34,11 +34,11 @@ def rlp_encode(input_data):
     raise ValueError("Bad input_data type : int, list or bytearray required")
 
 
-def encode_length(L, offset):
-    if L < 56:
-        return bytearray([L + offset])
-    BL = to_binary(L)
-    return bytearray([len(BL) + offset + 55]) + BL
+def encode_length(Lon, offset):
+    if Lon < 56:
+        return bytearray([Lon + offset])
+    BLon = to_binary(Lon)
+    return bytearray([len(BLon) + offset + 55]) + BLon
 
 
 def to_binary(x):
