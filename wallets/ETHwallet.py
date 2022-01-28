@@ -16,6 +16,7 @@
 
 
 import json
+from logging import getLogger
 
 from cryptolib.cryptography import public_key_recover, decompress_pubkey, sha2, sha3
 from cryptolib.coins.ethereum import rlp_encode, int2bytearray, uint256, read_string
@@ -28,6 +29,9 @@ from pywalletconnect import WCClient, WCClientInvalidOption, WCClientException
 
 ETH_units = 18
 GWEI_UNIT = 10 ** 9
+
+
+logger = getLogger(__name__)
 
 
 # ERC20 functions codes
@@ -440,6 +444,17 @@ class ETH_wallet:
             id_request = wc_message[0]
             method = wc_message[1]
             parameters = wc_message[2]
+            logger.debug(
+                "WC request id: %s, method: %s, params: %s", id_request, method, parameters
+            )
+            if method == "wc_sessionPayload":
+                # Read if WCv2 and extract to v1
+                logger.debug("WCv2 request")
+                if parameters.get("request"):
+                    logger.debug("request decoding")
+                    method = parameters["request"].get("method")
+                    parameters = parameters["request"].get("params")
+                    logger.debug("Actual method: %s, params: %s", method, parameters)
             if method == "wc_sessionUpdate":
                 if parameters[0].get("approved") is False:
                     raise Exception("Disconnected by the web app service.")
