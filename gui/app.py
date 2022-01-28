@@ -124,6 +124,16 @@ class app_option_panel(gui.window.OptionPanel):
             self.option_value = self.preset_values.get(preset_choice, "NotSelected")
         self.GetParent().EndModal(ID_OK)
 
+    def pasteValue(self, event):
+        """Paste the clipboard value in new_choice input field."""
+        event.Skip()
+        text_data = TextDataObject()
+        if TheClipboard.Open():
+            success = TheClipboard.GetData(text_data)
+            TheClipboard.Close()
+        if success:
+            self.new_choice.SetValue(text_data.GetText())
+
     def cancelOption(self, event):
         event.Skip()
         self.GetParent().EndModal(ID_CANCEL)

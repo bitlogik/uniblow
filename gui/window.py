@@ -437,7 +437,7 @@ class HDPanel ( wx.Panel ):
 class OptionDialog ( wx.Dialog ):
 
     def __init__( self, parent ):
-        wx.Dialog.__init__ ( self, parent, id = wx.ID_ANY, title = wx.EmptyString, pos = wx.DefaultPosition, size = wx.Size( 453,325 ), style = wx.DEFAULT_DIALOG_STYLE )
+        wx.Dialog.__init__ ( self, parent, id = wx.ID_ANY, title = wx.EmptyString, pos = wx.DefaultPosition, size = wx.Size( 455,375 ), style = wx.DEFAULT_DIALOG_STYLE )
 
         self.SetSizeHints( wx.DefaultSize, wx.DefaultSize )
 
@@ -490,6 +490,9 @@ class OptionPanel ( wx.Panel ):
 
         bSizer18.Add( self.custom_text, 0, wx.ALL|wx.ALIGN_CENTER_HORIZONTAL, 5 )
 
+        self.m_butpaste = wx.Button( self, wx.ID_ANY, u"Paste", wx.DefaultPosition, wx.DefaultSize, 0 )
+        bSizer18.Add( self.m_butpaste, 0, wx.ALL|wx.ALIGN_CENTER_HORIZONTAL, 5 )
+
         self.new_choice = wx.TextCtrl( self, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.Size( 375,-1 ), wx.TE_PROCESS_ENTER )
         self.new_choice.SetFont( wx.Font( 11, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, False, wx.EmptyString ) )
 
@@ -522,6 +525,7 @@ class OptionPanel ( wx.Panel ):
         bSizer18.Fit( self )
 
         # Connect Events
+        self.m_butpaste.Bind( wx.EVT_BUTTON, self.pasteValue )
         self.new_choice.Bind( wx.EVT_TEXT_ENTER, self.valid_custom )
         self.m_button4.Bind( wx.EVT_BUTTON, self.cancelOption )
         self.m_button3.Bind( wx.EVT_BUTTON, self.okOption )
@@ -531,6 +535,9 @@ class OptionPanel ( wx.Panel ):
 
 
     # Virtual event handlers, overide them in your derived class
+    def pasteValue( self, event ):
+        event.Skip()
+
     def valid_custom( self, event ):
         event.Skip()
 
