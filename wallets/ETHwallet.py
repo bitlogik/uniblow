@@ -42,6 +42,9 @@ TRANSFERT_FUNCTION = "a9059cbb"
 
 
 MESSAGE_HEADER = b"\x19Ethereum Signed Message:\n"
+USER_SCREEN = (
+    "\n>> !!!  Once approved, check on your device screen to confirm the signature  !!! <<"
+)
 
 
 def has_checksum(addr):
@@ -481,8 +484,8 @@ class ETH_wallet:
         if data is None:
             data = bytearray(b"")
         tx_bin, hash_to_sign = self.eth.prepare(account, amount, gazprice, ethgazlimit, data)
-        if self.current_device.is_hardware:
-            if self.eth.ERC20:
+        if self.current_device.has_screen:
+            if self.eth.ERC20 and self.current_device.ledger_tokens_compat:
                 # Token known by Ledger ?
                 ledger_info = self.ledger_tokens.get(self.eth.ERC20)
                 if ledger_info:
@@ -554,6 +557,8 @@ class ETH_wallet:
             f" Gas limit  : {gas_limit}\n"
             f"Max fee cost: {gas_limit*gas_price / (10 ** self.eth.decimals)} {self.coin}\n"
         )
+        if self.current_device.has_screen:
+            sign_request += USER_SCREEN
         if self.confirm_callback(request_message):
             data_hex = txdata.get("data", "0x")
             data = bytearray.fromhex(data_hex[2:])

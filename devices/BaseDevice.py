@@ -24,7 +24,8 @@ class BaseDevice(ABC):
     has_password = False
     has_admin_password = False
     is_HD = False
-    is_hardware = False
+    has_screen = False
+    ledger_tokens_compat = False
     has_hardware_button = False
     account = "0"
     aindex = "0"
@@ -73,6 +74,6 @@ class BaseDevice(ABC):
     def sign(self, hashed_msg):
         """Sign a hash and return with ASN DER encoding.
         For EdDSA it returns the "raw" 64 bytes RS signature in hex.
-        And in case is_hardware : return v,r,s for EVM transactions.
+        And in case has_screen : return v,r,s for EVM transactions.
         """
         pass
