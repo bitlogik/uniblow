@@ -282,6 +282,10 @@ def watch_messages():
     except NotEnoughTokens as exc:
         warn_modal(str(exc))
     except Exception as exc:
+        print(str(exc))
+        if str(exc).startswith("You rejected the"):
+            warn_modal(str(exc))
+            return
         wallet_error(exc, "fromwatch")
 
 

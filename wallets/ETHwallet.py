@@ -17,7 +17,7 @@
 
 import json
 
-from cryptolib.cryptography import public_key_recover, decompress_pubkey, sha3
+from cryptolib.cryptography import public_key_recover, decompress_pubkey, sha2, sha3
 from cryptolib.coins.ethereum import rlp_encode, int2bytearray, uint256, read_string
 from wallets.wallets_utils import shift_10, compare_eth_addresses, InvalidOption, NotEnoughTokens
 from wallets.ETHtokens import tokens_values, ledger_tokens
@@ -42,6 +42,8 @@ TRANSFERT_FUNCTION = "a9059cbb"
 
 
 MESSAGE_HEADER = b"\x19Ethereum Signed Message:\n"
+EIP712_HEADER = b"\x19\x01"
+
 USER_SCREEN = (
     "\n>> !!!  Once approved, check on your device screen to confirm the signature  !!! <<"
 )
@@ -247,6 +249,10 @@ class ETHwalletCore:
         if public_key_recover(h, r, s, v) != self.pubkey:
             v += 1
         # Signature encoding
+        return uint256(r) + uint256(s) + bytes([v])
+
+    def encode_vrs(self, v, r, s):
+        """Encode a message signature from vrs integers."""
         return uint256(r) + uint256(s) + bytes([v])
 
     def send(self, tx_hex):
@@ -509,6 +515,7 @@ class ETH_wallet:
         """Process a WalletConnect personal_sign and eth_sign call"""
         # sign(keccak256("\x19Ethereum Signed Message:\n" + len(message) + message)))
         data_bin = bytes.fromhex(data_hex[2:])
+        msg_header = MESSAGE_HEADER + str(len(data_bin)).encode("ascii")
         sign_request = (
             "WalletConnect signature request :\n\n"
             f"- Data to sign (hex) :\n"
@@ -516,8 +523,15 @@ class ETH_wallet:
             f"\n Data to sign (ASCII/UTF8) :\n"
             f" {data_bin.decode('utf8')}\n"
         )
+        if self.current_device.has_screen:
+            hash2_data = sha2(data_bin).hex().upper()
+            sign_request += f"\n Hash data to sign (hex) :\n {hash2_data}\n"
+            sign_request += USER_SCREEN
         if self.confirm_callback(sign_request):
-            msg_header = MESSAGE_HEADER + str(len(data_bin)).encode("ascii")
+            if self.current_device.has_screen:
+                v, r, s = self.current_device.sign_message(data_bin)
+                return self.eth.encode_vrs(v, r, s)
+            # else
             hash_sign = sha3(msg_header + data_bin)
             der_signature = self.current_device.sign(hash_sign)
             return self.eth.encode_datasign(hash_sign, der_signature)
@@ -525,13 +539,24 @@ class ETH_wallet:
     def process_sign_typeddata(self, data_bin):
         """Process a WalletConnect eth_signTypedData call"""
         data_obj = json.loads(data_bin)
-        hash_sign = typed_sign_hash(data_obj, self.chainID)
+        hash_domain, hash_data = typed_sign_hash(data_obj, self.chainID)
         sign_request = (
             "WalletConnect signature request :\n\n"
             f"- Data to sign (typed) :\n"
             f"{print_text_query(data_obj)}"
+            f"\n - Hash domain (hex) :\n"
+            f" 0x{hash_domain.hex().upper()}\n"
+            f"\n - Hash data (hex) :\n"
+            f" 0x{hash_data.hex().upper()}\n"
         )
+        if self.current_device.has_screen:
+            sign_request += USER_SCREEN
         if self.confirm_callback(sign_request):
+            if self.current_device.has_screen:
+                v, r, s = self.current_device.sign_eip712(hash_domain, hash_data)
+                return self.eth.encode_vrs(v, r, s)
+            # else
+            hash_sign = sha3(EIP712_HEADER + hash_domain + hash_data)
             der_signature = self.current_device.sign(hash_sign)
             return self.eth.encode_datasign(hash_sign, der_signature)
 

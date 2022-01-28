@@ -186,11 +186,12 @@ def typed_sign_hash(query_obj, chain_id=None):
     if chain_id is not None and "chainId" in query_obj["domain"]:
         if chain_id != query_obj["domain"]["chainId"]:
             raise ValueError("ChainID is not matching the current active chain.")
+
+    # Compute the hashes to sign
+    domain_separator = hash_struct("EIP712Domain", query_obj["types"], query_obj["domain"])
     hash_msg = hash_struct(query_obj["primaryType"], query_obj["types"], query_obj["message"])
 
-    # Compute the hash to sign
-    domain_separator = hash_struct("EIP712Domain", query_obj["types"], query_obj["domain"])
-    return sha3(b"\x19\x01" + domain_separator + hash_msg)
+    return domain_separator, hash_msg
 
 
 def print_text_query(query_obj):

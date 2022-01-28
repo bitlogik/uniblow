@@ -29,6 +29,14 @@ class NotinitException(Exception):
     pass
 
 
+def unpack_vrs(vrsbin):
+    """Provide serialized vrs as 3 integers."""
+    v = read_uint8(vrsbin, 0)
+    r = read_uint256(vrsbin, 1)
+    s = read_uint256(vrsbin, 33)
+    return v, r, s
+
+
 class Ledger(BaseDevice):
 
     is_HD = True
@@ -132,7 +140,37 @@ class Ledger(BaseDevice):
             if exc.sw == 0x6985:
                 raise Exception("You rejected the transaction.")
             raise Exception(str(exc))
-        v = read_uint8(vrs_bin, 0)
-        r = read_uint256(vrs_bin, 1)
-        s = read_uint256(vrs_bin, 33)
-        return v, r, s
+        return unpack_vrs(vrs_bin)
+
+    def sign_message(self, message):
+        """Sign a personnal message, used when has_screen"""
+        msg_sz = len(message)
+        assert msg_sz < 225
+        apdu = [0xE0, 0x08, 0x00, 0x00, len(self.bin_path) + msg_sz + 4]
+        apdu.extend(self.bin_path)
+        apdu.extend(writeUint32BE(msg_sz))
+        apdu.extend(message)
+        try:
+            vrs_bin = self.ledger_device.exchange(bytearray(apdu))
+        except BTChipException as exc:
+            if exc.sw == 0x6985:
+                raise Exception("You rejected the message signature.")
+            raise Exception(str(exc))
+        return unpack_vrs(vrs_bin)
+
+    def sign_eip712(self, domain_hash, message_hash):
+        """Sign an EIP712 typed hash request, used when has_screen"""
+        # version 0 ?
+        assert len(domain_hash) == 32
+        assert len(message_hash) == 32
+        apdu = [0xE0, 0x0C, 0x00, 0x00, len(self.bin_path) + 64]
+        apdu.extend(self.bin_path)
+        apdu.extend(domain_hash)
+        apdu.extend(message_hash)
+        try:
+            vrs_bin = self.ledger_device.exchange(bytearray(apdu))
+        except BTChipException as exc:
+            if exc.sw == 0x6985:
+                raise Exception("You rejected the message signature.")
+            raise Exception(str(exc))
+        return unpack_vrs(vrs_bin)
