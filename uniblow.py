@@ -557,7 +557,7 @@ def set_coin(coin, network, wallet_type):
         else:
             wallet_error(exc)
         return
-    if app.device.__class__.__name__ == "Ledger":
+    if app.device.has_screen:
         app.gui_panel.btn_chkaddr.Show()
     display_coin(account_id)
 

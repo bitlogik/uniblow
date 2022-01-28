@@ -32,7 +32,8 @@ class NotinitException(Exception):
 class Ledger(BaseDevice):
 
     is_HD = True
-    is_hardware = True
+    has_screen = True
+    ledger_tokens_compat = True
     has_hardware_button = True
 
     def __init__(self):
@@ -105,6 +106,7 @@ class Ledger(BaseDevice):
         self, token_name, token_addr, token_decimals, chain_id, ledger_signature_hex
     ):
         """Send the trusted token information in to the Ledger."""
+        # used when ledger_tokens_compat
         ledger_signature = bytes.fromhex(ledger_signature_hex)
         token_name_bin = token_name.encode("utf8")
         token_name_len = len(token_name_bin)
