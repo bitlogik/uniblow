@@ -216,7 +216,7 @@ def confirm_tx(to_addr, amount):
 
 def confirm_request(request_ui_message):
     """Display a modal to the user.
-    callback *args called if the user approves the request.
+    returns True if the user approves the request.
     """
     confirm_txt = f"Do you approve the following request ?\n\n{request_ui_message}"
     confirm_tx_modal = wx.MessageDialog(
@@ -644,7 +644,10 @@ def transfer(to, amount):
             progress_modal.Destroy()
             wx.MilliSleep(100)
             logger.error(
-                "Error during device selection : %s", str(exc), exc_info=exc, stack_info=True
+                "Error during the transaction processing : %s",
+                str(exc),
+                exc_info=exc,
+                stack_info=True,
             )
             if str(exc) == "Error status : 0x6600":
                 warn_modal("User button on PGP device timeout")

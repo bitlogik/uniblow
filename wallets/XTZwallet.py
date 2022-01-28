@@ -47,7 +47,7 @@ class RPC_api:
 
     def __init__(self, network):
         if network == "mainnet":
-            self.url = f"https://mainnet-tezos.giganode.io"
+            self.url = "https://mainnet-tezos.giganode.io"
         else:
             self.url = f"https://{network}.smartpy.io"
         self.chainID = self.getData("/chains/main/chain_id")
