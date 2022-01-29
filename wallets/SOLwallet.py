@@ -223,7 +223,7 @@ class SOL_wallet:
 
     # SOL wallet have no option
     user_options = []
-    # self.__init__ ( contract_addr = "user input option" )
+    # self.__init__ ( option_name = "user input option" )
     options_data = []
 
     def __init__(

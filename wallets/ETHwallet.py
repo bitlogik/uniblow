@@ -266,7 +266,7 @@ class ETH_wallet:
 
     # ETH wallet type 1 and 2 have option
     user_options = [1, 2]
-    # self.__init__ ( contract_addr = "user input option" )
+    # self.__init__ ( option_name = "user input option" )
     options_data = [
         {
             "option_name": "contract_addr",
