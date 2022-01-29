@@ -291,7 +291,7 @@ class TopPanel ( wx.Panel ):
 class HDDialog ( wx.Dialog ):
 
     def __init__( self, parent ):
-        wx.Dialog.__init__ ( self, parent, id = wx.ID_ANY, title = u"HD wallet settings", pos = wx.DefaultPosition, size = wx.Size( 525,438 ), style = wx.CAPTION|wx.CLOSE_BOX|wx.DEFAULT_DIALOG_STYLE|wx.STAY_ON_TOP|wx.SYSTEM_MENU )
+        wx.Dialog.__init__ ( self, parent, id = wx.ID_ANY, title = u"HD wallet settings", pos = wx.DefaultPosition, size = wx.Size( 525,480 ), style = wx.CAPTION|wx.CLOSE_BOX|wx.DEFAULT_DIALOG_STYLE|wx.STAY_ON_TOP|wx.SYSTEM_MENU )
 
         self.SetSizeHints( wx.DefaultSize, wx.DefaultSize )
 
@@ -390,6 +390,9 @@ class HDPanel ( wx.Panel ):
 
 
         bSizer11.Add( bSizer14, 1, wx.ALIGN_CENTER_HORIZONTAL|wx.TOP, 16 )
+
+        self.m_altderiv = wx.CheckBox( self, wx.ID_ANY, u"Alt. derivation path (Not BIP44, for ETH / EVM)", wx.DefaultPosition, wx.DefaultSize, 0 )
+        bSizer11.Add( self.m_altderiv, 0, wx.ALL|wx.ALIGN_CENTER_HORIZONTAL, 5 )
 
 
         bSizer11.Add( ( 0, 0), 0, wx.TOP, 20 )

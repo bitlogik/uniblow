@@ -29,6 +29,7 @@ class BaseDevice(ABC):
     has_hardware_button = False
     account = "0"
     aindex = "0"
+    legacy_derive = False
 
     @abstractmethod
     def open_account(self):

@@ -112,6 +112,7 @@ class HDdevice(BaseDevice):
         # Build wallet info
         self.account = settings["account"]
         self.aindex = settings["index"]
+        self.legacy_derive = settings["legacy_path"]
         account_info = {
             "seed_enc": encrypted_content.hex(),
             "salt": salt.hex(),

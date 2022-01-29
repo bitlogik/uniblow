@@ -405,8 +405,12 @@ class ETH_wallet:
         return cls.wtypes
 
     @classmethod
-    def get_path(cls, network_name, wtype):
-        return cls.derive_paths[network_name][0]
+    def get_path(cls, network_name, wtype, legacy):
+        deriv_path = cls.derive_paths[network_name][0]
+        if legacy:
+            # Legacy path alternative derivation
+            deriv_path = deriv_path.replace("0/", "")
+        return deriv_path
 
     @classmethod
     def get_key_type(cls, wtype):

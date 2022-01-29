@@ -247,7 +247,7 @@ class SOL_wallet:
         return cls.wtypes
 
     @classmethod
-    def get_path(cls, network_name, wtype):
+    def get_path(cls, network_name, wtype, legacy):
         return cls.derive_paths[network_name][0]
 
     @classmethod
