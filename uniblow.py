@@ -420,10 +420,12 @@ def device_selected(device):
                         app.gui_panel.devices_choice.SetSelection(0)
                         return
                 if the_device.is_HD:
-                    # HD means also mnemonic can be imported
-                    mnemonic = device_loaded.generate_mnemonic()  # mnemonic proposal
+                    mnemonic = ""
+                    if not the_device.has_hardware_button:
+                        # Not a hardware wallet, menmonic generated in software wallet
+                        mnemonic = device_loaded.generate_mnemonic()  # mnemonic proposal
                     # Get settings from the user
-                    HDwallet_settings = app.set_mnemonic(mnemonic)
+                    HDwallet_settings = app.hd_setup(mnemonic)
                     if HDwallet_settings is None:
                         app.gui_panel.devices_choice.SetSelection(0)
                         return
@@ -437,15 +439,15 @@ def device_selected(device):
                     if password == "":
                         password = DEFAULT_PASSWORD
                 try:
-                    if len(password) < 6:
-                        raise Exception("PIN password shall be at least 6 chars.")
+                    if the_device.has_password:
+                        if len(password) < 6:
+                            raise Exception("PIN password shall be at least 6 chars.")
                     if the_device.has_admin_password:
                         device_loaded.set_admin(admin_password)
                     if the_device.is_HD:
-                        HDwallet_settings["file_password"] = password
+                        if the_device.has_password:
+                            HDwallet_settings["file_password"] = password
                         device_loaded.initialize_device(HDwallet_settings)
-                    # is_HD has password already
-                    #  attribute has_password is false, password set by settings parameters
                     elif the_device.has_password:
                         device_loaded.initialize_device(password)
                     else:

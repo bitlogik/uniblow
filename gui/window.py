@@ -291,7 +291,7 @@ class TopPanel ( wx.Panel ):
 class HDDialog ( wx.Dialog ):
 
     def __init__( self, parent ):
-        wx.Dialog.__init__ ( self, parent, id = wx.ID_ANY, title = u"HD wallet settings", pos = wx.DefaultPosition, size = wx.Size( 500,438 ), style = wx.CAPTION|wx.CLOSE_BOX|wx.DEFAULT_DIALOG_STYLE|wx.STAY_ON_TOP|wx.SYSTEM_MENU )
+        wx.Dialog.__init__ ( self, parent, id = wx.ID_ANY, title = u"HD wallet settings", pos = wx.DefaultPosition, size = wx.Size( 525,438 ), style = wx.CAPTION|wx.CLOSE_BOX|wx.DEFAULT_DIALOG_STYLE|wx.STAY_ON_TOP|wx.SYSTEM_MENU )
 
         self.SetSizeHints( wx.DefaultSize, wx.DefaultSize )
 
@@ -315,28 +315,28 @@ class HDPanel ( wx.Panel ):
 
         bSizer15 = wx.BoxSizer( wx.HORIZONTAL )
 
-        self.m_staticText15 = wx.StaticText( self, wx.ID_ANY, u"Wallet mnemonic input", wx.DefaultPosition, wx.DefaultSize, 0 )
-        self.m_staticText15.Wrap( -1 )
+        self.title_text = wx.StaticText( self, wx.ID_ANY, u"Wallet mnemonic input", wx.DefaultPosition, wx.DefaultSize, 0 )
+        self.title_text.Wrap( -1 )
 
-        self.m_staticText15.SetFont( wx.Font( 12, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, False, wx.EmptyString ) )
+        self.title_text.SetFont( wx.Font( 12, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, False, wx.EmptyString ) )
 
-        bSizer15.Add( self.m_staticText15, 0, wx.ALIGN_CENTER_HORIZONTAL|wx.ALIGN_CENTER_VERTICAL|wx.LEFT, 42 )
+        bSizer15.Add( self.title_text, 0, wx.ALIGN_CENTER_HORIZONTAL|wx.ALIGN_CENTER_VERTICAL|wx.LEFT, 42 )
 
 
         bSizer15.Add( ( 24, 0), 0, 0, 15 )
 
-        self.m_staticText16 = wx.StaticText( self, wx.ID_ANY, u"Words in list", wx.DefaultPosition, wx.DefaultSize, 0 )
-        self.m_staticText16.Wrap( -1 )
+        self.m_textwl = wx.StaticText( self, wx.ID_ANY, u"Words in list", wx.DefaultPosition, wx.DefaultSize, 0 )
+        self.m_textwl.Wrap( -1 )
 
-        bSizer15.Add( self.m_staticText16, 0, wx.ALIGN_BOTTOM|wx.ALL, 5 )
+        bSizer15.Add( self.m_textwl, 0, wx.ALIGN_BOTTOM|wx.ALL, 5 )
 
         self.m_bitmapHDwl = wx.StaticBitmap( self, wx.ID_ANY, wx.NullBitmap, wx.DefaultPosition, wx.DefaultSize, 0 )
         bSizer15.Add( self.m_bitmapHDwl, 0, wx.ALIGN_BOTTOM|wx.BOTTOM, 5 )
 
-        self.m_staticText17 = wx.StaticText( self, wx.ID_ANY, u"Checksum", wx.DefaultPosition, wx.DefaultSize, wx.ST_NO_AUTORESIZE )
-        self.m_staticText17.Wrap( -1 )
+        self.m_textcs = wx.StaticText( self, wx.ID_ANY, u"Checksum", wx.DefaultPosition, wx.DefaultSize, wx.ST_NO_AUTORESIZE )
+        self.m_textcs.Wrap( -1 )
 
-        bSizer15.Add( self.m_staticText17, 0, wx.ALL|wx.ALIGN_BOTTOM, 5 )
+        bSizer15.Add( self.m_textcs, 0, wx.ALL|wx.ALIGN_BOTTOM, 5 )
 
         self.m_bitmapHDcs = wx.StaticBitmap( self, wx.ID_ANY, wx.NullBitmap, wx.DefaultPosition, wx.DefaultSize, 0 )
         bSizer15.Add( self.m_bitmapHDcs, 0, wx.ALIGN_BOTTOM|wx.BOTTOM, 5 )
@@ -347,59 +347,59 @@ class HDPanel ( wx.Panel ):
         self.m_textCtrl_mnemo = wx.TextCtrl( self, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, wx.TE_MULTILINE )
         self.m_textCtrl_mnemo.SetFont( wx.Font( 12, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, False, wx.EmptyString ) )
 
-        bSizer11.Add( self.m_textCtrl_mnemo, 1, wx.EXPAND|wx.LEFT|wx.RIGHT, 16 )
+        bSizer11.Add( self.m_textCtrl_mnemo, 1, wx.LEFT|wx.RIGHT|wx.EXPAND, 16 )
 
         bSizer13 = wx.BoxSizer( wx.HORIZONTAL )
 
 
         bSizer13.Add( ( 0, 0), 0, wx.RIGHT, 18 )
 
-        self.m_staticText13 = wx.StaticText( self, wx.ID_ANY, u"Password (optional)", wx.DefaultPosition, wx.DefaultSize, 0 )
-        self.m_staticText13.Wrap( -1 )
+        self.m_bwptxt = wx.StaticText( self, wx.ID_ANY, u"Deriv. password (opt.)", wx.DefaultPosition, wx.DefaultSize, 0 )
+        self.m_bwptxt.Wrap( -1 )
 
-        bSizer13.Add( self.m_staticText13, 0, wx.ALIGN_CENTER_VERTICAL, 5 )
+        bSizer13.Add( self.m_bwptxt, 0, wx.ALIGN_CENTER_VERTICAL, 4 )
 
-        self.m_textCtrl_pwd = wx.TextCtrl( self, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.Size( 180,-1 ), 0 )
+        self.m_textCtrl_pwd = wx.TextCtrl( self, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.Size( 170,-1 ), 0 )
         bSizer13.Add( self.m_textCtrl_pwd, 0, wx.ALL, 5 )
 
         self.m_checkBox_secboost = wx.CheckBox( self, wx.ID_ANY, u"SecuBoost", wx.DefaultPosition, wx.DefaultSize, 0 )
         self.m_checkBox_secboost.SetToolTip( u"Extra security boost for mnemonic.\nNot compatible with BIP39.\nRequires >1GB RAM free" )
 
-        bSizer13.Add( self.m_checkBox_secboost, 0, wx.ALIGN_CENTER_VERTICAL|wx.LEFT, 28 )
+        bSizer13.Add( self.m_checkBox_secboost, 0, wx.ALIGN_CENTER_VERTICAL|wx.LEFT, 22 )
 
 
         bSizer11.Add( bSizer13, 0, wx.ALIGN_CENTER_HORIZONTAL, 5 )
 
         bSizer14 = wx.BoxSizer( wx.HORIZONTAL )
 
-        self.m_staticText14 = wx.StaticText( self, wx.ID_ANY, u"Account #", wx.DefaultPosition, wx.DefaultSize, 0 )
-        self.m_staticText14.Wrap( -1 )
+        self.m_accounttxt = wx.StaticText( self, wx.ID_ANY, u"Account #", wx.DefaultPosition, wx.DefaultSize, 0 )
+        self.m_accounttxt.Wrap( -1 )
 
-        bSizer14.Add( self.m_staticText14, 0, wx.ALIGN_CENTER_VERTICAL, 5 )
+        bSizer14.Add( self.m_accounttxt, 0, wx.ALIGN_CENTER_VERTICAL, 5 )
 
         self.m_spinCtrl_account = wx.SpinCtrl( self, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.Size( 75,-1 ), wx.SP_ARROW_KEYS, 0, 10, 0 )
-        bSizer14.Add( self.m_spinCtrl_account, 0, wx.ALL, 5 )
+        bSizer14.Add( self.m_spinCtrl_account, 0, wx.ALL|wx.ALIGN_CENTER_VERTICAL, 5 )
 
-        self.m_staticText141 = wx.StaticText( self, wx.ID_ANY, u"index", wx.DefaultPosition, wx.DefaultSize, 0 )
-        self.m_staticText141.Wrap( -1 )
+        self.m_indextxt = wx.StaticText( self, wx.ID_ANY, u"index", wx.DefaultPosition, wx.DefaultSize, 0 )
+        self.m_indextxt.Wrap( -1 )
 
-        bSizer14.Add( self.m_staticText141, 0, wx.LEFT|wx.ALIGN_CENTER_VERTICAL, 24 )
+        bSizer14.Add( self.m_indextxt, 0, wx.LEFT|wx.ALIGN_CENTER_VERTICAL, 24 )
 
         self.m_spinCtrl_index = wx.SpinCtrl( self, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.Size( 75,-1 ), wx.SP_ARROW_KEYS, 0, 10, 0 )
-        bSizer14.Add( self.m_spinCtrl_index, 0, wx.ALL, 5 )
+        bSizer14.Add( self.m_spinCtrl_index, 0, wx.ALL|wx.ALIGN_CENTER_VERTICAL, 5 )
 
 
-        bSizer11.Add( bSizer14, 0, wx.ALIGN_CENTER_HORIZONTAL|wx.TOP, 16 )
+        bSizer11.Add( bSizer14, 1, wx.ALIGN_CENTER_HORIZONTAL|wx.TOP, 16 )
 
 
         bSizer11.Add( ( 0, 0), 0, wx.TOP, 20 )
 
-        self.m_staticText151 = wx.StaticText( self, wx.ID_ANY, u"Validate this first proposal,\nor insert your mnemonic and settings to import an existing HD wallet.", wx.DefaultPosition, wx.DefaultSize, 0 )
-        self.m_staticText151.Wrap( -1 )
+        self.m_usertxt = wx.StaticText( self, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, 0 )
+        self.m_usertxt.Wrap( -1 )
 
-        self.m_staticText151.SetFont( wx.Font( 10, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, False, wx.EmptyString ) )
+        self.m_usertxt.SetFont( wx.Font( 10, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, False, wx.EmptyString ) )
 
-        bSizer11.Add( self.m_staticText151, 0, wx.ALIGN_CENTER_HORIZONTAL|wx.LEFT|wx.RIGHT, 24 )
+        bSizer11.Add( self.m_usertxt, 0, wx.ALIGN_CENTER_HORIZONTAL|wx.LEFT|wx.RIGHT, 24 )
 
         bSizer12 = wx.BoxSizer( wx.HORIZONTAL )
 
@@ -413,7 +413,7 @@ class HDPanel ( wx.Panel ):
         bSizer12.Add( self.m_butcancel, 0, wx.ALL, 5 )
 
 
-        bSizer11.Add( bSizer12, 0, wx.ALIGN_CENTER_HORIZONTAL|wx.ALL, 20 )
+        bSizer11.Add( bSizer12, 0, wx.ALIGN_CENTER_HORIZONTAL|wx.ALL, 18 )
 
 
         self.SetSizer( bSizer11 )

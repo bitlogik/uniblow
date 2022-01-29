@@ -1908,7 +1908,7 @@
             <property name="minimum_size"></property>
             <property name="name">HDDialog</property>
             <property name="pos"></property>
-            <property name="size">500,438</property>
+            <property name="size">525,438</property>
             <property name="style">wxCAPTION|wxCLOSE_BOX|wxDEFAULT_DIALOG_STYLE|wxSTAY_ON_TOP|wxSYSTEM_MENU</property>
             <property name="subclass">; ; forward_declare</property>
             <property name="title">HD wallet settings</property>
@@ -1994,7 +1994,7 @@
                                 <property name="minimize_button">0</property>
                                 <property name="minimum_size"></property>
                                 <property name="moveable">1</property>
-                                <property name="name">m_staticText15</property>
+                                <property name="name">title_text</property>
                                 <property name="pane_border">1</property>
                                 <property name="pane_position"></property>
                                 <property name="pane_size"></property>
@@ -2065,7 +2065,7 @@
                                 <property name="minimize_button">0</property>
                                 <property name="minimum_size"></property>
                                 <property name="moveable">1</property>
-                                <property name="name">m_staticText16</property>
+                                <property name="name">m_textwl</property>
                                 <property name="pane_border">1</property>
                                 <property name="pane_position"></property>
                                 <property name="pane_size"></property>
@@ -2184,7 +2184,7 @@
                                 <property name="minimize_button">0</property>
                                 <property name="minimum_size"></property>
                                 <property name="moveable">1</property>
-                                <property name="name">m_staticText17</property>
+                                <property name="name">m_textcs</property>
                                 <property name="pane_border">1</property>
                                 <property name="pane_position"></property>
                                 <property name="pane_size"></property>
@@ -2266,7 +2266,7 @@
                 </object>
                 <object class="sizeritem" expanded="1">
                     <property name="border">16</property>
-                    <property name="flag">wxEXPAND|wxLEFT|wxRIGHT</property>
+                    <property name="flag">wxLEFT|wxRIGHT|wxEXPAND</property>
                     <property name="proportion">1</property>
                     <object class="wxTextCtrl" expanded="1">
                         <property name="BottomDockable">1</property>
@@ -2349,7 +2349,7 @@
                             </object>
                         </object>
                         <object class="sizeritem" expanded="1">
-                            <property name="border">5</property>
+                            <property name="border">4</property>
                             <property name="flag">wxALIGN_CENTER_VERTICAL</property>
                             <property name="proportion">0</property>
                             <object class="wxStaticText" expanded="1">
@@ -2380,7 +2380,7 @@
                                 <property name="gripper">0</property>
                                 <property name="hidden">0</property>
                                 <property name="id">wxID_ANY</property>
-                                <property name="label">Password (optional)</property>
+                                <property name="label">Deriv. password (opt.)</property>
                                 <property name="markup">0</property>
                                 <property name="max_size"></property>
                                 <property name="maximize_button">0</property>
@@ -2389,7 +2389,7 @@
                                 <property name="minimize_button">0</property>
                                 <property name="minimum_size"></property>
                                 <property name="moveable">1</property>
-                                <property name="name">m_staticText13</property>
+                                <property name="name">m_bwptxt</property>
                                 <property name="pane_border">1</property>
                                 <property name="pane_position"></property>
                                 <property name="pane_size"></property>
@@ -2458,7 +2458,7 @@
                                 <property name="pos"></property>
                                 <property name="resize">Resizable</property>
                                 <property name="show">1</property>
-                                <property name="size">180,-1</property>
+                                <property name="size">170,-1</property>
                                 <property name="style"></property>
                                 <property name="subclass">; ; forward_declare</property>
                                 <property name="toolbar_pane">0</property>
@@ -2474,7 +2474,7 @@
                             </object>
                         </object>
                         <object class="sizeritem" expanded="1">
-                            <property name="border">28</property>
+                            <property name="border">22</property>
                             <property name="flag">wxALIGN_CENTER_VERTICAL|wxLEFT</property>
                             <property name="proportion">0</property>
                             <object class="wxCheckBox" expanded="1">
@@ -2542,7 +2542,7 @@
                 <object class="sizeritem" expanded="1">
                     <property name="border">16</property>
                     <property name="flag">wxALIGN_CENTER_HORIZONTAL|wxTOP</property>
-                    <property name="proportion">0</property>
+                    <property name="proportion">1</property>
                     <object class="wxBoxSizer" expanded="1">
                         <property name="minimum_size"></property>
                         <property name="name">bSizer14</property>
@@ -2589,7 +2589,7 @@
                                 <property name="minimize_button">0</property>
                                 <property name="minimum_size"></property>
                                 <property name="moveable">1</property>
-                                <property name="name">m_staticText14</property>
+                                <property name="name">m_accounttxt</property>
                                 <property name="pane_border">1</property>
                                 <property name="pane_position"></property>
                                 <property name="pane_size"></property>
@@ -2611,7 +2611,7 @@
                         </object>
                         <object class="sizeritem" expanded="1">
                             <property name="border">5</property>
-                            <property name="flag">wxALL</property>
+                            <property name="flag">wxALL|wxALIGN_CENTER_VERTICAL</property>
                             <property name="proportion">0</property>
                             <object class="wxSpinCtrl" expanded="1">
                                 <property name="BottomDockable">1</property>
@@ -2712,7 +2712,7 @@
                                 <property name="minimize_button">0</property>
                                 <property name="minimum_size"></property>
                                 <property name="moveable">1</property>
-                                <property name="name">m_staticText141</property>
+                                <property name="name">m_indextxt</property>
                                 <property name="pane_border">1</property>
                                 <property name="pane_position"></property>
                                 <property name="pane_size"></property>
@@ -2734,7 +2734,7 @@
                         </object>
                         <object class="sizeritem" expanded="1">
                             <property name="border">5</property>
-                            <property name="flag">wxALL</property>
+                            <property name="flag">wxALL|wxALIGN_CENTER_VERTICAL</property>
                             <property name="proportion">0</property>
                             <object class="wxSpinCtrl" expanded="1">
                                 <property name="BottomDockable">1</property>
@@ -2838,7 +2838,7 @@
                         <property name="gripper">0</property>
                         <property name="hidden">0</property>
                         <property name="id">wxID_ANY</property>
-                        <property name="label">Validate this first proposal,&#x0A;or insert your mnemonic and settings to import an existing HD wallet.</property>
+                        <property name="label"></property>
                         <property name="markup">0</property>
                         <property name="max_size"></property>
                         <property name="maximize_button">0</property>
@@ -2847,7 +2847,7 @@
                         <property name="minimize_button">0</property>
                         <property name="minimum_size"></property>
                         <property name="moveable">1</property>
-                        <property name="name">m_staticText151</property>
+                        <property name="name">m_usertxt</property>
                         <property name="pane_border">1</property>
                         <property name="pane_position"></property>
                         <property name="pane_size"></property>
@@ -2868,7 +2868,7 @@
                     </object>
                 </object>
                 <object class="sizeritem" expanded="1">
-                    <property name="border">20</property>
+                    <property name="border">18</property>
                     <property name="flag">wxALIGN_CENTER_HORIZONTAL|wxALL</property>
                     <property name="proportion">0</property>
                     <object class="wxBoxSizer" expanded="1">
