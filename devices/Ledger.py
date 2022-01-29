@@ -105,6 +105,10 @@ class Ledger(BaseDevice):
                 )
             if exc.sw == 0x6A15:
                 raise Exception("Error in Ledger. Did you open the Ethereum app in the Ledger?")
+            if exc.message == "Invalid channel":
+                raise Exception(
+                    "Error communicating with the Ledger. Please lock or close any web3 wallet which can interfer with the Ledger : Metamask, Frame, Rabby, LedgerLive,..."
+                )
             if exc.sw == 0x6F00:
                 raise Exception(exc.message)
             if exc.sw != 0x6985:
