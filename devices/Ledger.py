@@ -55,6 +55,7 @@ class Ledger(BaseDevice):
     def initialize_device(self, settings):
         self.account = settings["account"]
         self.aindex = settings["index"]
+        self.legacy_derive = settings["legacy_path"]
 
     def open_account(self):
         try:

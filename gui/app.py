@@ -105,9 +105,11 @@ class HDsetting_panel(gui.window.HDPanel):
         event.Skip()
         account = str(self.m_spinCtrl_account.GetValue())
         index = str(self.m_spinCtrl_index.GetValue())
+        legacy = self.m_altderiv.IsChecked()
         self.hd_wallet_settings = {
             "account": account,
             "index": index,
+            "legacy_path": legacy,
         }
         if self.m_checkBox_secboost:
             # Case software HD
@@ -286,7 +288,7 @@ class UniblowApp(App):
             self.gui_hdpanel.m_textCtrl_pwd.Destroy()
             self.gui_hdpanel.m_checkBox_secboost.Destroy()
             self.gui_hdpanel.m_usertxt.SetLabel("Choose account and index for the key to use.")
-            self.gui_hdframe.SetSize(470, 270)
+            self.gui_hdframe.SetSize(470, 290)
         self.gui_hdpanel.m_butOK.SetCursor(HAND_CURSOR)
         self.gui_hdpanel.m_butcancel.SetCursor(HAND_CURSOR)
         ret = self.gui_hdframe.ShowModal()

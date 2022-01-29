@@ -247,7 +247,7 @@ class DOGE_wallet:
         return cls.wtypes
 
     @classmethod
-    def get_path(cls, network_name, wtype):
+    def get_path(cls, network_name, wtype, legacy):
         # First path
         # To be changed to the first one available, needs scanning
         return cls.derive_paths[network_name][wtype]
