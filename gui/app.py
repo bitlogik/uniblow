@@ -103,22 +103,29 @@ class HDsetting_panel(gui.window.HDPanel):
 
     def hd_ok(self, event):
         event.Skip()
-        if self.m_checkBox_secboost.IsChecked():
-            derivation = "SCRYPT"
-        else:
-            derivation = "PBKDF2-2048-HMAC-SHA512"
-        mnemo_txt = self.m_textCtrl_mnemo.GetValue()
-        password = self.m_textCtrl_pwd.GetValue()
         account = str(self.m_spinCtrl_account.GetValue())
         index = str(self.m_spinCtrl_index.GetValue())
-        # Attach object to frame, so the modal inputs are synchroneous
         self.hd_wallet_settings = {
-            "mnemonic": mnemo_txt,
             "account": account,
             "index": index,
-            "HD_password": password,
-            "seed_gen": derivation,
         }
+        if self.m_checkBox_secboost:
+            # Case software HD
+            if self.m_checkBox_secboost.IsChecked():
+                derivation = "SCRYPT"
+            else:
+                derivation = "PBKDF2-2048-HMAC-SHA512"
+            mnemo_txt = self.m_textCtrl_mnemo.GetValue()
+            password = self.m_textCtrl_pwd.GetValue()
+
+            # Attach object to frame, so the modal inputs are synchroneous
+            self.hd_wallet_settings.update(
+                {
+                    "mnemonic": mnemo_txt,
+                    "HD_password": password,
+                    "seed_gen": derivation,
+                }
+            )
         self.GetParent().EndModal(ID_OK)
 
     def hd_cancel(self, event):
@@ -253,17 +260,33 @@ class UniblowApp(App):
             self.gui_panel.coins_choice.Append(coin)
         self.gui_panel.coins_choice.SetSelection(0)
 
-    def set_mnemonic(self, proposal):
-        """Call the HD device creation window."""
+    def hd_setup(self, proposal):
+        """Call the HD device option window."""
         self.gui_hdframe = gui.window.HDDialog(self.gui_frame)
         self.gui_hdpanel = HDsetting_panel(self.gui_hdframe)
-        self.gui_hdpanel.GOOD_BMP = Bitmap(file_path("gui/good.bmp"))
-        self.gui_hdpanel.BAD_BMP = Bitmap(file_path("gui/bad.bmp"))
-        self.gui_hdpanel.m_bitmapHDwl.SetBitmap(self.gui_hdpanel.BAD_BMP)
-        self.gui_hdpanel.m_bitmapHDcs.SetBitmap(self.gui_hdpanel.BAD_BMP)
-        self.gui_hdpanel.m_textCtrl_mnemo.SetValue(proposal)
         HAND_CURSOR = Cursor(CURSOR_HAND)
-        self.gui_hdpanel.m_checkBox_secboost.SetCursor(HAND_CURSOR)
+        if proposal:
+            self.gui_hdpanel.GOOD_BMP = Bitmap(file_path("gui/good.bmp"))
+            self.gui_hdpanel.BAD_BMP = Bitmap(file_path("gui/bad.bmp"))
+            self.gui_hdpanel.m_bitmapHDwl.SetBitmap(self.gui_hdpanel.BAD_BMP)
+            self.gui_hdpanel.m_bitmapHDcs.SetBitmap(self.gui_hdpanel.BAD_BMP)
+            self.gui_hdpanel.m_checkBox_secboost.SetCursor(HAND_CURSOR)
+            self.gui_hdpanel.m_textCtrl_mnemo.SetValue(proposal)
+            self.gui_hdpanel.m_usertxt.SetLabel(
+                "Validate this first proposal,\n"
+                "or insert your mnemonic and settings to import\n"
+                "an existing HD wallet."
+            )
+        else:
+            self.gui_hdpanel.title_text.SetLabel("Hardware wallet account options")
+            self.gui_hdpanel.m_textwl.Destroy()
+            self.gui_hdpanel.m_textcs.Destroy()
+            self.gui_hdpanel.m_textCtrl_mnemo.Destroy()
+            self.gui_hdpanel.m_bwptxt.Destroy()
+            self.gui_hdpanel.m_textCtrl_pwd.Destroy()
+            self.gui_hdpanel.m_checkBox_secboost.Destroy()
+            self.gui_hdpanel.m_usertxt.SetLabel("Choose account and index for the key to use.")
+            self.gui_hdframe.SetSize(470, 270)
         self.gui_hdpanel.m_butOK.SetCursor(HAND_CURSOR)
         self.gui_hdpanel.m_butcancel.SetCursor(HAND_CURSOR)
         ret = self.gui_hdframe.ShowModal()

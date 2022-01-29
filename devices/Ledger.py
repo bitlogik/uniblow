@@ -39,6 +39,7 @@ def unpack_vrs(vrsbin):
 
 class Ledger(BaseDevice):
 
+    is_init = False
     is_HD = True
     has_screen = True
     ledger_tokens_compat = True
@@ -48,6 +49,12 @@ class Ledger(BaseDevice):
         self.created = False
         self.ledger_device = None
         self.bin_path = None
+        self.account = None
+        self.aindex = None
+
+    def initialize_device(self, settings):
+        self.account = settings["account"]
+        self.aindex = settings["index"]
 
     def open_account(self):
         try:
@@ -67,6 +74,8 @@ class Ledger(BaseDevice):
             raise Exception(f"Error {hex(exc.sw)} in Ledger.")
         eth_version = f"{eth_app_info[1]}.{eth_app_info[2]}.{eth_app_info[3]}"
         logger.debug(f"Ledger ETH app version {eth_version}")
+        if self.account is None:
+            raise NotinitException
 
     def get_address_index(self):
         """Get the account address index, last BIP44 derivation number as str"""
