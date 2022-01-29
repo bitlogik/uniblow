@@ -154,6 +154,10 @@ if os_platform == "mac":
             "CFBundleDisplayName": "uniblow",
             "CFBundleVersion": VERSION,
             "CFBundleShortVersionString": VERSION,
+            "LSEnvironment": {
+                "LANG": "en_US.UTF-8",
+                "LC_CTYPE": "en_US.UTF-8",
+            },
             "NSHumanReadableCopyright": "Copyright (C) 2021 BitLogiK",
         },
     )

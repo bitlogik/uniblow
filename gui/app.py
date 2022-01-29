@@ -16,6 +16,7 @@
 
 import sys
 import os.path
+from os import environ
 from webbrowser import open as wopen
 
 from wx import (
@@ -71,6 +72,22 @@ def file_path(fpath):
 
 def show_history(history_url):
     wopen(history_url, new=1, autoraise=True)
+
+
+if sys.platform.startswith("darwin"):
+    # On MacOS, the set_default_verify_paths method of the Python OpenSSL lib,
+    # used in the context method load_default_certs, mostly fails to find any
+    # root Certificates Authorities for the SSLContext class.
+    # This helps the Python OpenSSL to find the location for the context,
+    # at which CA certificates for verification purposes is located.
+    # On Mac, Uniblow is bundled with the certifi package, which uses
+    # the Mozilla CA certificates list, in the 'cacert' PEM file.
+    # https://wiki.mozilla.org/CA/Included_Certificates
+    cert_file_path = os.path.abspath(os.path.join(__file__, "../../certifi/cacert.pem"))
+    # The certifi CA file exists at this path when in the Mac app bundle
+    if os.path.exists(cert_file_path):
+        # Setting the environment variable SSL_CERT_FILE for libssl
+        environ["SSL_CERT_FILE"] = cert_file_path
 
 
 class HDsetting_panel(gui.window.HDPanel):
