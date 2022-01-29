@@ -1,10 +1,10 @@
 #!/bin/sh
 
-# Build uniblow MacOS binary package release
+# Build the uniblow MacOS binary package release
 
 # Requires Xcode developer tools
 # Python 3.8/3.9
-# if needed, python3 -m venv unibenvi should trigger the dev tools installation
+# If needed, python3 -m venv unibenv should trigger the dev tools installation
 
 
 rm -Rf build
@@ -36,5 +36,5 @@ setopt -o nomatch
 echo Compilation done.
 echo Binary result is in the dist folder.
 
-echo "Now need : code sign, notarization, dmg bundling, and notarization of the bundle."
-echo "DMG building requires biplist and dmgbuild."
+echo Now need : code sign, notarization, dmg bundling, and notarization of the bundle.
+echo DMG building requires biplist and dmgbuild.
