@@ -103,11 +103,16 @@ def get_device_class(device_str):
 
 def display_balance():
     logger.debug("Checking for wallet balance")
+    if not hasattr(app, "wallet"):
+        erase_info()
+        return
     try:
         balance = app.wallet.get_balance()
     except Exception as exc:
         erase_info()
-        err_msg = f"Network error when getting info.\nCheck your Internet connection.\n{str(exc)}"
+        err_msg = (
+            f"Error when getting account balance.\nCheck your Internet connection.\n{str(exc)}"
+        )
         logger.error("Error in display_balance : %s", err_msg, exc_info=exc, stack_info=True)
         warn_modal(err_msg)
         return
