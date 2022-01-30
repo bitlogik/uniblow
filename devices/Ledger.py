@@ -36,6 +36,7 @@ INSTRUCTION_SIGN = 0x04
 INSTRUCTION_SIGNMESSAGE = 0x08
 INSTRUCTION_SIGN712 = 0x0C
 INSTRUCTION_SENDTOKENDATA = 0x0A
+MINIMUM_APP_VERSION = 0x010500
 
 
 def unpack_vrs(vrsbin):
@@ -84,6 +85,8 @@ class Ledger(BaseDevice):
             raise Exception(f"Error {hex(exc.sw)} in Ledger.")
         eth_version = f"{eth_app_info[1]}.{eth_app_info[2]}.{eth_app_info[3]}"
         logger.debug(f"Ledger ETH app version {eth_version}")
+        if int.from_bytes(eth_app_info[1:4], "big") < MINIMUM_APP_VERSION:
+            raise Exception("The Ethereum app installed in the Ledger must be at least v1.5.0.")
         if self.account is None:
             raise NotinitException
 
