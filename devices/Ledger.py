@@ -29,6 +29,15 @@ class NotinitException(Exception):
     pass
 
 
+LEDGER_CLASS = 0xE0
+INSTRUCTION_GETPUBKEY = 0x02
+INSTRUCTION_GETAPPDATA = 0x06
+INSTRUCTION_SIGN = 0x04
+INSTRUCTION_SIGNMESSAGE = 0x08
+INSTRUCTION_SIGN712 = 0x0C
+INSTRUCTION_SENDTOKENDATA = 0x0A
+
+
 def unpack_vrs(vrsbin):
     """Provide serialized vrs as 3 integers."""
     v = read_uint8(vrsbin, 0)
@@ -63,7 +72,7 @@ class Ledger(BaseDevice):
         except:
             raise Exception("Ledger not found. Connect it and unlock. In Linux, allow udev rules.")
         try:
-            apdu = [0xE0, 0x06, 0x00, 0x00, 0x00, 0x04]
+            apdu = [LEDGER_CLASS, INSTRUCTION_GETAPPDATA, 0x00, 0x00, 0x00]
             eth_app_info = self.ledger_device.exchange(bytearray(apdu))
         except BTChipException as exc:
             if exc.sw == 0x6D00:
@@ -91,7 +100,13 @@ class Ledger(BaseDevice):
 
     def get_public_key(self, showOnScreenCB=None):
         result = {}
-        apdu = [0xE0, 0x02, 0x00 if showOnScreenCB is None else 0x01, 00, len(self.bin_path)]
+        apdu = [
+            LEDGER_CLASS,
+            INSTRUCTION_GETPUBKEY,
+            0x00 if showOnScreenCB is None else 0x01,
+            0x00,
+            len(self.bin_path),
+        ]
         apdu.extend(self.bin_path)
         approved = False
         try:
@@ -132,7 +147,14 @@ class Ledger(BaseDevice):
         ledger_signature = bytes.fromhex(ledger_signature_hex)
         token_name_bin = token_name.encode("utf8")
         token_name_len = len(token_name_bin)
-        apdu = [0xE0, 0x0A, 0x00, 0x00, 29 + token_name_len + len(ledger_signature), token_name_len]
+        apdu = [
+            LEDGER_CLASS,
+            INSTRUCTION_SENDTOKENDATA,
+            0x00,
+            0x00,
+            29 + token_name_len + len(ledger_signature),
+            token_name_len,
+        ]
         apdu.extend(token_name_bin)
         apdu.extend(bytes.fromhex(token_addr))
         apdu.extend(writeUint32BE(token_decimals))
@@ -141,7 +163,7 @@ class Ledger(BaseDevice):
         self.ledger_device.exchange(bytearray(apdu))
 
     def sign(self, transaction):
-        apdu = [0xE0, 0x04, 0x00, 0x00, len(self.bin_path) + len(transaction)]
+        apdu = [LEDGER_CLASS, INSTRUCTION_SIGN, 0x00, 0x00, len(self.bin_path) + len(transaction)]
         apdu.extend(self.bin_path)
         apdu.extend(transaction)
         try:
@@ -160,7 +182,7 @@ class Ledger(BaseDevice):
         """Sign a personnal message, used when has_screen"""
         msg_sz = len(message)
         assert msg_sz < 225
-        apdu = [0xE0, 0x08, 0x00, 0x00, len(self.bin_path) + msg_sz + 4]
+        apdu = [LEDGER_CLASS, INSTRUCTION_SIGNMESSAGE, 0x00, 0x00, len(self.bin_path) + msg_sz + 4]
         apdu.extend(self.bin_path)
         apdu.extend(writeUint32BE(msg_sz))
         apdu.extend(message)
@@ -174,10 +196,9 @@ class Ledger(BaseDevice):
 
     def sign_eip712(self, domain_hash, message_hash):
         """Sign an EIP712 typed hash request, used when has_screen"""
-        # version 0 ?
         assert len(domain_hash) == 32
         assert len(message_hash) == 32
-        apdu = [0xE0, 0x0C, 0x00, 0x00, len(self.bin_path) + 64]
+        apdu = [LEDGER_CLASS, INSTRUCTION_SIGN712, 0x00, 0x00, len(self.bin_path) + 64]
         apdu.extend(self.bin_path)
         apdu.extend(domain_hash)
         apdu.extend(message_hash)
