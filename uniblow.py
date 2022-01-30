@@ -101,10 +101,38 @@ def get_device_class(device_str):
     return device_class
 
 
+def check_coin_consistency(current_wallet=None, network_num=None):
+    """Check if selected coin is the same as the current wallet class used."""
+    # Designed to fix a race condition when the async data of a wallet
+    # are displayed : address and balance.
+    # Changing the coin selector could mix crypto info. So this terminates some
+    # process path that are no longer valid.
+    if not app.gui_panel.coins_choice.IsEnabled():
+        # Can be seedwatcher
+        return True
+    coin_sel = app.gui_panel.coins_choice.GetSelection()
+    if coin_sel <= 0:
+        return False
+    coin_name = app.gui_panel.coins_choice.GetString(coin_sel)
+    coin_class = get_coin_class(coin_name)
+    if current_wallet is None:
+        current_wallet = type(app.wallet)
+    if coin_class is not current_wallet:
+        return False
+    if network_num is not None:
+        net_sel = app.gui_panel.network_choice.GetSelection()
+        if net_sel < 0:
+            return False
+        return net_sel == network_num
+    return True
+
+
 def display_balance():
     logger.debug("Checking for wallet balance")
     if not hasattr(app, "wallet"):
         erase_info()
+        return
+    if not check_coin_consistency():
         return
     try:
         balance = app.wallet.get_balance()
@@ -498,6 +526,8 @@ def set_coin(coin, network, wallet_type):
                     wx.CallAfter(wallet_fallback)
                     return
         key_type = get_coin_class(coin).get_key_type(wallet_type)
+        if not check_coin_consistency(get_coin_class(coin), network):
+            return
         if app.device.is_HD:
             current_path = (
                 get_coin_class(coin)
@@ -513,7 +543,11 @@ def set_coin(coin, network, wallet_type):
                 "confirm_callback": confirm_request,
             }
         app.wallet = get_coin_class(coin)(network, wallet_type, app.device, **option_arg)
+        if not check_coin_consistency(network_num=network):
+            return
         account_id = app.wallet.get_account()
+        if not check_coin_consistency(network_num=network):
+            return
         if option_info is not None and option_info.get("use_get_messages", False):
             app.wallet.wc_timer = wx.Timer()
             app.wallet.wc_timer.Notify = watch_messages
@@ -524,11 +558,12 @@ def set_coin(coin, network, wallet_type):
     except Exception as exc:
         wallet_error(exc)
         return
+    if not check_coin_consistency(network_num=network):
+        return
     display_coin(account_id)
 
 
 def display_coin(account_addr):
-    app.gui_panel.account_addr.SetValue(account_addr)
     imgbuf = BytesIO()
     imgqr = qrcode.make(
         account_addr,
@@ -537,6 +572,9 @@ def display_coin(account_addr):
         border=3,
     )
     imgqr.save(imgbuf, "PNG")
+    if not check_coin_consistency():
+        return
+    app.gui_panel.account_addr.SetValue(account_addr)
     imgbuf.seek(0)
     wxi = wx.Image(imgbuf, type=wx.BITMAP_TYPE_PNG)
     app.gui_panel.qrimg.SetScaleMode(wx.StaticBitmap.ScaleMode.Scale_None)  # or Scale_AspectFit
