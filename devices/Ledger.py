@@ -70,7 +70,7 @@ class Ledger(BaseDevice):
     def open_account(self):
         try:
             self.ledger_device = getDongle()
-        except:
+        except Exception:
             raise Exception("Ledger not found. Connect it and unlock. In Linux, allow udev rules.")
         try:
             apdu = [LEDGER_CLASS, INSTRUCTION_GETAPPDATA, 0x00, 0x00, 0x00]
@@ -80,7 +80,8 @@ class Ledger(BaseDevice):
                 raise Exception("Error in Ledger. Did you open the Ethereum app in the Ledger?")
             if exc.sw == 0x6D02:
                 raise Exception(
-                    "No app started in the Ledger. Install and open the Ethereum app in the Ledger."
+                    "No app started in the Ledger. "
+                    "Install and open the Ethereum app in the Ledger."
                 )
             raise Exception(f"Error {hex(exc.sw)} in Ledger.")
         eth_version = f"{eth_app_info[1]}.{eth_app_info[2]}.{eth_app_info[3]}"
@@ -120,13 +121,15 @@ class Ledger(BaseDevice):
                 raise Exception("Ledger is locked. Unlock it and retry.")
             if exc.sw == 0x6511:
                 raise Exception(
-                    "No app started in the Ledger. Install and open the Ethereum app in the Ledger."
+                    "No app started in the Ledger. Install and open "
+                    "the Ethereum app in the Ledger."
                 )
             if exc.sw == 0x6A15:
                 raise Exception("Error in Ledger. Did you open the Ethereum app in the Ledger?")
             if exc.message == "Invalid channel":
                 raise Exception(
-                    "Error communicating with the Ledger. Please lock or close any web3 wallet which can interfer with the Ledger : Metamask, Frame, Rabby, LedgerLive,..."
+                    "Error communicating with the Ledger. Please lock or close any web3 wallet "
+                    "which can interfer with the Ledger : Metamask, Frame, Rabby, LedgerLive,..."
                 )
             if exc.sw == 0x6F00:
                 raise Exception(exc.message)
