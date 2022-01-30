@@ -17,7 +17,7 @@
 
 from copy import deepcopy
 from wallets.ETHwallet import ETH_wallet
-from wallets.BSCtokens import tokens_values
+from wallets.BSCtokens import tokens_values, ledger_tokens
 
 
 class BSC_wallet(ETH_wallet):
@@ -56,3 +56,4 @@ class BSC_wallet(ETH_wallet):
             rpc_endpoint = "https://data-seed-prebsc-2-s2.binance.org:8545/"
             self.explorer = "https://testnet.bscscan.com/address/0x"
         self.load_base(rpc_endpoint, device, contract_addr, wc_uri, confirm_callback)
+        self.ledger_tokens = ledger_tokens

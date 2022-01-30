@@ -16,6 +16,7 @@
 
 
 import OpenPGPpy
+from devices.BaseDevice import BaseDevice
 
 CURVE_K1_ORDER = 0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEBAAEDCE6AF48A03BBFD25E8CD0364141
 EC_BYTES_SIZE = 32
@@ -66,17 +67,15 @@ def compress_pubkey(pgp_pubkey):
     return pubkey_header + pubkey[1:33]
 
 
-class OpenPGP:
+class OpenPGP(BaseDevice):
     # Using an OpenPGP device
 
     has_password = True
     has_admin_password = True
-    is_HD = False
+    has_hardware_button = True
 
     def __init__(self):
-        self.created = False
         self.PGPdevice = OpenPGPpy.OpenPGPcard()
-        self.has_hardware_button = True
 
     def __del__(self):
         if hasattr(self, "PGPdevice"):

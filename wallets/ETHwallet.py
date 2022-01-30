@@ -17,10 +17,10 @@
 
 import json
 
-from cryptolib.cryptography import public_key_recover, decompress_pubkey, sha3
+from cryptolib.cryptography import public_key_recover, decompress_pubkey, sha2, sha3
 from cryptolib.coins.ethereum import rlp_encode, int2bytearray, uint256, read_string
 from wallets.wallets_utils import shift_10, compare_eth_addresses, InvalidOption, NotEnoughTokens
-from wallets.ETHtokens import tokens_values
+from wallets.ETHtokens import tokens_values, ledger_tokens
 from wallets.typed_data_hash import typed_sign_hash, print_text_query
 from pyweb3 import Web3Client
 from pywalletconnect import WCClient, WCClientInvalidOption, WCClientException
@@ -42,6 +42,11 @@ TRANSFERT_FUNCTION = "a9059cbb"
 
 
 MESSAGE_HEADER = b"\x19Ethereum Signed Message:\n"
+EIP712_HEADER = b"\x19\x01"
+
+USER_SCREEN = (
+    "\n>> !!!  Once approved, check on your device screen to confirm the signature  !!! <<"
+)
 
 
 def has_checksum(addr):
@@ -177,7 +182,7 @@ class ETHwalletCore:
             ]
         )
         self.datahash = sha3(signing_tx)
-        return self.datahash
+        return (signing_tx, self.datahash)
 
     def add_signature(self, signature_der):
         """Add a DER signature into the built transaction."""
@@ -210,6 +215,27 @@ class ETHwalletCore:
         )
         return tx_final.hex()
 
+    def add_vrs(self, vrs):
+        # v from Ledger hardware device is only the 8 bits LSB
+        v_high = self.chainID >> 7
+        v = int2bytearray(256 * v_high + vrs[0])
+        r = int2bytearray(vrs[1])
+        s = int2bytearray(vrs[2])
+        tx_final = rlp_encode(
+            [
+                self.nonce,
+                self.gasprice,
+                self.startgas,
+                self.to,
+                self.value,
+                self.data,
+                v,
+                r,
+                s,
+            ]
+        )
+        return tx_final.hex()
+
     def encode_datasign(self, datahash, signature_der):
         """Encode a message signature from the DER sig."""
         # Signature decoding
@@ -223,6 +249,10 @@ class ETHwalletCore:
         if public_key_recover(h, r, s, v) != self.pubkey:
             v += 1
         # Signature encoding
+        return uint256(r) + uint256(s) + bytes([v])
+
+    def encode_vrs(self, v, r, s):
+        """Encode a message signature from vrs integers."""
         return uint256(r) + uint256(s) + bytes([v])
 
     def send(self, tx_hex):
@@ -312,6 +342,7 @@ class ETH_wallet:
             # If an Infura key is provided, also use it for mainnet
             rpc_endpoint = f"https://{self.network}.infura.io/v3/{INFURA_KEY}"
         self.load_base(rpc_endpoint, device, contract_addr, wc_uri, confirm_callback)
+        self.ledger_tokens = ledger_tokens
 
     def load_base(self, rpc_endpoint, device, contract_addr, wc_uri, confirm_callback):
         """Finish initialization, second part common for all chains"""
@@ -374,8 +405,12 @@ class ETH_wallet:
         return cls.wtypes
 
     @classmethod
-    def get_path(cls, network_name, wtype):
-        return cls.derive_paths[network_name][0]
+    def get_path(cls, network_name, wtype, legacy):
+        deriv_path = cls.derive_paths[network_name][0]
+        if legacy:
+            # Legacy path alternative derivation
+            deriv_path = deriv_path.replace("0/", "")
+        return deriv_path
 
     @classmethod
     def get_key_type(cls, wtype):
@@ -458,9 +493,23 @@ class ETH_wallet:
         """
         if data is None:
             data = bytearray(b"")
-        hash_to_sign = self.eth.prepare(account, amount, gazprice, ethgazlimit, data)
-        tx_signature = self.current_device.sign(hash_to_sign)
-        return self.eth.add_signature(tx_signature)
+        tx_bin, hash_to_sign = self.eth.prepare(account, amount, gazprice, ethgazlimit, data)
+        if self.current_device.has_screen:
+            if self.eth.ERC20 and self.current_device.ledger_tokens_compat:
+                # Token known by Ledger ?
+                ledger_info = self.ledger_tokens.get(self.eth.ERC20)
+                if ledger_info:
+                    # Known token : provide the trusted info to the device
+                    name = ledger_info["ticker"]
+                    data_sig = ledger_info["signature"]
+                    self.current_device.register_token(
+                        name, self.eth.ERC20[2:], self.eth.decimals, self.chainID, data_sig
+                    )
+            vrs = self.current_device.sign(tx_bin)
+            return self.eth.add_vrs(vrs)
+        else:
+            tx_signature = self.current_device.sign(hash_to_sign)
+            return self.eth.add_signature(tx_signature)
 
     def broadcast_tx(self, txdata):
         """Broadcast and return the tx hash as 0xhhhhhhhh"""
@@ -470,6 +519,7 @@ class ETH_wallet:
         """Process a WalletConnect personal_sign and eth_sign call"""
         # sign(keccak256("\x19Ethereum Signed Message:\n" + len(message) + message)))
         data_bin = bytes.fromhex(data_hex[2:])
+        msg_header = MESSAGE_HEADER + str(len(data_bin)).encode("ascii")
         sign_request = (
             "WalletConnect signature request :\n\n"
             f"- Data to sign (hex) :\n"
@@ -477,8 +527,15 @@ class ETH_wallet:
             f"\n Data to sign (ASCII/UTF8) :\n"
             f" {data_bin.decode('utf8')}\n"
         )
+        if self.current_device.has_screen:
+            hash2_data = sha2(data_bin).hex().upper()
+            sign_request += f"\n Hash data to sign (hex) :\n {hash2_data}\n"
+            sign_request += USER_SCREEN
         if self.confirm_callback(sign_request):
-            msg_header = MESSAGE_HEADER + str(len(data_bin)).encode("ascii")
+            if self.current_device.has_screen:
+                v, r, s = self.current_device.sign_message(data_bin)
+                return self.eth.encode_vrs(v, r, s)
+            # else
             hash_sign = sha3(msg_header + data_bin)
             der_signature = self.current_device.sign(hash_sign)
             return self.eth.encode_datasign(hash_sign, der_signature)
@@ -486,13 +543,24 @@ class ETH_wallet:
     def process_sign_typeddata(self, data_bin):
         """Process a WalletConnect eth_signTypedData call"""
         data_obj = json.loads(data_bin)
-        hash_sign = typed_sign_hash(data_obj, self.chainID)
+        hash_domain, hash_data = typed_sign_hash(data_obj, self.chainID)
         sign_request = (
             "WalletConnect signature request :\n\n"
             f"- Data to sign (typed) :\n"
             f"{print_text_query(data_obj)}"
+            f"\n - Hash domain (hex) :\n"
+            f" 0x{hash_domain.hex().upper()}\n"
+            f"\n - Hash data (hex) :\n"
+            f" 0x{hash_data.hex().upper()}\n"
         )
+        if self.current_device.has_screen:
+            sign_request += USER_SCREEN
         if self.confirm_callback(sign_request):
+            if self.current_device.has_screen:
+                v, r, s = self.current_device.sign_eip712(hash_domain, hash_data)
+                return self.eth.encode_vrs(v, r, s)
+            # else
+            hash_sign = sha3(EIP712_HEADER + hash_domain + hash_data)
             der_signature = self.current_device.sign(hash_sign)
             return self.eth.encode_datasign(hash_sign, der_signature)
 
@@ -518,6 +586,8 @@ class ETH_wallet:
             f" Gas limit  : {gas_limit}\n"
             f"Max fee cost: {gas_limit*gas_price / (10 ** self.eth.decimals)} {self.coin}\n"
         )
+        if self.current_device.has_screen:
+            sign_request += USER_SCREEN
         if self.confirm_callback(request_message):
             data_hex = txdata.get("data", "0x")
             data = bytearray.fromhex(data_hex[2:])

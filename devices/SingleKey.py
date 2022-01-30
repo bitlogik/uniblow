@@ -18,23 +18,24 @@
 from secrets import randbelow
 from cryptolib.cryptography import CURVES_ORDER
 from cryptolib.ECKeyPair import EC_key_pair
+
+from devices.BaseDevice import BaseDevice
 from wallets.wallets_utils import InvalidOption
 
 CURVE_K1_ORDER = CURVES_ORDER["K1"]
 EC_BYTES_SIZE = 32
 
 
-class SKdevice:
+class SKdevice(BaseDevice):
 
     has_password = True
-    has_admin_password = False
-    is_HD = False
 
     def __init__(self):
         self.ktype = None
         self.eckey = None
-        self.created = False
-        self.has_hardware_button = False
+
+    def open_account(self):
+        raise InvalidOption("SingleKey device can't be opened using this method.")
 
     def open_account_fromint(self, key_int):
         self.eckey_k1 = EC_key_pair(key_int, "K1")

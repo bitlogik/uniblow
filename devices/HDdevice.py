@@ -28,6 +28,7 @@ from cryptolib.HDwallet import (
     mnemonic_to_seed,
     generate_mnemonic,
 )
+from devices.BaseDevice import BaseDevice
 from devices.file_path import WalletFile
 
 
@@ -42,17 +43,10 @@ class NotinitException(Exception):
     pass
 
 
-class HDdevice:
+class HDdevice(BaseDevice):
 
     has_password = True
-    has_admin_password = False
     is_HD = True
-
-    def __init__(self):
-        self.created = False
-        self.has_hardware_button = False
-        self.account = "0"
-        self.aindex = "0"
 
     def open_account(self, password):
         wallet_file = WalletFile(FILE_NAME)
@@ -118,6 +112,7 @@ class HDdevice:
         # Build wallet info
         self.account = settings["account"]
         self.aindex = settings["index"]
+        self.legacy_derive = settings["legacy_path"]
         account_info = {
             "seed_enc": encrypted_content.hex(),
             "salt": salt.hex(),

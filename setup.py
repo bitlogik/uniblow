@@ -32,6 +32,7 @@ setup(
         "PyNaCl==1.5.0",
         "pyweb3==0.1.3",
         "OpenPGPpy==0.4",
+        "hidapi==0.11.0.post2",
         "pyWalletConnect==1.1.4",
     ],
     package_data={
