@@ -599,6 +599,7 @@ def set_coin(coin, network, wallet_type):
         return
     if not check_coin_consistency(network_num=network):
         return
+    if app.device.has_screen:
         app.gui_panel.btn_chkaddr.Show()
     display_coin(account_id)
 

@@ -16,6 +16,7 @@
 
 
 import json
+from logging import getLogger
 
 from cryptolib.cryptography import public_key_recover, decompress_pubkey, sha2, sha3
 from cryptolib.coins.ethereum import rlp_encode, int2bytearray, uint256, read_string
@@ -28,6 +29,9 @@ from pywalletconnect import WCClient, WCClientInvalidOption, WCClientException
 
 ETH_units = 18
 GWEI_UNIT = 10 ** 9
+
+
+logger = getLogger(__name__)
 
 
 # ERC20 functions codes
@@ -47,6 +51,14 @@ EIP712_HEADER = b"\x19\x01"
 USER_SCREEN = (
     "\n>> !!!  Once approved, check on your device screen to confirm the signature  !!! <<"
 )
+
+WALLETCONNECT_PROJID = "5af34a5c60298f270f4281f8bae67f33"
+WALLET_DESCR = {
+    "description": "A universal blockchain wallet for cryptos",
+    "url": "https://uniblow.org",
+    "icons": ["https://uniblow.org/img/uniblow_logo.png"],
+    "name": "Uniblow",
+}
 
 
 def has_checksum(addr):
@@ -371,6 +383,8 @@ class ETH_wallet:
         if contract_addr_str is not None:
             self.coin = self.eth.token_symbol
         if wc_uri is not None:
+            WCClient.set_wallet_metadata(WALLET_DESCR)
+            WCClient.set_project_id(WALLETCONNECT_PROJID)
             try:
                 self.wc_client = WCClient.from_wc_uri(wc_uri)
                 req_id, req_chain_id, request_info = self.wc_client.open_session()
@@ -388,6 +402,7 @@ class ETH_wallet:
             if approve:
                 self.wc_client.reply_session_request(req_id, self.chainID, self.get_account())
             else:
+                self.wc_client.reject_session_request(req_id)
                 self.wc_client.close()
                 raise InvalidOption("You just declined the WalletConnect request.")
 
@@ -430,9 +445,26 @@ class ETH_wallet:
             id_request = wc_message[0]
             method = wc_message[1]
             parameters = wc_message[2]
+            logger.debug(
+                "WC request id: %s, method: %s, params: %s", id_request, method, parameters
+            )
+            if method == "wc_sessionPayload":
+                # Read if WCv2 and extract to v1
+                logger.debug("WCv2 request")
+                if parameters.get("request"):
+                    logger.debug("request decoding")
+                    method = parameters["request"].get("method")
+                    parameters = parameters["request"].get("params")
+                    logger.debug("Actual method: %s, params: %s", method, parameters)
             if method == "wc_sessionUpdate":
                 if parameters[0].get("approved") is False:
                     raise Exception("Disconnected by the web app service.")
+            if method == "wc_sessionDelete":
+                if parameters.get("reason"):
+                    raise Exception(
+                        "Disconnected by the web app service.\n"
+                        f"Reason : {parameters['reason']['message']}"
+                    )
             elif method == "personal_sign":
                 if compare_eth_addresses(parameters[1], self.get_account()):
                     signature = self.process_sign_message(parameters[0])
