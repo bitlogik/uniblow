@@ -1,7 +1,12 @@
+from cryptolib.cryptography import sha3
 from wallets.typed_data_hash import encode_data, type_hash, hash_struct, typed_sign_hash
 
 
 # Tests for EIP712 typed structured data hashing
+
+
+def full_message_digest(domain_hash, digest_data):
+    return sha3(b"\x19\x01" + domain_hash + digest_data)
 
 
 def test_eip712_simple():
@@ -70,14 +75,13 @@ def test_eip712_A():
         "ca26ae5702701d05cd2305f7c52a2fc8"
     )
 
-    struct_hash = hash_struct("Mail", typed_data["types"], typed_data["message"])
-    assert struct_hash.hex() == "c52c0ee5d84264471806290a3f2c4cecfc5490626bf912d01f240d7a274b371e"
-
-    dom_sep = hash_struct("EIP712Domain", typed_data["types"], typed_data["domain"])
+    dom_sep, hashf = typed_sign_hash(typed_data)
     assert dom_sep.hex() == "f2cee375fa42b42143804025fc449deafd50cc031ca257e0b194a650a912090f"
-
-    res = typed_sign_hash(typed_data)
-    assert res.hex() == "be609aee343fb3c4b28e1df9e632fca64fcfaede20f02e86244efddf30957bd2"
+    assert hashf.hex() == "c52c0ee5d84264471806290a3f2c4cecfc5490626bf912d01f240d7a274b371e"
+    assert (
+        full_message_digest(dom_sep, hashf).hex()
+        == "be609aee343fb3c4b28e1df9e632fca64fcfaede20f02e86244efddf30957bd2"
+    )
 
 
 def test_eip712_B():
@@ -126,10 +130,12 @@ def test_eip712_B():
         },
         "message": {"name": "Bob", "wallet": "0xbBbBBBBbbBBBbbbBbbBbbbbBBbBbbbbBbBbbBBbB"},
     }
-    dom_sep = hash_struct("EIP712Domain", typed_data1["types"], typed_data1["domain"])
+    dom_sep, thash = typed_sign_hash(typed_data1)
     assert dom_sep.hex() == "f2cee375fa42b42143804025fc449deafd50cc031ca257e0b194a650a912090f"
-    thash = typed_sign_hash(typed_data1)
-    assert thash.hex() == "0a94cf6625e5860fc4f330d75bcd0c3a4737957d2321d1a024540ab5320fe903"
+    assert (
+        full_message_digest(dom_sep, thash).hex()
+        == "0a94cf6625e5860fc4f330d75bcd0c3a4737957d2321d1a024540ab5320fe903"
+    )
 
     # Test encoding 2
     typed_data2 = {
@@ -159,10 +165,12 @@ def test_eip712_B():
             "count": 4,
         },
     }
-    dom_sep = hash_struct("EIP712Domain", typed_data2["types"], typed_data2["domain"])
+    dom_sep, thash = typed_sign_hash(typed_data2)
     assert dom_sep.hex() == "f2cee375fa42b42143804025fc449deafd50cc031ca257e0b194a650a912090f"
-    thash = typed_sign_hash(typed_data2)
-    assert thash.hex() == "2218fda59750be7bb9e5dfb2b49e4ec000dc2542862c5826f1fe980d6d727e95"
+    assert (
+        full_message_digest(dom_sep, thash).hex()
+        == "2218fda59750be7bb9e5dfb2b49e4ec000dc2542862c5826f1fe980d6d727e95"
+    )
 
     # Test encoding 3
     typed_data3 = {
@@ -225,14 +233,13 @@ def test_eip712_B():
     assert hash_person_2.hex() == "efa62530c7ae3a290f8a13a5fc20450bdb3a6af19d9d9d2542b5a94e631a9168"
     phash3 = type_hash("Mail", typed_data3["types"])
     assert phash3.hex() == "4bd8a9a2b93427bb184aca81e24beb30ffa3c747e2a33d4225ec08bf12e2e753"
-    hash_primary = hash_struct(
-        typed_data3["primaryType"], typed_data3["types"], typed_data3["message"]
-    )
+    dom_sep, hash_primary = typed_sign_hash(typed_data3)
     assert hash_primary.hex() == "eb4221181ff3f1a83ea7313993ca9218496e424604ba9492bb4052c03d5c3df8"
-    dom_sep = hash_struct("EIP712Domain", typed_data3["types"], typed_data3["domain"])
     assert dom_sep.hex() == "f2cee375fa42b42143804025fc449deafd50cc031ca257e0b194a650a912090f"
-    global_hash = typed_sign_hash(typed_data3)
-    assert global_hash.hex() == "a85c2e2b118698e88db68a8105b794a8cc7cec074e89ef991cb4f5f533819cc2"
+    assert (
+        full_message_digest(dom_sep, hash_primary).hex()
+        == "a85c2e2b118698e88db68a8105b794a8cc7cec074e89ef991cb4f5f533819cc2"
+    )
 
     # Test encoding 4
     typed_data4 = {
@@ -262,10 +269,12 @@ def test_eip712_B():
             "count": "0x1122334455667788",
         },
     }
-    dom_sep = hash_struct("EIP712Domain", typed_data4["types"], typed_data4["domain"])
+    dom_sep, hashdf = typed_sign_hash(typed_data4)
     assert dom_sep.hex() == "f2cee375fa42b42143804025fc449deafd50cc031ca257e0b194a650a912090f"
-    global_hash = typed_sign_hash(typed_data4)
-    assert global_hash.hex() == "2a3e64893ed4ba30ea34dbff3b0aa08c7677876cfdf7112362eccf3111f58d1d"
+    assert (
+        full_message_digest(dom_sep, hashdf).hex()
+        == "2a3e64893ed4ba30ea34dbff3b0aa08c7677876cfdf7112362eccf3111f58d1d"
+    )
 
 
 def test_real_dapp():
