@@ -402,6 +402,7 @@ class ETH_wallet:
             if approve:
                 self.wc_client.reply_session_request(req_id, self.chainID, self.get_account())
             else:
+                self.wc_client.reject_session_request(req_id)
                 self.wc_client.close()
                 raise InvalidOption("You just declined the WalletConnect request.")
 
