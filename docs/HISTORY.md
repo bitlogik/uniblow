@@ -1,6 +1,15 @@
 
 Uniblow versions history
 
+## 1.4.0
+
+* Add Ledger device (for ETH/EVM, incl. tokens support)
+* Add WalletConnect v2 (experimental)
+* Improve UI/UX
+* Action build for MacOS fixed for SSL CA
+* Base device class created
+* Update pyNaCl/libsodium
+
 ## 1.3.1
 
 * Update XTZ wallet
