@@ -33,7 +33,7 @@ setup(
         "pyweb3==0.1.3",
         "OpenPGPpy==0.4",
         "hidapi==0.11.0.post2",
-        "pyWalletConnect==1.1.4",
+        "pyWalletConnect==1.2.0",
     ],
     package_data={
         "gui": [
