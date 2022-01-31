@@ -18,14 +18,14 @@ It may run on other Linux, as RHEL or Fedora. But without any testing and no gua
 Get the binary and its signature file.
 
 From the uniblow website :  
-[Uniblow program](https://uniblow.org/dist/Uniblow-linux-x86_64-1.3.1)  
+[Uniblow program](https://uniblow.org/dist/Uniblow-linux-x86_64-1.4.0)  
  and its  
-[PGP signature](https://uniblow.org/dist/Uniblow-linux-x86_64-1.3.1.sig)
+[PGP signature](https://uniblow.org/dist/Uniblow-linux-x86_64-1.4.0.sig)
 
 **OR** using the terminal, in Tails you need to prepend *torsocks* to these commands :
 ```
-wget https://uniblow.org/dist/Uniblow-linux-x86_64-1.3.1
-wget https://uniblow.org/dist/Uniblow-linux-x86_64-1.3.1.sig
+wget https://uniblow.org/dist/Uniblow-linux-x86_64-1.4.0
+wget https://uniblow.org/dist/Uniblow-linux-x86_64-1.4.0.sig
 ```
 
 ### Check authenticity
@@ -48,7 +48,7 @@ In Tails, using the Files explorer, you can right click on the sig file and sele
 
 OR alternatively using the Terminal, in Debian/Ubuntu (also valid for Tails) :
 ```
-UniblowFile=Uniblow-linux-x86_64-1.3.1
+UniblowFile=Uniblow-linux-x86_64-1.4.0
 gpg --verify --trust-model always $UniblowFile.sig $UniblowFile
 ```
 
@@ -82,11 +82,11 @@ Now, you can run Uniblow.
 
 In **Tails**, the *torsocks* software is required to wrap the internet queries of the Uniblow app. Else you get the network error message *Network is unreachable*.
 ```
-torsocks ./Uniblow-linux-x86_64-1.3.1
+torsocks ./Uniblow-linux-x86_64-1.4.0
 ```
 
 
 In **Debian or Ubuntu**, you can directly run it from the file explorer GUI : double-click on the Uniblow binary icon to start it.
 
-If nothing happens after some seconds, open a terminal in the current directory and type `./Uniblow-linux-x86_64-1.3.1`
+If nothing happens after some seconds, open a terminal in the current directory and type `./Uniblow-linux-x86_64-1.4.0`
 
