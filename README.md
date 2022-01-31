@@ -30,7 +30,7 @@ Compatible with the following blockchains :
     * mainnet and testnet networks
     * Standard wallet (P2PKH)
     * Segwit P2SH compatibility
-    * Full Segwit bech32 (P2WPKH)
+    * Full Segwit wallet bech32 (P2WPKH)
     * Send to Taproot Bech32m address (P2TR)
 * ETH
     * mainnet, Rinkeby, Ropsten, Kovan and Goerli networks
@@ -144,10 +144,10 @@ seed (of one single address).
 The BasicFile device encrypts your private key [with a random salt using
 libsodium
 XSalsa20/Poly1305](https://libsodium.gitbook.io/doc/secret-key_cryptography/secretbox#algorithm-details),
-with an encryption key derived from the user chosen password using [Argon2id
+ with an encryption key derived from the user chosen password using [Argon2id
 (moderate
 settings)](https://raw.githubusercontent.com/P-H-C/phc-winner-argon2/master/argon2-specs.pdf).
-One can choose to use a default password. To do so, just left blank the password
+ One can choose to use a default password. To do so, just left blank the password
 prompt input when asked the first time at device setting. Without a personal
 password, the security of the key is what your hard-drive computer offers for
 your files.  
@@ -163,9 +163,13 @@ case, rename back to BasicFileWallet and you read back the first wallet.
 
 The folder where the key file is stored, sits in the user data directory.
 
-* Windows :  C:\\Users\\<username\>\\AppData\\Local\\BitLogiK\\Uniblow\\keys\\
-* Linux   :  ~/.local/share/Uniblow/keys/  or in $XDG_DATA_HOME if defined
-* MacOS   :  ~/Library/Application Support/Uniblow/keys/
+* Windows :  
+C:\\Users\\<username\>\\AppData\\Local\\BitLogiK\\Uniblow\\keys\\
+* Linux   :  
+~/.local/share/Uniblow/keys/  
+or in $XDG_DATA_HOME if defined
+* MacOS   :  
+~/Library/Application Support/Uniblow/keys/
 
 ### OpenPGP device
 
@@ -177,9 +181,6 @@ OpenPGP physical device, outside of the computer. Most of these devices are
 built with a secure element chip. The private key never escapes the hardware
 device boundary. Note that the drawback is that there is no easy backup of the
 keys, so one have to take care of not forgetting the PIN or losing the device.
-Some blockchain-based hardware wallets with the OpenPGP mechanism offer some
-link with the seed, as the Ledger Nano S/X , [see details
-there](https://github.com/LedgerHQ/openpgp-card-app/blob/master/doc/user/blue-app-openpgp-card.rst).
 
 For the best experience, the OpenPGP device should be in its default reset state
 before using it with uniblow. Uniblow asks the user to choose the admin PIN
@@ -210,7 +211,7 @@ XSalsa20/Poly1305](https://libsodium.gitbook.io/doc/secret-key_cryptography/secr
 using an encryption key derived from the user chosen password using [Argon2id
 (moderate
 settings)](https://raw.githubusercontent.com/P-H-C/phc-winner-argon2/master/argon2-specs.pdf).
-One can choose to use a default password. To do so, just left blank the password
+ One can choose to use a default password. To do so, just left blank the password
 prompt input when asked the first time at device setting. Without your personal
 password, the security of the key is what your hard-drive computer offers for
 your files.  
@@ -232,7 +233,7 @@ A Ledger hardware device such as Nano X and Nano S, can be used with Uniblow but
 only for Ethereum/EVM chains (ETH, BSC, MATIC, FTM, CELO, AVAX and ARB).
 
 The Ledger needs to be unlocked and run the Ethereum app. The address displayed
-in the wallet can be checked on the Ledger by clicking a dedicated UI button. The
+in the wallet can be checked on the Ledger screen by clicking a dedicated UI button. The
 Uniblow wallet has a tokens list integrated, which allows to send thousands of
 major tokens without enabling the "blind signing" features.
 
