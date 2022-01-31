@@ -793,10 +793,10 @@ def check_wallet(evt):
         "",
         style=wx.PD_APP_MODAL | wx.PD_AUTO_HIDE | wx.PD_SMOOTH,
     )
-    wx.MilliSleep(100)
+    wx.MilliSleep(200)
     wait_msg = "Verify the address on the Ledger screen."
     progress_modal.Update(50, wait_msg)
-    wx.MilliSleep(100)
+    wx.MilliSleep(250)
     try:
         app.device.get_public_key(partial(end_checkwallet, progress_modal))
     except Exception as exc:
