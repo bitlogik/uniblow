@@ -3,7 +3,7 @@
 # UNIBLOW BTC lib wallet
 # Copyright (C) 2015-2019 Vitalik Buterin and pycryptools developers
 # Copyright (C) 2019-2021 primal100
-# Copyright (C) 2021 BitLogiK
+# Copyright (C) 2021-2022 BitLogiK
 
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by

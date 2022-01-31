@@ -4,7 +4,7 @@
 # UNIBLOW User data file I/O
 # Copyright (C) 2005-2010 ActiveState Software Inc.
 # Copyright (C) 2013 Eddy Petrișor
-# Copyright (C) 2021 BitLogiK
+# Copyright (C) 2021-2022 BitLogiK
 
 
 """ Uniblow read/write user data in file.
