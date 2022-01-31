@@ -232,6 +232,16 @@ case, rename back to HDseed and you read back the first wallet.
 
 To access the direcory where the HDseed is stored, see the *BasicFile device* section above.
 
+### Ledger
+
+A Ledger hardware device can be used only with Ethereum/EVM like chain (ETH, BSC, MATIC, FTM, CELO, AVAX and ARB).
+
+The Ledger needs to be unlocked and run the Ethereum app. The address displayed in the wallet can be checked on the Ledger with a dedicated UI button. The Uniblow wallet has a tokens list integrated, which allows to send thousands of tokens without enabling the "blind signing features".
+
+In case you use Uniblow with the Ledger on a dapp (with WalletConnect option), the transactions can require the "blind signing" option to be enabled in the Ledger. In this case, a dedicated modal will appear asking you to activate this, and you need to make the transaction again after the option activation.
+
+On Linux, the udev rules needs to be allowed for the Ledger USB device. Run [this official script](https://raw.githubusercontent.com/LedgerHQ/udev-rules/master/add_udev_rules.sh) as root to allow the Ledger device.
+
 ## Special wallet options
 
 ### ERC20
@@ -243,6 +253,7 @@ In ETH, BSC, MATIC, FTM, CELO, AVAX or ARB, you can choose the ERC20 wallet acco
 In ETH, BSC, MATIC, FTM, CELO, AVAX or ARB, Uniblow can connect to a Dapp using the WalletConnect system. Select WalletConnect in the wallet account type, input the wc URI and it will connect to the web3 app using WalletConnect.  
 Note that in this mode, Uniblow disables sending any transaction from the GUI. All the sending transactions have to be performed from the connected web app, after your approval in Uniblow. Else you have to connect to a standard (or token) account type to process a sending transaction using Uniblow directly.
 
+With a Ledger device, the transactions can require the "blind signing" option to be enabled in the Ledger.
 
 The SecuBoost seed derivation type
 ----------------------------------
