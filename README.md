@@ -232,9 +232,9 @@ A Ledger hardware device such as Nano X and Nano S, can be used with Uniblow but
 only for Ethereum/EVM chains (ETH, BSC, MATIC, FTM, CELO, AVAX and ARB).
 
 The Ledger needs to be unlocked and run the Ethereum app. The address displayed
-in the wallet can be checked on the Ledger with a dedicated UI button. The
+in the wallet can be checked on the Ledger by clicking a dedicated UI button. The
 Uniblow wallet has a tokens list integrated, which allows to send thousands of
-major tokens without enabling the "blind signing features".
+major tokens without enabling the "blind signing" features.
 
 In case you use Uniblow with the Ledger on a web3 dapp, with the WalletConnect option,
 the transactions can require the "blind signing" option to be enabled in the
