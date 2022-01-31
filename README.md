@@ -18,12 +18,6 @@ A **uni**versal **blo**ckchain **w**allet for cryptos
 Official web site : https://uniblow.org  
 (also https://uniblow.app)
 
-The Uniblow software can also be used integrated in your services, as it
-provides a unified, multi-platforms and blockchain agnostic interface to manage
-many different wallets. By using the wallet class, this is as simple as :
-`ETH_wallet = wallet("ETH", "mainnet", device)`, and you get the interface
-methods mentioned in the developer section below.
-
 ![Uniblow screenshot](screenshot.png)
 
 Don't expect to get advanced settings for the fees. This software provides an
@@ -348,6 +342,12 @@ Future features :
     chains (external and internal change).
 
 ### Programming interface class
+
+The Uniblow software can also be used integrated in your services, as it
+provides a unified, multi-platforms and blockchain agnostic interface to manage
+many different wallets. By using the wallet class, this is as simple as :
+`ETH_wallet = wallet(0, 0, device)`, and you get the interface
+methods mentioned below.
 
 The coin wallet interface is simple and provides an abstraction layer for any underlying blockchain.
 
