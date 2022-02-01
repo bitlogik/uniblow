@@ -1,6 +1,6 @@
 """
 *******************************************************************************
-*   BTChip Bitcoin Hardware Wallet Python API
+*   Ledger Hardware Wallet Python API
 *   (c) 2014 BTChip
 *
 *  Licensed under the Apache License, Version 2.0 (the "License");
@@ -18,12 +18,12 @@
 """
 
 import struct
-from .btchipException import BTChipException
+from .ledgerException import LedgerException
 
 
 def wrapCommandAPDU(channel, command, packetSize):
     if packetSize < 3:
-        raise BTChipException("Can't handle Ledger framing with less than 3 bytes for the report")
+        raise LedgerException("Can't handle Ledger framing with less than 3 bytes for the report")
     sequenceIdx = 0
     offset = 0
     result = struct.pack(">HBHH", channel, 0x05, sequenceIdx, len(command))
@@ -54,13 +54,13 @@ def unwrapResponseAPDU(channel, data, packetSize):
     if (data is None) or (len(data) < 7 + 5):
         return None
     if struct.unpack(">H", data[offset : offset + 2])[0] != channel:
-        raise BTChipException("Invalid channel")
+        raise LedgerException("Invalid channel")
     offset += 2
     if data[offset] != 0x05:
-        raise BTChipException("Invalid tag")
+        raise LedgerException("Invalid tag")
     offset += 1
     if struct.unpack(">H", data[offset : offset + 2])[0] != sequenceIdx:
-        raise BTChipException("Invalid sequence")
+        raise LedgerException("Invalid sequence")
     offset += 2
     responseLength = struct.unpack(">H", data[offset : offset + 2])[0]
     offset += 2
@@ -77,13 +77,13 @@ def unwrapResponseAPDU(channel, data, packetSize):
         if offset == len(data):
             return None
         if struct.unpack(">H", data[offset : offset + 2])[0] != channel:
-            raise BTChipException("Invalid channel")
+            raise LedgerException("Invalid channel")
         offset += 2
         if data[offset] != 0x05:
-            raise BTChipException("Invalid tag")
+            raise LedgerException("Invalid tag")
         offset += 1
         if struct.unpack(">H", data[offset : offset + 2])[0] != sequenceIdx:
-            raise BTChipException("Invalid sequence")
+            raise LedgerException("Invalid sequence")
         offset += 2
         if (responseLength - len(result)) > packetSize - 5:
             blockSize = packetSize - 5

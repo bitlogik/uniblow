@@ -1,6 +1,6 @@
 """
 *******************************************************************************
-*   BTChip Bitcoin Hardware Wallet Python API
+*   Ledger Hardware Wallet Python API
 *   (c) 2014 BTChip
 *
 *  Licensed under the Apache License, Version 2.0 (the "License");
@@ -18,7 +18,7 @@
 """
 
 
-class BTChipException(Exception):
+class LedgerException(Exception):
     def __init__(self, message, sw=0x6F00):
         self.message = message
         self.sw = sw

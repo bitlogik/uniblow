@@ -1,6 +1,6 @@
 """
 *******************************************************************************
-*   BTChip Bitcoin Hardware Wallet Python API
+*   Ledger Hardware Wallet Python API
 *   (c) 2014 BTChip
 *   (c) 2022 BitLogiK
 *
@@ -19,7 +19,7 @@
 """
 
 from abc import ABCMeta, abstractmethod
-from .btchipException import BTChipException
+from .ledgerException import LedgerException
 from .ledgerWrapper import wrapCommandAPDU, unwrapResponseAPDU
 from logging import getLogger
 import time
@@ -81,7 +81,7 @@ class HIDDongleHIDAPI(Dongle, DongleWait):
 
     def exchange(self, apdu, timeout=20000):
         if not self.opened:
-            raise BTChipException("Ledger was disconnected.")
+            raise LedgerException("Ledger was disconnected.")
         logger.debug(" Sending => %s", apdu.hex())
         if self.ledger:
             apdu = wrapCommandAPDU(0x0101, apdu, 64)
@@ -133,7 +133,7 @@ class HIDDongleHIDAPI(Dongle, DongleWait):
         response = result[dataStart : dataLength + dataStart]
         logger.debug(" Receiving <= %s%.2x", response.hex(), sw)
         if sw != 0x9000:
-            raise BTChipException("Invalid status %04x" % sw, sw)
+            raise LedgerException("Invalid status %04x" % sw, sw)
         return response
 
     def waitFirstResponse(self, timeout):
@@ -144,10 +144,10 @@ class HIDDongleHIDAPI(Dongle, DongleWait):
                 data = self.device.read(65)
             except OSError:
                 self.close()
-                raise BTChipException("Ledger was disconnected.")
+                raise LedgerException("Ledger was disconnected.")
             if not len(data):
                 if time.time() - start > timeout:
-                    raise BTChipException("Timeout")
+                    raise LedgerException("Timeout")
                 time.sleep(0.02)
         return bytearray(data)
 
@@ -171,13 +171,13 @@ class DongleSmartcard(Dongle):
 
     def exchange(self, apdu, timeout=20000):
         if not self.opened:
-            raise BTChipException("Ledger was disconnected.")
+            raise LedgerException("Ledger was disconnected.")
         logger.debug(" Sending => %s", apdu.hex())
         response, sw1, sw2 = self.device.transmit(toBytes(apdu.hex()))
         sw = (sw1 << 8) | sw2
         logger.debug(" Receiving <= %s%.2x", response.hex(), sw)
         if sw != 0x9000:
-            raise BTChipException("Invalid status %04x" % sw, sw)
+            raise LedgerException("Invalid status %04x" % sw, sw)
         return bytearray(response)
 
     def close(self):
@@ -199,7 +199,7 @@ class DongleServer(Dongle):
         try:
             self.socket.connect((self.server, self.port))
         except Exception:
-            raise BTChipException("Ledger Proxy connection failed")
+            raise LedgerException("Ledger Proxy connection failed")
         logger.debug("Ledger server connected")
 
     def exchange(self, apdu, timeout=20000):
@@ -211,7 +211,7 @@ class DongleServer(Dongle):
         sw = struct.unpack(">H", self.socket.recv(2))[0]
         logger.debug(" Sending <= %s%.2x", response.hex(), sw)
         if sw != 0x9000:
-            raise BTChipException("Invalid status %04x" % sw, sw)
+            raise LedgerException("Invalid status %04x" % sw, sw)
         return bytearray(response)
 
     def close(self):
@@ -273,4 +273,4 @@ def getDongle():
         os.getenv("LEDGER_PROXY_PORT") is not None
     ):
         return DongleServer(os.getenv("LEDGER_PROXY_ADDRESS"), int(os.getenv("LEDGER_PROXY_PORT")))
-    raise BTChipException("No dongle found")
+    raise LedgerException("No dongle found")

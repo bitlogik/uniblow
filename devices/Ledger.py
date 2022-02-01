@@ -17,8 +17,8 @@
 from logging import getLogger
 
 from devices.BaseDevice import BaseDevice
-from devices.btchip.btchipComm import getDongle
-from devices.btchip.btchipException import BTChipException
+from devices.ledger.ledgerComm import getDongle
+from devices.ledger.ledgerException import LedgerException
 from cryptolib.HDwallet import encode_bip39_string, BIP32node
 
 logger = getLogger(__name__)
@@ -74,7 +74,7 @@ class Ledger(BaseDevice):
         try:
             apdu = [LEDGER_CLASS, INSTRUCTION_GETAPPDATA, 0x00, 0x00, 0x00]
             eth_app_info = self.ledger_device.exchange(bytearray(apdu))
-        except BTChipException as exc:
+        except LedgerException as exc:
             if exc.sw == 0x6D00:
                 raise Exception("Error in Ledger. Did you open the Ethereum app in the Ledger?")
             if exc.sw == 0x6D02:
@@ -117,7 +117,7 @@ class Ledger(BaseDevice):
         try:
             response = self.ledger_device.exchange(bytearray(apdu))
             approved = True
-        except BTChipException as exc:
+        except LedgerException as exc:
             if exc.sw == 0x6B0C:
                 raise Exception("Ledger is locked. Unlock it and retry.")
             if exc.sw == 0x6511:
@@ -175,7 +175,7 @@ class Ledger(BaseDevice):
         apdu.extend(transaction)
         try:
             vrs_bin = self.ledger_device.exchange(bytearray(apdu))
-        except BTChipException as exc:
+        except LedgerException as exc:
             if exc.sw == 0x6A80:
                 raise Exception(
                     "This transaction requires to enable blind signing in the Ledger app settings."
@@ -195,7 +195,7 @@ class Ledger(BaseDevice):
         apdu.extend(message)
         try:
             vrs_bin = self.ledger_device.exchange(bytearray(apdu))
-        except BTChipException as exc:
+        except LedgerException as exc:
             if exc.sw == 0x6985:
                 raise Exception("You rejected the message signature.")
             raise Exception(str(exc))
@@ -211,7 +211,7 @@ class Ledger(BaseDevice):
         apdu.extend(message_hash)
         try:
             vrs_bin = self.ledger_device.exchange(bytearray(apdu))
-        except BTChipException as exc:
+        except LedgerException as exc:
             if exc.sw == 0x6985:
                 raise Exception("You rejected the message signature.")
             raise Exception(str(exc))
