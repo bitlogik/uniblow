@@ -98,14 +98,18 @@ class SeedDevice:
         self.ecpair = ecpair
 
     def get_public_key(self):
-        return self.ecpair.get_public_key().hex()
+        return self.ecpair.get_public_key()
 
 
 class blockchainWallet:
     def __init__(self, coin_data, device):
         self.name = coin_data["name"]
         wallet_type = coin_data.get("type", 0)
-        self.wallet = coin_data["wallet_lib"](0, wallet_type, device)
+        if self.name == "Bitcoin Legacy" and self.m_typechoice.GetSelection() == 2:
+            # This is Electrum Old derivation wallet, set public key as uncompressed
+            self.wallet = coin_data["wallet_lib"](0, wallet_type, device, False)
+        else:
+            self.wallet = coin_data["wallet_lib"](0, wallet_type, device)
 
 
 class ContextOptionsMenu(Menu):

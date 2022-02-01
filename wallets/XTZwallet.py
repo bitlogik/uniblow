@@ -159,10 +159,8 @@ class XTZwalletCore:
             PUBKEY_HEADER = XTZwalletCore.PUBKEY_K1_HEADER
             ADDRESS_HEADER = XTZwalletCore.ADDRESS_K1_HEADER
         self.key_type = XTZwalletCore.key_types[wtype]
-        self.pubkey_b58 = encode_base58(
-            PUBKEY_HEADER + bytes.fromhex(self.pubkey),
-        )
-        pubkey_hashed = blake2b(bytes.fromhex(pubkey), 20)
+        self.pubkey_b58 = encode_base58(PUBKEY_HEADER + pubkey)
+        pubkey_hashed = blake2b(pubkey, 20)
         self.address = encode_base58(ADDRESS_HEADER + pubkey_hashed)
         self.api = api
         self.network = network

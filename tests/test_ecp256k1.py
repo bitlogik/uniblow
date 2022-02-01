@@ -23,6 +23,19 @@ def key_to_coords(pvkey):
     return (pubkey_numbers.x, pubkey_numbers.y)
 
 
+def test_pubkeys():
+    from cryptolib.cryptography import compress_pubkey, decompress_pubkey
+
+    compr = bytes.fromhex("0339a36013301597daef41fbe593a02cc513d0b55527ec2df1050e2e8ff49c85c2")
+    uncompr = bytes.fromhex(
+        "04"
+        "39a36013301597daef41fbe593a02cc513d0b55527ec2df1050e2e8ff49c85c2"
+        "3cbe7ded0e7ce6a594896b8f62888fdbc5c8821305e2ea42bf01e37300116281"
+    )
+    assert compress_pubkey(uncompr) == compr
+    assert decompress_pubkey(compr) == uncompr
+
+
 def test_ECDH():
     """Test scalar point multiplication"""
     for x in range(10):

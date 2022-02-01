@@ -23,6 +23,7 @@ import re
 import cryptolib.coins
 from cryptolib.bech32 import test_bech32
 from cryptolib.base58 import decode_base58
+from cryptolib.cryptography import compress_pubkey
 from wallets.wallets_utils import shift_10, NotEnoughTokens
 
 
@@ -144,13 +145,12 @@ def testaddr(btc_addr, is_testnet):
 
 
 class BTCwalletCore:
-    def __init__(self, pubkey, network_type, segwit_option, api):
+    def __init__(self, pubkey, network_type, segwit_option, api, pubk_cpr):
         self.testnet = False
         if network_type == "testnet":
             self.testnet = True
         self.segwit = segwit_option
-        # pubkey is hex compressed
-        self.pubkey = pubkey
+        self.pubkey = compress_pubkey(pubkey).hex() if pubk_cpr else pubkey.hex()
         if self.segwit == 0:
             self.address = cryptolib.coins.bitcoin.Bitcoin(testnet=self.testnet).pubtoaddr(
                 self.pubkey
@@ -297,11 +297,11 @@ class BTC_wallet:
         ],
     ]
 
-    def __init__(self, network, wtype, device):
+    def __init__(self, network, wtype, device, pk_compress=True):
         self.current_device = device
         pubkey = self.current_device.get_public_key()
         network_name = self.networks[network]
-        self.btc = BTCwalletCore(pubkey, network_name, wtype, blkhub_api(network_name))
+        self.btc = BTCwalletCore(pubkey, network_name, wtype, blkhub_api(network_name), pk_compress)
 
     @classmethod
     def get_networks(cls):

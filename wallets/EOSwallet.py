@@ -22,7 +22,7 @@ import urllib.request
 from cryptolib.base58 import bin_to_base58_eos
 from cryptolib.uintEncode import uint8, uint16, uint32, encode_varuint
 from cryptolib.coins.eos import string_to_binname, expiration_string_epoch_int, near_future_iso_str
-from cryptolib.cryptography import public_key_recover, decompress_pubkey, sha2
+from cryptolib.cryptography import public_key_recover, compress_pubkey, sha2
 from wallets.wallets_utils import NotEnoughTokens
 
 
@@ -139,9 +139,9 @@ POWER_UP_PAYMENT = "0.0002"
 
 class EOSwalletCore:
     def __init__(self, pubkey, network, api):
-        self.pubkey = decompress_pubkey(pubkey)
+        self.pubkey = pubkey
         self.api = api
-        self.address = compute_eos_address(bytes.fromhex(pubkey))
+        self.address = compute_eos_address(compress_pubkey(pubkey))
         self.account = self.getaccount(self.address)
         self.network = network
 
@@ -317,8 +317,8 @@ class EOS_wallet:
         self.network = EOS_wallet.networks[network]
         self.key_type = EOS_wallet.wtypes[wtype]
         self.current_device = device
-        pubkey_hex = self.current_device.get_public_key()
-        self.eos = EOSwalletCore(pubkey_hex, self.network, eos_api(self.network))
+        pubkey = self.current_device.get_public_key()
+        self.eos = EOSwalletCore(pubkey, self.network, eos_api(self.network))
 
     @classmethod
     def get_networks(cls):

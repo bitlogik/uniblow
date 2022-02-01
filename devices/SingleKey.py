@@ -82,9 +82,8 @@ class SKdevice(BaseDevice):
         self.created = True
         return pvkey_int
 
-    def get_public_key(self, compressed=True):
-        # compressed has no effect if type is Ed
-        return self.eckey.get_public_key(compressed).hex()
+    def get_public_key(self):
+        return self.eckey.get_public_key()
 
     def sign(self, hashed_msg):
         # If Ed, hashed_msg is the full message

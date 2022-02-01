@@ -2,7 +2,7 @@ from wallets.ETHwallet import ETHwalletCore
 
 
 fake_api = None
-dummy_pubkey = "0238a4f4226db063fd940eee86d7d130832a2e1175fd6a8c4bd2f031fb6cf8c676"
+dummy_pubkey = bytes.fromhex("0238a4f4226db063fd940eee86d7d130832a2e1175fd6a8c4bd2f031fb6cf8c676")
 ERC20_contract = "0x6b175474e89094c44da98b954eedeac495271d0f"
 
 

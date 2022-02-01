@@ -38,13 +38,22 @@ CURVES_ORDER = {
 }
 
 
-def decompress_pubkey(pubkey_hex_compr):
-    """From a public key X962 hex compressed to X962 bin uncompressed"""
+def decompress_pubkey(pubkey_compr):
+    """From a public key X962 compressed to uncompressed"""
     # Key already decompressed ?
-    if len(pubkey_hex_compr) == 130 and pubkey_hex_compr[0] == 4:
-        return pubkey_hex_compr
-    ECPub = ECPoint.from_hex(pubkey_hex_compr)
+    if len(pubkey_compr) == 65 and pubkey_compr[0] == 4:
+        return pubkey_compr
+    ECPub = ECPoint.from_bytes(pubkey_compr)
     return ECPub.encode_output(False)
+
+
+def compress_pubkey(pubkey):
+    """From a public key X962 uncompressed to compressed"""
+    # Key already compressed ?
+    if len(pubkey) == 33 and pubkey[0] in [2, 3]:
+        return pubkey
+    pkh = 2 + pubkey[64] % 2
+    return bytes([pkh]) + pubkey[1:33]
 
 
 def public_key_recover(h, r, s, par=0):

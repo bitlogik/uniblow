@@ -22,6 +22,7 @@ import re
 
 import cryptolib.coins
 from cryptolib.base58 import decode_base58
+from cryptolib.cryptography import compress_pubkey
 from wallets.wallets_utils import shift_10, NotEnoughTokens
 
 
@@ -133,8 +134,7 @@ class DOGEwalletCore:
         if network_type == "testnet":
             self.testnet = True
         self.segwit = segwit_option
-        # pubkey is hex compressed
-        self.pubkey = pubkey
+        self.pubkey = compress_pubkey(pubkey).hex()
         if self.segwit == 0:
             self.address = cryptolib.coins.dogecoin.Doge(testnet=self.testnet).pubtoaddr(
                 self.pubkey

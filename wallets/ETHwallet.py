@@ -18,7 +18,7 @@
 import json
 from logging import getLogger
 
-from cryptolib.cryptography import public_key_recover, decompress_pubkey, sha2, sha3
+from cryptolib.cryptography import public_key_recover, sha2, sha3
 from cryptolib.coins.ethereum import rlp_encode, int2bytearray, uint256, read_string
 from wallets.wallets_utils import shift_10, compare_eth_addresses, InvalidOption, NotEnoughTokens
 from wallets.ETHtokens import tokens_values, ledger_tokens
@@ -101,7 +101,7 @@ def testaddr(eth_addr):
 
 class ETHwalletCore:
     def __init__(self, pubkey, network, api, chainID, ERC20=None):
-        self.pubkey = decompress_pubkey(pubkey)
+        self.pubkey = pubkey
         key_hash = sha3(self.pubkey[1:])
         self.address = format_checksum_address(key_hash.hex()[-40:])
         self.ERC20 = ERC20
@@ -360,7 +360,7 @@ class ETH_wallet:
         """Finish initialization, second part common for all chains"""
         self.current_device = device
         self.confirm_callback = confirm_callback
-        pubkey_hex = self.current_device.get_public_key()
+        pubkey = self.current_device.get_public_key()
 
         if contract_addr is not None:
             if len(contract_addr) == 42 and "0x" == contract_addr[:2]:
@@ -374,7 +374,7 @@ class ETH_wallet:
         else:
             contract_addr_str = None
         self.eth = ETHwalletCore(
-            pubkey_hex,
+            pubkey,
             self.network,
             Web3Client(rpc_endpoint, "Uniblow/1"),
             self.chainID,

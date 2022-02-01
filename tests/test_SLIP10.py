@@ -19,7 +19,8 @@ def test_slip10_P1_vect1():
     hdw_1 = BIP32node.master_node(SEED_1, "R1")
     for test_data1 in DATA_1:
         assert (
-            hdw_1.derive_path_private(test_data1[0]).pv_key.get_public_key().hex() == test_data1[1]
+            hdw_1.derive_path_private(test_data1[0]).pv_key.get_public_key(True).hex()
+            == test_data1[1]
         )
 
 
@@ -39,7 +40,8 @@ def test_slip10_Ed_vect1():
     hdw_1 = BIP32node.master_node(SEED_1, "ED")
     for test_data1 in DATA_1:
         assert (
-            hdw_1.derive_path_private(test_data1[0]).pv_key.get_public_key().hex() == test_data1[1]
+            hdw_1.derive_path_private(test_data1[0]).pv_key.get_public_key(True).hex()
+            == test_data1[1]
         )
 
 
@@ -65,7 +67,8 @@ def test_slip10_P1_vect2():
     hdw_2 = BIP32node.master_node(SEED_2, "R1")
     for test_data2 in DATA_2:
         assert (
-            hdw_2.derive_path_private(test_data2[0]).pv_key.get_public_key().hex() == test_data2[1]
+            hdw_2.derive_path_private(test_data2[0]).pv_key.get_public_key(True).hex()
+            == test_data2[1]
         )
 
 
@@ -91,5 +94,6 @@ def test_slip10_Ed_vect2():
     hdw_2 = BIP32node.master_node(SEED_2, "ED")
     for test_data2 in DATA_2:
         assert (
-            hdw_2.derive_path_private(test_data2[0]).pv_key.get_public_key().hex() == test_data2[1]
+            hdw_2.derive_path_private(test_data2[0]).pv_key.get_public_key(True).hex()
+            == test_data2[1]
         )

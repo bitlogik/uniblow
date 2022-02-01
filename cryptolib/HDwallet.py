@@ -26,7 +26,7 @@ from cryptolib.cryptography import (
     CURVES_ORDER,
     random_generator,
 )
-from cryptolib.ECKeyPair import EC_key_pair, EC_key_pair_uncpr
+from cryptolib.ECKeyPair import EC_key_pair
 from cryptolib.ElectrumLegacy import decode_old_mnemonic
 
 # BIP39 : mnemonic <-> seed
@@ -163,7 +163,7 @@ class BIP32node:
             # standard (non-hardened)
             if self.curve == "ED":
                 raise Exception("Ed25519 derivation can't be done with a non-hardened normal child")
-            data = self.pv_key.get_public_key() + BIP32node.ser32(i)
+            data = self.pv_key.get_public_key(True) + BIP32node.ser32(i)
         key_valid = False
         if self.curve != "ED":
             n_order = CURVES_ORDER.get(self.curve)
@@ -188,14 +188,12 @@ class BIP32node:
     def derive_path_private(self, path_str):
         if self.depth > 0:
             raise Exception("Must be called only on a master node")
-        if path_str == "" or path_str == "m":
+        path_list = decode_bip39_path(path_str)
+        if path_list == []:
             return self
-        if path_str[:2] != "m/":
-            raise Exception("Unvalid path string, must start with m/")
-        path_list = path_str.lstrip("m/").split("/")
         node = self
-        for pt in path_list:
-            node = node.derive_private(BIP32node.index_int(pt.rstrip()))
+        for ptidx in path_list:
+            node = node.derive_private(ptidx)
         return node
 
     @classmethod
@@ -233,15 +231,6 @@ class BIP32node:
     @staticmethod
     def ser32(num):
         return num.to_bytes(4, "big")
-
-    @staticmethod
-    def index_int(path_num):
-        """index string to int"""
-        if path_num[-1] == "'" or path_num[-1] == "H":
-            numout = int(path_num[:-1], 10) + BIP32node.HARDENED_LIMIT
-        else:
-            numout = int(path_num, 10)
-        return numout
 
     @staticmethod
     def ser256(num):
@@ -297,7 +286,7 @@ class ElectrumOldWallet:
         for _ in range(100000):
             seedh = sha2(seedh + orig_seedh)
         master_key = int.from_bytes(seedh, "big")
-        return cls(EC_key_pair_uncpr(master_key, "K1"))
+        return cls(EC_key_pair(master_key, "K1"))
 
     def derive_key(self, path_str):
         child_priv_int = self.master_private_key.pv_int()
@@ -307,8 +296,8 @@ class ElectrumOldWallet:
             raise Exception("Unvalid path string, must have exactly 2 levels for Old Electrum")
         change, index = path_str.lstrip("m/").split("/")
         data_hashed = (
-            f"{index}:{change}:".encode("ascii") + self.master_private_key.get_public_key()[1:]
+            f"{index}:{change}:".encode("ascii") + self.master_private_key.get_public_key(False)[1:]
         )
         child_priv_int += int.from_bytes(dbl_sha2(data_hashed), "big")
         curve = "K1"
-        return EC_key_pair_uncpr(child_priv_int % CURVES_ORDER[curve], curve)
+        return EC_key_pair(child_priv_int % CURVES_ORDER[curve], curve)

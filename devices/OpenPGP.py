@@ -60,13 +60,6 @@ def fix_s_sig(sigRS):
     return encode_der_s(r_value, s_value)
 
 
-def compress_pubkey(pgp_pubkey):
-    pubkey = pgp_pubkey[-65:]
-    pubkey_parity = pubkey[64] % 2
-    pubkey_header = (2 + pubkey_parity).to_bytes(1, byteorder="big")
-    return pubkey_header + pubkey[1:33]
-
-
 class OpenPGP(BaseDevice):
     # Using an OpenPGP device
 
@@ -146,7 +139,7 @@ class OpenPGP(BaseDevice):
 
     def get_public_key(self):
         pubkey_bin = self.PGPdevice.get_public_key("B600")
-        return compress_pubkey(pubkey_bin).hex()
+        return pubkey_bin[-65:]
 
     def sign(self, hashed_msg):
         self.PGPdevice.verify_pin(1, self.PIN)

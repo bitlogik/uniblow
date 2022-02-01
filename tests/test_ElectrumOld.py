@@ -6,7 +6,7 @@ TEST_MNEMONIC = "content frustrate harsh paint given careful hello peach glance 
 
 def path2addr(wallet, path):
     device_key = wallet.derive_key(path)
-    return BTC_wallet(0, 0, device_key).btc.address
+    return BTC_wallet(0, 0, device_key, False).btc.address
 
 
 def test_old_electrum():

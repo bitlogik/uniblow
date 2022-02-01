@@ -69,7 +69,7 @@ class EC_key_pair:
         # Ed25519
         return self.key_obj.sign(data, RawEncoder).signature
 
-    def get_public_key(self, compressed=True):
+    def get_public_key(self, compressed=False):
         """public key output X962 from the private key object"""
         if self.curve == "K1" or self.curve == "R1":
             # X962 PublicKey
@@ -81,9 +81,3 @@ class EC_key_pair:
             return self.key_obj.public_key().public_bytes(serialization.Encoding.X962, out_format)
         # Ed25519 : 32 bytes public key
         return self.key_obj.verify_key.encode(RawEncoder)
-
-
-class EC_key_pair_uncpr(EC_key_pair):
-    def get_public_key(self, compressed=None):
-        """Return the uncompressed public key"""
-        return super().get_public_key(False)

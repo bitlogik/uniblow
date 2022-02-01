@@ -148,7 +148,7 @@ class HDdevice(BaseDevice):
         self.pvkey = mnode.derive_key(pathc)
 
     def get_public_key(self):
-        return self.pvkey.get_public_key().hex()
+        return self.pvkey.get_public_key()
 
     def sign(self, hashed_msg):
         return self.pvkey.sign(hashed_msg)

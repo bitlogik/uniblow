@@ -143,7 +143,7 @@ class Ledger(BaseDevice):
             offset = offset + 1 + response[offset]
             result["address"] = str(response[offset + 1 : offset + 1 + response[offset]])
             offset = offset + 1 + response[offset]
-            return result["publicKey"].hex()
+            return result["publicKey"]
 
     def register_token(
         self, token_name, token_addr, token_decimals, chain_id, ledger_signature_hex

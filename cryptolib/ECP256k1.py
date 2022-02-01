@@ -151,10 +151,6 @@ class ECPoint:
         return cls(x, point_y(x, parity_hint))
 
     @classmethod
-    def from_hex(cls, pubkey_hex):
-        return ECPoint.from_bytes(bytes.fromhex(pubkey_hex))
-
-    @classmethod
     def from_bytes(cls, bytes_data):
         if bytes_data[0] == 4:
             compressed = False

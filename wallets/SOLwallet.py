@@ -163,7 +163,7 @@ def testaddr(sol_addr):
 
 class SOLwalletCore:
     def __init__(self, pubkey, network, api):
-        self.address = bin_to_base58(bytes.fromhex(pubkey))
+        self.address = bin_to_base58(pubkey)
         self.api = api
         self.decimals = self.get_decimals()
 
@@ -235,8 +235,8 @@ class SOL_wallet:
     ):
         self.network = SOL_wallet.networks[network].lower()
         self.current_device = device
-        pubkey_hex = self.current_device.get_public_key()
-        self.sol = SOLwalletCore(pubkey_hex, self.network, sol_api(self.network))
+        pubkey = self.current_device.get_public_key()
+        self.sol = SOLwalletCore(pubkey, self.network, sol_api(self.network))
 
     @classmethod
     def get_networks(cls):
