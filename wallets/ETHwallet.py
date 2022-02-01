@@ -619,7 +619,7 @@ class ETH_wallet:
             f"Max fee cost: {gas_limit*gas_price / (10 ** self.eth.decimals)} {self.coin}\n"
         )
         if self.current_device.has_screen:
-            sign_request += USER_SCREEN
+            request_message += USER_SCREEN
         if self.confirm_callback(request_message):
             data_hex = txdata.get("data", "0x")
             data = bytearray.fromhex(data_hex[2:])
