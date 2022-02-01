@@ -322,12 +322,16 @@ def close_device():
         del app.device
 
 
-def cb_open_wallet(wallet_obj, pkey, waltype, sw_frame):
+def cb_open_wallet(wallet_obj, pkey, waltype, sw_frame, pubkey_cpr):
     """Process the opening of the wallet from SeedWatcher."""
     key_device = SKdevice()
     key_device.load_key(pkey)
     app.device = key_device
-    app.wallet = wallet_obj(key_device)
+    if pubkey_cpr:
+        app.wallet = wallet_obj(key_device)
+    else:
+        # Special case for Bitcoin Electrum old
+        app.wallet = wallet_obj(key_device, pubkey_cpr)
     sw_frame.Close()
     app.gui_panel.btn_chkaddr.Hide()
     app.gui_panel.devices_choice.SetSelection(1)

@@ -102,10 +102,10 @@ class SeedDevice:
 
 
 class blockchainWallet:
-    def __init__(self, coin_data, device):
+    def __init__(self, coin_data, device, deriv_type):
         self.name = coin_data["name"]
         wallet_type = coin_data.get("type", 0)
-        if self.name == "Bitcoin Legacy" and self.m_typechoice.GetSelection() == 2:
+        if self.name == "Bitcoin Legacy" and deriv_type == 2:
             # This is Electrum Old derivation wallet, set public key as uncompressed
             self.wallet = coin_data["wallet_lib"](0, wallet_type, device, False)
         else:
@@ -194,7 +194,8 @@ class SeedWatcherPanel(gui.swgui.MainPanel):
         if not self.__nonzero__():
             # Panel was closed
             return
-        if self.m_typechoice.GetSelection() == 1:
+        derivation_type_code = self.m_typechoice.GetSelection()
+        if derivation_type_code == 1:
             # Electrum special path
             if coin["name"][:8] != "Bitcoin ":
                 # Use only Bitcoin for the Electrum seed
@@ -206,7 +207,7 @@ class SeedWatcherPanel(gui.swgui.MainPanel):
             elif coin["type"] == 1 or coin["type"] == 2:
                 # p2wsh and segwit
                 cpath = "m/{}'/{}/{}"
-        if self.m_typechoice.GetSelection() == 2:
+        if derivation_type_code == 2:
             if coin["name"] != "Bitcoin Legacy":
                 # Use only Bitcoin legacy for the Electrum seed
                 self.enable_inputs()
@@ -224,7 +225,7 @@ class SeedWatcherPanel(gui.swgui.MainPanel):
             # Only for last, means all the index down to m shall be hardened
             path += "'"
 
-        if self.m_typechoice.GetSelection() == 2:
+        if derivation_type_code == 2:
             wallet = ElectrumOldWallet.from_seed(seed)
         else:
             wallet = HD_Wallet.from_seed(seed, key_type)
@@ -233,7 +234,7 @@ class SeedWatcherPanel(gui.swgui.MainPanel):
 
         coin_key = SeedDevice(pv_key)
         try:
-            coin_wallet = blockchainWallet(coin, coin_key)
+            coin_wallet = blockchainWallet(coin, coin_key, derivation_type_code)
             self.coins.append(coin_wallet)
             CallAfter(self.display_coin, coin_wallet)
         except Exception as exc:
@@ -354,7 +355,11 @@ class SeedWatcherPanel(gui.swgui.MainPanel):
         wallet_type = coins_list[sel_wallet].get("type", 0)
         wallet_open = partial(coins_list[sel_wallet]["wallet_lib"], 0, wallet_type)
         key = self.coins[sel_wallet].wallet.current_device.ecpair
-        self.cb_wallet(wallet_open, key, wallet_type, self.GetParent())
+        pkcpr = True
+        if wallet_type == 0 and self.m_typechoice.GetSelection() == 2:
+            # Special case for Bitcoin Electrum old
+            pkcpr = False
+        self.cb_wallet(wallet_open, key, wallet_type, self.GetParent(), pkcpr)
 
 
 def start_seedwatcher(app, cb_wallet):
