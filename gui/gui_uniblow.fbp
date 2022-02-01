@@ -1015,7 +1015,7 @@
                                                 <property name="permission">none</property>
                                                 <object class="sizeritem" expanded="1">
                                                     <property name="border">20</property>
-                                                    <property name="flag">wxALIGN_BOTTOM|wxTOP|wxLEFT</property>
+                                                    <property name="flag">wxTOP|wxLEFT|wxALIGN_CENTER_VERTICAL</property>
                                                     <property name="proportion">0</property>
                                                     <object class="wxStaticText" expanded="1">
                                                         <property name="BottomDockable">1</property>
@@ -1076,7 +1076,7 @@
                                                 </object>
                                                 <object class="sizeritem" expanded="1">
                                                     <property name="border">20</property>
-                                                    <property name="flag">wxALIGN_BOTTOM|wxTOP|wxLEFT</property>
+                                                    <property name="flag">wxTOP|wxLEFT|wxALIGN_CENTER_VERTICAL</property>
                                                     <property name="proportion">0</property>
                                                     <object class="wxStaticText" expanded="1">
                                                         <property name="BottomDockable">1</property>

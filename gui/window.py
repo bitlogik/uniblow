@@ -169,14 +169,14 @@ class TopPanel ( wx.Panel ):
 
         self.balance_label.SetFont( wx.Font( 15, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, False, wx.EmptyString ) )
 
-        bSizer16.Add( self.balance_label, 0, wx.ALIGN_BOTTOM|wx.TOP|wx.LEFT, 20 )
+        bSizer16.Add( self.balance_label, 0, wx.TOP|wx.LEFT|wx.ALIGN_CENTER_VERTICAL, 20 )
 
         self.balance_info = wx.StaticText( self, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, 0 )
         self.balance_info.Wrap( -1 )
 
         self.balance_info.SetFont( wx.Font( 15, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, False, wx.EmptyString ) )
 
-        bSizer16.Add( self.balance_info, 0, wx.ALIGN_BOTTOM|wx.TOP|wx.LEFT, 20 )
+        bSizer16.Add( self.balance_info, 0, wx.TOP|wx.LEFT|wx.ALIGN_CENTER_VERTICAL, 20 )
 
 
         bSizer18.Add( bSizer16, 0, wx.TOP, 16 )
