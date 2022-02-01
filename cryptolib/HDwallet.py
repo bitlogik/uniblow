@@ -29,6 +29,40 @@ from cryptolib.cryptography import (
 from cryptolib.ECKeyPair import EC_key_pair
 from cryptolib.ElectrumLegacy import decode_old_mnemonic
 
+
+# BIP39 helpers
+
+
+def decode_bip39_path(path_string):
+    """Decode a BIP39 string m/../.. into an integer list."""
+    if path_string == "" or path_string == "m":
+        return []
+    if path_string[:2] != "m/":
+        raise Exception("Unvalid path string, must start with m/")
+    path_list = path_string.lstrip("m/").split("/")
+    int_list = []
+    for path_idx in path_list:
+        path_idx = path_idx.rstrip()
+        if path_idx[-1] == "'" or path_idx[-1] == "H":
+            numout = int(path_idx[:-1], 10) + BIP32node.HARDENED_LIMIT
+        else:
+            numout = int(path_idx, 10)
+        int_list.append(numout)
+    return int_list
+
+
+def encode_bip39_path(bip39_path_ints):
+    """Encode an integer list of a path into binary (x 32 bits)."""
+    enc_out = b""
+    for idx in bip39_path_ints:
+        enc_out += BIP32node.ser32(idx)
+    return enc_out
+
+
+def encode_bip39_string(bip39_path_string):
+    return encode_bip39_path(decode_bip39_path(bip39_path_string))
+
+
 # BIP39 : mnemonic <-> seed
 
 with open(

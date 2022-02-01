@@ -18,9 +18,8 @@ from logging import getLogger
 
 from devices.BaseDevice import BaseDevice
 from devices.btchip.btchipComm import getDongle
-from devices.btchip.btchipHelpers import parse_bip32_path, writeUint32BE, read_uint8, read_uint256
 from devices.btchip.btchipException import BTChipException
-
+from cryptolib.HDwallet import encode_bip39_string, BIP32node
 
 logger = getLogger(__name__)
 
@@ -41,9 +40,9 @@ MINIMUM_APP_VERSION = 0x010500
 
 def unpack_vrs(vrsbin):
     """Provide serialized vrs as 3 integers."""
-    v = read_uint8(vrsbin, 0)
-    r = read_uint256(vrsbin, 1)
-    s = read_uint256(vrsbin, 33)
+    v = int.from_bytes(vrsbin[:1], "big")
+    r = int.from_bytes(vrsbin[1:33], "big")
+    s = int.from_bytes(vrsbin[33:65], "big")
     return v, r, s
 
 
@@ -100,7 +99,9 @@ class Ledger(BaseDevice):
         return self.account
 
     def derive_key(self, path, key_type):
-        self.bin_path = parse_bip32_path(path[2:])
+        # Check k1 ?
+        path_bin = encode_bip39_string(path)
+        self.bin_path = bytes([len(path_bin) >> 2]) + path_bin
 
     def get_public_key(self, showOnScreenCB=None):
         result = {}
@@ -163,8 +164,8 @@ class Ledger(BaseDevice):
         ]
         apdu.extend(token_name_bin)
         apdu.extend(bytes.fromhex(token_addr))
-        apdu.extend(writeUint32BE(token_decimals))
-        apdu.extend(writeUint32BE(chain_id))
+        apdu.extend(BIP32node.ser32(token_decimals))
+        apdu.extend(BIP32node.ser32(chain_id))
         apdu.extend(ledger_signature)
         self.ledger_device.exchange(bytearray(apdu))
 
@@ -190,7 +191,7 @@ class Ledger(BaseDevice):
         assert msg_sz < 225
         apdu = [LEDGER_CLASS, INSTRUCTION_SIGNMESSAGE, 0x00, 0x00, len(self.bin_path) + msg_sz + 4]
         apdu.extend(self.bin_path)
-        apdu.extend(writeUint32BE(msg_sz))
+        apdu.extend(BIP32node.ser32(msg_sz))
         apdu.extend(message)
         try:
             vrs_bin = self.ledger_device.exchange(bytearray(apdu))
