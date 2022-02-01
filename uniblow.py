@@ -57,6 +57,7 @@ DEVICES_LIST = [
     "OpenPGP",
     "HDdevice",
     "Ledger",
+    "Cryptnox",
 ]
 
 FEES_PRORITY_TEXT = [
@@ -391,6 +392,8 @@ def device_selected(device):
             "AVAX",
         ]
     if device_sel_name == "OpenPGP":
+        coins_list.remove("SOL")
+    if device_sel_name == "Cryptnox":
         coins_list.remove("SOL")
     app.load_coins_list(coins_list)
     if sel_device == 1:
