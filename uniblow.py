@@ -170,6 +170,9 @@ def display_balance():
         app.gui_panel.amount.Disable()
         app.gui_panel.send_button.Disable()
         app.gui_panel.send_all.Disable()
+    if hasattr(app.wallet, "wc_timer"):
+        # WalletConnect active
+        app.gui_panel.dest_addr.ChangeValue("   Use the connected dapp to transact")
 
 
 def erase_info(reset=False):
