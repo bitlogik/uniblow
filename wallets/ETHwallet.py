@@ -345,7 +345,7 @@ class ETH_wallet:
                 "To use Uniblow from source with an Ethereum testnet, bring your own Infura key."
             )
         if self.network == "mainnet":
-            rpc_endpoint = "https://cloudflare-eth.com/"
+            rpc_endpoint = "https://rpc.ankr.com/eth/"
             self.explorer = "https://etherscan.io/address/0x"
         else:
             rpc_endpoint = f"https://{self.network}.infura.io/v3/{INFURA_KEY}"
