@@ -20,6 +20,7 @@ import urllib.parse
 import urllib.request
 
 from cryptolib.base58 import encode_base58, decode_base58
+from cryptolib.cryptography import compress_pubkey
 from wallets.wallets_utils import shift_10, NotEnoughTokens
 
 try:
@@ -144,20 +145,21 @@ class XTZwalletCore:
     # PUBKEY_R1_HEADER = bytes([3, 178, 139, 127])  # p2pk
 
     def __init__(self, pubkey, network, wtype, api):
-        self.pubkey = pubkey
         if wtype == 1:
             # tz1 Ed
             self.SIG_HEADER = XTZwalletCore.SIGED_HEADER
             PUBKEY_HEADER = XTZwalletCore.PUBKEY_ED_HEADER
             ADDRESS_HEADER = XTZwalletCore.ADDRESS_ED_HEADER
+            self.pubkey = pubkey
         else:
             # tz2 k1
             self.SIG_HEADER = XTZwalletCore.SIGK1_HEADER
             PUBKEY_HEADER = XTZwalletCore.PUBKEY_K1_HEADER
             ADDRESS_HEADER = XTZwalletCore.ADDRESS_K1_HEADER
+            self.pubkey = compress_pubkey(pubkey)
         self.key_type = XTZwalletCore.key_types[wtype]
-        self.pubkey_b58 = encode_base58(PUBKEY_HEADER + pubkey)
-        pubkey_hashed = blake2b(pubkey, 20)
+        self.pubkey_b58 = encode_base58(PUBKEY_HEADER + self.pubkey)
+        pubkey_hashed = blake2b(self.pubkey, 20)
         self.address = encode_base58(ADDRESS_HEADER + pubkey_hashed)
         self.api = api
         self.network = network
