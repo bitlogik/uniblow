@@ -163,6 +163,13 @@ def display_balance():
         app.gui_panel.amount.Enable()
         app.gui_panel.send_button.Enable()
         app.gui_panel.send_all.Enable()
+    else:
+        app.gui_panel.dest_addr.Clear()
+        app.gui_panel.amount.Clear()
+        app.gui_panel.dest_addr.Disable()
+        app.gui_panel.amount.Disable()
+        app.gui_panel.send_button.Disable()
+        app.gui_panel.send_all.Disable()
 
 
 def erase_info(reset=False):
