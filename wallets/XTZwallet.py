@@ -67,16 +67,21 @@ class RPC_api:
             resp = json.load(webrsp)
             return resp
         except urllib.error.HTTPError as e:
+            err = e.read().decode("utf8")
             try:
-                err = json.load(e)
-            except Exception:
-                err = ""
-            if err and err != []:
-                key = "msg"
-                if key not in err[0]:
+                err = json.loads(err)
+            except ValueError:
+                pass
+            if isinstance(err, str):
+                raise IOError(f"Error code {e.code}\n{err}")
+            if err and err != [] and len(err) > 1 and err[0].get(key):
+                if "msg" in err[0]:
+                    key = "msg"
+                elif "id" in err[0]:
                     key = "id"
+                else:
+                    raise IOError(f"Error code {e.code}\n{err}")
                 raise IOError(f"Error in the node processing :\n{err[0][key]}")
-            raise IOError(f"Error code {e.code}")
         except urllib.error.URLError as e:
             raise IOError(e)
         except Exception:
@@ -218,7 +223,7 @@ class XTZwalletCore:
                     "fee": self.fee,
                     "counter": str(self.nonce),
                     "gas_limit": "1000",
-                    "storage_limit": "500",
+                    "storage_limit": "0",
                     "public_key": self.pubkey_b58,
                 }
             )
@@ -278,8 +283,8 @@ class XTZ_wallet:
 
     networks = [
         "Mainnet",
-        "GranadaNet",
         "HangzhouNet",
+        "IthacaNet",
     ]
 
     wtypes = [
