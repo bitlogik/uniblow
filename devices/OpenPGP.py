@@ -139,6 +139,10 @@ class OpenPGP(BaseDevice):
 
     def get_public_key(self):
         pubkey_bin = self.PGPdevice.get_public_key("B600")
+        if pubkey_bin[:2] != b"\x7F\x49":
+            raise Exception("Bad object key from OpenPGP public key")
+        if pubkey_bin[4] != 65:
+            raise Exception("Bad public key length read")
         return pubkey_bin[-65:]
 
     def sign(self, hashed_msg):
