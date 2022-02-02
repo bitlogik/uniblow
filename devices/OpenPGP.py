@@ -20,6 +20,7 @@ from devices.BaseDevice import BaseDevice
 
 CURVE_K1_ORDER = 0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEBAAEDCE6AF48A03BBFD25E8CD0364141
 EC_BYTES_SIZE = 32
+ECDSA_K1 = "132B8104000A"
 
 
 class pwdException(Exception):
@@ -107,6 +108,11 @@ class OpenPGP(BaseDevice):
                 raise Exception("Error: Incorrect PIN format")
             if exc.sw_code == 0x6983:
                 raise Exception("Error: PIN 1 is blocked")
+        # Read and check sign key type in slot C1
+        app_data = self.PGPdevice.get_application_data()
+        algo_key = app_data["73"]["C1"]
+        if not algo_key.startswith(ECDSA_K1):
+            raise Exception("Error: This OpenPGP device has a sign key not setup as k1.")
 
     def initialize_device(self, password):
         self.PIN = password
@@ -121,7 +127,8 @@ class OpenPGP(BaseDevice):
                 raise Exception("Error: Wrong admin code")
         # Generate in the device an EC256k1 key pair
         try:
-            self.PGPdevice.put_data("00C1", "132B8104000A")
+            # Set sign key as ECDSA SECP256K1
+            self.PGPdevice.put_data("00C1", ECDSA_K1)
         except OpenPGPpy.PGPCardException as exc:
             if exc.sw_code == 0x6A80:
                 raise Exception("This device is not compatible with ECDSA 256k1.") from exc
