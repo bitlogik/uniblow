@@ -1,6 +1,19 @@
 
 Uniblow versions history
 
+
+## 1.4.2
+
+* Center balance display
+* Fix WalletConnect issue to sign
+* Update XTZ wallet
+* XTZ RPC back to SmartPy
+* ETH RPC default changed to ANKR
+* Disable wallets input when balance back to 0
+* OpenPGP checks the current key type in device
+* Refactor devices : pubkey always binary uncompressed
+* Updated pyWeb3 for better error handling
+
 ## 1.4.0
 
 * Add Ledger device (for ETH/EVM, incl. tokens support)
