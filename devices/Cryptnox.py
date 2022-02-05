@@ -71,10 +71,6 @@ class Cryptnox(BaseDevice):
         self.card.load_seed(seedg, self.pin)
 
     def open_account(self, password):
-        try:
-            self.card = CryptnoxCard()
-        except Exception:
-            raise Exception("Cryptnox not found.")
         if not self.card.initialized:
             raise NotinitException()
         if not self.card.seeded:
@@ -99,36 +95,31 @@ class Cryptnox(BaseDevice):
             self.card.testPIN(password)
         except Exception as exc:
             if str(exc).startswith("Error (SCP) : 63C"):
-                delattr(self, "card")
-                self.card = None
                 raise pwdException
+            if str(exc).startswith("Error (SCP) : 6700"):
+                raise Exception("PIN input is too long")
+            raise exc
         self.pin = password
 
     def get_pw_left(self):
         """When has_password and not password_retries_inf"""
-        try:
-            card = CryptnoxCard()
-        except Exception:
-            raise Exception("Cryptnox not found.")
-        card.open_secure_channel(Basic_Pairing_Secret)
-        tries_left = card.get_pin_left()
-        del card
+        self.card.open_secure_channel(Basic_Pairing_Secret)
+        tries_left = self.card.get_pin_left()
         return tries_left
 
     def is_init(self):
         """Required when has_password and not password_retries_inf"""
         try:
-            card = CryptnoxCard()
+            self.card = CryptnoxCard()
         except Exception:
             raise Exception("Cryptnox not found.")
         # Check card version must be Basic
-        if card.cardtype != Cryptnox.basic_card_id:
+        if self.card.cardtype != Cryptnox.basic_card_id:
             raise Exception("Cryptnox compatible with uniblow are only BG-1 models.")
         # Check minimal applet version
-        if int.from_bytes(card.applet_version, "big") < 0x010202:
+        if int.from_bytes(self.card.applet_version, "big") < 0x010202:
             raise Exception("Cryptnox firmware is too old. Required v>=1.2.2")
-        isinit = card.initialized
-        del card
+        isinit = self.card.initialized
         return isinit
 
     def generate_mnemonic(self):
