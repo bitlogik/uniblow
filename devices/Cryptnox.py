@@ -128,6 +128,10 @@ class Cryptnox(BaseDevice):
     def set_admin(self, PUKcode):
         self.PUK = PUKcode.encode("utf8")
 
+    def set_path(self, settings):
+        self.account = settings["account"]
+        self.aindex = settings["index"]
+
     def get_address_index(self):
         """Get the account address index, last BIP44 derivation number as str"""
         return self.aindex

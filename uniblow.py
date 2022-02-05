@@ -424,6 +424,8 @@ def device_selected(device):
                     ):
                         # Goto password exception to ask for user PIN
                         pin_left = device_loaded.get_pw_left()
+                        if the_device.is_HD:
+                            HDwallet_settings = app.hd_setup("")
                         raise pwdException
                     # Can raise notinit
                     device_loaded.open_account(password_default)
@@ -535,6 +537,9 @@ def device_selected(device):
             except Exception as exc:
                 return device_error(exc)
         wx.MilliSleep(100)
+        if the_device.has_password and the_device.is_HD and not the_device.password_retries_inf:
+            # Kind of special for Cryptnox for now
+            device_loaded.set_path(HDwallet_settings)
         app.device = device_loaded
         if app.device.created:
             info_modal(
