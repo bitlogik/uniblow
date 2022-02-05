@@ -507,6 +507,7 @@ def device_selected(device):
                 if pin_left == 0:
                     warn_modal(f"Device {pwd_pin} is locked.")
                     return
+                    # ToDo SoftLock ?
                 while True:
                     inp_message = f"Input your {device_sel_name} wallet {pwd_pin}.\n"
                     if not the_device.password_retries_inf:

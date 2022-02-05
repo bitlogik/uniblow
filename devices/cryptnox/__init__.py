@@ -145,9 +145,7 @@ class CryptnoxCard:
         # if sw1 == 0x69 and sw2 == 0x85:
         #     raise Exception("This command may need a secured channel")
         if sw1 == 0x69 and sw2 == 0x82:
-            raise Exception(
-                "Error during secure channel communication\n" "          Check PairingKey\n"
-            )
+            raise Exception("Invalid Pairing key\n")
         if sw1 == 0x6A and sw2 == 0x82:
             raise Exception(
                 "Error firmware not found\n" "          Check a Cryptnox is connected\n"
@@ -158,11 +156,10 @@ class CryptnoxCard:
             raise Exception("Error : %02X%02X" % (sw1, sw2))
         return data
 
-    def init(self, name, email, PIN, PUK, PairingSecret=None):
+    def init(self, name, email, PIN, PUK):
         # Basic : string PIN : 9 numbers, string PUK : 12 chars
         # PIN can be 4-9 numbers for Basic version
-        # string PUK : 12 chars
-        # optional 32 bytes PairingSecret
+        # bytes PUK : 12 bytes chars
         if self.initialized:
             raise Exception("Card was already initialized")
         if not hasattr(self, "SessionPubKey"):
@@ -171,12 +168,9 @@ class CryptnoxCard:
         InitSessionpvKey = gen_EC_pv_key()
         AESInitKey = derive_secret(InitSessionpvKey, self.SessionPubKey)
         IVinitkey = gen16Brandom()
-        if self.cardtype == 66:  # Basic
-            # PairingSecret = Basic_Pairing_Secret
-            while len(PIN) < 9:
-                PIN += "\0"
-        if PairingSecret is None:
-            PairingSecret = gen32Brandom()
+        PairingSecret = Basic_Pairing_Secret
+        while len(PIN) < 9:
+            PIN += "\0"
         InitSessionpubKey = "41" + privkey_to_pubkey(InitSessionpvKey)
         logger.debug("InitPvKey")
         logger.debug(hex(InitSessionpvKey))
@@ -188,16 +182,15 @@ class CryptnoxCard:
         logger.debug(IVinitkey.hex())
         bname = bytes(name, "ascii")
         bemail = bytes(email, "ascii")
-        if self.cardtype == 66 or self.cardtype == 65 or self.cardtype == 78:  # Basic or Admin
-            Data = (
-                bytes([len(bname)])
-                + bname
-                + bytes([len(bemail)])
-                + bemail
-                + bytes(PIN, "ascii")
-                + PUK
-                + PairingSecret
-            )
+        Data = (
+            bytes([len(bname)])
+            + bname
+            + bytes([len(bemail)])
+            + bemail
+            + bytes(PIN, "ascii")
+            + PUK
+            + PairingSecret
+        )
         logger.debug("Init Data %s", Data.hex())
         Payload = pad_data(Data)
         EncPayload = aes_encrypt(AESInitKey, IVinitkey, Payload)
@@ -464,7 +457,11 @@ class CryptnoxCard:
 
     def testPIN(self, pin):
         SELp = [0x80, 0x20, 0x00, 0x00]
-        self.send_enc_apdu(SELp, bytes(pin, "ascii"))
+        return self.send_enc_apdu(SELp, bytes(pin, "ascii"))
+
+    def get_pin_left(self):
+        resp_pinleft = self.testPIN("")
+        return resp_pinleft[0]
 
     def changePIN(self, selPINPUK, newPINPUK):
         # sel PIN PUK

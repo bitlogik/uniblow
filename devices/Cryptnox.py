@@ -17,7 +17,7 @@
 
 from devices.BaseDevice import BaseDevice
 from devices.cryptnox import CryptnoxCard, Basic_Pairing_Secret
-from cryptolib.HDwallet import encode_bip39_string
+from cryptolib.HDwallet import encode_bip39_string, mnemonic_to_seed, generate_mnemonic
 
 from logging import getLogger
 
@@ -34,10 +34,17 @@ class NotinitException(Exception):
 
 class Cryptnox(BaseDevice):
 
-    is_init = False
     is_HD = True
     has_password = True
-    # has_admin_password = True
+    has_admin_password = True
+    password_name = "PIN"
+    password_min_len = 4
+    default_password = "1234"
+    admin_pass_name = "admin code"
+    admin_pwd_minlen = 12
+    default_admin_password = "123456789012"
+    internally_gen_keys = False
+    password_retries_inf = False
 
     def __init__(self):
         self.created = False
@@ -48,23 +55,74 @@ class Cryptnox(BaseDevice):
     def initialize_device(self, settings):
         self.account = settings["account"]
         self.aindex = settings["index"]
-        self.legacy_derive = settings["legacy_path"]
+        # Compute the seed
+        seedg = mnemonic_to_seed(
+            settings["mnemonic"], settings["HD_password"], method=settings["seed_gen"]
+        )
+        # Initialize the Cryptnox card
+        self.pin = settings["file_password"]
+        logger.debug("PIN %s", self.pin)
+        logger.debug("PUK %s", self.PUK)
+        self.card.init("Init by Uniblow", "aaaa", settings["file_password"], self.PUK)
+        delattr(self, "PUK")
+        # Now upload the seed in the Cryptnox
+        self.card.open_secure_channel(Basic_Pairing_Secret)
+        self.card.load_seed(seedg, self.pin)
 
     def open_account(self, password):
         try:
             self.card = CryptnoxCard()
         except Exception:
             raise Exception("Cryptnox not found.")
+        # ToDo : Check minimal applet version
+        if not self.card.initialized:
+            raise NotinitException()
+        if not self.card.seeded:
+            raise Exception("Reset or inject a key in this Cryptnox card.")
+        # Todo Check the key loaded is a HD seed key
         self.account = "0"
         self.aindex = "0"
-        self.card.open_secure_channel(Basic_Pairing_Secret)
-        self.pin = password
-        self.pin = "123456"
         try:
-            self.card.testPIN(self.pin)
+            self.card.open_secure_channel(Basic_Pairing_Secret)
         except Exception as exc:
-            if str(exc) == "Error (SCP) : 63C5":
-                raise NotinitException
+            raise Exception("Invalid pairing key for this card.", str(exc))
+        try:
+            self.card.testPIN(password)
+        except Exception as exc:
+            if str(exc).startswith("Error (SCP) : 63C"):
+                delattr(self, "card")
+                self.card = None
+                raise pwdException
+        self.pin = password
+
+    def get_pw_left(self):
+        """When has_password and not password_retries_inf"""
+        try:
+            card = CryptnoxCard()
+        except Exception:
+            raise Exception("Cryptnox not found.")
+        card.open_secure_channel(Basic_Pairing_Secret)
+        tries_left = card.get_pin_left()
+        del card
+        return tries_left
+
+    def is_init(self):
+        """Required when has_password and not password_retries_inf"""
+        try:
+            card = CryptnoxCard()
+        except Exception:
+            raise Exception("Cryptnox not found.")
+        # ToDo check card version must be Basic
+        # ToDo Check PIN auth enabled
+        isinit = card.initialized
+        del card
+        return isinit
+
+    def generate_mnemonic(self):
+        return generate_mnemonic(12)
+
+    def set_admin(self, PUKcode):
+        self.PUK = PUKcode.encode("utf8")
 
     def get_address_index(self):
         """Get the account address index, last BIP44 derivation number as str"""
