@@ -53,6 +53,7 @@ class Ledger(BaseDevice):
     has_screen = True
     ledger_tokens_compat = True
     has_hardware_button = True
+    internally_gen_keys = True
 
     def __init__(self):
         self.created = False

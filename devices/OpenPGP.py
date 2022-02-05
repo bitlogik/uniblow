@@ -66,7 +66,15 @@ class OpenPGP(BaseDevice):
 
     has_password = True
     has_admin_password = True
+    password_name = "PIN"
+    default_password = "123456"
+    password_min_len = 6
+    password_retries_inf = False
+    admin_pass_name = "Administrator PIN3"
+    default_admin_password = "12345678"
+    admin_pwd_minlen = 8
     has_hardware_button = True
+    internally_gen_keys = True
 
     def __init__(self):
         self.PGPdevice = OpenPGPpy.OpenPGPcard()
@@ -83,14 +91,27 @@ class OpenPGP(BaseDevice):
 
     def set_admin(self, admin_password):
         self.PIN3 = admin_password
-        if self.PIN3 == "NoPasswd":
-            self.PIN3 = "12345678"
         self.PGPdevice.change_pin("12345678", self.PIN3, 3)
+
+    def get_pin_left(self):
+        """When has_password and not password_retries_inf"""
+        return self.PGPdevice.get_pin_status(1)
+
+    def is_init(self):
+        """Required when has_password and not password_retries_inf"""
+        init_status = False
+        try:
+            # Check if has a key generated
+            self.PGPdevice.get_public_key("B600")
+            return True
+        except OpenPGPpy.PGPCardException as exc:
+            # SW = 0x6581 or 0x6A88 ?
+            if exc.sw_code != 0x6581 and exc.sw_code != 0x6A88:
+                raise exc
+            return False
 
     def open_account(self, password):
         self.PIN = password
-        if self.PIN == "NoPasswd":
-            self.PIN = "123456"
         try:
             self.PGPdevice.get_public_key("B600")
         except OpenPGPpy.PGPCardException as exc:

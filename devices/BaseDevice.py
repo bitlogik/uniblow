@@ -22,11 +22,19 @@ class BaseDevice(ABC):
     # Default values - Override if different
     created = False
     has_password = False
+    password_name = "local user password"
+    password_min_len = 6
+    default_password = "NoPasswd"
+    password_retries_inf = False
     has_admin_password = False
+    admin_pass_name = "Administrator Password"
+    admin_pwd_minlen = 8
+    default_admin_password = ""
     is_HD = False
     has_screen = False
     ledger_tokens_compat = False
     has_hardware_button = False
+    internally_gen_keys = False
     account = "0"
     aindex = "0"
     legacy_derive = False

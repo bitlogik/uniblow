@@ -46,6 +46,7 @@ class NotinitException(Exception):
 class HDdevice(BaseDevice):
 
     has_password = True
+    password_retries_inf = True
     is_HD = True
 
     def open_account(self, password):

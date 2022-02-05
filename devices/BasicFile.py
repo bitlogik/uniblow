@@ -40,6 +40,9 @@ class NotinitException(Exception):
 class BasicFile(SKdevice):
     """Single key wallet, with file read/save."""
 
+    has_password = True
+    password_retries_inf = True
+
     def open_account(self, password):
         wallet_file = WalletFile(FILE_NAME)
         if path.isfile(wallet_file.file_path):
