@@ -456,7 +456,7 @@ def device_selected(device):
                             return
                         if admin_password == "":
                             admin_password = device_loaded.default_admin_password
-                        if len(admin_password) >= the_device.password_min_len:
+                        if len(admin_password) >= the_device.admin_pwd_minlen:
                             break
                         warn_modal(
                             f"{the_device.admin_pass_name} shall be at least "
