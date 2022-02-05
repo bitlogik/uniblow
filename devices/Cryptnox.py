@@ -45,6 +45,7 @@ class Cryptnox(BaseDevice):
     default_admin_password = "123456789012"
     internally_gen_keys = False
     password_retries_inf = False
+    basic_card_id = 0x42
 
     def __init__(self):
         self.created = False
@@ -74,18 +75,26 @@ class Cryptnox(BaseDevice):
             self.card = CryptnoxCard()
         except Exception:
             raise Exception("Cryptnox not found.")
-        # ToDo : Check minimal applet version
         if not self.card.initialized:
             raise NotinitException()
         if not self.card.seeded:
-            raise Exception("Reset or inject a key in this Cryptnox card.")
-        # Todo Check the key loaded is a HD seed key
+            # Must be initalized and seeded
+            raise Exception("Reset or inject/generate a key in this Cryptnox card.")
+        # Check PIN auth enabled
+        if not self.card.pinauth:
+            raise Exception(
+                "PIN auth needs to be enabled in the Cryptnox card to be used with uniblow."
+            )
         self.account = "0"
         self.aindex = "0"
         try:
             self.card.open_secure_channel(Basic_Pairing_Secret)
         except Exception as exc:
             raise Exception("Invalid pairing key for this card.", str(exc))
+        # Check the key loaded is a HD seed key
+        card_info = self.card.get_card_info()
+        if card_info.key_type not in ["X", "S", "D", "L"]:
+            raise Exception("This Cryptnox card wasn't setup with a derivable key type.")
         try:
             self.card.testPIN(password)
         except Exception as exc:
@@ -112,8 +121,12 @@ class Cryptnox(BaseDevice):
             card = CryptnoxCard()
         except Exception:
             raise Exception("Cryptnox not found.")
-        # ToDo check card version must be Basic
-        # ToDo Check PIN auth enabled
+        # Check card version must be Basic
+        if card.cardtype != Cryptnox.basic_card_id:
+            raise Exception("Cryptnox compatible with uniblow are only BG-1 models.")
+        # Check minimal applet version
+        if int.from_bytes(card.applet_version, "big") < 0x010202:
+            raise Exception("Cryptnox firmware is too old. Required v>=1.2.2")
         isinit = card.initialized
         del card
         return isinit

@@ -409,21 +409,23 @@ class CryptnoxCard:
 
     def get_card_info(self, pk_user_idx=0):
         SELp = [0x80, 0xFA, pk_user_idx, 0x00]
-        if self.cardtype == 80 or self.cardtype == 85:
-            cardinfo_data = self.send_enc_apdu(SELp, bytes([0]), True)
-        else:
-            cardinfo_data = self.send_enc_apdu(SELp, bytes([0]), True)
+        cardinfo_data = self.send_enc_apdu(SELp, bytes([0]), True)
         if pk_user_idx == 0:
             cardinfo = cardinfo_()
-            lenuser = cardinfo_data[0]
-            cardinfo.owner = cardinfo_data[1 : lenuser + 1].decode("ascii")
-            lenemail = cardinfo_data[lenuser + 1]
-            offuserlist = lenemail + 2 + lenuser
-            cardinfo["email"] = cardinfo_data[lenuser + 2 : offuserlist].decode("ascii")
-            if self.cardtype == 78 or self.cardtype == 66:  # NFT or Basic
-                cardinfo["counter"] = int.from_bytes(
-                    cardinfo_data[offuserlist : offuserlist + 4], "big"
-                )
+            offset = 0
+            cardinfo.key_type = chr(cardinfo_data[offset])
+            offset += 1
+            lenuser = cardinfo_data[offset]
+            offset += 1
+            cardinfo.owner = cardinfo_data[offset : lenuser + offset].decode("ascii")
+            lenemail = cardinfo_data[lenuser + offset]
+            offset += 1
+            offuserlist = lenemail + offset + lenuser
+            cardinfo.email = cardinfo_data[lenuser + offset : offuserlist].decode("ascii")
+            offset += 2
+            cardinfo.counter = int.from_bytes(
+                cardinfo_data[offuserlist : offuserlist + offset], "big"
+            )
         else:
             cardinfo = cardinfo_data
         return cardinfo
