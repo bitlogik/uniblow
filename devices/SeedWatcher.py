@@ -270,7 +270,7 @@ class SeedWatcherPanel(gui.swgui.MainPanel):
     def compute_seed(self, *args):
         try:
             wallet_seed = HD_Wallet.seed_from_mnemonic(*args)
-        except:
+        except Exception:
             self.enable_inputs()
             return
         self.async_getcoininfo_idx(0, wallet_seed)

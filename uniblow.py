@@ -323,7 +323,6 @@ def watch_messages():
     except NotEnoughTokens as exc:
         warn_modal(str(exc))
     except Exception as exc:
-        print(str(exc))
         if str(exc).startswith("You rejected the"):
             warn_modal(str(exc))
             return
@@ -508,8 +507,6 @@ def device_selected(device):
                 if pin_left == 0:
                     warn_modal(f"Device {pwd_pin} is locked.")
                     return
-                print(pin_left)
-                print(the_device.password_softlock)
                 if (
                     not the_device.password_retries_inf
                     and the_device.password_softlock > 0

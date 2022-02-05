@@ -99,7 +99,6 @@ class OpenPGP(BaseDevice):
 
     def is_init(self):
         """Required when has_password and not password_retries_inf"""
-        init_status = False
         try:
             # Check if has a key generated
             self.PGPdevice.get_public_key("B600")

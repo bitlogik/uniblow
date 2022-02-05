@@ -68,7 +68,7 @@ class CryptnoxCard:
                         self.connection = r.createConnection()
                         self.connection.connect(CardConnection.T1_protocol)
                         reader_detected = hasattr(self, "connection")
-                    except:
+                    except Exception:
                         logger.debug("Fail with this reader")
                         pass
                 if reader_detected:
@@ -101,20 +101,20 @@ class CryptnoxCard:
             delattr(self, "MACiv")
         # Decoding flags
         self.SNID = None  # will be set by get_manufacturer_cert (cert ID)
-        self.cardtype = datasel[0]  # B=66=x42 or U=85=x55 or P=80=x50
+        self.cardtype = datasel[0]
         self.applet_version = datasel[1:4]
         card_status_bytes = datasel[4] * 256 + datasel[5]
-        self.initialized = bool(card_status_bytes & (2 ** 6))
-        self.seeded = bool(card_status_bytes & (2 ** 5))
-        self.pinauth = bool(card_status_bytes & (2 ** 4))
-        self.pinless = bool(card_status_bytes & (2 ** 3))
-        self.xpubread = bool(card_status_bytes & (2 ** 2))
-        self.clearpubrd = bool(card_status_bytes & (2 ** 1))
+        self.initialized = bool(card_status_bytes & 64)
+        self.seeded = bool(card_status_bytes & 32)
+        self.pinauth = bool(card_status_bytes & 16)
+        self.pinless = bool(card_status_bytes & 8)
+        self.xpubread = bool(card_status_bytes & 4)
+        self.clearpubrd = bool(card_status_bytes & 2)
 
         card_publickeys_flag = datasel[6] * 256 + datasel[7]
-        self.userpubkey01 = bool(card_publickeys_flag & (2 ** 0))
-        self.userpubkey02 = bool(card_publickeys_flag & (2 ** 1))
-        self.userpubkey03 = bool(card_publickeys_flag & (2 ** 2))
+        self.userpubkey01 = bool(card_publickeys_flag & 1)
+        self.userpubkey02 = bool(card_publickeys_flag & 2)
+        self.userpubkey03 = bool(card_publickeys_flag & 4)
 
         self.custom_bytes = datasel[8:24]  # uintegers list
 
@@ -148,7 +148,7 @@ class CryptnoxCard:
             raise Exception("Invalid Pairing key\n")
         if sw1 == 0x6A and sw2 == 0x82:
             raise Exception(
-                "Error firmware not found\n" "          Check a Cryptnox is connected\n"
+                "Error firmware not found\nCheck a Cryptnox is connected\n"
             )
         if sw1 == 0x99 and sw2 == 0x99:
             raise Exception("Radio link was broken")
@@ -249,7 +249,7 @@ class CryptnoxCard:
                 else:
                     print("Bad certificate format")
                     return False
-            except:
+            except Exception:
                 print("Bad card certificate format")
                 return False
         else:
@@ -359,7 +359,7 @@ class CryptnoxCard:
         # Decrypt response
         try:
             datadec = unpad_data(aes_decrypt(self.AESkey, MACval, rep_data))
-        except:
+        except Exception:
             raise Exception("Error (SCP) : Error during decryption (bad padding, wrong key)")
         status = datadec[-2:]
         datarcvd = datadec[:-2]
@@ -608,7 +608,6 @@ class CryptnoxCard:
         self.xpubread = status
 
     def set_clearpukey(self, status, PUKb):
-        ## XXX K1 or R1 ?
         # status = False : clear public pubkey read disabled
         # status = True : clear public pubkey read enabled
         self.set_pubexport(status, 1, PUKb)
@@ -841,7 +840,7 @@ def gen_EC_pv_key():
 
 
 def privkey_to_der(pvkey):
-    # X962 =1.2.840.10045.2.1, SECP256k1 = 1.3.132.0.10 = 06052B8104000A
+    # X962 = 1.2.840.10045.2.1, SECP256k1 = 1.3.132.0.10 = 06052B8104000A
     datahex = "303E020100301006072A8648CE3D020106052B8104000A042730250201010420" + "%064X" % pvkey
     return bytes.fromhex(datahex)
 
@@ -957,6 +956,6 @@ def checksignature(msg, pubkey_hex, signature_hex):
     try:
         pubkey.verify(signature, msg, ec.ECDSA(hashes.SHA256()))
         sigOK = True
-    except:
+    except Exception:
         sigOK = False
     return sigOK

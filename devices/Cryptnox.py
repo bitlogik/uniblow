@@ -105,15 +105,14 @@ class Cryptnox(BaseDevice):
     def get_pw_left(self):
         """When has_password and not password_retries_inf"""
         self.card.open_secure_channel(Basic_Pairing_Secret)
-        tries_left = self.card.get_pin_left()
-        return tries_left
+        return self.card.get_pin_left()
 
     def is_init(self):
         """Required when has_password and not password_retries_inf"""
         try:
             self.card = CryptnoxCard()
         except Exception:
-            raise Exception("Cryptnox not found.")
+            raise Exception("No Cryptnox card found.")
         # Check card version must be Basic
         if self.card.cardtype != Cryptnox.basic_card_id:
             raise Exception("Cryptnox compatible with uniblow are only BG-1 models.")
