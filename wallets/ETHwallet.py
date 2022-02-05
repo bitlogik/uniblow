@@ -51,6 +51,9 @@ EIP712_HEADER = b"\x19\x01"
 USER_SCREEN = (
     "\n>> !!!  Once approved, check on your device screen to confirm the signature  !!! <<"
 )
+USER_BUTTON = (
+    "\n>> !!!  Once approved, press the button on the device to confirm the signature  !!! <<"
+)
 
 WALLETCONNECT_PROJID = "5af34a5c60298f270f4281f8bae67f33"
 WALLET_DESCR = {
@@ -465,22 +468,22 @@ class ETH_wallet:
                         "Disconnected by the web app service.\n"
                         f"Reason : {parameters['reason']['message']}"
                     )
-            elif method == "personal_sign":
+            elif method == "personal_sign" and len(parameters) > 1:
                 if compare_eth_addresses(parameters[1], self.get_account()):
                     signature = self.process_sign_message(parameters[0])
                     if signature is not None:
                         self.wc_client.reply(id_request, f"0x{signature.hex()}")
-            elif method == "eth_sign":
+            elif method == "eth_sign" and len(parameters) > 1:
                 if compare_eth_addresses(parameters[0], self.get_account()):
                     signature = self.process_sign_message(parameters[1])
                     if signature is not None:
                         self.wc_client.reply(id_request, f"0x{signature.hex()}")
-            elif method == "eth_signTypedData":
+            elif method == "eth_signTypedData" and len(parameters) > 1:
                 if compare_eth_addresses(parameters[0], self.get_account()):
                     signature = self.process_sign_typeddata(parameters[1])
                     if signature is not None:
                         self.wc_client.reply(id_request, f"0x{signature.hex()}")
-            elif method == "eth_sendTransaction":
+            elif method == "eth_sendTransaction" and len(parameters) > 0:
                 # sign and sendRaw
                 tx_obj_tosign = parameters[0]
                 if compare_eth_addresses(tx_obj_tosign["from"], self.get_account()):
@@ -488,16 +491,17 @@ class ETH_wallet:
                     if tx_signed is not None:
                         tx_hash = self.broadcast_tx(tx_signed)
                         self.wc_client.reply(id_request, tx_hash)
-            elif method == "eth_signTransaction":
+            elif method == "eth_signTransaction" and len(parameters) > 0:
                 tx_obj_tosign = parameters[0]
                 if compare_eth_addresses(tx_obj_tosign["from"], self.get_account()):
                     tx_signed = self.process_signtransaction(tx_obj_tosign)
                     if tx_signed is not None:
                         self.wc_client.reply(id_request, f"0x{tx_signed}")
-            elif method == "eth_sendRawTransaction":
+            elif method == "eth_sendRawTransaction" and len(parameters) > 0:
                 tx_data = parameters[0]
                 tx_hash = self.broadcast_tx(tx_data)
                 self.wc_client.reply(id_request, tx_hash)
+            logger.debug("WC command processing finished, now reading next available message.")
             wc_message = self.wc_client.get_message()
 
     def get_balance(self):
@@ -563,6 +567,8 @@ class ETH_wallet:
             hash2_data = sha2(data_bin).hex().upper()
             sign_request += f"\n Hash data to sign (hex) :\n {hash2_data}\n"
             sign_request += USER_SCREEN
+        elif self.current_device.has_hardware_button:
+            sign_request += USER_BUTTON
         if self.confirm_callback(sign_request):
             if self.current_device.has_screen:
                 v, r, s = self.current_device.sign_message(data_bin)
@@ -575,7 +581,15 @@ class ETH_wallet:
     def process_sign_typeddata(self, data_bin):
         """Process a WalletConnect eth_signTypedData call"""
         data_obj = json.loads(data_bin)
-        hash_domain, hash_data = typed_sign_hash(data_obj, self.chainID)
+        # Silent ignore when chain ids mismatch
+        if (
+            "domain" in data_obj
+            and "chainId" in data_obj["domain"]
+            and self.chainID != data_obj["domain"]["chainId"]
+        ):
+            logger.debug("Wrong chain id in signedTypedData")
+            return None
+        hash_domain, hash_data = typed_sign_hash(data_obj)
         sign_request = (
             "WalletConnect signature request :\n\n"
             f"- Data to sign (typed) :\n"
@@ -587,6 +601,8 @@ class ETH_wallet:
         )
         if self.current_device.has_screen:
             sign_request += USER_SCREEN
+        elif self.current_device.has_hardware_button:
+            sign_request += USER_BUTTON
         if self.confirm_callback(sign_request):
             if self.current_device.has_screen:
                 v, r, s = self.current_device.sign_eip712(hash_domain, hash_data)
@@ -620,6 +636,8 @@ class ETH_wallet:
         )
         if self.current_device.has_screen:
             request_message += USER_SCREEN
+        elif self.current_device.has_hardware_button:
+            request_message += USER_BUTTON
         if self.confirm_callback(request_message):
             data_hex = txdata.get("data", "0x")
             data = bytearray.fromhex(data_hex[2:])
