@@ -424,7 +424,7 @@ def device_selected(device):
                         and device_loaded.is_init()
                     ):
                         # Goto password exception to ask for user PIN
-                        pin_left = device_loaded.get_pin_left()
+                        pin_left = device_loaded.get_pw_left()
                         raise pwdException
                     # Can raise notinit
                     device_loaded.open_account(password_default)

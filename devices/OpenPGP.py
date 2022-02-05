@@ -93,7 +93,7 @@ class OpenPGP(BaseDevice):
         self.PIN3 = admin_password
         self.PGPdevice.change_pin("12345678", self.PIN3, 3)
 
-    def get_pin_left(self):
+    def get_pw_left(self):
         """When has_password and not password_retries_inf"""
         return self.PGPdevice.get_pin_status(1)
 
