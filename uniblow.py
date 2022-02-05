@@ -503,11 +503,21 @@ def device_selected(device):
                     )
                     warn_modal(str(exc))
                     return
-            except pwdException:
+            except pwdException as excp:
+                pin_left = device_loaded.get_pw_left()
                 if pin_left == 0:
                     warn_modal(f"Device {pwd_pin} is locked.")
                     return
-                    # ToDo SoftLock ?
+                print(pin_left)
+                print(the_device.password_softlock)
+                if (
+                    not the_device.password_retries_inf
+                    and the_device.password_softlock > 0
+                    and pin_left == the_device.password_softlock
+                    and str(excp) == "0"
+                ):
+                    warn_modal(f"Device {pwd_pin} is soft locked. Restart it to try again.")
+                    return
                 while True:
                     inp_message = f"Input your {device_sel_name} wallet {pwd_pin}.\n"
                     if not the_device.password_retries_inf:
@@ -525,7 +535,6 @@ def device_selected(device):
                         f"Device {pwd_pin} shall be at least {the_device.password_min_len} chars.",
                         True,
                     )
-                pin_left -= 1
             except Exception as exc:
                 return device_error(exc)
         wx.MilliSleep(100)

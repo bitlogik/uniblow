@@ -26,6 +26,7 @@ class BaseDevice(ABC):
     password_min_len = 6
     default_password = "NoPasswd"
     password_retries_inf = False
+    password_softlock = 0
     has_admin_password = False
     admin_pass_name = "Administrator Password"
     admin_pwd_minlen = 8

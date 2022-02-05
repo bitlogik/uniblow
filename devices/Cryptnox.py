@@ -39,12 +39,13 @@ class Cryptnox(BaseDevice):
     has_admin_password = True
     password_name = "PIN"
     password_min_len = 4
+    password_retries_inf = False
+    password_softlock = 3
     default_password = "1234"
     admin_pass_name = "admin code"
     admin_pwd_minlen = 12
     default_admin_password = "123456789012"
     internally_gen_keys = False
-    password_retries_inf = False
     basic_card_id = 0x42
 
     def __init__(self):
@@ -95,8 +96,8 @@ class Cryptnox(BaseDevice):
             self.card.testPIN(password)
         except Exception as exc:
             if str(exc).startswith("Error (SCP) : 63C"):
-                raise pwdException
-            if str(exc).startswith("Error (SCP) : 6700"):
+                raise pwdException(str(exc)[-1])
+            if exc == "Error (SCP) : 6700":
                 raise Exception("PIN input is too long")
             raise exc
         self.pin = password
