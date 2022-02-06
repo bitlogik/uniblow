@@ -87,7 +87,14 @@ class Cryptnox(BaseDevice):
         try:
             self.card.open_secure_channel(Basic_Pairing_Secret)
         except Exception as exc:
-            raise Exception("Invalid pairing key for this card.", str(exc))
+            raise Exception(
+                "Error while opening the Cryptnox encrypted tunnel.\n\n"
+                "Possible causes :\n"
+                " * Invalid PairingKey for this card \n"
+                " * Card is fake, not genuine\n"
+                " * Card was disconnected from the reader\n\n"
+                "Log of the error :\n" + str(exc)
+            )
         # Check the key loaded is a HD seed key
         card_info = self.card.get_card_info()
         if card_info.key_type not in ["X", "S", "D", "L"]:

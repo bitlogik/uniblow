@@ -26,6 +26,7 @@ from cryptography.hazmat.primitives.asymmetric import ec
 
 from smartcard.System import readers
 from smartcard.CardConnection import CardConnection
+from smartcard.Exceptions import CardConnectionException
 
 
 from logging import getLogger
@@ -35,6 +36,10 @@ logger = getLogger(__name__)
 # Common public pairing key
 # The Basic version can't auth the host, only by PIN
 Basic_Pairing_Secret = b"Cryptnox Basic CommonPairingData"
+
+
+class CryptnoxCommException(Exception):
+    pass
 
 
 class cardinfo_(dict):
@@ -134,7 +139,10 @@ class CryptnoxCard:
         # send full APDU, APDU is a list of integers
         logger.debug("--> sending : %i bytes data ", (len(APDU) - 5))
         logger.debug(list2hex(APDU))
-        data, sw1, sw2 = self.connection.transmit(APDU)
+        try:
+            data, sw1, sw2 = self.connection.transmit(APDU)
+        except CardConnectionException:
+            raise CryptnoxCommException("Cryptnox card was disconnected.")
         logger.debug(
             "<-- received : %02x%02x : %i bytes data",
             sw1,
