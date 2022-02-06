@@ -401,12 +401,14 @@ class ETH_wallet:
                 if hasattr(self, "wc_client"):
                     self.wc_client.close()
                 raise InvalidOption(exc)
+            relay = self.wc_client.get_relay_url()
             request_message = (
                 "WalletConnect request from :\n\n"
                 f"{request_info['name']}\n\n"
-                f"website   : {request_info['url']}\n"
-                f"Relay URL : {self.wc_client.get_relay_url()}\n"
+                f"website  :  {request_info['url']}\n"
             )
+            if relay:
+                request_message += f"Relay URL : {relay}\n"
             approve = self.confirm_callback(request_message)
             if approve:
                 self.wc_client.reply_session_request(req_id, self.chainID, self.get_account())
