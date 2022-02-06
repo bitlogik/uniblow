@@ -42,14 +42,17 @@ ICON_FILE = "gui/uniblow.ico"
 
 
 class InfoBox(gui.infodialog.InfoDialog):
-    def __init__(self, message, title, style, parent):
+    def __init__(self, message, title, style, parent, block_modal=False):
         super().__init__(parent)
         self.message = message
         self.SetTitle(title)
         self.m_textCtrl.SetBackgroundColour(self.GetBackgroundColour())
         self.m_textCtrl.SetValue(self.message)
         self.m_textCtrl.SelectNone()
-        self.Show()
+        if block_modal:
+            self.ShowModal()
+        else:
+            self.Show()
 
     def copy_text_dialog(self, event):
         event.Skip()
@@ -252,6 +255,8 @@ class UniblowApp(App):
     def load_devices(self, devices_list):
         self.gui_panel.devices_choice.Append("Choose your device")
         for device in devices_list:
+            if device == "LocalFile":
+                device = "Local file wallet"
             self.gui_panel.devices_choice.Append(device)
         self.gui_panel.devices_choice.SetSelection(0)
 

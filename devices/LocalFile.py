@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 # -*- coding: utf8 -*-
 
-# UNIBLOW Hierarchical Deterministic keys device
+# UNIBLOW Hierarchical Deterministic file device
 # Copyright (C) 2021-2022 BitLogiK
 
 # This program is free software: you can redistribute it and/or modify
@@ -42,10 +42,11 @@ class pwdException(nacl.exceptions.CryptoError):
 class NotinitException(Exception):
     pass
 
-
-class HDdevice(BaseDevice):
+# Previously called HDdevice
+class LocalFile(BaseDevice):
 
     has_password = True
+    password_retries_inf = True
     is_HD = True
 
     def open_account(self, password):
@@ -144,7 +145,7 @@ class HDdevice(BaseDevice):
             pathc += "'"
             mnode = self.master_node_ed
         else:
-            raise Exception("HDdevice support only K1 and Ed derivations.")
+            raise Exception("LocalFile supports only K1 and Ed derivations.")
         self.pvkey = mnode.derive_key(pathc)
 
     def get_public_key(self):

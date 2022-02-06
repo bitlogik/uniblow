@@ -139,10 +139,20 @@ class SeedWatcherFrame(gui.swgui.MainFrame):
 class SeedWatcherPanel(gui.swgui.MainPanel):
     def mnemo_changed(self, event):
         event.Skip()
+        if self.m_typechoice.GetSelection() > 0:
+            self.m_staticText5.Hide()
+            self.m_staticText6.Hide()
+            self.m_bitmap_wl.Hide()
+            self.m_bitmap_cs.Hide()
+        else:
+            self.m_staticText5.Show()
+            self.m_staticText6.Show()
+            self.m_bitmap_wl.Show()
+            self.m_bitmap_cs.Show()
+            self.m_bitmap_wl.SetBitmap(self.BAD_BMP)
+            self.m_bitmap_cs.SetBitmap(self.BAD_BMP)
         self.m_dataViewListCtrl1.DeleteAllItems()
         self.m_staticTextcopy.Disable()
-        self.m_bitmap_wl.SetBitmap(self.BAD_BMP)
-        self.m_bitmap_cs.SetBitmap(self.BAD_BMP)
         self.check_mnemonic()
 
     def gen_new_mnemonic(self, event):
@@ -270,7 +280,7 @@ class SeedWatcherPanel(gui.swgui.MainPanel):
     def compute_seed(self, *args):
         try:
             wallet_seed = HD_Wallet.seed_from_mnemonic(*args)
-        except:
+        except Exception:
             self.enable_inputs()
             return
         self.async_getcoininfo_idx(0, wallet_seed)

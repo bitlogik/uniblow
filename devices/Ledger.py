@@ -48,11 +48,11 @@ def unpack_vrs(vrsbin):
 
 class Ledger(BaseDevice):
 
-    is_init = False
     is_HD = True
     has_screen = True
     ledger_tokens_compat = True
     has_hardware_button = True
+    internally_gen_keys = True
 
     def __init__(self):
         self.created = False
