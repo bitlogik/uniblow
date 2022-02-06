@@ -42,13 +42,14 @@ SUPPORTED_COINS = [
     "MATIC",
     "FTM",
     "CELO",
+    "MOVR",
     "ARB",
     "AVAX",
     "LTC",
     "DOGE",
     "EOS",
-    "SOL",
     "XTZ",
+    "SOL",
 ]
 
 DEVICES_LIST = [
@@ -404,6 +405,7 @@ def device_selected(device):
             "MATIC",
             "FTM",
             "CELO",
+            "MOVR",
             "ARB",
             "AVAX",
         ]

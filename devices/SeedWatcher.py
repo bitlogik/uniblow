@@ -47,20 +47,22 @@ from cryptolib.HDwallet import (
     bip39_is_checksum_valid,
     ElectrumOldWallet,
 )
+
+
 from wallets.BTCwallet import BTC_wallet
 from wallets.ETHwallet import ETH_wallet
-from wallets.MATICwallet import MATIC_wallet
 from wallets.BSCwallet import BSC_wallet
-from wallets.CELOwallet import CELO_wallet
+from wallets.MATICwallet import MATIC_wallet
 from wallets.FTMwallet import FTM_wallet
+from wallets.CELOwallet import CELO_wallet
+from wallets.MOVRwallet import MOVR_wallet
 from wallets.AVAXwallet import AVAX_wallet
 from wallets.ARBwallet import ARB_wallet
 from wallets.LTCwallet import LTC_wallet
 from wallets.DOGEwallet import DOGE_wallet
-from wallets.SOLwallet import SOL_wallet
-from wallets.XTZwallet import XTZ_wallet
 from wallets.EOSwallet import EOS_wallet
-
+from wallets.XTZwallet import XTZ_wallet
+from wallets.SOLwallet import SOL_wallet
 
 coins_list = [
     {"name": "Bitcoin Legacy", "path": "m/44'/0'/{}'/{}/{}", "wallet_lib": BTC_wallet, "type": 0},
@@ -72,15 +74,17 @@ coins_list = [
     {"name": "MATIC", "path": "m/44'/60'/{}'/{}/{}", "wallet_lib": MATIC_wallet},
     {"name": "FTM", "path": "m/44'/60'/{}'/{}/{}", "wallet_lib": FTM_wallet},
     {"name": "CELO", "path": "m/44'/60'/{}'/{}/{}", "wallet_lib": CELO_wallet},
+    {"name": "MOVR", "path": "m/44'/60'/{}'/{}/{}", "wallet_lib": MOVR_wallet, "network": 0},
+    {"name": "GLMR", "path": "m/44'/60'/{}'/{}/{}", "wallet_lib": MOVR_wallet, "network": 1},
     {"name": "ARB", "path": "m/44'/60'/{}'/{}/{}", "wallet_lib": ARB_wallet},
     {"name": "AVAX", "path": "m/44'/60'/{}'/{}/{}", "wallet_lib": AVAX_wallet},
     {"name": "Litecoin", "path": "m/44'/2'/{}'/{}/{}", "wallet_lib": LTC_wallet},
     {"name": "Dogecoin", "path": "m/44'/3'/{}'/{}/{}", "wallet_lib": DOGE_wallet},
     {"name": "EOSio", "path": "m/44'/194'/{}'/{}/{}", "wallet_lib": EOS_wallet},
-    {"name": "Solana", "path": "m/44'/501'/{0}'/{2}", "wallet_lib": SOL_wallet},
-    {"name": "Solana (alt. deriv)", "path": "m/44'/501'/{2}", "wallet_lib": SOL_wallet},
     {"name": "Tezos tz1", "path": "m/44'/1729'/{0}'/{2}", "wallet_lib": XTZ_wallet, "type": 1},
     {"name": "Tezos tz2", "path": "m/44'/1729'/{}'/{}/{}", "wallet_lib": XTZ_wallet, "type": 0},
+    {"name": "Solana", "path": "m/44'/501'/{0}'/{2}", "wallet_lib": SOL_wallet},
+    {"name": "Solana (alt. deriv)", "path": "m/44'/501'/{2}", "wallet_lib": SOL_wallet},
 ]
 
 WORDSLEN_LIST = ["12 words", "15 words", "18 words", "21 words", "24 words"]
@@ -104,12 +108,13 @@ class SeedDevice:
 class blockchainWallet:
     def __init__(self, coin_data, device, deriv_type):
         self.name = coin_data["name"]
+        wallet_netw = coin_data.get("network", 0)
         wallet_type = coin_data.get("type", 0)
         if self.name == "Bitcoin Legacy" and deriv_type == 2:
             # This is Electrum Old derivation wallet, set public key as uncompressed
-            self.wallet = coin_data["wallet_lib"](0, wallet_type, device, False)
+            self.wallet = coin_data["wallet_lib"](wallet_netw, wallet_type, device, False)
         else:
-            self.wallet = coin_data["wallet_lib"](0, wallet_type, device)
+            self.wallet = coin_data["wallet_lib"](wallet_netw, wallet_type, device)
 
 
 class ContextOptionsMenu(Menu):
