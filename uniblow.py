@@ -53,9 +53,8 @@ SUPPORTED_COINS = [
 
 DEVICES_LIST = [
     "SeedWatcher",
-    "BasicFile",
+    "LocalFile",
     "OpenPGP",
-    "HDdevice",
     "Ledger",
     "Cryptnox",
 ]

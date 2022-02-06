@@ -255,6 +255,8 @@ class UniblowApp(App):
     def load_devices(self, devices_list):
         self.gui_panel.devices_choice.Append("Choose your device")
         for device in devices_list:
+            if device == "LocalFile":
+                device = "Local file wallet"
             self.gui_panel.devices_choice.Append(device)
         self.gui_panel.devices_choice.SetSelection(0)
 
