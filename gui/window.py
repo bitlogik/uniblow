@@ -48,21 +48,21 @@ class TopPanel ( wx.Panel ):
 
         self.device_label.SetFont( wx.Font( 11, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, False, wx.EmptyString ) )
 
-        bSizer2.Add( self.device_label, 0, wx.ALL|wx.ALIGN_CENTER_HORIZONTAL, 5 )
+        bSizer2.Add( self.device_label, 0, wx.ALIGN_CENTER_HORIZONTAL, 5 )
 
         devices_choiceChoices = []
         self.devices_choice = wx.Choice( self, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, devices_choiceChoices, 0 )
         self.devices_choice.SetSelection( 0 )
         self.devices_choice.SetFont( wx.Font( 13, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, False, wx.EmptyString ) )
 
-        bSizer2.Add( self.devices_choice, 0, wx.ALIGN_CENTER_HORIZONTAL|wx.BOTTOM, 20 )
+        bSizer2.Add( self.devices_choice, 0, wx.ALIGN_CENTER_HORIZONTAL|wx.TOP, 5 )
 
         self.coins_label = wx.StaticText( self, wx.ID_ANY, u"Blockchain", wx.DefaultPosition, wx.DefaultSize, 0 )
         self.coins_label.Wrap( -1 )
 
         self.coins_label.SetFont( wx.Font( 10, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, False, wx.EmptyString ) )
 
-        bSizer2.Add( self.coins_label, 0, wx.ALL|wx.ALIGN_CENTER_HORIZONTAL, 5 )
+        bSizer2.Add( self.coins_label, 0, wx.ALIGN_CENTER_HORIZONTAL|wx.TOP, 20 )
 
         coins_choiceChoices = []
         self.coins_choice = wx.Choice( self, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, coins_choiceChoices, 0 )
@@ -70,7 +70,7 @@ class TopPanel ( wx.Panel ):
         self.coins_choice.SetFont( wx.Font( 12, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, False, wx.EmptyString ) )
         self.coins_choice.Enable( False )
 
-        bSizer2.Add( self.coins_choice, 0, wx.ALL|wx.ALIGN_CENTER_VERTICAL|wx.ALIGN_CENTER_HORIZONTAL, 5 )
+        bSizer2.Add( self.coins_choice, 0, wx.ALIGN_CENTER_VERTICAL|wx.ALIGN_CENTER_HORIZONTAL|wx.TOP, 5 )
 
         self.network_label = wx.StaticText( self, wx.ID_ANY, u"Network", wx.DefaultPosition, wx.DefaultSize, 0 )
         self.network_label.Wrap( -1 )
@@ -78,7 +78,7 @@ class TopPanel ( wx.Panel ):
         self.network_label.SetFont( wx.Font( 10, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, False, wx.EmptyString ) )
         self.network_label.Enable( False )
 
-        bSizer2.Add( self.network_label, 0, wx.ALL|wx.ALIGN_CENTER_HORIZONTAL, 5 )
+        bSizer2.Add( self.network_label, 0, wx.ALIGN_CENTER_HORIZONTAL|wx.TOP, 20 )
 
         network_choiceChoices = []
         self.network_choice = wx.Choice( self, wx.ID_ANY, wx.DefaultPosition, wx.Size( 150,-1 ), network_choiceChoices, 0 )
@@ -86,7 +86,7 @@ class TopPanel ( wx.Panel ):
         self.network_choice.SetFont( wx.Font( 12, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, False, wx.EmptyString ) )
         self.network_choice.Enable( False )
 
-        bSizer2.Add( self.network_choice, 0, wx.ALL|wx.ALIGN_CENTER_HORIZONTAL, 5 )
+        bSizer2.Add( self.network_choice, 0, wx.ALIGN_CENTER_HORIZONTAL|wx.TOP, 5 )
 
         self.wallopt_label = wx.StaticText( self, wx.ID_ANY, u"Account Type", wx.DefaultPosition, wx.DefaultSize, 0 )
         self.wallopt_label.Wrap( -1 )
@@ -94,7 +94,7 @@ class TopPanel ( wx.Panel ):
         self.wallopt_label.SetFont( wx.Font( 10, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, False, wx.EmptyString ) )
         self.wallopt_label.Enable( False )
 
-        bSizer2.Add( self.wallopt_label, 0, wx.ALL|wx.ALIGN_CENTER_HORIZONTAL, 5 )
+        bSizer2.Add( self.wallopt_label, 0, wx.ALIGN_CENTER_HORIZONTAL|wx.TOP, 20 )
 
         wallopt_choiceChoices = []
         self.wallopt_choice = wx.Choice( self, wx.ID_ANY, wx.DefaultPosition, wx.Size( 185,-1 ), wallopt_choiceChoices, 0 )
