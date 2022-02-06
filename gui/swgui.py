@@ -18,7 +18,7 @@ import wx.dataview
 class MainFrame ( wx.Frame ):
 
     def __init__( self, parent ):
-        wx.Frame.__init__ ( self, parent, id = wx.ID_ANY, title = u"  [ Uniblow ]    Seed Watcher", pos = wx.DefaultPosition, size = wx.Size( 650,680 ), style = wx.CAPTION|wx.CLOSE_BOX|wx.SYSTEM_MENU|wx.FULL_REPAINT_ON_RESIZE|wx.TAB_TRAVERSAL )
+        wx.Frame.__init__ ( self, parent, id = wx.ID_ANY, title = u"  [ Uniblow ]    Seed Watcher", pos = wx.DefaultPosition, size = wx.Size( 650,700 ), style = wx.CAPTION|wx.CLOSE_BOX|wx.SYSTEM_MENU|wx.FULL_REPAINT_ON_RESIZE|wx.TAB_TRAVERSAL )
 
         self.SetSizeHints( wx.DefaultSize, wx.DefaultSize )
 
@@ -57,17 +57,32 @@ class MainPanel ( wx.Panel ):
         self.m_button_gen = wx.BitmapButton( self, wx.ID_ANY, wx.NullBitmap, wx.DefaultPosition, wx.DefaultSize, wx.BU_AUTODRAW|wx.BORDER_NONE )
 
         self.m_button_gen.SetBitmap( wx.NullBitmap )
-        bSizer31.Add( self.m_button_gen, 0, wx.ALL|wx.ALIGN_CENTER_VERTICAL, 10 )
+        bSizer31.Add( self.m_button_gen, 0, wx.ALIGN_CENTER_VERTICAL|wx.BOTTOM|wx.RIGHT|wx.LEFT, 10 )
+
+        bSizer6 = wx.BoxSizer( wx.VERTICAL )
+
+        self.m_staticText9 = wx.StaticText( self, wx.ID_ANY, u"Generation option", wx.DefaultPosition, wx.DefaultSize, 0 )
+        self.m_staticText9.Wrap( -1 )
+
+        self.m_staticText9.SetFont( wx.Font( 9, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, False, wx.EmptyString ) )
+
+        bSizer6.Add( self.m_staticText9, 0, wx.ALIGN_CENTER_HORIZONTAL|wx.TOP|wx.RIGHT|wx.LEFT, 5 )
 
         m_choice_nwordsChoices = []
         self.m_choice_nwords = wx.Choice( self, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, m_choice_nwordsChoices, 0 )
         self.m_choice_nwords.SetSelection( 0 )
         self.m_choice_nwords.SetFont( wx.Font( 11, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, False, wx.EmptyString ) )
 
-        bSizer31.Add( self.m_choice_nwords, 0, wx.ALL|wx.ALIGN_CENTER_VERTICAL, 10 )
+        bSizer6.Add( self.m_choice_nwords, 0, wx.ALIGN_CENTER_VERTICAL|wx.ALIGN_CENTER_HORIZONTAL|wx.RIGHT|wx.LEFT, 10 )
+
+
+        bSizer31.Add( bSizer6, 1, wx.EXPAND, 5 )
 
 
         bSizer11.Add( bSizer31, 0, wx.ALIGN_CENTER_HORIZONTAL, 5 )
+
+
+        bSizer11.Add( ( 0, 0), 0, wx.TOP, 8 )
 
         bSizer3 = wx.BoxSizer( wx.HORIZONTAL )
 
@@ -144,19 +159,19 @@ class MainPanel ( wx.Panel ):
 
         bSizer5.Add( self.m_staticTextAcct, 0, wx.ALIGN_CENTER_VERTICAL, 5 )
 
-        self.m_account = wx.SpinCtrl( self, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.Size( 75,-1 ), wx.SP_ARROW_KEYS, 0, 2147483647, 0 )
-        bSizer5.Add( self.m_account, 0, wx.ALL|wx.ALIGN_CENTER_VERTICAL, 5 )
+        self.m_account = wx.SpinCtrl( self, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.Size( 112,-1 ), wx.SP_ARROW_KEYS, 0, 2147483647, 0 )
+        bSizer5.Add( self.m_account, 0, wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5 )
 
         self.is_change = wx.CheckBox( self, wx.ID_ANY, u"internal", wx.DefaultPosition, wx.DefaultSize, wx.ALIGN_RIGHT )
-        bSizer5.Add( self.is_change, 0, wx.LEFT|wx.ALIGN_CENTER_VERTICAL, 20 )
+        bSizer5.Add( self.is_change, 0, wx.ALIGN_CENTER_VERTICAL|wx.LEFT, 22 )
 
         self.m_staticTextIdx = wx.StaticText( self, wx.ID_ANY, u"Index", wx.DefaultPosition, wx.DefaultSize, 0 )
         self.m_staticTextIdx.Wrap( -1 )
 
         bSizer5.Add( self.m_staticTextIdx, 0, wx.ALIGN_CENTER_VERTICAL|wx.LEFT, 25 )
 
-        self.m_index = wx.SpinCtrl( self, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.Size( 75,-1 ), wx.SP_ARROW_KEYS, 0, 2147483647, 0 )
-        bSizer5.Add( self.m_index, 0, wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5 )
+        self.m_index = wx.SpinCtrl( self, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.Size( 112,-1 ), wx.SP_ARROW_KEYS, 0, 2147483647, 0 )
+        bSizer5.Add( self.m_index, 0, wx.ALIGN_CENTER_VERTICAL|wx.TOP|wx.BOTTOM|wx.LEFT, 5 )
 
 
         bSizer11.Add( bSizer5, 0, wx.ALIGN_CENTER, 5 )
