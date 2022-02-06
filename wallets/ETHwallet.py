@@ -587,12 +587,13 @@ class ETH_wallet:
     def process_sign_typeddata(self, data_bin):
         """Process a WalletConnect eth_signTypedData call"""
         data_obj = json.loads(data_bin)
+        chain_id = None
+        if "domain" in data_obj and "chainId" in data_obj["domain"]:
+            chain_id = data_obj["domain"]["chainId"]
+            if isinstance(chain_id, str) and chain_id.startswith("eip155:"):
+                chain_id = int(chain_id[7:])
         # Silent ignore when chain ids mismatch
-        if (
-            "domain" in data_obj
-            and "chainId" in data_obj["domain"]
-            and self.chainID != data_obj["domain"]["chainId"]
-        ):
+        if chain_id is not None and self.chainID != data_obj["domain"]["chainId"]:
             logger.debug("Wrong chain id in signedTypedData")
             return None
         hash_domain, hash_data = typed_sign_hash(data_obj)
