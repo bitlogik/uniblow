@@ -45,7 +45,7 @@
             <property name="minimum_size"></property>
             <property name="name">TopFrame</property>
             <property name="pos"></property>
-            <property name="size">918,418</property>
+            <property name="size">925,420</property>
             <property name="style">wxCAPTION|wxCLOSE_BOX|wxMINIMIZE_BOX|wxSYSTEM_MENU</property>
             <property name="subclass">; ; forward_declare</property>
             <property name="title"></property>
@@ -181,7 +181,7 @@
                                 <property name="enabled">1</property>
                                 <property name="fg"></property>
                                 <property name="floatable">1</property>
-                                <property name="font">,90,90,12,70,0</property>
+                                <property name="font">,90,90,13,70,0</property>
                                 <property name="gripper">0</property>
                                 <property name="hidden">0</property>
                                 <property name="id">wxID_ANY</property>
@@ -693,7 +693,7 @@
                                         </object>
                                         <object class="sizeritem" expanded="1">
                                             <property name="border">80</property>
-                                            <property name="flag">wxLEFT|wxALIGN_CENTER_VERTICAL</property>
+                                            <property name="flag">wxALIGN_CENTER_VERTICAL|wxLEFT|wxRESERVE_SPACE_EVEN_IF_HIDDEN</property>
                                             <property name="proportion">0</property>
                                             <object class="wxButton" expanded="1">
                                                 <property name="BottomDockable">1</property>

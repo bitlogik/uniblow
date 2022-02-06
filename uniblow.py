@@ -150,6 +150,8 @@ def display_balance():
     app.gui_panel.balance_info.SetLabel(balance)
     app.gui_panel.hist_button.Enable()
     app.gui_panel.copy_button.Enable()
+    app.gui_panel.account_label.Enable()
+    app.gui_panel.balance_label.Enable()
     bal_str = balance.split(" ")[0]
     if (
         # No fund in the wallet
@@ -161,11 +163,19 @@ def display_balance():
     ):
         app.gui_panel.dest_addr.Enable()
         app.gui_panel.amount.Enable()
+        app.gui_panel.dest_label.Enable()
+        app.gui_panel.amount_label.Enable()
+        app.gui_panel.fee_slider.Enable()
+        app.gui_panel.fee_setting.Enable()
         app.gui_panel.send_button.Enable()
         app.gui_panel.send_all.Enable()
     else:
         app.gui_panel.dest_addr.Clear()
         app.gui_panel.amount.Clear()
+        app.gui_panel.dest_label.Disable()
+        app.gui_panel.amount_label.Disable()
+        app.gui_panel.fee_slider.Disable()
+        app.gui_panel.fee_setting.Disable()
         app.gui_panel.dest_addr.Disable()
         app.gui_panel.amount.Disable()
         app.gui_panel.send_button.Disable()
@@ -193,10 +203,17 @@ def erase_info(reset=False):
     app.gui_panel.send_button.Disable()
     app.gui_panel.wallopt_label.Disable()
     app.gui_panel.wallopt_choice.Disable()
+    app.gui_panel.account_label.Disable()
+    app.gui_panel.balance_label.Disable()
+    app.gui_panel.dest_label.Disable()
+    app.gui_panel.amount_label.Disable()
+    app.gui_panel.fee_slider.Disable()
+    app.gui_panel.fee_setting.Disable()
     app.gui_panel.btn_chkaddr.Hide()
     if reset:
         app.gui_panel.network_choice.SetSelection(0)
         app.gui_panel.wallopt_choice.SetSelection(0)
+        app.gui_panel.fee_setting.SetLabel("")
     app.gui_panel.qrimg.SetBitmap(wx.Bitmap())
     if hasattr(app, "wallet"):
         del app.wallet
@@ -888,6 +905,7 @@ def start_main_app():
     app.gui_panel.fee_slider.Bind(wx.EVT_SCROLL_CHANGED, fee_changed)
     app.gui_panel.btn_chkaddr.Bind(wx.EVT_BUTTON, check_wallet)
     app.gui_panel.btn_chkaddr.Hide()
+    erase_info(True)
     app.gui_frame.Show()
 
 
