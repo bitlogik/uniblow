@@ -318,9 +318,9 @@ class HDPanel ( wx.Panel ):
         self.title_text = wx.StaticText( self, wx.ID_ANY, u"Wallet mnemonic input", wx.DefaultPosition, wx.DefaultSize, 0 )
         self.title_text.Wrap( -1 )
 
-        self.title_text.SetFont( wx.Font( 12, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, False, wx.EmptyString ) )
+        self.title_text.SetFont( wx.Font( 14, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, False, wx.EmptyString ) )
 
-        bSizer15.Add( self.title_text, 0, wx.ALIGN_CENTER_HORIZONTAL|wx.ALIGN_CENTER_VERTICAL|wx.LEFT, 42 )
+        bSizer15.Add( self.title_text, 0, wx.ALIGN_CENTER_HORIZONTAL|wx.ALIGN_CENTER_VERTICAL|wx.LEFT, 32 )
 
 
         bSizer15.Add( ( 24, 0), 0, 0, 15 )
@@ -340,6 +340,9 @@ class HDPanel ( wx.Panel ):
 
         self.m_bitmapHDcs = wx.StaticBitmap( self, wx.ID_ANY, wx.NullBitmap, wx.DefaultPosition, wx.DefaultSize, 0 )
         bSizer15.Add( self.m_bitmapHDcs, 0, wx.ALIGN_BOTTOM|wx.BOTTOM, 5 )
+
+
+        bSizer15.Add( ( 0, 0), 1, wx.EXPAND|wx.RIGHT, 16 )
 
 
         bSizer11.Add( bSizer15, 1, wx.EXPAND, 5 )
@@ -377,7 +380,7 @@ class HDPanel ( wx.Panel ):
 
         bSizer14.Add( self.m_accounttxt, 0, wx.ALIGN_CENTER_VERTICAL, 5 )
 
-        self.m_spinCtrl_account = wx.SpinCtrl( self, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.Size( 75,-1 ), wx.SP_ARROW_KEYS, 0, 10, 0 )
+        self.m_spinCtrl_account = wx.SpinCtrl( self, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.Size( 75,-1 ), wx.SP_ARROW_KEYS, 0, 2147483647, 0 )
         bSizer14.Add( self.m_spinCtrl_account, 0, wx.ALL|wx.ALIGN_CENTER_VERTICAL, 5 )
 
         self.m_indextxt = wx.StaticText( self, wx.ID_ANY, u"index", wx.DefaultPosition, wx.DefaultSize, 0 )
@@ -385,7 +388,7 @@ class HDPanel ( wx.Panel ):
 
         bSizer14.Add( self.m_indextxt, 0, wx.LEFT|wx.ALIGN_CENTER_VERTICAL, 24 )
 
-        self.m_spinCtrl_index = wx.SpinCtrl( self, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.Size( 75,-1 ), wx.SP_ARROW_KEYS, 0, 10, 0 )
+        self.m_spinCtrl_index = wx.SpinCtrl( self, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.Size( 75,-1 ), wx.SP_ARROW_KEYS, 0, 2147483647, 0 )
         bSizer14.Add( self.m_spinCtrl_index, 0, wx.ALL|wx.ALIGN_CENTER_VERTICAL, 5 )
 
 
