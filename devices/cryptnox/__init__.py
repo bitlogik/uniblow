@@ -147,9 +147,7 @@ class CryptnoxCard:
         if sw1 == 0x69 and sw2 == 0x82:
             raise Exception("Invalid Pairing key\n")
         if sw1 == 0x6A and sw2 == 0x82:
-            raise Exception(
-                "Error firmware not found\nCheck a Cryptnox is connected\n"
-            )
+            raise Exception("Error firmware not found\nCheck a Cryptnox is connected\n")
         if sw1 == 0x99 and sw2 == 0x99:
             raise Exception("Radio link was broken")
         if sw1 != 0x90 or sw2 != 0x00:

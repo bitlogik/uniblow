@@ -42,6 +42,7 @@ class pwdException(nacl.exceptions.CryptoError):
 class NotinitException(Exception):
     pass
 
+
 # Previously called HDdevice
 class LocalFile(BaseDevice):
 
