@@ -162,21 +162,27 @@ class TopPanel ( wx.Panel ):
 
         bSizer18.Add( bSizer19, 0, 0, 5 )
 
+
+        bSizer18.Add( ( 0, 0), 0, wx.TOP, 20 )
+
         bSizer16 = wx.BoxSizer( wx.HORIZONTAL )
 
-        self.balance_label = wx.StaticText( self, wx.ID_ANY, u"Balance :", wx.DefaultPosition, wx.DefaultSize, 0 )
+        self.balance_label = wx.StaticText( self, wx.ID_ANY, u"Balance", wx.DefaultPosition, wx.DefaultSize, 0 )
         self.balance_label.Wrap( -1 )
 
         self.balance_label.SetFont( wx.Font( 15, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, False, wx.EmptyString ) )
 
-        bSizer16.Add( self.balance_label, 0, wx.TOP|wx.LEFT|wx.ALIGN_CENTER_VERTICAL, 20 )
+        bSizer16.Add( self.balance_label, 0, wx.LEFT, 24 )
+
+
+        bSizer16.Add( ( 0, 0), 0, wx.LEFT|wx.ALIGN_BOTTOM, 15 )
 
         self.balance_info = wx.StaticText( self, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, 0 )
         self.balance_info.Wrap( -1 )
 
         self.balance_info.SetFont( wx.Font( 15, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, False, wx.EmptyString ) )
 
-        bSizer16.Add( self.balance_info, 0, wx.TOP|wx.LEFT|wx.ALIGN_CENTER_VERTICAL, 20 )
+        bSizer16.Add( self.balance_info, 0, 0, 20 )
 
 
         bSizer18.Add( bSizer16, 0, wx.TOP, 16 )

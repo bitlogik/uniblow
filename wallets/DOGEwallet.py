@@ -23,7 +23,7 @@ import re
 import cryptolib.coins
 from cryptolib.base58 import decode_base58
 from cryptolib.cryptography import compress_pubkey
-from wallets.wallets_utils import shift_10, NotEnoughTokens
+from wallets.wallets_utils import balance_string, shift_10, NotEnoughTokens
 
 
 class sochain_api:
@@ -263,7 +263,7 @@ class DOGE_wallet:
 
     def get_balance(self):
         # Get balance in base integer unit
-        return f"{self.doge.getbalance() / (10 ** DOGE_units)} {self.coin}"
+        return f"{balance_string(self.doge.getbalance(), DOGE_units)} {self.coin}"
 
     def check_address(self, addr_str):
         # Check if address is valid

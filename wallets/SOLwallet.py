@@ -19,7 +19,7 @@ import json
 import urllib.parse
 import urllib.request
 
-from wallets.wallets_utils import shift_10, NotEnoughTokens
+from wallets.wallets_utils import balance_string, shift_10, NotEnoughTokens
 from cryptolib.base58 import base58_to_bin, bin_to_base58
 from cryptolib.uintEncode import uint8, uint32, uint64, encode_varuint
 
@@ -261,7 +261,7 @@ class SOL_wallet:
 
     def get_balance(self):
         # Get balance in base integer unit
-        return str(self.sol.getbalance() / (10 ** self.sol.decimals)) + " " + self.coin
+        return f"{balance_string(self.sol.getbalance(), self.sol.decimals)} {self.coin}"
 
     def check_address(self, addr_str):
         # Check if address is valid

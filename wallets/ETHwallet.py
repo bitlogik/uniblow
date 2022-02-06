@@ -20,15 +20,21 @@ from logging import getLogger
 
 from cryptolib.cryptography import public_key_recover, sha2, sha3
 from cryptolib.coins.ethereum import rlp_encode, int2bytearray, uint256, read_string
-from wallets.wallets_utils import shift_10, compare_eth_addresses, InvalidOption, NotEnoughTokens
+from wallets.wallets_utils import (
+    shift_10,
+    balance_string,
+    compare_eth_addresses,
+    InvalidOption,
+    NotEnoughTokens,
+)
 from wallets.ETHtokens import tokens_values, ledger_tokens
 from wallets.typed_data_hash import typed_sign_hash, print_text_query
 from pyweb3 import Web3Client
 from pywalletconnect import WCClient, WCClientInvalidOption, WCClientException
 
 
-ETH_units = 18
-GWEI_UNIT = 10 ** 9
+ETH_DECIMALS = 18
+GWEI_DECIMALS = 9
 
 
 logger = getLogger(__name__)
@@ -136,7 +142,7 @@ class ETHwalletCore:
             if balraw == [] or balraw == "0x":
                 return 1
             return int(balraw[2:], 16)
-        return ETH_units
+        return ETH_DECIMALS
 
     def get_symbol(self):
         if self.ERC20:
@@ -505,9 +511,9 @@ class ETH_wallet:
             wc_message = self.wc_client.get_message()
 
     def get_balance(self):
-        # Get balance in base integer unit
+        # Get balance in base integer unit and return string with unit
         return (
-            str(self.eth.getbalance(not self.eth.ERC20) / (10 ** self.eth.decimals))
+            balance_string(self.eth.getbalance(not self.eth.ERC20), self.eth.decimals)
             + " "
             + self.coin
         )
@@ -629,10 +635,10 @@ class ETH_wallet:
         request_message = (
             "WalletConnect transaction request :\n\n"
             f" To    :  0x{to_addr}\n"
-            f" Value :  {value / (10 ** self.eth.decimals)} {self.coin}\n"
-            f" Gas price  : {gas_price / GWEI_UNIT} Gwei\n"
+            f" Value :  {balance_string(value , self.eth.decimals)} {self.coin}\n"
+            f" Gas price  : {balance_string(gas_price, GWEI_DECIMALS)} Gwei\n"
             f" Gas limit  : {gas_limit}\n"
-            f"Max fee cost: {gas_limit*gas_price / (10 ** self.eth.decimals)} {self.coin}\n"
+            f"Max fee cost: {balance_string(gas_limit*gas_price, self.eth.decimals)} {self.coin}\n"
         )
         if self.current_device.has_screen:
             request_message += USER_SCREEN

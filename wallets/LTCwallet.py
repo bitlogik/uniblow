@@ -24,7 +24,7 @@ import cryptolib.coins
 from cryptolib.base58 import decode_base58
 from cryptolib.bech32 import test_bech32
 from cryptolib.cryptography import compress_pubkey
-from wallets.wallets_utils import shift_10, NotEnoughTokens
+from wallets.wallets_utils import balance_string, shift_10, NotEnoughTokens
 
 
 class sochain_api:
@@ -318,7 +318,7 @@ class LTC_wallet:
 
     def get_balance(self):
         # Get balance in base integer unit
-        return f"{self.ltc.getbalance() / (10 ** LTC_units)} {self.coin}"
+        return f"{balance_string(self.ltc.getbalance(), LTC_units)} {self.coin}"
 
     def check_address(self, addr_str):
         # Check if address is valid

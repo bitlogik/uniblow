@@ -21,7 +21,7 @@ import urllib.request
 
 from cryptolib.base58 import encode_base58, decode_base58
 from cryptolib.cryptography import compress_pubkey
-from wallets.wallets_utils import shift_10, NotEnoughTokens
+from wallets.wallets_utils import balance_string, shift_10, NotEnoughTokens
 
 try:
     import nacl.signing
@@ -340,7 +340,7 @@ class XTZ_wallet:
 
     def get_balance(self):
         # Get balance in base integer unit
-        return f"{self.xtz.getbalance() / (10 ** XTZ_units)} {self.coin}"
+        return f"{balance_string(self.xtz.getbalance(), XTZ_units)} {self.coin}"
 
     def check_address(self, addr_str):
         # Check if address is valid
