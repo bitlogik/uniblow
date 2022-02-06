@@ -74,7 +74,7 @@ class RPC_api:
                 pass
             if isinstance(err, str):
                 raise IOError(f"Error code {e.code}\n{err}")
-            if err and err != [] and len(err) > 1 and err[0].get(key):
+            if err and err != [] and len(err) > 1:
                 if "msg" in err[0]:
                     key = "msg"
                 elif "id" in err[0]:
