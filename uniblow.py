@@ -442,6 +442,9 @@ def device_selected(device):
                         pin_left = device_loaded.get_pw_left()
                         if the_device.is_HD:
                             HDwallet_settings = app.hd_setup("")
+                            if HDwallet_settings is None:
+                                app.gui_panel.devices_choice.SetSelection(0)
+                                return
                         raise pwdException
                     # Can raise notinit
                     device_loaded.open_account(password_default)
@@ -521,7 +524,11 @@ def device_selected(device):
                     warn_modal(str(exc))
                     return
             except pwdException as excp:
-                pin_left = device_loaded.get_pw_left()
+                try:
+                    pin_left = device_loaded.get_pw_left()
+                except Exception as exc:
+                    device_error(exc)
+                    return
                 if pin_left == 0:
                     warn_modal(f"Device {pwd_pin} is locked.")
                     return
