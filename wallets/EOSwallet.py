@@ -17,6 +17,7 @@
 
 import json
 import re
+import time
 import urllib.request
 
 from cryptolib.base58 import bin_to_base58_eos
@@ -386,6 +387,7 @@ class EOS_wallet:
             self.eos.finalize_powerup(pu_tx, ptxhash, tx_signature)
             if is_all:
                 value -= float(POWER_UP_PAYMENT)
+            time.sleep(3)
 
         # Perform the transfer transaction
         atx, hash_to_sign = self.eos.prepare(to_account, value)
