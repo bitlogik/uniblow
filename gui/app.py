@@ -210,7 +210,6 @@ class UniblowApp(App):
             self.gui_frame.SetSize((996, 418))
         self.gui_panel = gui.window.TopPanel(self.gui_frame)
         self.gui_frame.SetIcons(wicon)
-        self.gui_frame.SetTitle(f"  Uniblow  -  {self.version}")
         self.gui_panel.hist_button.SetBitmap(Bitmap(file_path("gui/histo.png"), BITMAP_TYPE_PNG))
         self.gui_panel.hist_button.SetBitmapPressed(
             Bitmap(file_path("gui/histodn.png"), BITMAP_TYPE_PNG)
@@ -236,6 +235,7 @@ class UniblowApp(App):
         self.gui_panel.send_button.SetCursor(HAND_CURSOR)
         self.gui_panel.send_all.SetCursor(HAND_CURSOR)
         self.gui_panel.btn_chkaddr.SetCursor(HAND_CURSOR)
+        self.gui_frame.SetTitle(f"  Uniblow  -  {self.version}")
         return True
 
     def BringWindowToFront(self):
@@ -273,6 +273,7 @@ class UniblowApp(App):
         self.gui_hdpanel = HDsetting_panel(self.gui_hdframe)
         HAND_CURSOR = Cursor(CURSOR_HAND)
         if proposal:
+            # LocalFile wallet init setup
             self.gui_hdpanel.GOOD_BMP = Bitmap(file_path("gui/good.bmp"))
             self.gui_hdpanel.BAD_BMP = Bitmap(file_path("gui/bad.bmp"))
             self.gui_hdpanel.m_bitmapHDwl.SetBitmap(self.gui_hdpanel.BAD_BMP)
@@ -285,6 +286,8 @@ class UniblowApp(App):
                 "an existing HD wallet."
             )
         else:
+            # hardware wallet options
+            self.gui_hdframe.SetTitle("Open hardware wallet options")
             self.gui_hdpanel.title_text.SetLabel("Hardware wallet account options")
             self.gui_hdpanel.m_textwl.Destroy()
             self.gui_hdpanel.m_textcs.Destroy()
@@ -293,7 +296,7 @@ class UniblowApp(App):
             self.gui_hdpanel.m_textCtrl_pwd.Destroy()
             self.gui_hdpanel.m_checkBox_secboost.Destroy()
             self.gui_hdpanel.m_usertxt.SetLabel("Choose account and index for the key to use.")
-            self.gui_hdframe.SetSize(470, 290)
+            self.gui_hdframe.SetSize(480, 320)
         self.gui_hdpanel.m_butOK.SetCursor(HAND_CURSOR)
         self.gui_hdpanel.m_butcancel.SetCursor(HAND_CURSOR)
         ret = self.gui_hdframe.ShowModal()

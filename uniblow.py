@@ -479,7 +479,7 @@ def device_selected(device):
                         else f"between {device_loaded.admin_pwd_minlen} and {device_loaded.admin_pwd_maxlen}"
                     )
                     set_admin_message += (
-                        f"The chosen {the_device.admin_pass_name} must be {lenmsg} chars long."
+                        f"The chosen {the_device.admin_pass_name} must be\n{lenmsg} chars long."
                     )
                     while True:
                         admin_password = get_password(device_sel_name, set_admin_message)
@@ -509,7 +509,7 @@ def device_selected(device):
                     pintype = "chars"
                     if device_loaded.is_pin_numeric:
                         pintype = "digits"
-                    inp_message += f"The chosen {pwd_pin} must be {lenmsg} {pintype} long."
+                    inp_message += f"The chosen {pwd_pin} must be\n{lenmsg} {pintype} long."
                     while True:
                         password = get_password(device_sel_name, inp_message)
                         if password is None:
@@ -580,7 +580,7 @@ def device_selected(device):
                     pintype = "chars"
                     if device_loaded.is_pin_numeric:
                         pintype = "digits"
-                    inp_message += f"\nThe {pwd_pin} to provide is {lenmsg} {pintype} long."
+                    inp_message += f"\nThe {pwd_pin} to provide\nis {lenmsg} {pintype} long."
                     password_default = get_password(device_sel_name, inp_message)
                     if password_default is None:
                         app.gui_panel.devices_choice.SetSelection(0)

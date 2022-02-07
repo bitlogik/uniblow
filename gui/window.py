@@ -297,7 +297,7 @@ class TopPanel ( wx.Panel ):
 class HDDialog ( wx.Dialog ):
 
     def __init__( self, parent ):
-        wx.Dialog.__init__ ( self, parent, id = wx.ID_ANY, title = u"HD wallet settings", pos = wx.DefaultPosition, size = wx.Size( 525,480 ), style = wx.CAPTION|wx.CLOSE_BOX|wx.DEFAULT_DIALOG_STYLE|wx.STAY_ON_TOP|wx.SYSTEM_MENU )
+        wx.Dialog.__init__ ( self, parent, id = wx.ID_ANY, title = u"Local File wallet setup", pos = wx.DefaultPosition, size = wx.Size( 600,480 ), style = wx.CAPTION|wx.CLOSE_BOX|wx.DEFAULT_DIALOG_STYLE|wx.STAY_ON_TOP|wx.SYSTEM_MENU )
 
         self.SetSizeHints( wx.DefaultSize, wx.DefaultSize )
 
@@ -321,7 +321,7 @@ class HDPanel ( wx.Panel ):
 
         bSizer15 = wx.BoxSizer( wx.HORIZONTAL )
 
-        self.title_text = wx.StaticText( self, wx.ID_ANY, u"Wallet mnemonic input", wx.DefaultPosition, wx.DefaultSize, 0 )
+        self.title_text = wx.StaticText( self, wx.ID_ANY, u"Local wallet mnemonic setup", wx.DefaultPosition, wx.DefaultSize, 0 )
         self.title_text.Wrap( -1 )
 
         self.title_text.SetFont( wx.Font( 14, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, False, wx.EmptyString ) )
