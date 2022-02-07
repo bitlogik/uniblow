@@ -90,6 +90,8 @@ class Cryptnox(BaseDevice):
         try:
             self.card.open_secure_channel(Basic_Pairing_Secret)
         except Exception as exc:
+            if str(exc).endswith("disconnected."):
+                raise exc
             raise Exception(
                 "Error while opening the Cryptnox encrypted tunnel.\n\n"
                 "Possible causes :\n"
