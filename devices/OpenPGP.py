@@ -18,6 +18,7 @@
 import OpenPGPpy
 from devices.BaseDevice import BaseDevice
 
+
 CURVE_K1_ORDER = 0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEBAAEDCE6AF48A03BBFD25E8CD0364141
 EC_BYTES_SIZE = 32
 ECDSA_K1 = "132B8104000A"
@@ -78,6 +79,8 @@ class OpenPGP(BaseDevice):
 
     def __init__(self):
         self.PGPdevice = OpenPGPpy.OpenPGPcard()
+        self.password_max_len = self.PGPdevice.pw1_maxlen
+        self.admin_pwd_maxlen = self.PGPdevice.pw3_maxlen
 
     def __del__(self):
         if hasattr(self, "PGPdevice"):

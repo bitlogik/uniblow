@@ -23,13 +23,16 @@ class BaseDevice(ABC):
     created = False
     has_password = False
     password_name = "local user password"
-    password_min_len = 6
+    password_min_len = 8
+    password_max_len = 24
+    is_pin_numeric = False
     default_password = "NoPasswd"
     password_retries_inf = False
     password_softlock = 0
     has_admin_password = False
     admin_pass_name = "Administrator Password"
     admin_pwd_minlen = 8
+    admin_pwd_maxlen = 24
     default_admin_password = ""
     is_HD = False
     has_screen = False

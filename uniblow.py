@@ -470,7 +470,17 @@ def device_selected(device):
                         f"the {device_sel_name} device.\n"
                     )
                     set_admin_message += "\nFor demo, quick insecure setup, it can be left blank,\n"
-                    set_admin_message += f"and a default {the_device.admin_pass_name} will be used."
+                    set_admin_message += (
+                        f"and a default {the_device.admin_pass_name} will be used.\n\n"
+                    )
+                    lenmsg = (
+                        str(device_loaded.admin_pwd_minlen)
+                        if device_loaded.admin_pwd_minlen == device_loaded.admin_pwd_maxlen
+                        else f"between {device_loaded.admin_pwd_minlen} and {device_loaded.admin_pwd_maxlen}"
+                    )
+                    set_admin_message += (
+                        f"The chosen {the_device.admin_pass_name} must be {lenmsg} chars long."
+                    )
                     while True:
                         admin_password = get_password(device_sel_name, set_admin_message)
                         if admin_password is None:
@@ -478,17 +488,28 @@ def device_selected(device):
                             return
                         if admin_password == "":
                             admin_password = device_loaded.default_admin_password
-                        if len(admin_password) >= the_device.admin_pwd_minlen:
+                        if (
+                            len(admin_password) >= device_loaded.admin_pwd_minlen
+                            and len(admin_password) <= device_loaded.admin_pwd_maxlen
+                        ):
                             break
                         warn_modal(
-                            f"{the_device.admin_pass_name} shall be at least "
-                            f"{the_device.admin_pwd_minlen} chars.",
+                            f"{the_device.admin_pass_name} shall be {lenmsg} chars long.",
                             True,
                         )
                 if the_device.has_password:
                     inp_message = f"Choose your {pwd_pin} to setup the {device_sel_name} wallet.\n"
                     inp_message += "\nFor demo, quick insecure setup, it can be left blank,\n"
-                    inp_message += f"and a default {pwd_pin} will be used."
+                    inp_message += f"and a default {pwd_pin} will be used.\n\n"
+                    lenmsg = (
+                        str(device_loaded.password_min_len)
+                        if device_loaded.password_min_len == device_loaded.password_max_len
+                        else f"between {device_loaded.password_min_len} and {device_loaded.password_max_len}"
+                    )
+                    pintype = "chars"
+                    if device_loaded.is_pin_numeric:
+                        pintype = "digits"
+                    inp_message += f"The chosen {pwd_pin} must be {lenmsg} {pintype} long."
                     while True:
                         password = get_password(device_sel_name, inp_message)
                         if password is None:
@@ -496,11 +517,13 @@ def device_selected(device):
                             return
                         if password == "":
                             password = device_loaded.default_password
-                        if len(password) >= the_device.password_min_len:
+                        if (
+                            len(password_default) >= device_loaded.password_min_len
+                            and len(password_default) <= device_loaded.password_max_len
+                        ):
                             break
                         warn_modal(
-                            f"Device {pwd_pin} shall be at least {the_device.password_min_len}"
-                            " chars.",
+                            f"Device {pwd_pin} shall be {lenmsg} {pintype} long.",
                             True,
                         )
                 try:
@@ -547,16 +570,28 @@ def device_selected(device):
                     if not the_device.password_retries_inf:
                         inp_message += (
                             f"{pin_left} {pwd_pin} tr{'ies' if pin_left >=2 else 'y'}"
-                            " left on this device."
+                            " left on this device.\n"
                         )
+                    lenmsg = (
+                        str(device_loaded.password_min_len)
+                        if device_loaded.password_min_len == device_loaded.password_max_len
+                        else f"between {device_loaded.password_min_len} and {device_loaded.password_max_len}"
+                    )
+                    pintype = "chars"
+                    if device_loaded.is_pin_numeric:
+                        pintype = "digits"
+                    inp_message += f"\nThe {pwd_pin} to provide is {lenmsg} {pintype} long."
                     password_default = get_password(device_sel_name, inp_message)
                     if password_default is None:
                         app.gui_panel.devices_choice.SetSelection(0)
                         return
-                    if len(password_default) >= the_device.password_min_len:
+                    if (
+                        len(password_default) >= device_loaded.password_min_len
+                        and len(password_default) <= device_loaded.password_max_len
+                    ):
                         break
                     warn_modal(
-                        f"Device {pwd_pin} shall be at least {the_device.password_min_len} chars.",
+                        f"Device {pwd_pin} shall be {lenmsg} {pintype} long.",
                         True,
                     )
             except Exception as exc:

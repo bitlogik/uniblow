@@ -39,11 +39,14 @@ class Cryptnox(BaseDevice):
     has_admin_password = True
     password_name = "PIN"
     password_min_len = 4
+    password_max_len = 9
+    is_pin_numeric = True
     password_retries_inf = False
     password_softlock = 3
     default_password = "1234"
     admin_pass_name = "admin code"
     admin_pwd_minlen = 12
+    admin_pwd_maxlen = 12
     default_admin_password = "123456789012"
     internally_gen_keys = False
     basic_card_id = 0x42
