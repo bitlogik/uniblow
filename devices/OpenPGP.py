@@ -107,8 +107,8 @@ class OpenPGP(BaseDevice):
             self.PGPdevice.get_public_key("B600")
             return True
         except OpenPGPpy.PGPCardException as exc:
-            # SW = 0x6581 or 0x6A88 ?
-            if exc.sw_code != 0x6581 and exc.sw_code != 0x6A88:
+            # SW = 0x6581 or 0x6A88 or 0x6F00 ?
+            if exc.sw_code != 0x6581 and exc.sw_code != 0x6A88 and exc.sw_code != 0x6F00:
                 raise exc
             return False
 
@@ -117,8 +117,8 @@ class OpenPGP(BaseDevice):
         try:
             self.PGPdevice.get_public_key("B600")
         except OpenPGPpy.PGPCardException as exc:
-            # SW = 0x6581 or 0x6A88 ?
-            if exc.sw_code != 0x6581 and exc.sw_code != 0x6A88:
+            # SW = 0x6581 or 0x6A88 or 0x6F00 ?
+            if exc.sw_code != 0x6581 and exc.sw_code != 0x6A88 and exc.sw_code != 0x6F00:
                 raise
             # SIGn key is not present
             raise NotinitException()
@@ -153,7 +153,7 @@ class OpenPGP(BaseDevice):
             # Set sign key as ECDSA SECP256K1
             self.PGPdevice.put_data("00C1", ECDSA_K1)
         except OpenPGPpy.PGPCardException as exc:
-            if exc.sw_code == 0x6A80:
+            if exc.sw_code == 0x6A80 or exc.sw_code == 0x6A83:
                 raise Exception("This device is not compatible with ECDSA 256k1.") from exc
             raise
         # Generate key for sign
