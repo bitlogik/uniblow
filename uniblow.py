@@ -518,8 +518,8 @@ def device_selected(device):
                         if password == "":
                             password = device_loaded.default_password
                         if (
-                            len(password_default) >= device_loaded.password_min_len
-                            and len(password_default) <= device_loaded.password_max_len
+                            len(password) >= device_loaded.password_min_len
+                            and len(password) <= device_loaded.password_max_len
                         ):
                             break
                         warn_modal(
@@ -549,22 +549,22 @@ def device_selected(device):
                     warn_modal(str(exc))
                     return
             except pwdException as excp:
-                try:
-                    pin_left = device_loaded.get_pw_left()
-                except Exception as exc:
-                    device_error(exc)
-                    return
-                if pin_left == 0:
-                    warn_modal(f"Device {pwd_pin} is locked.")
-                    return
-                if (
-                    not the_device.password_retries_inf
-                    and the_device.password_softlock > 0
-                    and pin_left == the_device.password_softlock
-                    and str(excp) == "0"
-                ):
-                    warn_modal(f"Device {pwd_pin} is soft locked. Restart it to try again.")
-                    return
+                if not device_loaded.password_retries_inf:
+                    try:
+                        pin_left = device_loaded.get_pw_left()
+                    except Exception as exc:
+                        device_error(exc)
+                        return
+                    if pin_left == 0:
+                        warn_modal(f"Device {pwd_pin} is locked.")
+                        return
+                    if (
+                        the_device.password_softlock > 0
+                        and pin_left == the_device.password_softlock
+                        and str(excp) == "0"
+                    ):
+                        warn_modal(f"Device {pwd_pin} is soft locked. Restart it to try again.")
+                        return
                 while True:
                     inp_message = f"Input your {device_sel_name} wallet {pwd_pin}.\n"
                     if not the_device.password_retries_inf:
