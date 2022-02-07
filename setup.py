@@ -23,7 +23,7 @@ setup(
     author_email="contact@bitlogik.fr",
     url="https://github.com/bitlogik/uniblow",
     license="GPLv3",
-    python_requires=">=3.6",
+    python_requires=">=3.6.1",
     install_requires=[
         "wxPython==4.1.1",
         "cryptography>=3.3",
