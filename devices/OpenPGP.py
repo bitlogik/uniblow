@@ -116,6 +116,8 @@ class OpenPGP(BaseDevice):
         self.PIN = password
         try:
             self.PGPdevice.get_public_key("B600")
+        except OpenPGPpy.ConnectionException:
+            raise Exception("OpenPGP device was disconnected.")
         except OpenPGPpy.PGPCardException as exc:
             # SW = 0x6581 or 0x6A88 or 0x6F00 ?
             if exc.sw_code != 0x6581 and exc.sw_code != 0x6A88 and exc.sw_code != 0x6F00:
@@ -124,6 +126,8 @@ class OpenPGP(BaseDevice):
             raise NotinitException()
         try:
             self.PGPdevice.verify_pin(1, self.PIN)
+        except OpenPGPpy.ConnectionException:
+            raise Exception("OpenPGP device was disconnected.")
         except OpenPGPpy.PGPCardException as exc:
             if exc.sw_code == 0x6982:
                 raise pwdException("BadPass")
@@ -145,6 +149,8 @@ class OpenPGP(BaseDevice):
         try:
             self.PGPdevice.verify_pin(3, self.PIN3)
             self.PGPdevice.change_pin("123456", self.PIN, 1)
+        except OpenPGPpy.ConnectionException:
+            raise Exception("OpenPGP device was disconnected.")
         except OpenPGPpy.PGPCardException as exc:
             if exc.sw_code == 0x6982 or exc.sw_code == 0x6A80:
                 raise Exception("Error: Wrong admin code")
@@ -152,6 +158,8 @@ class OpenPGP(BaseDevice):
         try:
             # Set sign key as ECDSA SECP256K1
             self.PGPdevice.put_data("00C1", ECDSA_K1)
+        except OpenPGPpy.ConnectionException:
+            raise Exception("OpenPGP device was disconnected.")
         except OpenPGPpy.PGPCardException as exc:
             if exc.sw_code == 0x6A80 or exc.sw_code == 0x6A83:
                 raise Exception("This device is not compatible with ECDSA 256k1.") from exc
@@ -168,7 +176,10 @@ class OpenPGP(BaseDevice):
         self.created = True
 
     def get_public_key(self):
-        pubkey_bin = self.PGPdevice.get_public_key("B600")
+        try:
+            pubkey_bin = self.PGPdevice.get_public_key("B600")
+        except OpenPGPpy.ConnectionException:
+            raise Exception("OpenPGP device was disconnected.")
         if pubkey_bin[:2] != b"\x7F\x49":
             raise Exception("Bad object key from OpenPGP public key")
         if pubkey_bin[4] != 65:
@@ -176,6 +187,9 @@ class OpenPGP(BaseDevice):
         return pubkey_bin[-65:]
 
     def sign(self, hashed_msg):
-        self.PGPdevice.verify_pin(1, self.PIN)
-        raw_sig = self.PGPdevice.sign(hashed_msg)
+        try:
+            self.PGPdevice.verify_pin(1, self.PIN)
+            raw_sig = self.PGPdevice.sign(hashed_msg)
+        except OpenPGPpy.ConnectionException:
+            raise Exception("OpenPGP device was disconnected.")
         return fix_s_sig(raw_sig)
