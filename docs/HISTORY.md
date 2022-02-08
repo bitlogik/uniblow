@@ -2,6 +2,26 @@
 Uniblow versions history
 
 
+## 1.5.0
+
+* Remove BasicFile device
+* HDdevice renamed Local File
+* Add Cryptnox card device
+* Add MOVR and GLMR chains
+* Display min/max length for PIN or password
+* Display PIN remaining tries
+* WalletConnect v1 auto disconnect
+* WC chain id mismatch fully ignored
+* Balance always displayed as human float, no more sci
+* GUI messages are clearer for hardware devices
+* Improve UI aligments
+* SeedWatcher color check indicators only for BIP39
+* GUI grey area when not used
+* Add PIN locked detection
+* Improve EOS transactions following PowerUp
+* Improve XTZ API error handling
+* Improve OpenPGP devices compatibility
+
 ## 1.4.2
 
 * Center balance display
@@ -13,6 +33,7 @@ Uniblow versions history
 * OpenPGP checks the current key type in device
 * Refactor devices : pubkey always binary uncompressed
 * Updated pyWeb3 for better error handling
+* Refactor Ledger device code
 
 ## 1.4.0
 
