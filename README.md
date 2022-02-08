@@ -424,62 +424,8 @@ output.
 ### Build binaries
 
 There are specific instructions and scripts to build uniblow binaries for the
-Windows and Debian platforms in a dedicated [build document](docs/Build.md).
-
-### ToDo list
-
-Future features :
-
--   User wallet management (custom name, listing).
--   Full HD wallet device, avoiding address reuse, and discover in all account
-    chains (external and internal change).
-
-### Programming interface class
-
-The Uniblow software can also be used integrated in your services, as it
-provides a unified, multi-platforms and blockchain agnostic interface to manage
-many different wallets. By using the wallet class, this is as simple as :
-`ETH_wallet = wallet(0, 0, device)`, and you get the interface
-methods mentioned below.
-
-The coin wallet interface is simple and provides an abstraction layer for any underlying blockchain.
-
-The class can be used to integrate the uniblow code to automate transactions in your backend. It can also be used to extend uniblow to add a new blockchain. Developers can easily add any crypto in this wallet, following this Python3 programming interface class.
-
-```Python
-class newCOINwallet:
-
-    coin = "SYM"
-
-    def __init__(self, coin, *options):
-     ... create the wallet, for now options is network,wtype indexes (indexing the list returned by get_networks and get_account_types)
-
-    def get_networks(self):
-     ... return list of different possible networks names
-
-    def get_account_types(self):
-     ... return list of different possible account types
-
-    def get_account(self):
-     ... return the account name (address or similar)
-
-    def get_balance(self):
-     ... return a string with the balance and the symbol ticker
-
-    def check_address(self, addr_str):
-     ... return True if the address/account name is valid
-    
-    def history(self):
-     ... return an URL string for the account details
-
-    def transfer(self, amount, to_account, fee):
-     ... transfer to pay x coin unit to an external account and return txid
-     ... fee is 0, 1 or 2 : "economic", "normal", "fast"
-    
-    def transfer_all(self, to_account, fee_priority):
-     ... transfer all the wallet to an address (minus fee)
-     ... fee is 0, 1 or 2 : "economic", "normal", "fast"
-```
+Windows, Debian and MacOS platforms in a dedicated [build
+document](docs/Build.md).
 
 License
 -------
