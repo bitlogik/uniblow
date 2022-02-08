@@ -314,7 +314,7 @@ cannot perform advanced operations such as PIN unlock, nor card reset.
 
 ### OpenPGP device
 
-Works with an OpenPGP v3 device that accepts User Interaction confirmation
+Works with an OpenPGP v2/v3 device that accepts User Interaction confirmation
 (button) and ECP 256K1 key pairs.
 
 This device type is very secure, because the signature is performed in the
@@ -395,7 +395,7 @@ RAM, and takes approximately 20 seconds on a desktop computer.
 Development
 -----------
 
-### Use it from source
+### Run it from source
 
 -   For the GUI, [install wxPython 4](https://wxpython.org/pages/downloads/)
     with your system binaries wheels.
@@ -430,7 +430,7 @@ document](docs/Build.md).
 License
 -------
 
-Copyright (C) 2021 BitLogiK SAS
+Copyright (C) 2021-2022 BitLogiK SAS
 
 This program is free software: you can redistribute it and/or modify it under
 the terms of the GNU General Public License as published by the Free Software
