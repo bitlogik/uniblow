@@ -68,7 +68,7 @@ class Cryptnox(BaseDevice):
         self.pin = settings["file_password"]
         logger.debug("PIN %s", self.pin)
         logger.debug("PUK %s", self.PUK)
-        self.card.init("Init by Uniblow", "aaaa", settings["file_password"], self.PUK)
+        self.card.init("Init by Uniblow", " ", settings["file_password"], self.PUK)
         delattr(self, "PUK")
         # Now upload the seed in the Cryptnox
         self.card.open_secure_channel(Basic_Pairing_Secret)
