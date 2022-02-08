@@ -15,7 +15,7 @@ Windows, Debian and MacOS platforms in the [Build document](Build.md).
 You MacOS system needs :
 
 -   [Python 3.9
-    pkg](https://www.python.org/ftp/python/3.9.7/python-3.9.7-macos11.pkg)
+    pkg](https://www.python.org/ftp/python/3.9.9/python-3.9.9-macos11.pkg)
     installed
 
 -   XCode and developer tools
@@ -44,7 +44,7 @@ source unibenv/bin/activate
 #### Install uniblow dependencies
 ```
 python -m pip install pip==21.2.1
-python -m pip install wxPython==4.1.1 pyscard==2.0.1 pysha3==1.0.2 pynacl==1.4.0 pyWalletConnect==1.0.0
+python -m pip install wxPython==4.1.1 pyscard==2.0.1 pysha3==1.0.2 pynacl==1.5.0 pyWalletConnect==1.0.0
 python -m pip install -e .
 ```
 
