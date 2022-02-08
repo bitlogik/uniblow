@@ -6,14 +6,21 @@ Uniblow
 
 A **uni**versal **blo**ckchain **w**allet for cryptos
 
-* Handy, almost 1-click
-* Fast and lightweight
-* Multiple cryptos blockchains
-* Tokens ERC20/BEP20
-* WalletConnect
-* Multiple networks (testnets,...)
-* Multi platforms : PC, Mac and Linux
-* Open source GPLv3
+-   Handy, almost 1-click
+
+-   Fast and lightweight
+
+-   Multiple cryptos blockchains
+
+-   Tokens ERC20/BEP20
+
+-   WalletConnect
+
+-   Multiple networks (testnets,...)
+
+-   Multi platforms : PC, Mac and Linux
+
+-   Open source GPLv3
 
 Official web site : https://uniblow.org  
 (also https://uniblow.app)
@@ -26,98 +33,157 @@ multiple blockchains and platforms.
 
 Compatible with the following blockchains :
 
-* BTC
-    * mainnet and testnet networks
-    * Standard wallet (P2PKH)
-    * Segwit P2SH compatibility
-    * Full Segwit wallet bech32 (P2WPKH)
-    * Send to Taproot Bech32m address (P2TR)
-* ETH
-    * mainnet, Rinkeby, Ropsten, Kovan and Goerli networks
-    * ERC20 tokens
-    * WalletConnect
-* BSC
-    * mainnet and testnet networks
-    * BEP20 tokens
-    * WalletConnect
-* MATIC
-    * Mainnet and Mumbai networks
-    * ERC20 tokens
-    * WalletConnect
-* FTM
-    * Mainnet and Testnet networks
-    * ERC20 tokens
-    * WalletConnect Dapps
-* CELO
-    Mainnet, Alfajores and Baklava networks
-    ERC20 tokens
-    WalletConnect Dapps
-* ARB
-    * Arbitrum mainnet
-    * ERC20 tokens
-    * WalletConnect
-* AVAX
-    * Mainnet and Fuji testnet networks
-    * ERC20 tokens
-    * WalletConnect
-* SOL
-    * mainnet and testnet networks
-* XTZ
-    * tz1 wallet
-    * tz2 wallet
-    * Main Tezos, testnet Granada and Hangzhou networks
-* LTC
-    * mainnet and testnet networks
-    * Standard wallet (P2PKH)
-    * Segwit P2SH compatibility
-* DOGE
-    * mainnet and testnet networks
-* EOS
-    * K1 wallet
-    * EOSio and Jungle3 networks
+-   BTC
 
+    -   mainnet and testnet networks
+
+    -   Standard wallet (P2PKH)
+
+    -   Segwit P2SH compatibility
+
+    -   Full Segwit wallet bech32 (P2WPKH)
+
+    -   Send to Taproot Bech32m address (P2TR)
+
+-   ETH
+
+    -   mainnet, Rinkeby, Ropsten, Kovan and Goerli networks
+
+    -   ERC20 tokens
+
+    -   WalletConnect
+
+-   BSC
+
+    -   mainnet and testnet networks
+
+    -   BEP20 tokens
+
+    -   WalletConnect
+
+-   MATIC
+
+    -   Mainnet and Mumbai networks
+
+    -   ERC20 tokens
+
+    -   WalletConnect
+
+-   FTM
+
+    -   Mainnet and Testnet networks
+
+    -   ERC20 tokens
+
+    -   WalletConnect Dapps
+
+-   CELO
+
+    -   Mainnet, Alfajores and Baklava networks
+
+    -   ERC20 tokens
+
+    -   WalletConnect Dapps
+
+-   MOVR
+
+    -   Moonriver, Moonbeam and Moonbase Alpha
+
+    -   ERC20 tokens
+
+    -   WalletConnect Dapps
+
+-   ARB
+
+    -   Arbitrum mainnet
+
+    -   ERC20 tokens
+
+    -   WalletConnect
+
+-   AVAX
+
+    -   Mainnet and Fuji testnet networks
+
+    -   ERC20 tokens
+
+    -   WalletConnect
+
+-   SOL
+
+    -   mainnet and testnet networks
+
+-   XTZ
+
+    -   tz1 wallet
+
+    -   tz2 wallet
+
+    -   Main Tezos, testnet Granada and Hangzhou networks
+
+-   LTC
+
+    -   mainnet and testnet networks
+
+    -   Standard wallet (P2PKH)
+
+    -   Segwit P2SH compatibility
+
+-   DOGE
+
+    -   mainnet and testnet networks
+
+-   EOS
+
+    -   K1 wallet
+
+    -   EOSio and Jungle3 networks
 
 Run Uniblow
 -----------
 
 On **Windows** :
 
--   Download the Uniblow binary [from the uniblow official website](https://uniblow.org/get).
+-   Download the Uniblow binary [from the uniblow official
+    website](https://uniblow.org/get).
 
 To increase the security, the Windows exe releases are signed with our [Extended
 Validation
 certificate](https://en.wikipedia.org/wiki/Code_signing#Extended_validation_(EV)_code_signing),
 bringing even greater confidence in the integrity of the application.
 
-
 On **Debian / Tails / Ubuntu** :
 
--   Follow the [dedicated instructions
-    page](docs/LinuxRunBin.md).
+-   Follow the [dedicated instructions page](docs/LinuxRunBin.md).
 
-To increase the security, the Linux binaries releases are [signed with
-our PGP key](https://bitlogik.fr/pgp/bitlogik.asc), bringing even greater
-confidence in the integrity of the application. The checking process is
-described in [this instructions document](docs/LinuxRunBin.md).
-
+To increase the security, the Linux binaries releases are [signed with our PGP
+key](https://bitlogik.fr/pgp/bitlogik.asc), bringing even greater confidence in
+the integrity of the application. The checking process is described in [this
+instructions document](docs/LinuxRunBin.md).
 
 On **MacOS**
 
--   Download the Uniblow dmg package for Mac [from the uniblow official website](https://uniblow.org/get).
+-   Download the Uniblow dmg package for Mac [from the uniblow official
+    website](https://uniblow.org/get).
+
 -   Open the dmg to mount it.
+
 -   Drag and drop Uniblow (on the left) to the Applications icon on right.
+
 -   Eject the dmg disk and you can delete the dmg file.
 
-To increase the security, the Mac dmg package and also the uniblow app are signed (stapled) and notarized by Apple, bringing even greater confidence in the integrity of the application.
+To increase the security, the Mac dmg package and also the uniblow app are
+signed (stapled) and notarized by Apple, bringing even greater confidence in the
+integrity of the application.
 
-
-## Devices
+Devices
+-------
 
 ### Seed Watcher
 
 Useful for paperwallets or one-time analysis of a mnemonic seed. This specific
-device can be also useful to provide an ephemeral temporary wallet, in TailsOS for
-example.
+device can be also useful to provide an ephemeral temporary wallet, in TailsOS
+for example.
 
 This device doesn't store permanently the private keys. It provides a window GUI
 to read a mnemonic seed, analyzes it, and displays the major cryptos held by
@@ -126,50 +192,125 @@ generate new BIP39 mnemonic seeds. Then one can load a given asset wallet in the
 app to make some transactions.
 
 The seed generated within SeedWatcher is BIP39 only, and is not compatible with
-Electrum. You can\'t input a seed generated with Uniblow in an Electrum wallet without
-selecting the BIP39 option in Electrum.
+Electrum. You can't input a seed generated with Uniblow in an Electrum wallet
+without selecting the BIP39 option in Electrum.
 
-Note that Seed Watcher only looks at the one given address account/index. If you used a
-full HD wallet for BTC, LTC or DOGE (such as Electrum), the whole balance could not be
-recomputed properly.
+Note that Seed Watcher only looks at the one given address account/index. If you
+used a full HD wallet for BTC, LTC or DOGE (such as Electrum), the whole balance
+could not be recomputed properly.
 
-Using the Electrum seed derivation, the same limitation applies : it can only look
-at one address account at a time. That means it may not see all your full Electrum
-account. You need to manually increase the index number. Additionally, the
-SeedWatcher can't generate an Electrum compatible seed, still it can read an Electrum
-seed (of one single address).
+Using the Electrum seed derivation, the same limitation applies : it can only
+look at one address account at a time. That means it may not see all your full
+Electrum account. You need to manually increase the index number. Additionally,
+the SeedWatcher can't generate an Electrum compatible seed, still it can read an
+Electrum seed (of one single address).
 
-### BasicFile device
+### Local File
 
-The BasicFile device encrypts your private key [with a random salt using
+This wallet is compatible with BIP39/32/44 wallets. You can save 12/24 words
+when initializing a new one, and get back you fund later.
+
+You can also import an existing wallet from a compatible wallet, and it will use
+the funds. Note that at this stage, there is a limitation on BTC, LTC and DOGE :
+it only uses one static address for all transactions on a given blockchain. And
+it won't retrieve your money if you use some other HD wallets with many
+transactions.
+
+You can also export the saved words mnemonic in an other compatible wallet, and
+it should access and use all you funds.
+
+The Local File device stores only the seed encrypted [with a random salt using
 libsodium
 XSalsa20/Poly1305](https://libsodium.gitbook.io/doc/secret-key_cryptography/secretbox#algorithm-details),
- with an encryption key derived from the user chosen password using [Argon2id
+using an encryption key derived from the user chosen password using [Argon2id
 (moderate
 settings)](https://raw.githubusercontent.com/P-H-C/phc-winner-argon2/master/argon2-specs.pdf).
- One can choose to use a default password. To do so, just left blank the password
-prompt input when asked the first time at device setting. Without a personal
+One can choose to use a default password. To do so, just left blank the password
+prompt input when asked the first time at device setting. Without your personal
 password, the security of the key is what your hard-drive computer offers for
 your files.  
 If you setup a password but forget it, there would be no way to recover your
-coins.
+coins from the backup file. But you can still initialize a new Local File wallet
+with the same words mnemonic.
 
-The key is encrypted and stored in JSON and hex in the *BasicFileWallet.key* file, in the
-user data folder for Uniblow. Hence the name "BasicFile" for this device. To backup this
-wallet key, copy the file elsewhere. To remove this wallet
-and start a fresh one, delete this file. You can also rename it and that would
-start a new different file wallet, and keep the first wallet aside. In this
-case, rename back to BasicFileWallet and you read back the first wallet.
+The seed of this wallet is encrypted and stored in a file named *HDseed.key*, in
+the user data folder for Uniblow. To backup it, copy the file elsewhere. To
+remove this wallet and start a fresh one, delete this file. You can also rename
+it and that would start a new different Local File wallet, and keep the first
+wallet aside. In this case, rename back to HDseed and you read back the first
+wallet.
 
-The folder where the key file is stored, sits in the user data directory.
+The folder where the HDseed file is stored, sits in the user data directory.
 
-* Windows :  
-C:\\Users\\<username\>\\AppData\\Local\\BitLogiK\\Uniblow\\keys\\
-* Linux   :  
-~/.local/share/Uniblow/keys/  
-or in $XDG_DATA_HOME if defined
-* MacOS   :  
-~/Library/Application Support/Uniblow/keys/
+-   Windows :  
+    C:\\Users\\\\AppData\\Local\\BitLogiK\\Uniblow\\keys\\
+
+-   Linux :  
+    \~/.local/share/Uniblow/keys/  
+    or in \$XDG_DATA_HOME if defined
+
+-   MacOS :  
+    \~/Library/Application Support/Uniblow/keys/
+
+This device was previously named *HDdevice*, and the *BasicFile* device was
+removed. If you used the BasicFile device and have cryptos in it, use an old
+Uniblow version before 1.5 and transfer your fund.
+
+### Ledger
+
+A Ledger hardware device such as Nano X and Nano S, can be used with Uniblow but
+only for Ethereum/EVM chains (ETH, BSC, MATIC, FTM, CELO, MOVR, AVAX and ARB).
+
+The Ledger needs to be unlocked and run the Ethereum app. The address displayed
+in the wallet can be checked on the Ledger screen by clicking a dedicated UI
+button. The Uniblow wallet has a tokens list integrated, which allows to send
+thousands of major tokens without enabling the "blind signing" features.
+
+In case you use Uniblow with the Ledger on a web3 dapp, with the WalletConnect
+option, the transactions can require the "blind signing" option to be enabled in
+the Ledger app. In this situation, a dedicated modal will appear asking you to
+activate this, and you need to make the transaction again after the option
+activation.
+
+On Linux, the udev rules need to be allowed for the Ledger USB device. Run [this
+official
+script](https://raw.githubusercontent.com/LedgerHQ/udev-rules/master/add_udev_rules.sh)
+as root/sudo to allow the Ledger device.
+
+### Cryptnox card
+
+The [Cryptnox card](https://cryptnox.com) is a crypto credit-card sized hardware
+wallet with advanced functionalities. The compatible model is the BG-1 card
+(single or Dual).
+
+When a card is initialized using Uniblow, it generates a BIP39 mnemonic seed,
+which is loaded in the the card. This mnemonic seed is displayed to the user
+once during the initialization process, and acts as a backup for the internal
+keys card. By design, there's no way to extract any private key from the card
+after the setup. The only way to recover the wallet keys is to perform a new
+initialization and input the same mnemonic provided. Note that the SeedWatcher
+device gives you a temporary and fast access to these keys from the mnemonic,
+thanks to Cryptnox BIP39 compatibility.
+
+Uniblow doesn't use many advanced features of this wallet, but only simple
+stuff, to keep it simple and providing the same user experience as the others
+devices. Uniblow uses the Cryptnox card only with a simple PIN authentication
+method.
+
+Uniblow can initialize a blank card.
+
+If the card was not initialized using Uniblow, the card needs to be in a state :
+
+-   PIN enabled
+
+-   Standard secured channel key
+
+-   Seed or derivable key loaded
+
+If the card is locked, only half initialized, or in a fancy state, you can use
+the [CryptnoxPro](https://github.com/Cryptnox-Software/cryptnoxpro) or the
+[Cryptnox iOS app](https://apps.apple.com/app/id1583011693). Because Uniblow
+cannot perform advanced operations such as PIN unlock, nor card reset.
 
 ### OpenPGP device
 
@@ -186,78 +327,31 @@ For the best experience, the OpenPGP device should be in its default reset state
 before using it with uniblow. Uniblow asks the user to choose the admin PIN
 (PIN3), and the user PIN (PIN1), then it configures the device with these PINs.  
 The device can also be already configured, with one EC256k1 key generated in the
-SIG key slot. Uniblow will eventually ask for the user PIN1 and use this key.
+SIG key slot. Uniblow will ask for the user PIN1 and use this key.
 
 Without backup, if you forget the PIN, or lost the OpenPGP device, there would
 be no way to recover your coins.
 
 The Yubico 5 is a recommended OpenPGP device.
 
-### HDdevice
-
-This wallet is compatible with BIP39/32/44 wallets. You can save 12/24 words when
-initializing a new one, and get back you fund later.
-
-You can also import an existing wallet from a compatible wallet, and it will use
-the funds. Note that at this stage, there is a limitation on BTC, LTC and DOGE :
-it only uses one static address for all transactions on a given blockchain. And
-it won't retrieve your money if you use some other HD wallets with many transactions.
-
-You can also export the saved words mnemonic in an other compatible wallet, and
-it should access and use all you funds.
-
-The HD device stores only the seed encrypted [with a random salt using libsodium
-XSalsa20/Poly1305](https://libsodium.gitbook.io/doc/secret-key_cryptography/secretbox#algorithm-details),
-using an encryption key derived from the user chosen password using [Argon2id
-(moderate
-settings)](https://raw.githubusercontent.com/P-H-C/phc-winner-argon2/master/argon2-specs.pdf).
- One can choose to use a default password. To do so, just left blank the password
-prompt input when asked the first time at device setting. Without your personal
-password, the security of the key is what your hard-drive computer offers for
-your files.  
-If you setup a password but forget it, there would be no way to recover your
-coins from the backup file. But you can still initialize a new HD device wallet
-with the same words mnemonic.
-
-The seed of this wallet is encrypted and stored in a file named *HDseed.key*, in the
-user data folder for Uniblow. To backup it, copy the file elsewhere. To remove this
-wallet and start a fresh one, delete this file. You can also rename it and that
-would start a new different HD wallet, and keep the first wallet aside. In this
-case, rename back to HDseed and you read back the first wallet.
-
-To access the direcory where the HDseed is stored, see the *BasicFile device* section above.
-
-### Ledger
-
-A Ledger hardware device such as Nano X and Nano S, can be used with Uniblow but
-only for Ethereum/EVM chains (ETH, BSC, MATIC, FTM, CELO, AVAX and ARB).
-
-The Ledger needs to be unlocked and run the Ethereum app. The address displayed
-in the wallet can be checked on the Ledger screen by clicking a dedicated UI button. The
-Uniblow wallet has a tokens list integrated, which allows to send thousands of
-major tokens without enabling the "blind signing" features.
-
-In case you use Uniblow with the Ledger on a web3 dapp, with the WalletConnect option,
-the transactions can require the "blind signing" option to be enabled in the
-Ledger app. In this situation, a dedicated modal will appear asking you to
-activate this, and you need to make the transaction again after the option
-activation.
-
-On Linux, the udev rules need to be allowed for the Ledger USB device. Run
-[this official
-script](https://raw.githubusercontent.com/LedgerHQ/udev-rules/master/add_udev_rules.sh)
-as root/sudo to allow the Ledger device.
-
-## Special wallet options
+Special wallet options
+----------------------
 
 ### ERC20
 
-In ETH, BSC, MATIC, FTM, CELO, AVAX or ARB, you can choose the ERC20 wallet account type option. Select a known preset token, or input an ERC20 token address.
+In ETH, BSC, MATIC, FTM, CELO, MOVR, AVAX or ARB, you can choose the ERC20
+wallet account type option. Select a known preset token, or input an ERC20 token
+address.
 
 ### WalletConnect
 
-In ETH, BSC, MATIC, FTM, CELO, AVAX or ARB, Uniblow can connect to a Dapp using the WalletConnect system. Select WalletConnect in the wallet account type, input the wc URI and it will connect to the web3 app using WalletConnect.  
-Note that in this mode, Uniblow disables sending any transaction from the GUI. All the sending transactions have to be performed from the connected web app, after your approval in Uniblow. Else you have to connect to a standard (or token) account type to process a sending transaction using Uniblow directly.
+In ETH, BSC, MATIC, FTM, CELO, MOVR, AVAX or ARB, Uniblow can connect to a Dapp
+using the WalletConnect system. Select WalletConnect in the wallet account type,
+input the wc URI and it will connect to the web3 app using WalletConnect.  
+Note that in this mode, Uniblow disables sending any transaction from the GUI.
+All the sending transactions have to be performed from the connected web app,
+after your approval in Uniblow. Else you have to connect to a standard (or
+token) account type to process a sending transaction using Uniblow directly.
 
 With a Ledger device, the transactions can require the "blind signing" option to
 be enabled in the Ledger ETH app.
@@ -298,7 +392,6 @@ be slowed down by this time factor.
 Note that this algorithm, per design, uses extensive resources : requires 1 GB
 RAM, and takes approximately 20 seconds on a desktop computer.
 
-
 Development
 -----------
 
@@ -311,8 +404,7 @@ Development
         [Python3](https://www.python.org/ftp/python/3.9.9/python-3.9.9-amd64.exe),
         then run `pip3 install wxPython==4.1.1`
 
-    -   **MacOS** : Read the [MacDev document](docs/MacDev.md) for more
-        details.
+    -   **MacOS** : Read the [MacDev document](docs/MacDev.md) for more details.
 
     -   **Linux** : Read the [LinuxDev document](docs/LinuxDev.md) for more
         details
@@ -321,13 +413,13 @@ Development
 
     -   `python3 setup.py install --user`
 
--   For ETH testnets, put your Infura key in ETHwallet. The
-    binaries have an Infura key embedded.
+-   For ETH testnets, put your Infura key in ETHwallet. The binaries have an
+    Infura key embedded.
 
 -   Run with `python3 uniblow.py -v`
 
-The '-v' argument enables the debug logging output for more verbose terminal output.
-
+The '-v' argument enables the debug logging output for more verbose terminal
+output.
 
 ### Build binaries
 
@@ -389,16 +481,16 @@ class newCOINwallet:
      ... fee is 0, 1 or 2 : "economic", "normal", "fast"
 ```
 
+License
+-------
 
-## License
+Copyright (C) 2021 BitLogiK SAS
 
-Copyright (C) 2021  BitLogiK SAS
+This program is free software: you can redistribute it and/or modify it under
+the terms of the GNU General Public License as published by the Free Software
+Foundation, version 3 of the License.
 
-This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU General Public License as published by
-the Free Software Foundation, version 3 of the License.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
-See the [GNU General Public License](LICENSE.md) for more details.
+This program is distributed in the hope that it will be useful, but WITHOUT ANY
+WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+PARTICULAR PURPOSE. See the [GNU General Public License](LICENSE.md) for more
+details.
