@@ -13,6 +13,8 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
+"""Cryptography methods for Uniblow."""
+
 
 import hashlib
 import hmac
@@ -21,15 +23,14 @@ from secrets import randbelow
 
 try:
     import sha3 as keccak
-except Exception:
-    raise Exception("Requires PySHA3 : pip3 install pysha3")
-
-from .ECP256k1 import ECPoint, inverse_mod
+except Exception as exc:
+    raise Exception("Requires PySHA3 : pip3 install pysha3") from exc
 from cryptography.hazmat.primitives import hashes
 from cryptography.hazmat.primitives.ciphers import Cipher, algorithms, modes
 from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
 from nacl.hashlib import scrypt
 
+from .ECP256k1 import ECPoint, inverse_mod
 
 # Cryptography
 
@@ -44,8 +45,8 @@ def decompress_pubkey(pubkey_compr):
     # Key already decompressed ?
     if len(pubkey_compr) == 65 and pubkey_compr[0] == 4:
         return pubkey_compr
-    ECPub = ECPoint.from_bytes(pubkey_compr)
-    return ECPub.encode_output(False)
+    ec_pub = ECPoint.from_bytes(pubkey_compr)
+    return ec_pub.encode_output(False)
 
 
 def compress_pubkey(pubkey):
@@ -57,14 +58,14 @@ def compress_pubkey(pubkey):
     return bytes([pkh]) + pubkey[1:33]
 
 
-def public_key_recover(h, r, s, par=0):
+def public_key_recover(hash_val, r_sig, s_sig, parity=0):
     """Recover public key from hash and signature"""
-    n = CURVES_ORDER["K1"]
+    curve_order = CURVES_ORDER["K1"]
     # Q = (s.R - h.G) / r
-    R = ECPoint.from_x(r, par)
-    Q = inverse_mod(r, n) * R.dual_mult(-h % n, s)
+    r_point = ECPoint.from_x(r_sig, parity)
+    qpub = inverse_mod(r_sig, curve_order) * r_point.dual_mult(-hash_val % curve_order, s_sig)
     # Uncompressed format 04 X Y
-    return Q.encode_output(False)
+    return qpub.encode_output(False)
 
 
 def sha2(raw_message):
@@ -84,9 +85,9 @@ def sha512(raw_message):
 
 def md160(raw_message):
     """RIPE MD160"""
-    h = hashlib.new("ripemd160")
-    h.update(raw_message)
-    return h.digest()
+    hmd = hashlib.new("ripemd160")
+    hmd.update(raw_message)
+    return hmd.digest()
 
 
 def sha3(raw_message):
@@ -100,12 +101,14 @@ def Hash160(data):
 
 
 def HMAC_SHA512(key, data):
+    """Compute hmac SHA2-512."""
     hmac512 = hmac.new(key, digestmod=hashlib.sha512)
     hmac512.update(data)
     return hmac512.digest()
 
 
 def PBKDF2_SHA512(salt):
+    """Create a PBKDF2 HMAC object."""
     # Then .derive(data)
     return PBKDF2HMAC(
         algorithm=hashes.SHA512(),
@@ -116,25 +119,24 @@ def PBKDF2_SHA512(salt):
 
 
 def SecuBoost_KDF(data, salt):
+    """SecuBoost key derivation."""
     return scrypt(
         data.replace(b" ", b""), salt, n=pow(2, 20), r=8, p=8, dklen=64, maxmem=1.5 * pow(2, 30)
     )
 
 
-def aes_encrypt(key, iv, data):
+def aes_encrypt(key, init_vect, data):
     """Encrypt using AES CBC."""
-    aes_cbc = Cipher(algorithms.AES(key), modes.CBC(iv))
+    aes_cbc = Cipher(algorithms.AES(key), modes.CBC(init_vect))
     aese = aes_cbc.encryptor()
-    e = aese.update(data) + aese.finalize()
-    return e
+    return aese.update(data) + aese.finalize()
 
 
-def aes_decrypt(key, iv, datae):
+def aes_decrypt(key, init_vect, datae):
     """Decrypt using AES CBC."""
-    aes_cbc = Cipher(algorithms.AES(key), modes.CBC(iv))
+    aes_cbc = Cipher(algorithms.AES(key), modes.CBC(init_vect))
     aesd = aes_cbc.decryptor()
-    datad = aesd.update(datae) + aesd.finalize()
-    return datad
+    return aesd.update(datae) + aesd.finalize()
 
 
 def compute_mac(mackey, maciv, data):
@@ -179,8 +181,8 @@ def random_generator():
         rnd_list.append(random_raw[32 * i : 32 * (i + 1)])
     # Get 8 from 12
     rnd_out = []
-    for x in range(12, 4, -1):
-        rnd_out.append(rnd_list.pop(randbelow(x)))
+    for xval in range(12, 4, -1):
+        rnd_out.append(rnd_list.pop(randbelow(xval)))
     assert len(rnd_out) == 8
     assert len(rnd_list) == 4
     # Reduce to 256 bits from 2048 random-source bits with sha2
