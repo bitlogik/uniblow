@@ -16,7 +16,7 @@
 
 
 from devices.BaseDevice import BaseDevice
-from devices.cryptnox import CryptnoxCard, Basic_Pairing_Secret
+from devices.cryptnox import CryptnoxCard, CryptnoxInvalidException
 from cryptolib.HDwallet import encode_bip39_string, mnemonic_to_seed, generate_mnemonic
 
 from logging import getLogger
@@ -71,7 +71,7 @@ class Cryptnox(BaseDevice):
         self.card.init("Init by Uniblow", " ", settings["file_password"], self.PUK)
         delattr(self, "PUK")
         # Now upload the seed in the Cryptnox
-        self.card.open_secure_channel(Basic_Pairing_Secret)
+        self.card.open_secure_channel()
         self.card.load_seed(seedg, self.pin)
 
     def open_account(self, password):
@@ -88,7 +88,7 @@ class Cryptnox(BaseDevice):
         self.account = "0"
         self.aindex = "0"
         try:
-            self.card.open_secure_channel(Basic_Pairing_Secret)
+            self.card.open_secure_channel()
         except Exception as exc:
             if str(exc).endswith("disconnected."):
                 raise exc
@@ -116,13 +116,15 @@ class Cryptnox(BaseDevice):
 
     def get_pw_left(self):
         """When has_password and not password_retries_inf"""
-        self.card.open_secure_channel(Basic_Pairing_Secret)
+        self.card.open_secure_channel()
         return self.card.get_pin_left()
 
     def is_init(self):
         """Required when has_password and not password_retries_inf"""
         try:
             self.card = CryptnoxCard()
+        except CryptnoxInvalidException as exc:
+            raise exc
         except Exception:
             raise Exception("No Cryptnox card found.")
         # Check card version must be Basic

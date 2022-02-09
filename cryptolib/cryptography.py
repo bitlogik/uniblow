@@ -26,6 +26,7 @@ except Exception:
 
 from .ECP256k1 import ECPoint, inverse_mod
 from cryptography.hazmat.primitives import hashes
+from cryptography.hazmat.primitives.ciphers import Cipher, algorithms, modes
 from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
 from nacl.hashlib import scrypt
 
@@ -76,6 +77,11 @@ def dbl_sha2(raw_message):
     return sha2(sha2(raw_message))
 
 
+def sha512(raw_message):
+    """SHA-2 512"""
+    return hashlib.sha512(raw_message).digest()
+
+
 def md160(raw_message):
     """RIPE MD160"""
     h = hashlib.new("ripemd160")
@@ -89,6 +95,7 @@ def sha3(raw_message):
 
 
 def Hash160(data):
+    """RIPE MD160 after SHA2-256"""
     return md160(sha2(data))
 
 
@@ -114,8 +121,51 @@ def SecuBoost_KDF(data, salt):
     )
 
 
-def b58checksum(data):
-    return dbl_sha2(data)[:4]
+def aes_encrypt(key, iv, data):
+    """Encrypt using AES CBC."""
+    aes_cbc = Cipher(algorithms.AES(key), modes.CBC(iv))
+    aese = aes_cbc.encryptor()
+    e = aese.update(data) + aese.finalize()
+    return e
+
+
+def aes_decrypt(key, iv, datae):
+    """Decrypt using AES CBC."""
+    aes_cbc = Cipher(algorithms.AES(key), modes.CBC(iv))
+    aesd = aes_cbc.decryptor()
+    datad = aesd.update(datae) + aesd.finalize()
+    return datad
+
+
+def compute_mac(mackey, maciv, data):
+    """Compute AES CBC-MAC"""
+    return aes_encrypt(mackey, maciv, data)[-16:]
+
+
+def pad_data(data):
+    """Pad data using ISO 7816-4 : ISO 9797-1 Method 2."""
+    dataarr = bytearray(data)
+    dataarr.append(128)
+    while len(dataarr) % 16 > 0:
+        dataarr.append(0)
+    return bytes(dataarr)
+
+
+def unpad_data(data):
+    """Remove pad using ISO 7816-4 : ISO 9797-1 Method 2.
+    Throws exception if bad padding.
+    """
+    i = len(data) - 1
+    while data[i] == 0:
+        i -= 1
+    if data[i] != 128:
+        raise Exception("Bad padding in received data")
+    return data[:i]
+
+
+def gen_iv():
+    """Randomly generates 16 bytes data."""
+    return urandom(16)
 
 
 def random_generator():
@@ -135,6 +185,11 @@ def random_generator():
     assert len(rnd_list) == 4
     # Reduce to 256 bits from 2048 random-source bits with sha2
     return sha2(b"".join(rnd_out))
+
+
+def b58checksum(data):
+    """Base58 sum check."""
+    return dbl_sha2(data)[:4]
 
 
 def encode_int_der(intarray):

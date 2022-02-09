@@ -18,6 +18,7 @@
 # For ECDSA 256k1 or 256r1
 # or Ed25519
 
+from secrets import token_bytes
 
 from cryptography.hazmat import backends
 from cryptography.hazmat.primitives import serialization, hashes
@@ -28,28 +29,45 @@ from nacl.signing import SigningKey
 from cryptolib.cryptography import makeup_sig
 
 
+K1_CURVE = ec.SECP256K1()
+R1_CURVE = ec.SECP256R1()
+
+
 class EC_key_pair:
     """EC 256k1, 256r1 or Ed 25519 key pair"""
 
     def __init__(self, pv_key_int, curve):
-        """A EllipticCurvePrivateKey object"""
+        """An EllipticCurvePrivateKey object"""
         self.curve = curve
         if self.curve == "K1":
-            self.key_obj = ec.derive_private_key(
-                pv_key_int, ec.SECP256K1(), backends.default_backend()
-            )
+            curveobj = K1_CURVE
         elif self.curve == "R1":
-            self.key_obj = ec.derive_private_key(
-                pv_key_int, ec.SECP256R1(), backends.default_backend()
-            )
+            curveobj = R1_CURVE
+        if self.curve == "K1" or self.curve == "R1":
+            # K1 or R1
+            if pv_key_int < 0:
+                # No private key provided, generating
+                self.key_obj = ec.generate_private_key(curveobj, backends.default_backend())
+            else:
+                # Create a key pair from the provided key integer
+                self.key_obj = ec.derive_private_key(
+                    pv_key_int, curveobj, backends.default_backend()
+                )
         elif self.curve == "ED":
-            seed_bytes = pv_key_int.to_bytes(32, "big")
+            if pv_key_int < 0:
+                # No private key provided, generating
+                seed_bytes = token_bytes(32)
+            else:
+                # Create a key pair from the provided key integer
+                seed_bytes = pv_key_int.to_bytes(32, "big")
             self.key_obj = SigningKey(seed_bytes, RawEncoder)
         else:
             raise ValueError("ECkeypair must be K1, R1 or ED")
 
     def pv_int(self):
         """output private key as a integer, only for 256k1/r1"""
+        if self.curve == "ED":
+            raise ValueError("ECkeypair pv_int can only be used for R1 or K1 key.")
         return self.key_obj.private_numbers().private_value
 
     def ser256(self):
@@ -81,3 +99,35 @@ class EC_key_pair:
             return self.key_obj.public_key().public_bytes(serialization.Encoding.X962, out_format)
         # Ed25519 : 32 bytes public key
         return self.key_obj.verify_key.encode(RawEncoder)
+
+    def ecdh(self, peer_pub_key):
+        """Compute a ECDH key exchange."""
+        if self.curve == "ED":
+            raise ValueError("ECkeypair pv_int can only be used for R1 or K1 key.")
+        if self.curve == "K1":
+            curveobj = K1_CURVE
+        elif self.curve == "R1":
+            curveobj = R1_CURVE
+        public_key = ec.EllipticCurvePublicKey.from_encoded_point(curveobj, peer_pub_key)
+        shared_key = self.key_obj.exchange(ec.ECDH(), public_key)
+        return shared_key
+
+
+class ECpubkey:
+    """EC 256k1, 256r1 public key"""
+
+    def __init__(self, pubkey_data, curve):
+        """An EllipticCurvePrivateKey object generated"""
+        if curve == "K1":
+            curveobj = K1_CURVE
+        elif curve == "R1":
+            curveobj = R1_CURVE
+        else:
+            raise ValueError("ECpubkey must be K1 or R1")
+        self.pubkey_obj = ec.EllipticCurvePublicKey.from_encoded_point(curveobj, pubkey_data)
+
+    def check_signature(self, msg, signature):
+        """Check an ECDSA signature.
+        Throws except InvalidSignature if not OK.
+        """
+        self.pubkey_obj.verify(signature, msg, ec.ECDSA(hashes.SHA256()))
