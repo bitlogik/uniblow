@@ -19,10 +19,6 @@ from devices.BaseDevice import BaseDevice
 from devices.cryptnox import CryptnoxCard, CryptnoxInvalidException
 from cryptolib.HDwallet import encode_bip39_string, mnemonic_to_seed, generate_mnemonic
 
-from logging import getLogger
-
-logger = getLogger(__name__)
-
 
 class pwdException(Exception):
     pass
@@ -66,8 +62,6 @@ class Cryptnox(BaseDevice):
         )
         # Initialize the Cryptnox card
         self.pin = settings["file_password"]
-        logger.debug("PIN %s", self.pin)
-        logger.debug("PUK %s", self.PUK)
         self.card.init("Init by Uniblow", " ", settings["file_password"], self.PUK)
         delattr(self, "PUK")
         # Now upload the seed in the Cryptnox
