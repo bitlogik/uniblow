@@ -155,8 +155,7 @@ class Cryptnox(BaseDevice):
         self.card.derive(encode_bip39_string(path), key_type)
 
     def get_public_key(self):
-        pubkey = self.card.get_pubkey(self.key_type)
-        return pubkey
+        return self.card.get_pubkey(self.key_type)
 
     def sign(self, txdigest):
         return self.card.sign(txdigest, self.key_type, pin=self.pin)

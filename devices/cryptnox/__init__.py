@@ -38,21 +38,25 @@ logger = getLogger(__name__)
 
 class CryptnoxException(Exception):
     """Cryptnox generic exception."""
+
     pass
 
 
 class CryptnoxInvalidException(CryptnoxException):
     """Cryptnox exception for invalid data or invalid state."""
+
     pass
 
 
 class CryptnoxCommException(CryptnoxException):
     """Cryptnox communication exception"""
+
     pass
 
 
 class cardinfo_(dict):
     """Class helpers to handle card info."""
+
     def __getattr__(self, name):
         if name in self:
             return self[name]
