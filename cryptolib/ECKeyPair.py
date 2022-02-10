@@ -14,11 +14,9 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 
-# EC key pair (private, public)
+# EC key (private, public)
 # For ECDSA 256k1 or 256r1
 # or Ed25519
-
-from secrets import token_bytes
 
 from cryptography.hazmat import backends
 from cryptography.hazmat.primitives import serialization, hashes
@@ -26,7 +24,7 @@ from cryptography.hazmat.primitives.asymmetric import ec, utils
 from nacl.encoding import RawEncoder
 from nacl.signing import SigningKey
 
-from cryptolib.cryptography import makeup_sig
+from cryptolib.cryptography import random_generator, makeup_sig
 
 
 K1_CURVE = ec.SECP256K1()
@@ -56,7 +54,7 @@ class EC_key_pair:
         elif self.curve == "ED":
             if pv_key_int < 0:
                 # No private key provided, generating
-                seed_bytes = token_bytes(32)
+                seed_bytes = random_generator()
             else:
                 # Create a key pair from the provided key integer
                 seed_bytes = pv_key_int.to_bytes(32, "big")
