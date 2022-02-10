@@ -51,7 +51,7 @@ Compatible with the following blockchains :
 
     -   ERC20 tokens
 
-    -   WalletConnect
+    -   WalletConnect Dapps
 
 -   BSC
 
@@ -59,7 +59,7 @@ Compatible with the following blockchains :
 
     -   BEP20 tokens
 
-    -   WalletConnect
+    -   WalletConnect Dapps
 
 -   MATIC
 
@@ -67,7 +67,7 @@ Compatible with the following blockchains :
 
     -   ERC20 tokens
 
-    -   WalletConnect
+    -   WalletConnect Dapps
 
 -   FTM
 
@@ -99,7 +99,7 @@ Compatible with the following blockchains :
 
     -   ERC20 tokens
 
-    -   WalletConnect
+    -   WalletConnect Dapps
 
 -   AVAX
 
@@ -107,7 +107,7 @@ Compatible with the following blockchains :
 
     -   ERC20 tokens
 
-    -   WalletConnect
+    -   WalletConnect Dapps
 
 -   SOL
 
@@ -208,30 +208,31 @@ Electrum seed (of one single address).
 ### Local File
 
 This wallet is compatible with BIP39/32/44 wallets. You can save 12/24 words
-when initializing a new one, and get back you fund later.
+when initializing a new one, and get back you fund late using this same
+mnemonic.
 
 You can also import an existing wallet from a compatible wallet, and it will use
-the funds. Note that at this stage, there is a limitation on BTC, LTC and DOGE :
-it only uses one static address for all transactions on a given blockchain. And
-it won't retrieve your money if you use some other HD wallets with many
-transactions.
+the funds. Note there is a limitation on BTC, LTC and DOGE : it only uses one
+static address for all transactions on a given blockchain. And it won't retrieve
+your money if you use some other HD wallets with many transactions.
 
 You can also export the saved words mnemonic in an other compatible wallet, and
-it should access and use all you funds.
+it should access and use all your funds.
 
-The Local File device stores only the seed encrypted [with a random salt using
-libsodium
+The Local File device stores the wallet seed in a file on your disk, in your
+user data directory. The encryption is done with your password. LocalFile stores
+only the seed encrypted [with a random salt using libsodium
 XSalsa20/Poly1305](https://libsodium.gitbook.io/doc/secret-key_cryptography/secretbox#algorithm-details),
 using an encryption key derived from the user chosen password using [Argon2id
 (moderate
 settings)](https://raw.githubusercontent.com/P-H-C/phc-winner-argon2/master/argon2-specs.pdf).
-One can choose to use a default password. To do so, just left blank the password
-prompt input when asked the first time at device setting. Without your personal
-password, the security of the key is what your hard-drive computer offers for
-your files.  
+One can choose to use a default password. To do so, just leave blank the
+password prompt input when asked the first time at device setting. Without a
+personalized password, the security of the key is what your hard-drive computer
+offers for your files.  
 If you setup a password but forget it, there would be no way to recover your
 coins from the backup file. But you can still initialize a new Local File wallet
-with the same words mnemonic.
+with the same mnemonic words.
 
 The seed of this wallet is encrypted and stored in a file named *HDseed.key*, in
 the user data folder for Uniblow. To backup it, copy the file elsewhere. To
@@ -280,7 +281,8 @@ as root/sudo to allow the Ledger device.
 ### Cryptnox card
 
 The [Cryptnox card](https://cryptnox.com) is a crypto credit-card sized hardware
-wallet with advanced functionalities. The compatible model is the BG-1 card
+wallet with advanced functionalities. This device is very secure thanks to its
+CC EAL6+ security grade central chip. The compatible model is the BG-1 card
 (single or Dual).
 
 When a card is initialized using Uniblow, it generates a BIP39 mnemonic seed,
@@ -289,15 +291,15 @@ once during the initialization process, and acts as a backup for the internal
 keys card. By design, there's no way to extract any private key from the card
 after the setup. The only way to recover the wallet keys is to perform a new
 initialization and input the same mnemonic provided. Note that the SeedWatcher
-device gives you a temporary and fast access to these keys from the mnemonic,
-thanks to Cryptnox BIP39 compatibility.
+device also gives you a temporary and fast access to these keys from the
+mnemonic, thanks to Cryptnox BIP39 compatibility.
 
 Uniblow doesn't use many advanced features of this wallet, but only simple
 stuff, to keep it simple and providing the same user experience as the others
 devices. Uniblow uses the Cryptnox card only with a simple PIN authentication
 method.
 
-Uniblow can initialize a blank card.
+Uniblow can setup and initialize a blank card.
 
 If the card was not initialized using Uniblow, the card needs to be in a state :
 
@@ -340,8 +342,8 @@ Special wallet options
 ### ERC20
 
 In ETH, BSC, MATIC, FTM, CELO, MOVR, AVAX or ARB, you can choose the ERC20
-wallet account type option. Select a known preset token, or input an ERC20 token
-address.
+wallet account type option. Select a known preset token, or input an ERC20
+custom token address.
 
 ### WalletConnect
 
