@@ -5,11 +5,11 @@ Uniblow versions history
 ## 1.5.0
 
 * Remove BasicFile device
-* HDdevice renamed Local File
-* Add Cryptnox card device
+* HDdevice renamed to Local File
+* Add the Cryptnox card device
 * Add MOVR and GLMR chains
 * Display min/max length for PIN or password
-* Display PIN remaining tries
+* Query and display PIN remaining tries
 * WalletConnect v1 auto disconnect
 * WC chain id mismatch fully ignored
 * Balance always displayed as human float, no more sci
