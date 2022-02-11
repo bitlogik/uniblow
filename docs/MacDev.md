@@ -44,7 +44,7 @@ source unibenv/bin/activate
 #### Install uniblow dependencies
 ```
 python -m pip install pip==21.2.1
-python -m pip install wxPython==4.1.1 pyscard==2.0.1 pysha3==1.0.2 pynacl==1.5.0 pyWalletConnect==1.0.0
+python -m pip install wxPython==4.1.1
 python -m pip install -e .
 ```
 
