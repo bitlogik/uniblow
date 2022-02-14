@@ -44,12 +44,13 @@ ICON_FILE = "gui/uniblow.ico"
 class InfoBox(gui.infodialog.InfoDialog):
     def __init__(self, message, title, style, parent, block_modal=False):
         super().__init__(parent)
+        self.is_modal = block_modal
         self.message = message
         self.SetTitle(title)
         self.m_textCtrl.SetBackgroundColour(self.GetBackgroundColour())
         self.m_textCtrl.SetValue(self.message)
         self.m_textCtrl.SelectNone()
-        if block_modal:
+        if self.is_modal:
             self.ShowModal()
         else:
             self.Show()
@@ -64,6 +65,8 @@ class InfoBox(gui.infodialog.InfoDialog):
         # else silent : no Access
 
     def close_info(self, event):
+        if self.is_modal:
+            self.EndModal(0)
         self.Destroy()
 
 
