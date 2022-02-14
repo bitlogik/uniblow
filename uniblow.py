@@ -520,10 +520,14 @@ def device_selected(device):
                         if (
                             len(password) >= device_loaded.password_min_len
                             and len(password) <= device_loaded.password_max_len
+                            and (not device_loaded.is_pin_numeric or password.isdigit())
                         ):
                             break
+                        wmsg = f"Device {pwd_pin} shall be {lenmsg} {pintype} long."
+                        if device_loaded.is_pin_numeric:
+                            wmsg += f"\n\nThe {pwd_pin} must be {pintype} (0-9) only."
                         warn_modal(
-                            f"Device {pwd_pin} shall be {lenmsg} {pintype} long.",
+                            wmsg,
                             True,
                         )
                 try:
@@ -588,10 +592,14 @@ def device_selected(device):
                     if (
                         len(password_default) >= device_loaded.password_min_len
                         and len(password_default) <= device_loaded.password_max_len
+                        and (not device_loaded.is_pin_numeric or password_default.isdigit())
                     ):
                         break
+                    wmsg = f"Device {pwd_pin} shall be {lenmsg} {pintype} long."
+                    if device_loaded.is_pin_numeric:
+                        wmsg += f"\n\nThe {pwd_pin} must be {pintype} (0-9) only."
                     warn_modal(
-                        f"Device {pwd_pin} shall be {lenmsg} {pintype} long.",
+                        wmsg,
                         True,
                     )
             except Exception as exc:
