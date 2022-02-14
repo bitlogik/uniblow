@@ -60,8 +60,8 @@ class InfoBox(gui.infodialog.InfoDialog):
         if TheClipboard.Open():
             TheClipboard.Clear()
             TheClipboard.SetData(TextDataObject(self.message))
-            TheClipboard.Close()
             TheClipboard.Flush()
+            TheClipboard.Close()
         # else silent : no Access
 
     def close_info(self, event):
