@@ -2,6 +2,13 @@
 Uniblow versions history
 
 
+## 1.5.1
+
+* Refine GUI look
+* Enforce PIN digits check in the GUI
+* Fix modal closing
+* Fix clipboard in info modal
+
 ## 1.5.0
 
 * Remove BasicFile device
