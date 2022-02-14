@@ -45,7 +45,7 @@
             <property name="minimum_size"></property>
             <property name="name">TopFrame</property>
             <property name="pos"></property>
-            <property name="size">925,420</property>
+            <property name="size">928,420</property>
             <property name="style">wxCAPTION|wxCLOSE_BOX|wxMINIMIZE_BOX|wxSYSTEM_MENU</property>
             <property name="subclass">; ; forward_declare</property>
             <property name="title"></property>
@@ -1282,7 +1282,7 @@
                         </object>
                         <object class="sizeritem" expanded="1">
                             <property name="border">8</property>
-                            <property name="flag">wxEXPAND|wxTOP</property>
+                            <property name="flag">wxTOP|wxEXPAND</property>
                             <property name="proportion">0</property>
                             <object class="wxBoxSizer" expanded="1">
                                 <property name="minimum_size"></property>
@@ -1291,7 +1291,7 @@
                                 <property name="permission">none</property>
                                 <object class="sizeritem" expanded="1">
                                     <property name="border">8</property>
-                                    <property name="flag">wxALL|wxALIGN_BOTTOM</property>
+                                    <property name="flag">wxALIGN_BOTTOM|wxTOP|wxBOTTOM|wxLEFT</property>
                                     <property name="proportion">0</property>
                                     <object class="wxStaticText" expanded="1">
                                         <property name="BottomDockable">1</property>
@@ -1459,7 +1459,7 @@
                                                     <property name="pos"></property>
                                                     <property name="resize">Resizable</property>
                                                     <property name="show">1</property>
-                                                    <property name="size">584,-1</property>
+                                                    <property name="size">581,-1</property>
                                                     <property name="style"></property>
                                                     <property name="subclass">; ; forward_declare</property>
                                                     <property name="toolbar_pane">0</property>

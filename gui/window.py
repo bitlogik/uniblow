@@ -17,7 +17,7 @@ import wx.xrc
 class TopFrame ( wx.Frame ):
 
     def __init__( self, parent ):
-        wx.Frame.__init__ ( self, parent, id = wx.ID_ANY, title = wx.EmptyString, pos = wx.DefaultPosition, size = wx.Size( 925,420 ), style = wx.CAPTION|wx.CLOSE_BOX|wx.MINIMIZE_BOX|wx.SYSTEM_MENU|wx.FULL_REPAINT_ON_RESIZE|wx.TAB_TRAVERSAL )
+        wx.Frame.__init__ ( self, parent, id = wx.ID_ANY, title = wx.EmptyString, pos = wx.DefaultPosition, size = wx.Size( 928,420 ), style = wx.CAPTION|wx.CLOSE_BOX|wx.MINIMIZE_BOX|wx.SYSTEM_MENU|wx.FULL_REPAINT_ON_RESIZE|wx.TAB_TRAVERSAL )
 
         self.SetSizeHints( wx.DefaultSize, wx.DefaultSize )
 
@@ -208,12 +208,12 @@ class TopPanel ( wx.Panel ):
 
         self.dest_label.SetFont( wx.Font( 14, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, False, wx.EmptyString ) )
 
-        bSizer4.Add( self.dest_label, 0, wx.ALL|wx.ALIGN_BOTTOM, 8 )
+        bSizer4.Add( self.dest_label, 0, wx.ALIGN_BOTTOM|wx.TOP|wx.BOTTOM|wx.LEFT, 8 )
 
         self.addr_panel = wx.Panel( self, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL )
         bSizer20 = wx.BoxSizer( wx.VERTICAL )
 
-        self.dest_addr = wx.TextCtrl( self.addr_panel, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.Size( 584,-1 ), 0 )
+        self.dest_addr = wx.TextCtrl( self.addr_panel, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.Size( 581,-1 ), 0 )
         self.dest_addr.SetFont( wx.Font( 14, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, False, wx.EmptyString ) )
         self.dest_addr.Enable( False )
 
@@ -226,7 +226,7 @@ class TopPanel ( wx.Panel ):
         bSizer4.Add( self.addr_panel, 0, wx.ALIGN_BOTTOM, 3 )
 
 
-        bSizer3.Add( bSizer4, 0, wx.EXPAND|wx.TOP, 8 )
+        bSizer3.Add( bSizer4, 0, wx.TOP|wx.EXPAND, 8 )
 
         bSizer7 = wx.BoxSizer( wx.HORIZONTAL )
 
