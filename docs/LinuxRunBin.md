@@ -2,14 +2,14 @@
 # Uniblow on Ubuntu, Debian or Tails
 
 
-We provide a Linux binary file which can be used directly on Ubuntu, Debian or Tails OS Linux distributions, for the common x86/64 *AMD64* architecture.
+We provide a **Linux binary file** which can be used directly on Ubuntu, Debian or Tails OS Linux distributions, for the common x86/64 *AMD64* architecture.
 
 For the following Linux OS :
 
-* Ubuntu from version 18 should work
+* Ubuntu from version 18.04 to 20.10
 * Ubuntu derivatives, like Mint or PureOS
 * Debian Buster 10 and Bullseye 11, untested on 9.x
-* Tails v4.20, should work on any v4.x
+* Tails OS : tested on 4.20 and 4.27. Should work on any v4.x
 
 It may run on other Linux, as RHEL or Fedora. But without any testing and no guarantee.
 
@@ -17,12 +17,12 @@ It may run on other Linux, as RHEL or Fedora. But without any testing and no gua
 
 Get the binary and its signature file.
 
-From the uniblow website :  
+**Download** from the uniblow website :  
 [Uniblow program](https://uniblow.org/dist/Uniblow-linux-x86_64-1.5.0)  
  and its  
 [PGP signature](https://uniblow.org/dist/Uniblow-linux-x86_64-1.5.0.sig)
 
-**OR** using the terminal, in Tails you need to prepend *torsocks* to these commands :
+**Or** using the terminal, in Tails you may need to prepend *torsocks* to these commands :
 ```
 wget https://uniblow.org/dist/Uniblow-linux-x86_64-1.5.0
 wget https://uniblow.org/dist/Uniblow-linux-x86_64-1.5.0.sig
