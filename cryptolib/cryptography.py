@@ -91,7 +91,7 @@ def md160(raw_message):
 
 
 def sha3(raw_message):
-    """Keccak-256 for Ethereumn, not SHA3"""
+    """Keccak-256 for Ethereum, not SHA3"""
     return keccak.keccak_256(raw_message).digest()
 
 
