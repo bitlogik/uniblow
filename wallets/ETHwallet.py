@@ -359,9 +359,6 @@ class ETH_wallet:
         else:
             rpc_endpoint = f"https://{self.network}.infura.io/v3/{INFURA_KEY}"
             self.explorer = f"https://{self.network}.etherscan.io/address/0x"
-        if INFURA_KEY != "xxx" and self.network == "mainnet":
-            # If an Infura key is provided, also use it for mainnet
-            rpc_endpoint = f"https://{self.network}.infura.io/v3/{INFURA_KEY}"
         self.load_base(rpc_endpoint, device, contract_addr, wc_uri, confirm_callback)
         self.ledger_tokens = ledger_tokens
 

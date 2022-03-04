@@ -49,7 +49,7 @@ class MATIC_wallet(ETH_wallet):
         self.network = MATIC_wallet.networks[network].lower()
         if self.network == "mainnet":
             self.chainID = 137
-            rpc_endpoint = "https://polygon-rpc.com/"
+            rpc_endpoint = "https://rpc.ankr.com/polygon/"
             self.explorer = "https://polygonscan.com/address/0x"
         if self.network == "mumbai":
             self.chainID = 80001
