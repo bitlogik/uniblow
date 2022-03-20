@@ -200,7 +200,7 @@ class app_option_panel(gui.window.OptionPanel):
 class UniblowApp(App):
     def __init__(self, version):
         self.version = version
-        App.__init__(self)
+        super().__init__()
         self.Bind(EVT_ACTIVATE_APP, self.OnActivate)
 
     def OnInit(self):
@@ -208,7 +208,6 @@ class UniblowApp(App):
         wicon = IconBundle(icon_path)
         HAND_CURSOR = Cursor(CURSOR_HAND)
         self.gui_frame = gui.window.TopFrame(None)
-        self.SetTopWindow(self.gui_frame)
         if sys.platform.startswith("darwin"):
             self.gui_frame.SetSize((996, 418))
         self.gui_panel = gui.window.TopPanel(self.gui_frame)
@@ -239,6 +238,7 @@ class UniblowApp(App):
         self.gui_panel.send_all.SetCursor(HAND_CURSOR)
         self.gui_panel.btn_chkaddr.SetCursor(HAND_CURSOR)
         self.gui_frame.SetTitle(f"  Uniblow  -  {self.version}")
+        self.SetTopWindow(self.gui_frame)
         return True
 
     def BringWindowToFront(self):
