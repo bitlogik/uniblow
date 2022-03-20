@@ -2,6 +2,13 @@
 Uniblow versions history
 
 
+## 1.5.2
+
+* Add METIS
+* Change web3 RPCs to ANKR, no more Infura
+* Release resources when closing binary
+* WCv1 auto-disconnect while running binary
+
 ## 1.5.1
 
 * Refine GUI look
