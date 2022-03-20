@@ -31,6 +31,7 @@ from wx import (
     CURSOR_HAND,
     BITMAP_TYPE_PNG,
     EVT_ACTIVATE_APP,
+    EVT_CLOSE,
 )
 
 import gui.window
@@ -208,6 +209,7 @@ class UniblowApp(App):
         wicon = IconBundle(icon_path)
         HAND_CURSOR = Cursor(CURSOR_HAND)
         self.gui_frame = gui.window.TopFrame(None)
+        self.gui_frame.Bind(EVT_CLOSE, self.OnClose)
         if sys.platform.startswith("darwin"):
             self.gui_frame.SetSize((996, 418))
         self.gui_panel = gui.window.TopPanel(self.gui_frame)
@@ -252,6 +254,13 @@ class UniblowApp(App):
             self.BringWindowToFront()
         event.Skip()
 
+    def OnClose(self, event):
+        if hasattr(self, "device"):
+            del self.device
+        if hasattr(self, "wallet"):
+            del self.wallet
+        event.Skip()
+    
     def MacReopenApp(self):
         self.BringWindowToFront()
 
