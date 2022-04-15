@@ -195,7 +195,10 @@ class SeedWatcherPanel(gui.swgui.MainPanel):
 
     def display_coin(self, coin):
         try:
-            coin_info = [coin.name, coin.wallet.get_account(), coin.wallet.get_balance()]
+            coin_balance = coin.wallet.get_balance()
+            if coin_balance.startswith("Register"):
+                coin_balance = "No account"
+            coin_info = [coin.name, coin.wallet.get_account(), coin_balance]
         except Exception as exc:
             logger.error("Error when reading info for %s (skipped) : ", coin.name, exc_info=exc)
             raise
