@@ -260,7 +260,7 @@ class UniblowApp(App):
         if hasattr(self, "wallet"):
             del self.wallet
         event.Skip()
-    
+
     def MacReopenApp(self):
         self.BringWindowToFront()
 
