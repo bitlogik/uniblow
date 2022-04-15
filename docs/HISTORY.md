@@ -2,6 +2,12 @@
 Uniblow versions history
 
 
+## 1.5.3
+
+* Improve SeedWatcher display for EOS
+* Update pyWeb3 : improve web3 queries
+* Add one more alternative derivation for ETH
+
 ## 1.5.2
 
 * Add METIS
