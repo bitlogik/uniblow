@@ -232,6 +232,9 @@ class SeedWatcherPanel(gui.swgui.MainPanel):
                 self.enable_inputs()
                 return
             cpath = "m/{1}/{2}"
+        if not self.__nonzero__():
+            # Panel was closed
+            return
         account_idx = str(self.m_account.GetValue())
         is_change = self.is_change.GetValue()
         address_idx = str(self.m_index.GetValue())
@@ -257,6 +260,9 @@ class SeedWatcherPanel(gui.swgui.MainPanel):
             self.coins.append(coin_wallet)
             CallAfter(self.display_coin, coin_wallet)
         except Exception as exc:
+            # Add dummy to stay sync for wallet open
+            # Will get the coins index from the displayed row with seekfor_row_wallet
+            self.coins.append(None)
             logger.error("Error when getting coin info : %s", str(exc), exc_info=exc)
         if coin_idx < len(coins_list) - 1 and self.__nonzero__():
             # Call for next
@@ -360,7 +366,6 @@ class SeedWatcherPanel(gui.swgui.MainPanel):
         while coins_list[coins_wallet_index]["name"] != target_name:
             coins_wallet_index += 1
             if coins_wallet_index >= len(coins_list):
-                print("finished")
                 return None
         return coins_wallet_index
 
