@@ -21,7 +21,7 @@ This document provides specific instructions and scripts to build uniblow binari
 ```
 sudo add-apt-repository universe
 sudo apt update
-sudo apt install -y libnotify4 libgtk-3-0 libpcsclite1 libsdl2-2.0-0 python3-venv python3-pip python3-pyscard
+sudo apt install -y libnotify4 libgtk-3-0 libpcsclite-dev libsdl2-2.0-0 python3-venv python3-pip
 ```
 
 * Get the source files

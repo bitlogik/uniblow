@@ -14,7 +14,7 @@ function is_installed {
     fi
 }
 
-softs_req=('libnotify4' 'libgtk-3-0' 'libpcsclite1' 'libsdl2-2.0-0' 'python3-venv' 'python3-pip' 'python3-pyscard')
+softs_req=('libnotify4' 'libgtk-3-0' 'libpcsclite-dev' 'libsdl2-2.0-0' 'python3-venv' 'python3-pip')
 
 for softr in "${softs_req[@]}"; do
   if [ "$(is_installed $softr)" == 'not' ]; then
@@ -38,7 +38,7 @@ python -m pip install https://extras.wxpython.org/wxPython4/extras/linux/gtk3/ub
 python -m pip install -U pip setuptools-rust
 
 python setup.py install
-python -m pip install pyinstaller==4.5.1
+python -m pip install pyinstaller==4.10
 
 echo Building package ...
 python -OO -m PyInstaller package/uniblow.spec
