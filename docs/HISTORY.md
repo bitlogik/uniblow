@@ -2,6 +2,14 @@
 Uniblow versions history
 
 
+## 1.6.0
+
+* Refine GUI in Windows
+* Fix blank title in Windows
+* Fix table shift when RPC error in SeedWatcher
+* Update pyscard
+* Update pyInstaller
+
 ## 1.5.3
 
 * Improve SeedWatcher display for EOS
