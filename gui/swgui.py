@@ -123,15 +123,15 @@ class MainPanel ( wx.Panel ):
         bSizer4 = wx.BoxSizer( wx.HORIZONTAL )
 
 
-        bSizer4.Add( ( 0, 0), 0, wx.RIGHT, 50 )
+        bSizer4.Add( ( 0, 0), 0, wx.RIGHT, 35 )
 
-        self.m_staticText51 = wx.StaticText( self, wx.ID_ANY, u"Password (optional)", wx.DefaultPosition, wx.DefaultSize, 0 )
+        self.m_staticText51 = wx.StaticText( self, wx.ID_ANY, u"Der. password (optional)", wx.DefaultPosition, wx.DefaultSize, 0 )
         self.m_staticText51.Wrap( -1 )
 
-        bSizer4.Add( self.m_staticText51, 0, wx.ALL|wx.ALIGN_CENTER_VERTICAL, 5 )
+        bSizer4.Add( self.m_staticText51, 0, wx.ALIGN_CENTER_VERTICAL|wx.TOP|wx.BOTTOM|wx.RIGHT, 5 )
 
-        self.m_textpwd = wx.TextCtrl( self, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.Size( 208,-1 ), wx.TE_PROCESS_ENTER )
-        bSizer4.Add( self.m_textpwd, 0, wx.ALL, 5 )
+        self.m_textpwd = wx.TextCtrl( self, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.Size( 190,-1 ), wx.TE_PROCESS_ENTER )
+        bSizer4.Add( self.m_textpwd, 0, wx.TOP|wx.BOTTOM, 5 )
 
 
         bSizer4.Add( ( 0, 0), 0, wx.RIGHT, 18 )

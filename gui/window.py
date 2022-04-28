@@ -17,7 +17,7 @@ import wx.xrc
 class TopFrame ( wx.Frame ):
 
     def __init__( self, parent ):
-        wx.Frame.__init__ ( self, parent, id = wx.ID_ANY, title = wx.EmptyString, pos = wx.DefaultPosition, size = wx.Size( 928,420 ), style = wx.CAPTION|wx.CLOSE_BOX|wx.MINIMIZE_BOX|wx.SYSTEM_MENU|wx.FULL_REPAINT_ON_RESIZE|wx.TAB_TRAVERSAL )
+        wx.Frame.__init__ ( self, parent, id = wx.ID_ANY, title = u"Uniblow", pos = wx.DefaultPosition, size = wx.Size( 950,425 ), style = wx.CAPTION|wx.CLOSE_BOX|wx.MINIMIZE_BOX|wx.SYSTEM_MENU|wx.FULL_REPAINT_ON_RESIZE|wx.TAB_TRAVERSAL )
 
         self.SetSizeHints( wx.DefaultSize, wx.DefaultSize )
 
@@ -41,6 +41,9 @@ class TopPanel ( wx.Panel ):
 
         bSizer1 = wx.BoxSizer( wx.HORIZONTAL )
 
+
+        bSizer1.Add( ( 0, 0), 0, wx.ALIGN_CENTER_VERTICAL|wx.LEFT, 5 )
+
         bSizer2 = wx.BoxSizer( wx.VERTICAL )
 
         self.device_label = wx.StaticText( self, wx.ID_ANY, u"Device", wx.DefaultPosition, wx.DefaultSize, 0 )
@@ -53,14 +56,14 @@ class TopPanel ( wx.Panel ):
         devices_choiceChoices = []
         self.devices_choice = wx.Choice( self, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, devices_choiceChoices, 0 )
         self.devices_choice.SetSelection( 0 )
-        self.devices_choice.SetFont( wx.Font( 13, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, False, wx.EmptyString ) )
+        self.devices_choice.SetFont( wx.Font( 12, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, False, wx.EmptyString ) )
 
-        bSizer2.Add( self.devices_choice, 0, wx.ALIGN_CENTER_HORIZONTAL|wx.TOP, 5 )
+        bSizer2.Add( self.devices_choice, 0, wx.TOP|wx.ALIGN_CENTER_HORIZONTAL, 5 )
 
         self.coins_label = wx.StaticText( self, wx.ID_ANY, u"Blockchain", wx.DefaultPosition, wx.DefaultSize, 0 )
         self.coins_label.Wrap( -1 )
 
-        self.coins_label.SetFont( wx.Font( 10, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, False, wx.EmptyString ) )
+        self.coins_label.SetFont( wx.Font( 11, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, False, wx.EmptyString ) )
 
         bSizer2.Add( self.coins_label, 0, wx.ALIGN_CENTER_HORIZONTAL|wx.TOP, 20 )
 
@@ -132,12 +135,12 @@ class TopPanel ( wx.Panel ):
         bSizer5.Add( bSizer201, 0, 0, 5 )
 
         self.account_addr = wx.TextCtrl( self, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.Size( 585,-1 ), wx.TE_READONLY|wx.BORDER_NONE )
-        self.account_addr.SetFont( wx.Font( 14, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, False, wx.EmptyString ) )
+        self.account_addr.SetFont( wx.Font( 13, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, False, wx.EmptyString ) )
 
-        bSizer5.Add( self.account_addr, 0, wx.TOP|wx.BOTTOM, 16 )
+        bSizer5.Add( self.account_addr, 0, wx.TOP|wx.BOTTOM|wx.EXPAND, 16 )
 
 
-        bSizer3.Add( bSizer5, 0, wx.LEFT|wx.TOP|wx.ALIGN_CENTER_HORIZONTAL, 12 )
+        bSizer3.Add( bSizer5, 0, wx.EXPAND|wx.LEFT|wx.TOP, 16 )
 
         bSizer6 = wx.BoxSizer( wx.HORIZONTAL )
 

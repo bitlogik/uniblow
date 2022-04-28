@@ -45,10 +45,10 @@
             <property name="minimum_size"></property>
             <property name="name">TopFrame</property>
             <property name="pos"></property>
-            <property name="size">928,420</property>
+            <property name="size">950,425</property>
             <property name="style">wxCAPTION|wxCLOSE_BOX|wxMINIMIZE_BOX|wxSYSTEM_MENU</property>
             <property name="subclass">; ; forward_declare</property>
-            <property name="title"></property>
+            <property name="title">Uniblow</property>
             <property name="tooltip"></property>
             <property name="window_extra_style"></property>
             <property name="window_name"></property>
@@ -82,6 +82,16 @@
                 <property name="name">bSizer1</property>
                 <property name="orient">wxHORIZONTAL</property>
                 <property name="permission">none</property>
+                <object class="sizeritem" expanded="1">
+                    <property name="border">5</property>
+                    <property name="flag">wxALIGN_CENTER_VERTICAL|wxLEFT</property>
+                    <property name="proportion">0</property>
+                    <object class="spacer" expanded="1">
+                        <property name="height">0</property>
+                        <property name="permission">protected</property>
+                        <property name="width">0</property>
+                    </object>
+                </object>
                 <object class="sizeritem" expanded="1">
                     <property name="border">5</property>
                     <property name="flag">wxALIGN_CENTER_VERTICAL</property>
@@ -154,7 +164,7 @@
                         </object>
                         <object class="sizeritem" expanded="1">
                             <property name="border">5</property>
-                            <property name="flag">wxALIGN_CENTER_HORIZONTAL|wxTOP</property>
+                            <property name="flag">wxTOP|wxALIGN_CENTER_HORIZONTAL</property>
                             <property name="proportion">0</property>
                             <object class="wxChoice" expanded="1">
                                 <property name="BottomDockable">1</property>
@@ -181,7 +191,7 @@
                                 <property name="enabled">1</property>
                                 <property name="fg"></property>
                                 <property name="floatable">1</property>
-                                <property name="font">,90,90,13,70,0</property>
+                                <property name="font">,90,90,12,70,0</property>
                                 <property name="gripper">0</property>
                                 <property name="hidden">0</property>
                                 <property name="id">wxID_ANY</property>
@@ -244,7 +254,7 @@
                                 <property name="enabled">1</property>
                                 <property name="fg"></property>
                                 <property name="floatable">1</property>
-                                <property name="font">,90,90,10,70,0</property>
+                                <property name="font">,90,90,11,70,0</property>
                                 <property name="gripper">0</property>
                                 <property name="hidden">0</property>
                                 <property name="id">wxID_ANY</property>
@@ -613,8 +623,8 @@
                         <property name="orient">wxVERTICAL</property>
                         <property name="permission">none</property>
                         <object class="sizeritem" expanded="1">
-                            <property name="border">12</property>
-                            <property name="flag">wxLEFT|wxTOP|wxALIGN_CENTER_HORIZONTAL</property>
+                            <property name="border">16</property>
+                            <property name="flag">wxEXPAND|wxLEFT|wxTOP</property>
                             <property name="proportion">0</property>
                             <object class="wxBoxSizer" expanded="1">
                                 <property name="minimum_size"></property>
@@ -767,7 +777,7 @@
                                 </object>
                                 <object class="sizeritem" expanded="1">
                                     <property name="border">16</property>
-                                    <property name="flag">wxTOP|wxBOTTOM</property>
+                                    <property name="flag">wxTOP|wxBOTTOM|wxEXPAND</property>
                                     <property name="proportion">0</property>
                                     <object class="wxTextCtrl" expanded="1">
                                         <property name="BottomDockable">1</property>
@@ -793,7 +803,7 @@
                                         <property name="enabled">1</property>
                                         <property name="fg"></property>
                                         <property name="floatable">1</property>
-                                        <property name="font">,90,90,14,70,0</property>
+                                        <property name="font">,90,90,13,70,0</property>
                                         <property name="gripper">0</property>
                                         <property name="hidden">0</property>
                                         <property name="id">wxID_ANY</property>
