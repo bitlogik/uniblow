@@ -1,26 +1,25 @@
 Uniblow
 =======
 
-
 ![Uniblow logo](uniblow_logo.png)
 
 A **uni**versal **blo**ckchain **w**allet for cryptos
 
--   Handy, almost 1-click
+- Handy, almost 1-click
 
--   Fast and lightweight
+- Fast and lightweight
 
--   Multiple cryptos blockchains
+- Multiple cryptos blockchains
 
--   Tokens ERC20/BEP20
+- Tokens ERC20/BEP20
 
--   WalletConnect
+- WalletConnect
 
--   Multiple networks (testnets,...)
+- Multiple networks (testnets,...)
 
--   Multi platforms : PC, Mac and Linux
+- Multi platforms : PC, Mac and Linux
 
--   Open source GPLv3
+- Open source GPLv3
 
 Official web site : https://uniblow.org  
 (also https://uniblow.app)
@@ -33,127 +32,127 @@ multiple blockchains and platforms.
 
 Compatible with the following blockchains :
 
--   BTC
+- BTC
+  
+  - mainnet and testnet networks
+  
+  - Standard wallet (P2PKH)
+  
+  - Segwit P2SH compatibility
+  
+  - Full Segwit wallet bech32 (P2WPKH)
+  
+  - Send to Taproot Bech32m address (P2TR)
 
-    -   mainnet and testnet networks
+- ETH
+  
+  - mainnet, Rinkeby, Ropsten, Kovan and Goerli networks
+  
+  - ERC20 tokens
+  
+  - WalletConnect Dapps
 
-    -   Standard wallet (P2PKH)
+- BSC
+  
+  - mainnet and testnet networks
+  
+  - BEP20 tokens
+  
+  - WalletConnect Dapps
 
-    -   Segwit P2SH compatibility
+- MATIC
+  
+  - Mainnet and Mumbai networks
+  
+  - ERC20 tokens
+  
+  - WalletConnect Dapps
 
-    -   Full Segwit wallet bech32 (P2WPKH)
+- FTM
+  
+  - Mainnet and Testnet networks
+  
+  - ERC20 tokens
+  
+  - WalletConnect Dapps
 
-    -   Send to Taproot Bech32m address (P2TR)
+- METIS
+  
+  - Mainnet and Testnet networks
+  
+  - ERC20 tokens
+  
+  - WalletConnect Dapps
 
--   ETH
+- CELO
+  
+  - Mainnet, Alfajores and Baklava networks
+  
+  - ERC20 tokens
+  
+  - WalletConnect Dapps
 
-    -   mainnet, Rinkeby, Ropsten, Kovan and Goerli networks
+- MOVR
+  
+  - Moonriver, Moonbeam and Moonbase Alpha
+  
+  - ERC20 tokens
+  
+  - WalletConnect Dapps
 
-    -   ERC20 tokens
+- ARB
+  
+  - Arbitrum mainnet
+  
+  - ERC20 tokens
+  
+  - WalletConnect Dapps
 
-    -   WalletConnect Dapps
+- AVAX
+  
+  - Mainnet and Fuji testnet networks
+  
+  - ERC20 tokens
+  
+  - WalletConnect Dapps
 
--   BSC
+- SOL
+  
+  - mainnet and testnet networks
 
-    -   mainnet and testnet networks
+- XTZ
+  
+  - tz1 wallet
+  
+  - tz2 wallet
+  
+  - Main Tezos, testnet Granada and Hangzhou networks
 
-    -   BEP20 tokens
+- LTC
+  
+  - mainnet and testnet networks
+  
+  - Standard wallet (P2PKH)
+  
+  - Segwit P2SH compatibility
 
-    -   WalletConnect Dapps
+- DOGE
+  
+  - mainnet and testnet networks
 
--   MATIC
-
-    -   Mainnet and Mumbai networks
-
-    -   ERC20 tokens
-
-    -   WalletConnect Dapps
-
--   FTM
-
-    -   Mainnet and Testnet networks
-
-    -   ERC20 tokens
-
-    -   WalletConnect Dapps
-
--   METIS
-
-    -   Mainnet and Testnet networks
-
-    -   ERC20 tokens
-
-    -   WalletConnect Dapps
-
--   CELO
-
-    -   Mainnet, Alfajores and Baklava networks
-
-    -   ERC20 tokens
-
-    -   WalletConnect Dapps
-
--   MOVR
-
-    -   Moonriver, Moonbeam and Moonbase Alpha
-
-    -   ERC20 tokens
-
-    -   WalletConnect Dapps
-
--   ARB
-
-    -   Arbitrum mainnet
-
-    -   ERC20 tokens
-
-    -   WalletConnect Dapps
-
--   AVAX
-
-    -   Mainnet and Fuji testnet networks
-
-    -   ERC20 tokens
-
-    -   WalletConnect Dapps
-
--   SOL
-
-    -   mainnet and testnet networks
-
--   XTZ
-
-    -   tz1 wallet
-
-    -   tz2 wallet
-
-    -   Main Tezos, testnet Granada and Hangzhou networks
-
--   LTC
-
-    -   mainnet and testnet networks
-
-    -   Standard wallet (P2PKH)
-
-    -   Segwit P2SH compatibility
-
--   DOGE
-
-    -   mainnet and testnet networks
-
--   EOS
-
-    -   K1 wallet
-
-    -   EOSio and Jungle3 networks
+- EOS
+  
+  - K1 wallet
+  
+  - EOSio and Jungle3 networks
 
 Run Uniblow
 -----------
 
-On **Windows** :
+On **Windows** : Minimum version is Windows 8.1
 
--   Download the Uniblow binary [from the uniblow official
-    website](https://uniblow.org/get).
+- Download the Uniblow binary [from the uniblow official
+  website](https://uniblow.org/get).
 
 To increase the security, the Windows exe releases are signed with our [Extended
 Validation
@@ -162,7 +161,7 @@ bringing even greater confidence in the integrity of the application.
 
 On **Debian / Tails / Ubuntu** :
 
--   Follow the [dedicated instructions page](docs/LinuxRunBin.md).
+- Follow the [dedicated instructions page](docs/LinuxRunBin.md).
 
 To increase the security, the Linux binaries releases are [signed with our PGP
 key](https://bitlogik.fr/pgp/bitlogik.asc), bringing even greater confidence in
@@ -171,14 +170,14 @@ instructions document](docs/LinuxRunBin.md).
 
 On **MacOS**
 
--   Download the Uniblow dmg package for Mac [from the uniblow official
-    website](https://uniblow.org/get).
+- Download the Uniblow dmg package for Mac [from the uniblow official
+  website](https://uniblow.org/get).
 
--   Open the dmg to mount it.
+- Open the dmg to mount it.
 
--   Drag and drop Uniblow (on the left) to the Applications icon on right.
+- Drag and drop Uniblow (on the left) to the Applications icon on right.
 
--   Eject the dmg disk and you can delete the dmg file.
+- Eject the dmg disk and you can delete the dmg file.
 
 To increase the security, the Mac dmg package and also the uniblow app are
 signed (stapled) and notarized by Apple, bringing even greater confidence in the
@@ -251,15 +250,15 @@ wallet.
 
 The folder where the HDseed file is stored, sits in the user data directory.
 
--   Windows :  
-    C:\\Users\\\\AppData\\Local\\BitLogiK\\Uniblow\\keys\\
+- Windows :  
+  C:\\Users\\\\AppData\\Local\\BitLogiK\\Uniblow\\keys\\
 
--   Linux :  
-    \~/.local/share/Uniblow/keys/  
-    or in \$XDG_DATA_HOME if defined
+- Linux :  
+  \~/.local/share/Uniblow/keys/  
+  or in \$XDG_DATA_HOME if defined
 
--   MacOS :  
-    \~/Library/Application Support/Uniblow/keys/
+- MacOS :  
+  \~/Library/Application Support/Uniblow/keys/
 
 This device was previously named *HDdevice*, and the *BasicFile* device was
 removed. If you used the BasicFile device and have cryptos in it, use an old
@@ -311,11 +310,11 @@ Uniblow can setup and initialize a blank card.
 
 If the card was not initialized using Uniblow, the card needs to be in a state :
 
--   PIN enabled
+- PIN enabled
 
--   Standard secured channel key
+- Standard secured channel key
 
--   Seed or derivable key loaded
+- Seed or derivable key loaded
 
 If the card is locked, only half initialized, or in a fancy state, you can use
 the [CryptnoxPro](https://github.com/Cryptnox-Software/cryptnoxpro) or the
@@ -407,26 +406,26 @@ Development
 
 ### Run it from source
 
--   For the GUI, [install wxPython 4](https://wxpython.org/pages/downloads/)
-    with your system binaries wheels.
+- For the GUI, [install wxPython 4](https://wxpython.org/pages/downloads/)
+  with your system binaries wheels.
+  
+  - **Windows** : Install
+    [Python3](https://www.python.org/ftp/python/3.9.9/python-3.9.9-amd64.exe),
+    then run `pip3 install wxPython==4.1.1`
+  
+  - **MacOS** : Read the [MacDev document](docs/MacDev.md) for more details.
+  
+  - **Linux** : Read the [LinuxDev document](docs/LinuxDev.md) for more
+    details
 
-    -   **Windows** : Install
-        [Python3](https://www.python.org/ftp/python/3.9.9/python-3.9.9-amd64.exe),
-        then run `pip3 install wxPython==4.1.1`
+- Install the uniblow package and its dependencies (or use venv)
+  
+  - `python3 setup.py install --user`
 
-    -   **MacOS** : Read the [MacDev document](docs/MacDev.md) for more details.
+- For ETH testnets, put your Infura key in ETHwallet. The binaries have an
+  Infura key embedded.
 
-    -   **Linux** : Read the [LinuxDev document](docs/LinuxDev.md) for more
-        details
-
--   Install the uniblow package and its dependencies (or use venv)
-
-    -   `python3 setup.py install --user`
-
--   For ETH testnets, put your Infura key in ETHwallet. The binaries have an
-    Infura key embedded.
-
--   Run with `python3 uniblow.py -v`
+- Run with `python3 uniblow.py -v`
 
 The '-v' argument enables the debug logging output for more verbose terminal
 output.
