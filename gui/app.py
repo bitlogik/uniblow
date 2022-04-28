@@ -21,7 +21,6 @@ from webbrowser import open as wopen
 
 from wx import (
     App,
-    CallAfter,
     IconBundle,
     TextDataObject,
     TheClipboard,
