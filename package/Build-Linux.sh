@@ -3,8 +3,8 @@
 # Build uniblow Debian/Ubuntu binary package release
 
 
-if ! (cat /etc/os-release | grep -E "18\.04(\.[0-9]+)? LTS \(Bionic Beaver\)" > /dev/null ) then
-  echo "This Uniblow building script only runs on Ubuntu 18.04."
+if ! (cat /etc/os-release | grep -E "20\.04(\.[0-9]+)? LTS \(Focal Fossa\)" > /dev/null ) then
+  echo "This Uniblow building script only runs on Ubuntu 20.04."
   exit 1
 fi
 
@@ -14,7 +14,7 @@ function is_installed {
     fi
 }
 
-softs_req=('libnotify4' 'libgtk-3-0' 'libpcsclite1' 'libsdl2-2.0-0' 'python3-venv' 'python3-pip' 'python3-pyscard')
+softs_req=('libnotify4' 'libgtk-3-0' 'libpcsclite-dev' 'libsdl2-2.0-0' 'python3-venv' 'python3-pip')
 
 for softr in "${softs_req[@]}"; do
   if [ "$(is_installed $softr)" == 'not' ]; then
