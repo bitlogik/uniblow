@@ -202,7 +202,7 @@ class app_option_panel(gui.window.OptionPanel):
 class UniblowApp(App):
     def __init__(self, version):
         self.version = version
-        super().__init__()
+        super().__init__(redirect=False)
         self.Bind(EVT_ACTIVATE_APP, self.OnActivate)
 
     def OnInit(self):
