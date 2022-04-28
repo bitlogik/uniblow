@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 # Uniblow : setup data
-# Copyright (C) 2021  BitLogiK
+# Copyright (C) 2021-2022  BitLogiK
 
 
 from setuptools import setup, find_packages
@@ -31,7 +31,7 @@ setup(
         "qrcode==6.1",
         "PyNaCl==1.5.0",
         "pyweb3==0.1.6",
-        "OpenPGPpy==0.8",
+        "OpenPGPpy==1.0",
         "hidapi==0.11.0.post2",
         "pyWalletConnect==1.2.2",
     ],
