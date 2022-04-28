@@ -240,7 +240,6 @@ class UniblowApp(App):
         self.gui_panel.send_button.SetCursor(HAND_CURSOR)
         self.gui_panel.send_all.SetCursor(HAND_CURSOR)
         self.gui_panel.btn_chkaddr.SetCursor(HAND_CURSOR)
-        CallAfter(lambda: self.gui_frame.SetTitle(f"  Uniblow  -  {self.version}"))
         self.SetTopWindow(self.gui_frame)
         return True
 

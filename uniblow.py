@@ -20,6 +20,10 @@ try:
 except ImportError:
     # Not Windows, anyway
     pass
+
+if "windll" in globals():
+    windll.shcore.SetProcessDpiAwareness(2)
+
 from copy import copy as ccopy
 from functools import partial
 from importlib import import_module
@@ -959,6 +963,7 @@ def start_main_app():
     app.gui_panel.btn_chkaddr.Bind(wx.EVT_BUTTON, check_wallet)
     app.gui_panel.btn_chkaddr.Hide()
     erase_info(True)
+    app.gui_frame.SetLabel(f"Uniblow  -  {VERSION}")
     app.gui_frame.Show()
 
 
@@ -969,9 +974,6 @@ if __name__ == "__main__":
 
     if "-v" in argv[1:]:
         basicConfig(level=DEBUG)
-
-    if "windll" in globals():
-        windll.shcore.SetProcessDpiAwareness(2)
 
     start_main_app()
     app.MainLoop()
