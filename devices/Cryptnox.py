@@ -30,7 +30,6 @@ class NotinitException(Exception):
 
 class Cryptnox(BaseDevice):
 
-    is_HD = True
     has_password = True
     has_admin_password = True
     password_name = "PIN"
@@ -46,6 +45,7 @@ class Cryptnox(BaseDevice):
     default_admin_password = "123456789012"
     internally_gen_keys = False
     basic_card_id = 0x42
+    nft_card_id = 0x4E
 
     def __init__(self):
         self.created = False
@@ -72,7 +72,7 @@ class Cryptnox(BaseDevice):
         if not self.card.initialized:
             raise NotinitException()
         if not self.card.seeded:
-            # Must be initalized and seeded
+            # Must be initialized and seeded
             raise Exception("Reset or inject/generate a key in this Cryptnox card.")
         # Check PIN auth enabled
         if not self.card.pinauth:
@@ -121,13 +121,24 @@ class Cryptnox(BaseDevice):
             raise exc
         except Exception:
             raise Exception("No Cryptnox card found.")
-        # Check card version must be Basic
-        if self.card.cardtype != Cryptnox.basic_card_id:
+        # Check card version must be Basic or NFT
+        if self.card.cardtype not in [Cryptnox.basic_card_id, Cryptnox.nft_card_id]:
             raise Exception("Cryptnox compatible with uniblow are only BG-1 models.")
         # Check minimal applet version
-        if int.from_bytes(self.card.applet_version, "big") < 0x010202:
-            raise Exception("Cryptnox firmware is too old. Required v>=1.2.2")
+        if self.card.cardtype == Cryptnox.basic_card_id:
+            if int.from_bytes(self.card.applet_version, "big") < 0x010202:
+                raise Exception("Cryptnox BG1 firmware is too old. Required v>=1.2.2")
+        if self.card.cardtype == Cryptnox.nft_card_id:
+            if int.from_bytes(self.card.applet_version, "big") < 0x010000:
+                raise Exception("Cryptnox NFT firmware is too old. Required v>=1.0.0")
+        # Set class is HD depending on card type
+        Cryptnox.is_HD = self.card.cardtype == Cryptnox.basic_card_id
         isinit = self.card.initialized
+        if self.card.cardtype == Cryptnox.nft_card_id and not isinit:
+            raise Exception(
+                "The Cryptnox NFT card can be used with Uniblow, "
+                "only when already initialized. You can init this NFT card with CryptnoxPro."
+            )
         return isinit
 
     def generate_mnemonic(self):
@@ -148,6 +159,13 @@ class Cryptnox(BaseDevice):
         """Get the account number, third BIP44 derivation number as str"""
         return self.account
 
+    def set_key_type(self, ktype):
+        """Only called for NFT (not HD)"""
+        if ktype == "K1":
+            self.key_type = ktype
+        else:
+            raise Exception("The Cryptnox NFT manages only K1 key type")
+
     def derive_key(self, path, key_type):
         self.key_type = key_type
         if key_type not in ["K1", "R1"]:
@@ -155,7 +173,11 @@ class Cryptnox(BaseDevice):
         self.card.derive(encode_bip39_string(path), key_type)
 
     def get_public_key(self):
-        return self.card.get_pubkey(self.key_type)
+        if self.is_HD:
+            pubkey = self.card.get_pubkey(self.key_type)
+        else:
+            pubkey = self.card.get_pubkey("K1")
+        return pubkey
 
     def sign(self, txdigest):
         return self.card.sign(txdigest, self.key_type, pin=self.pin)
