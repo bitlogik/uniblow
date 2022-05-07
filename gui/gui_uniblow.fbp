@@ -1035,7 +1035,7 @@
                                                 <property name="permission">none</property>
                                                 <object class="sizeritem" expanded="1">
                                                     <property name="border">24</property>
-                                                    <property name="flag">wxLEFT</property>
+                                                    <property name="flag"></property>
                                                     <property name="proportion">0</property>
                                                     <object class="wxStaticText" expanded="1">
                                                         <property name="BottomDockable">1</property>
@@ -1095,7 +1095,7 @@
                                                     </object>
                                                 </object>
                                                 <object class="sizeritem" expanded="1">
-                                                    <property name="border">15</property>
+                                                    <property name="border">12</property>
                                                     <property name="flag">wxLEFT|wxALIGN_BOTTOM</property>
                                                     <property name="proportion">0</property>
                                                     <object class="spacer" expanded="1">

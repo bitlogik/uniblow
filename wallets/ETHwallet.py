@@ -512,7 +512,7 @@ class ETH_wallet:
     def get_balance(self):
         # Get balance in base integer unit and return string with unit
         return (
-            balance_string(self.eth.getbalance(not self.eth.ERC20), self.eth.decimals)
+            balance_string(self.eth.getbalance(not self.eth.ERC20), self.eth.decimals)[:20]
             + " "
             + self.coin
         )
