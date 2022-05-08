@@ -123,20 +123,20 @@ class Cryptnox(BaseDevice):
             raise Exception("No Cryptnox card found.")
         # Check card version must be Basic or NFT
         if self.card.cardtype not in [Cryptnox.basic_card_id, Cryptnox.nft_card_id]:
-            raise Exception("Cryptnox compatible with uniblow are only BG-1 models.")
+            raise Exception("Cryptnox compatible with uniblow are only BG-1 anf B-NFT-1 models.")
         # Check minimal applet version
         if self.card.cardtype == Cryptnox.basic_card_id:
             if int.from_bytes(self.card.applet_version, "big") < 0x010202:
                 raise Exception("Cryptnox BG1 firmware is too old. Required v>=1.2.2")
         if self.card.cardtype == Cryptnox.nft_card_id:
             if int.from_bytes(self.card.applet_version, "big") < 0x010000:
-                raise Exception("Cryptnox NFT firmware is too old. Required v>=1.0.0")
+                raise Exception("Cryptnox B-NFT firmware is too old. Required v>=1.0.0")
         # Set class is HD depending on card type
         Cryptnox.is_HD = self.card.cardtype == Cryptnox.basic_card_id
         isinit = self.card.initialized
         if self.card.cardtype == Cryptnox.nft_card_id and not isinit:
             raise Exception(
-                "The Cryptnox NFT card can be used with Uniblow, "
+                "The Cryptnox B-NFT-1 card can be used with Uniblow, "
                 "only when already initialized. You can init this NFT card with CryptnoxPro."
             )
         return isinit
