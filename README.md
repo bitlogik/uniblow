@@ -299,7 +299,7 @@ stuff, to keep it simple and providing the same user experience as the others
 devices. Uniblow uses the Cryptnox card only with a simple PIN authentication
 method.
 
-Uniblow can setup and initialize a blank card BG1 card. The B-NFT-1 model shall be used already initialized.
+Uniblow can setup and initialize a blank BG1 card. The B-NFT-1 model shall be used already initialized.
 
 If the BG1 card was not initialized using Uniblow, the card needs to be in a state :
 

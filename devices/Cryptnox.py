@@ -123,7 +123,7 @@ class Cryptnox(BaseDevice):
             raise Exception("No Cryptnox card found.")
         # Check card version must be Basic or NFT
         if self.card.cardtype not in [Cryptnox.basic_card_id, Cryptnox.nft_card_id]:
-            raise Exception("Cryptnox compatible with uniblow are only BG-1 anf B-NFT-1 models.")
+            raise Exception("Cryptnox compatible with uniblow are only BG-1 and B-NFT-1 models.")
         # Check minimal applet version
         if self.card.cardtype == Cryptnox.basic_card_id:
             if int.from_bytes(self.card.applet_version, "big") < 0x010202:
@@ -164,7 +164,7 @@ class Cryptnox(BaseDevice):
         if ktype == "K1":
             self.key_type = ktype
         else:
-            raise Exception("The Cryptnox NFT manages only K1 key type")
+            raise Exception("The Cryptnox NFT manages only K1 key type.")
 
     def derive_key(self, path, key_type):
         self.key_type = key_type
