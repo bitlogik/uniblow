@@ -151,13 +151,10 @@ Run Uniblow
 
 On **Windows** : Minimum version is Windows 8.1
 
-- Download the Uniblow binary [from the uniblow official
-  website](https://uniblow.org/get).
+- Download the Uniblow binary [from the uniblow official website](https://uniblow.org/get).
 
 To increase the security, the Windows exe releases are signed with our [Extended
-Validation
-certificate](https://en.wikipedia.org/wiki/Code_signing#Extended_validation_(EV)_code_signing),
-bringing even greater confidence in the integrity of the application.
+Validation certificate](https://en.wikipedia.org/wiki/Code_signing#Extended_validation_(EV)_code_signing), bringing even greater confidence in the integrity of the application.
 
 On **Debian / Tails / Ubuntu** :
 
@@ -228,8 +225,7 @@ it should access and use all your funds.
 
 The Local File device stores the wallet seed in a file on your disk, in your
 user data directory. The encryption is done with your password. LocalFile stores
-only the seed encrypted [with a random salt using libsodium
-XSalsa20/Poly1305](https://libsodium.gitbook.io/doc/secret-key_cryptography/secretbox#algorithm-details),
+only the seed encrypted [with a random salt using libsodium XSalsa20/Poly1305](https://libsodium.gitbook.io/doc/secret-key_cryptography/secretbox#algorithm-details),
 using an encryption key derived from the user chosen password using [Argon2id
 (moderate
 settings)](https://raw.githubusercontent.com/P-H-C/phc-winner-argon2/master/argon2-specs.pdf).
@@ -317,8 +313,7 @@ If the card was not initialized using Uniblow, the card needs to be in a state :
 - Seed or derivable key loaded
 
 If the card is locked, only half initialized, or in a fancy state, you can use
-the [CryptnoxPro](https://github.com/Cryptnox-Software/cryptnoxpro) or the
-[Cryptnox iOS app](https://apps.apple.com/app/id1583011693). Because Uniblow
+the [CryptnoxPro](https://github.com/Cryptnox-Software/cryptnoxpro) or the [Cryptnox iOS app](https://apps.apple.com/app/id1583011693). Because Uniblow
 cannot perform advanced operations such as PIN unlock, nor card reset.
 
 ### OpenPGP device
