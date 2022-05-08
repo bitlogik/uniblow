@@ -283,12 +283,9 @@ as root/sudo to allow the Ledger device.
 
 ### Cryptnox card
 
-The [Cryptnox card](https://cryptnox.com) is a crypto credit-card sized hardware
-wallet with advanced functionalities. This device is very secure thanks to its
-CC EAL6+ security grade central chip. The compatible model is the BG-1 card
-(single or Dual).
+The [Cryptnox card](https://cryptnox.com) is a crypto credit-card sized hardware wallet with advanced functionalities. This device is very secure thanks to its CC EAL6+ security grade central chip. The compatible models are the BG-1 and the B-NFT-1 cards (single or Dual).
 
-When a card is initialized using Uniblow, it generates a BIP39 mnemonic seed,
+When a BG-1 card is initialized using Uniblow, it generates a BIP39 mnemonic seed,
 which is loaded in the the card. This mnemonic seed is displayed to the user
 once during the initialization process, and acts as a backup for the internal
 keys card. By design, there's no way to extract any private key from the card
@@ -302,9 +299,9 @@ stuff, to keep it simple and providing the same user experience as the others
 devices. Uniblow uses the Cryptnox card only with a simple PIN authentication
 method.
 
-Uniblow can setup and initialize a blank card.
+Uniblow can setup and initialize a blank card BG1 card. The B-NFT-1 model shall be used already initialized.
 
-If the card was not initialized using Uniblow, the card needs to be in a state :
+If the BG1 card was not initialized using Uniblow, the card needs to be in a state :
 
 - PIN enabled
 
