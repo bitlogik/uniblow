@@ -2,6 +2,11 @@
 Uniblow versions history
 
 
+## 1.6.2
+
+* Add Cryptnox B-NFT-1 support
+* Refine GUI balance
+
 ## 1.6.0
 
 * Refine GUI in Windows
