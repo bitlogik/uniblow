@@ -47,7 +47,7 @@ SUPPORTED_COINS = [
     "FTM",
     "METIS",
     "CELO",
-    "MOVR",
+    "GLMR",
     "ARB",
     "AVAX",
     "LTC",

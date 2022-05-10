@@ -17,16 +17,16 @@
 
 from copy import deepcopy
 from wallets.ETHwallet import ETH_wallet
-from wallets.MOVRtokens import tokens_values
+from wallets.GLMRtokens import tokens_values
 
 
-class MOVR_wallet(ETH_wallet):
+class GLMR_wallet(ETH_wallet):
 
-    coin = "MOVR"
+    coin = "GLMR"
 
     networks = [
-        "Moonriver",
         "Moonbeam",
+        "Moonriver",
         "Moonbase Alpha",
     ]
 
@@ -50,15 +50,15 @@ class MOVR_wallet(ETH_wallet):
     def __init__(
         self, network, wtype, device, contract_addr=None, wc_uri=None, confirm_callback=None
     ):
-        self.network = MOVR_wallet.networks[network]
+        self.network = GLMR_wallet.networks[network]
         if self.network == "Moonriver":
+            self.coin = "MOVR"
             self.chainID = 1285
             rpc_endpoint = "https://rpc.api.moonriver.moonbeam.network/"
             self.explorer = "https://moonriver.moonscan.io/address/0x"
         if self.network == "Moonbeam":
-            self.coin = "GLMR"
             self.chainID = 1284
-            rpc_endpoint = "https://rpc.api.moonbeam.network/"
+            rpc_endpoint = "https://rpc.ankr.com/moonbeam/"
             self.explorer = "https://moonbeam.moonscan.io/address/0x"
         if self.network == "Moonbase Alpha":
             self.coin = "MDEV"

@@ -55,7 +55,7 @@ from wallets.BSCwallet import BSC_wallet
 from wallets.MATICwallet import MATIC_wallet
 from wallets.FTMwallet import FTM_wallet
 from wallets.CELOwallet import CELO_wallet
-from wallets.MOVRwallet import MOVR_wallet
+from wallets.GLMRwallet import GLMR_wallet
 from wallets.AVAXwallet import AVAX_wallet
 from wallets.ARBwallet import ARB_wallet
 from wallets.LTCwallet import LTC_wallet
@@ -75,8 +75,8 @@ coins_list = [
     {"name": "MATIC", "path": "m/44'/60'/{}'/{}/{}", "wallet_lib": MATIC_wallet},
     {"name": "FTM", "path": "m/44'/60'/{}'/{}/{}", "wallet_lib": FTM_wallet},
     {"name": "CELO", "path": "m/44'/60'/{}'/{}/{}", "wallet_lib": CELO_wallet},
-    {"name": "MOVR", "path": "m/44'/60'/{}'/{}/{}", "wallet_lib": MOVR_wallet, "network": 0},
-    {"name": "GLMR", "path": "m/44'/60'/{}'/{}/{}", "wallet_lib": MOVR_wallet, "network": 1},
+    {"name": "GLMR", "path": "m/44'/60'/{}'/{}/{}", "wallet_lib": GLMR_wallet, "network": 0},
+    {"name": "MOVR", "path": "m/44'/60'/{}'/{}/{}", "wallet_lib": GLMR_wallet, "network": 1},
     {"name": "ARB", "path": "m/44'/60'/{}'/{}/{}", "wallet_lib": ARB_wallet},
     {"name": "AVAX", "path": "m/44'/60'/{}'/{}/{}", "wallet_lib": AVAX_wallet},
     {"name": "Litecoin", "path": "m/44'/2'/{}'/{}/{}", "wallet_lib": LTC_wallet},

@@ -92,9 +92,9 @@ Compatible with the following blockchains :
   
   - WalletConnect Dapps
 
-- MOVR
+- GLMR
   
-  - Moonriver, Moonbeam and Moonbase Alpha
+  - Moonbeam, Moonriver and Moonbase Alpha
   
   - ERC20 tokens
   
@@ -263,7 +263,7 @@ Uniblow version before 1.5 and transfer your fund.
 ### Ledger
 
 A Ledger hardware device such as Nano X and Nano S, can be used with Uniblow but
-only for Ethereum/EVM chains (ETH, BSC, MATIC, FTM, METIS, CELO, MOVR, AVAX and ARB).
+only for Ethereum/EVM chains (ETH, BSC, MATIC, FTM, METIS, CELO, GMLR, MOVR, AVAX and ARB).
 
 The Ledger needs to be unlocked and run the Ethereum app. The address displayed
 in the wallet can be checked on the Ledger screen by clicking a dedicated UI
@@ -340,13 +340,13 @@ Special wallet options
 
 ### ERC20
 
-In ETH, BSC, MATIC, FTM, METIS, CELO, MOVR, AVAX or ARB, you can choose the ERC20
+In ETH, BSC, MATIC, FTM, METIS, CELO, GLMR, MOVR, AVAX or ARB, you can choose the ERC20
 wallet account type option. Select a known preset token, or input an ERC20
 custom token address.
 
 ### WalletConnect
 
-In ETH, BSC, MATIC, FTM, METIS, CELO, MOVR, AVAX or ARB, Uniblow can connect to a Dapp
+In ETH, BSC, MATIC, FTM, METIS, CELO, GLMR, MOVR, AVAX or ARB, Uniblow can connect to a Dapp
 using the WalletConnect system. Select WalletConnect in the wallet account type,
 input the wc URI and it will connect to the web3 app using WalletConnect.  
 Note that in this mode, Uniblow disables sending any transaction from the GUI.
