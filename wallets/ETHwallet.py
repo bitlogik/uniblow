@@ -18,6 +18,9 @@
 import json
 from logging import getLogger
 
+from pyweb3 import Web3Client
+from pywalletconnect import WCClient, WCClientInvalidOption, WCClientException
+
 from cryptolib.cryptography import public_key_recover, sha2, sha3
 from cryptolib.coins.ethereum import rlp_encode, int2bytearray, uint256, read_string
 from wallets.wallets_utils import (
@@ -29,8 +32,6 @@ from wallets.wallets_utils import (
 )
 from wallets.ETHtokens import tokens_values, ledger_tokens
 from wallets.typed_data_hash import typed_sign_hash, print_text_query
-from pyweb3 import Web3Client
-from pywalletconnect import WCClient, WCClientInvalidOption, WCClientException
 
 
 ETH_DECIMALS = 18
@@ -548,9 +549,8 @@ class ETH_wallet:
                     )
             vrs = self.current_device.sign(tx_bin)
             return self.eth.add_vrs(vrs)
-        else:
-            tx_signature = self.current_device.sign(hash_to_sign)
-            return self.eth.add_signature(tx_signature)
+        tx_signature = self.current_device.sign(hash_to_sign)
+        return self.eth.add_signature(tx_signature)
 
     def broadcast_tx(self, txdata):
         """Broadcast and return the tx hash as 0xhhhhhhhh"""
