@@ -629,8 +629,8 @@ class ETH_wallet:
             gas_price = int(gas_price, 16)
         else:
             gas_price = self.eth.api.get_gasprice()
-        gas_limit = txdata.get("gas", 90000)
-        if gas_limit != 90000:
+        gas_limit = txdata.get("gas", ETH_wallet.GAZ_LIMIT_ERC_20_TX)
+        if gas_limit != ETH_wallet.GAZ_LIMIT_ERC_20_TX:
             gas_limit = int(gas_limit, 16)
         request_message = (
             "WalletConnect transaction request :\n\n"
