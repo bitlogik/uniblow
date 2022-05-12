@@ -566,8 +566,11 @@ class ETH_wallet:
             f"- Data to sign (hex) :\n"
             f"- {data_hex}\n"
             f"\n Data to sign (ASCII/UTF8) :\n"
-            f" {data_bin.decode('utf8')}\n"
         )
+        try:
+            sign_request += f" {data_bin.decode('utf8')}\n"
+        except UnicodeDecodeError:
+            sign_request += " <can't decode sign data to text>"
         if self.current_device.has_screen:
             hash2_data = sha2(data_bin).hex().upper()
             sign_request += f"\n Hash data to sign (hex) :\n {hash2_data}\n"
