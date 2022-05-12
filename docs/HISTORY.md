@@ -2,6 +2,13 @@
 Uniblow versions history
 
 
+## 1.6.4
+
+* Change CELO and ARB RPC to Ankr
+* GMLR is primary, not MOVR
+* Raise the default WC gas limit
+* Allow incorrect chars in WC eth_sign
+
 ## 1.6.2
 
 * Add Cryptnox B-NFT-1 support
