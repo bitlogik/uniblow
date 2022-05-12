@@ -45,6 +45,7 @@ SUPPORTED_COINS = [
     "BSC",
     "MATIC",
     "FTM",
+    "OP",
     "METIS",
     "CELO",
     "GLMR",

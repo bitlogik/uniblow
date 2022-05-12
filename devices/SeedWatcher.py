@@ -54,6 +54,7 @@ from wallets.ETHwallet import ETH_wallet
 from wallets.BSCwallet import BSC_wallet
 from wallets.MATICwallet import MATIC_wallet
 from wallets.FTMwallet import FTM_wallet
+from wallets.OPwallet import OP_wallet
 from wallets.METISwallet import METIS_wallet
 from wallets.CELOwallet import CELO_wallet
 from wallets.GLMRwallet import GLMR_wallet
@@ -75,6 +76,7 @@ coins_list = [
     {"name": "BSC", "path": "m/44'/60'/{}'/{}/{}", "wallet_lib": BSC_wallet},
     {"name": "MATIC", "path": "m/44'/60'/{}'/{}/{}", "wallet_lib": MATIC_wallet},
     {"name": "FTM", "path": "m/44'/60'/{}'/{}/{}", "wallet_lib": FTM_wallet},
+    {"name": "OP", "path": "m/44'/60'/{}'/{}/{}", "wallet_lib": OP_wallet},
     {"name": "METIS", "path": "m/44'/60'/{}'/{}/{}", "wallet_lib": METIS_wallet},
     {"name": "CELO", "path": "m/44'/60'/{}'/{}/{}", "wallet_lib": CELO_wallet},
     {"name": "GLMR", "path": "m/44'/60'/{}'/{}/{}", "wallet_lib": GLMR_wallet, "network": 0},
