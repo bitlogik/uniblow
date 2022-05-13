@@ -19,29 +19,18 @@ import os.path
 from os import environ
 from webbrowser import open as wopen
 
-from wx import (
-    App,
-    IconBundle,
-    TextDataObject,
-    TheClipboard,
-    Bitmap,
-    ID_OK,
-    ID_CANCEL,
-    Cursor,
-    CURSOR_HAND,
-    BITMAP_TYPE_PNG,
-    EVT_ACTIVATE_APP,
-    EVT_CLOSE,
-    EVT_BUTTON,
-)
+import wx
 
 import gui.window
 import gui.maingui
 import gui.infodialog
+from gui.send_frame import SendModal
 
 from cryptolib.HDwallet import bip39_is_checksum_valid
 
+
 ICON_FILE = "gui/uniblow.ico"
+BAD_ADDRESS = "Wrong destination account address checksum or wrong format."
 
 
 class InfoBox(gui.infodialog.InfoDialog):
@@ -137,11 +126,11 @@ class HDsetting_panel(gui.window.HDPanel):
                     "seed_gen": derivation,
                 }
             )
-        self.GetParent().EndModal(ID_OK)
+        self.GetParent().EndModal(wx.ID_OK)
 
     def hd_cancel(self, event):
         event.Skip()
-        self.GetParent().EndModal(ID_CANCEL)
+        self.GetParent().EndModal(wx.ID_CANCEL)
 
 
 class app_option_panel(gui.window.OptionPanel):
@@ -157,7 +146,7 @@ class app_option_panel(gui.window.OptionPanel):
         else:
             preset_choice = self.known_choice.GetStringSelection()
             self.option_value = self.preset_values.get(preset_choice, "NotSelected")
-        self.GetParent().EndModal(ID_OK)
+        self.GetParent().EndModal(wx.ID_OK)
 
     def pasteValue(self, event):
         """Paste the clipboard value in new_choice input field."""
@@ -171,7 +160,7 @@ class app_option_panel(gui.window.OptionPanel):
 
     def cancelOption(self, event):
         event.Skip()
-        self.GetParent().EndModal(ID_CANCEL)
+        self.GetParent().EndModal(wx.ID_CANCEL)
 
     def GetValue(self):
         return self.option_value
@@ -200,41 +189,42 @@ class app_option_panel(gui.window.OptionPanel):
         self.GetParent().SetTitle(title)
 
 
-class UniblowApp(App):
+class UniblowApp(wx.App):
     def __init__(self, version):
         self.version = version
         super().__init__(redirect=False)
-        self.Bind(EVT_ACTIVATE_APP, self.OnActivate)
+        self.Bind(wx.EVT_ACTIVATE_APP, self.OnActivate)
         self.dev_selected = None
+        self.coin_selected = None
 
     def OnInit(self):
+        self.HAND_CURSOR = wx.Cursor(wx.CURSOR_HAND)
         icon_path = file_path(ICON_FILE)
-        wicon = IconBundle(icon_path)
-        HAND_CURSOR = Cursor(CURSOR_HAND)
+        wicon = wx.IconBundle(icon_path)
         self.gui_frame = gui.maingui.UniblowFrame(None)
-        self.gui_frame.Bind(EVT_CLOSE, self.OnClose)
+        self.gui_frame.Bind(wx.EVT_CLOSE, self.OnClose)
         # if sys.platform.startswith("darwin"):
             # self.gui_frame.SetSize((996, 418))
         self.dev_panel = gui.maingui.DevicesPanel(self.gui_frame)
         self.gui_frame.SetIcons(wicon)
         
-        self.dev_panel.d_btn01.SetBitmap(Bitmap(file_path("gui/images/btns/dev_sw.png"), BITMAP_TYPE_PNG))
-        self.dev_panel.d_btn02.SetBitmap(Bitmap(file_path("gui/images/btns/dev_local.png"), BITMAP_TYPE_PNG))
-        self.dev_panel.d_btn03.SetBitmap(Bitmap(file_path("gui/images/btns/dev_ledger.png"), BITMAP_TYPE_PNG))
-        self.dev_panel.d_btn04.SetBitmap(Bitmap(file_path("gui/images/btns/dev_cryptnox.png"), BITMAP_TYPE_PNG))
-        self.dev_panel.d_btn05.SetBitmap(Bitmap(file_path("gui/images/btns/dev_pgp.png"), BITMAP_TYPE_PNG))
+        self.dev_panel.d_btn01.SetBitmap(wx.Bitmap(file_path("gui/images/btns/dev_sw.png"), wx.BITMAP_TYPE_PNG))
+        self.dev_panel.d_btn02.SetBitmap(wx.Bitmap(file_path("gui/images/btns/dev_local.png"), wx.BITMAP_TYPE_PNG))
+        self.dev_panel.d_btn03.SetBitmap(wx.Bitmap(file_path("gui/images/btns/dev_ledger.png"), wx.BITMAP_TYPE_PNG))
+        self.dev_panel.d_btn04.SetBitmap(wx.Bitmap(file_path("gui/images/btns/dev_cryptnox.png"), wx.BITMAP_TYPE_PNG))
+        self.dev_panel.d_btn05.SetBitmap(wx.Bitmap(file_path("gui/images/btns/dev_pgp.png"), wx.BITMAP_TYPE_PNG))
         
-        self.dev_panel.d_btn01.Bind(EVT_BUTTON, self.load_device)
-        self.dev_panel.d_btn02.Bind(EVT_BUTTON, self.load_device)
-        self.dev_panel.d_btn03.Bind(EVT_BUTTON, self.load_device)
-        self.dev_panel.d_btn04.Bind(EVT_BUTTON, self.load_device)
-        self.dev_panel.d_btn05.Bind(EVT_BUTTON, self.load_device)
+        self.dev_panel.d_btn01.Bind(wx.EVT_BUTTON, self.load_device)
+        self.dev_panel.d_btn02.Bind(wx.EVT_BUTTON, self.load_device)
+        self.dev_panel.d_btn03.Bind(wx.EVT_BUTTON, self.load_device)
+        self.dev_panel.d_btn04.Bind(wx.EVT_BUTTON, self.load_device)
+        self.dev_panel.d_btn05.Bind(wx.EVT_BUTTON, self.load_device)
         
-        self.dev_panel.d_btn01.SetCursor(HAND_CURSOR)
-        self.dev_panel.d_btn02.SetCursor(HAND_CURSOR)
-        self.dev_panel.d_btn03.SetCursor(HAND_CURSOR)
-        self.dev_panel.d_btn04.SetCursor(HAND_CURSOR)
-        self.dev_panel.d_btn05.SetCursor(HAND_CURSOR)
+        self.dev_panel.d_btn01.SetCursor(self.HAND_CURSOR)
+        self.dev_panel.d_btn02.SetCursor(self.HAND_CURSOR)
+        self.dev_panel.d_btn03.SetCursor(self.HAND_CURSOR)
+        self.dev_panel.d_btn04.SetCursor(self.HAND_CURSOR)
+        self.dev_panel.d_btn05.SetCursor(self.HAND_CURSOR)
         
         # self.dev_panel.hist_button.SetBitmapPressed(
         # Bitmap(file_path("gui/histodn.png"), BITMAP_TYPE_PNG)
@@ -264,31 +254,74 @@ class UniblowApp(App):
         self.SetTopWindow(self.gui_frame)
         return True
 
+    def start_wallet_panel(self):
+        """Kill devices choice panel and start the wallet panel."""
+        self.dev_panel.Destroy()
+        self.gui_frame.SetSize((670,380))
+        self.gui_panel = gui.maingui.WalletPanel(self.gui_frame)
+        self.gui_panel.copy_button.SetBitmap(wx.Bitmap(file_path("gui/images/btns/copy.png"), wx.BITMAP_TYPE_PNG))
+        self.gui_panel.hist_button.SetBitmap(wx.Bitmap(file_path("gui/images/btns/history.png"), wx.BITMAP_TYPE_PNG))
+        self.gui_panel.hist_button.SetCursor(self.HAND_CURSOR)
+        self.gui_panel.copy_button.SetCursor(self.HAND_CURSOR)
+        self.gui_panel.hist_button.Bind(wx.EVT_BUTTON, self.disp_history)
+        self.gui_panel.copy_button.Bind(wx.EVT_BUTTON, self.copy_account)
+        self.gui_panel.but_send.SetBitmap(wx.Bitmap(file_path("gui/images/btns/send.png"), wx.BITMAP_TYPE_PNG))
+        self.gui_panel.but_send.SetCursor(self.HAND_CURSOR)
+        self.gui_panel.but_send.Bind(wx.EVT_BUTTON, self.open_send)
+        
+        # app.gui_panel.devices_choice.Bind(wx.EVT_CHOICE, device_selected)
+        # app.gui_panel.coins_choice.Bind(wx.EVT_CHOICE, coin_selected)
+        # app.gui_panel.send_button.Bind(wx.EVT_BUTTON, send)
+        # app.gui_panel.send_all.Bind(wx.EVT_BUTTON, send_all)
+        # app.gui_panel.dest_addr.Bind(wx.EVT_TEXT, check_addr)
+        # app.gui_panel.amount.Bind(wx.EVT_TEXT_ENTER, send)
+        # app.gui_panel.fee_slider.Bind(wx.EVT_SCROLL_CHANGED, fee_changed)
+        # app.gui_panel.btn_chkaddr.Bind(wx.EVT_BUTTON, check_wallet)
+        # app.gui_panel.btn_chkaddr.Hide()
+
     def load_device(self, evt):
         """Called from the device panel choice click."""
         if evt.GetEventObject() is self.dev_panel.d_btn01:
             # SeedWatcher
-            print("hello sw")
             sel_dev = 0
         elif evt.GetEventObject() is self.dev_panel.d_btn02:
             # LocalFiles
-            print("hello files")
             sel_dev = 1
         elif evt.GetEventObject() is self.dev_panel.d_btn03:
             # Ledger
-            print("hello ledger")
             sel_dev = 3
         elif evt.GetEventObject() is self.dev_panel.d_btn04:
             # Cryptnox
-            print("hello cryptnox")
             sel_dev = 4
         elif evt.GetEventObject() is self.dev_panel.d_btn05:
             # OpenPGP
-            print("hello pgp")
             sel_dev = 2
         else:
             raise Exception("Bad device button object")
+        self.start_wallet_panel()
         self.dev_selected(sel_dev)
+
+    def load_coin(self, evt):
+        """Called from the chain panel choice click."""
+        coinsbtn = evt.GetEventObject().GetParent().GetChildren()
+        for pos in range(len(coinsbtn)):
+            if coinsbtn[pos] is evt.GetEventObject():
+                self.coin_selected(pos)
+
+    def deactivate_option_buttons(self):
+        self.gui_panel.but_evt1.SetBitmap(wx.NullBitmap)
+        self.gui_panel.but_evt2.SetBitmap(wx.NullBitmap)
+        self.gui_panel.but_evt1.Unbind(wx.EVT_BUTTON)
+        self.gui_panel.but_evt2.Unbind(wx.EVT_BUTTON)
+        self.gui_panel.Layout()
+
+
+    def activate_option_buttons(self):
+        self.gui_panel.but_evt1.SetBitmap(wx.Bitmap(file_path("gui/images/btns/tokens.png"), wx.BITMAP_TYPE_PNG))
+        self.gui_panel.but_evt2.SetBitmap(wx.Bitmap(file_path("gui/images/btns/wc.png"), wx.BITMAP_TYPE_PNG))
+        self.gui_panel.but_evt1.SetCursor(self.HAND_CURSOR)
+        self.gui_panel.but_evt2.SetCursor(self.HAND_CURSOR)
+        self.gui_panel.Layout()
 
     def BringWindowToFront(self):
         try:
@@ -311,33 +344,129 @@ class UniblowApp(App):
     def MacReopenApp(self):
         self.BringWindowToFront()
 
-    def load_devices(self, devices_list):
-        self.gui_panel.devices_choice.Append("Choose your device")
-        for device in devices_list:
-            if device == "LocalFile":
-                device = "Local file wallet"
-            self.gui_panel.devices_choice.Append(device)
-        self.gui_panel.devices_choice.SetSelection(0)
-
     def load_coins_list(self, coins_list):
-        self.gui_panel.coins_choice.Clear()
-        self.gui_panel.coins_choice.Append("Select blockchain")
+        sizer = wx.BoxSizer( wx.VERTICAL )
         for coin in coins_list:
-            self.gui_panel.coins_choice.Append(coin)
-        self.gui_panel.coins_choice.SetSelection(0)
+            coin_button = wx.BitmapButton( self.gui_panel.scrolled_coins, wx.ID_ANY, wx.NullBitmap, wx.DefaultPosition, wx.DefaultSize, wx.BU_AUTODRAW|wx.BORDER_NONE )
+            img = wx.Image( f"gui/images/icons/{coin.lower()}.png", wx.BITMAP_TYPE_PNG ).Rescale(32,32)
+            bmp = wx.Bitmap( img )
+            coin_button.SetBackgroundColour( wx.Colour( 248, 250, 252 ) )
+            coin_button.SetBitmap( bmp )
+            coin_button.SetCursor(self.HAND_CURSOR)
+            coin_button.Bind(wx.EVT_BUTTON, self.load_coin)
+            sizer.Add( coin_button, 0, wx.ALIGN_CENTER_HORIZONTAL|wx.BOTTOM|wx.TOP, 6 )
+        self.gui_panel.scrolled_coins.SetSizer( sizer )
+        self.gui_panel.scrolled_coins.Layout()
+        self.gui_panel.Layout()
+        self.gui_frame.Layout()
+
+    def callback_send(self, status, address, amount_str):
+        self.gui_panel.Enable()
+        if status != "OK":
+            self.send_dialog.Destroy()
+            return
+        if not self.gui_panel.but_send.IsEnabled():
+            self.send_dialog.Destroy()
+            return
+        if not hasattr(self, "wallet"):
+            self.send_dialog.Destroy()
+            return
+        self.gui_panel.Disable()
+        if not self.wallet.check_address(address):
+            self.warn_modal(BAD_ADDRESS)
+            return
+        if len(amount_str) <= 0:
+            self.warn_modal("Input an amount value to transfer.")
+            return
+        if amount_str[0] == "-":
+            self.warn_modal("Amount input must be positive or null.")
+            return
+        try:
+            if amount_str != "ALL":
+                float(amount_str)
+        except ValueError:
+            self.warn_modal("Unvalid amount input")
+            return
+        self.send_dialog.Destroy()
+        self.transfer(address, amount_str)
+
+    def open_send(self, evt):
+        self.send_dialog = SendModal(self.gui_panel, self.wallet.coin, self.wallet.check_address, self.callback_send)
+        self.gui_panel.Disable()
+        self.send_dialog.Show()
+
+    def copy_result(self, restxt):
+        self.gui_panel.copy_status.SetLabel(restxt)
+        if restxt != "":
+            wx.CallLater(1800, self.copy_result, "")
+
+    def copy_account(self, ev):
+        if not hasattr(self, "wallet"):
+            self.copy_result("No wallet")
+            return
+        try:
+            if wx.TheClipboard.IsOpened() or wx.TheClipboard.Open():
+                wx.TheClipboard.Clear()
+                addr = self.gui_panel.account_addr.GetLabel()
+                wx.TheClipboard.SetData(wx.TextDataObject(addr))
+                wx.TheClipboard.Flush()
+                wx.TheClipboard.Close()
+                self.copy_result("Copied")
+            else:
+                self.copy_result("No Access")
+        except Exception:
+            self.copy_result("Error")
+    
+    def disp_history(self, ev):
+        hist_url = self.wallet.history()
+        if hist_url:
+            show_history(hist_url)
+
+    def warn_modal(self, warning_text, modal=False):
+        InfoBox(
+            warning_text, "Error", wx.OK | wx.ICON_WARNING, self.gui_frame, block_modal=modal
+        )
+
+    def info_modal(self, title, info_text):
+        InfoBox(info_text, title, wx.OK | wx.ICON_INFORMATION, self.gui_frame)
+
+    def get_password(self, device_nam, input_message):
+        pwd_dialog = wx.PasswordEntryDialog(
+            self.gui_frame,
+            input_message,
+            caption=f"{device_nam} wallet PIN/password",
+            defaultValue="",
+            pos=wx.DefaultPosition,
+        )
+        if pwd_dialog.ShowModal() == wx.ID_OK:
+            passval = pwd_dialog.GetValue()
+            return passval
+
+    def get_option(self, network_id, input_value, preset_values):
+        option_dialog = gui.window.OptionDialog(self.gui_frame)
+        option_panel = app_option_panel(option_dialog)
+        option_panel.SetTitle(f"Wallet settings : {input_value} selection")
+        option_panel.SetPresetLabel(f"preset {input_value}")
+        option_panel.SetCustomLabel(f"input a {input_value}")
+        if preset_values:
+            option_panel.SetPresetValues(preset_values[network_id])
+        else:
+            option_panel.HidePreset()
+        if option_dialog.ShowModal() == wx.ID_OK:
+            optval = option_panel.GetValue()
+            return optval
 
     def hd_setup(self, proposal):
         """Call the HD device option window."""
         self.gui_hdframe = gui.window.HDDialog(self.gui_frame)
         self.gui_hdpanel = HDsetting_panel(self.gui_hdframe)
-        HAND_CURSOR = Cursor(CURSOR_HAND)
         if proposal:
             # LocalFile wallet init setup
-            self.gui_hdpanel.GOOD_BMP = Bitmap(file_path("gui/good.bmp"))
-            self.gui_hdpanel.BAD_BMP = Bitmap(file_path("gui/bad.bmp"))
+            self.gui_hdpanel.GOOD_BMP = wx.Bitmap(file_path("gui/good.bmp"))
+            self.gui_hdpanel.BAD_BMP = wx.Bitmap(file_path("gui/bad.bmp"))
             self.gui_hdpanel.m_bitmapHDwl.SetBitmap(self.gui_hdpanel.BAD_BMP)
             self.gui_hdpanel.m_bitmapHDcs.SetBitmap(self.gui_hdpanel.BAD_BMP)
-            self.gui_hdpanel.m_checkBox_secboost.SetCursor(HAND_CURSOR)
+            self.gui_hdpanel.m_checkBox_secboost.SetCursor(self.HAND_CURSOR)
             self.gui_hdpanel.m_textCtrl_mnemo.SetValue(proposal)
             self.gui_hdpanel.m_usertxt.SetLabel(
                 "Validate this first proposal,\n"
@@ -356,8 +485,8 @@ class UniblowApp(App):
             self.gui_hdpanel.m_checkBox_secboost.Destroy()
             self.gui_hdpanel.m_usertxt.SetLabel("Choose account and index for the key to use.")
             self.gui_hdframe.SetSize(480, 320)
-        self.gui_hdpanel.m_butOK.SetCursor(HAND_CURSOR)
-        self.gui_hdpanel.m_butcancel.SetCursor(HAND_CURSOR)
+        self.gui_hdpanel.m_butOK.SetCursor(self.HAND_CURSOR)
+        self.gui_hdpanel.m_butcancel.SetCursor(self.HAND_CURSOR)
         ret = self.gui_hdframe.ShowModal()
         if ret == ID_OK:
             wallet_settings = self.gui_hdpanel.hd_wallet_settings
