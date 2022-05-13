@@ -32,9 +32,11 @@ from wx import (
     BITMAP_TYPE_PNG,
     EVT_ACTIVATE_APP,
     EVT_CLOSE,
+    EVT_BUTTON,
 )
 
 import gui.window
+import gui.maingui
 import gui.infodialog
 
 from cryptolib.HDwallet import bip39_is_checksum_valid
@@ -203,44 +205,90 @@ class UniblowApp(App):
         self.version = version
         super().__init__(redirect=False)
         self.Bind(EVT_ACTIVATE_APP, self.OnActivate)
+        self.dev_selected = None
 
     def OnInit(self):
         icon_path = file_path(ICON_FILE)
         wicon = IconBundle(icon_path)
         HAND_CURSOR = Cursor(CURSOR_HAND)
-        self.gui_frame = gui.window.TopFrame(None)
+        self.gui_frame = gui.maingui.UniblowFrame(None)
         self.gui_frame.Bind(EVT_CLOSE, self.OnClose)
-        if sys.platform.startswith("darwin"):
-            self.gui_frame.SetSize((996, 418))
-        self.gui_panel = gui.window.TopPanel(self.gui_frame)
+        # if sys.platform.startswith("darwin"):
+            # self.gui_frame.SetSize((996, 418))
+        self.dev_panel = gui.maingui.DevicesPanel(self.gui_frame)
         self.gui_frame.SetIcons(wicon)
-        self.gui_panel.hist_button.SetBitmap(Bitmap(file_path("gui/histo.png"), BITMAP_TYPE_PNG))
-        self.gui_panel.hist_button.SetBitmapPressed(
-            Bitmap(file_path("gui/histodn.png"), BITMAP_TYPE_PNG)
-        )
-        self.gui_panel.copy_button.SetBitmap(Bitmap(file_path("gui/copy.png"), BITMAP_TYPE_PNG))
-        self.gui_panel.copy_button.SetBitmapPressed(
-            Bitmap(file_path("gui/copydn.png"), BITMAP_TYPE_PNG)
-        )
-        self.gui_panel.send_button.SetBitmap(Bitmap(file_path("gui/send.png"), BITMAP_TYPE_PNG))
-        self.gui_panel.send_button.SetBitmapPressed(
-            Bitmap(file_path("gui/senddn.png"), BITMAP_TYPE_PNG)
-        )
-        self.gui_panel.send_all.SetBitmap(Bitmap(file_path("gui/swipe.png"), BITMAP_TYPE_PNG))
-        self.gui_panel.send_all.SetBitmapPressed(
-            Bitmap(file_path("gui/swipedn.png"), BITMAP_TYPE_PNG)
-        )
-        self.gui_panel.devices_choice.SetCursor(HAND_CURSOR)
-        self.gui_panel.coins_choice.SetCursor(HAND_CURSOR)
-        self.gui_panel.network_choice.SetCursor(HAND_CURSOR)
-        self.gui_panel.wallopt_choice.SetCursor(HAND_CURSOR)
-        self.gui_panel.hist_button.SetCursor(HAND_CURSOR)
-        self.gui_panel.copy_button.SetCursor(HAND_CURSOR)
-        self.gui_panel.send_button.SetCursor(HAND_CURSOR)
-        self.gui_panel.send_all.SetCursor(HAND_CURSOR)
-        self.gui_panel.btn_chkaddr.SetCursor(HAND_CURSOR)
+        
+        self.dev_panel.d_btn01.SetBitmap(Bitmap(file_path("gui/images/btns/dev_sw.png"), BITMAP_TYPE_PNG))
+        self.dev_panel.d_btn02.SetBitmap(Bitmap(file_path("gui/images/btns/dev_local.png"), BITMAP_TYPE_PNG))
+        self.dev_panel.d_btn03.SetBitmap(Bitmap(file_path("gui/images/btns/dev_ledger.png"), BITMAP_TYPE_PNG))
+        self.dev_panel.d_btn04.SetBitmap(Bitmap(file_path("gui/images/btns/dev_cryptnox.png"), BITMAP_TYPE_PNG))
+        self.dev_panel.d_btn05.SetBitmap(Bitmap(file_path("gui/images/btns/dev_pgp.png"), BITMAP_TYPE_PNG))
+        
+        self.dev_panel.d_btn01.Bind(EVT_BUTTON, self.load_device)
+        self.dev_panel.d_btn02.Bind(EVT_BUTTON, self.load_device)
+        self.dev_panel.d_btn03.Bind(EVT_BUTTON, self.load_device)
+        self.dev_panel.d_btn04.Bind(EVT_BUTTON, self.load_device)
+        self.dev_panel.d_btn05.Bind(EVT_BUTTON, self.load_device)
+        
+        self.dev_panel.d_btn01.SetCursor(HAND_CURSOR)
+        self.dev_panel.d_btn02.SetCursor(HAND_CURSOR)
+        self.dev_panel.d_btn03.SetCursor(HAND_CURSOR)
+        self.dev_panel.d_btn04.SetCursor(HAND_CURSOR)
+        self.dev_panel.d_btn05.SetCursor(HAND_CURSOR)
+        
+        # self.dev_panel.hist_button.SetBitmapPressed(
+        # Bitmap(file_path("gui/histodn.png"), BITMAP_TYPE_PNG)
+        # )
+        # self.dev_panel.copy_button.SetBitmap(Bitmap(file_path("gui/copy.png"), BITMAP_TYPE_PNG))
+        # self.dev_panel.copy_button.SetBitmapPressed(
+            # Bitmap(file_path("gui/copydn.png"), BITMAP_TYPE_PNG)
+        # )
+        # self.dev_panel.send_button.SetBitmap(Bitmap(file_path("gui/send.png"), BITMAP_TYPE_PNG))
+        # self.dev_panel.send_button.SetBitmapPressed(
+            # Bitmap(file_path("gui/senddn.png"), BITMAP_TYPE_PNG)
+        # )
+        # self.dev_panel.send_all.SetBitmap(Bitmap(file_path("gui/swipe.png"), BITMAP_TYPE_PNG))
+        # self.dev_panel.send_all.SetBitmapPressed(
+            # Bitmap(file_path("gui/swipedn.png"), BITMAP_TYPE_PNG)
+        # )
+        # self.dev_panel.devices_choice.SetCursor(HAND_CURSOR)
+        # self.dev_panel.coins_choice.SetCursor(HAND_CURSOR)
+        # self.dev_panel.network_choice.SetCursor(HAND_CURSOR)
+        # self.dev_panel.wallopt_choice.SetCursor(HAND_CURSOR)
+        # self.dev_panel.hist_button.SetCursor(HAND_CURSOR)
+        # self.dev_panel.copy_button.SetCursor(HAND_CURSOR)
+        # self.dev_panel.send_button.SetCursor(HAND_CURSOR)
+        # self.dev_panel.send_all.SetCursor(HAND_CURSOR)
+        # self.dev_panel.btn_chkaddr.SetCursor(HAND_CURSOR)
+        
         self.SetTopWindow(self.gui_frame)
         return True
+
+    def load_device(self, evt):
+        """Called from the device panel choice click."""
+        if evt.GetEventObject() is self.dev_panel.d_btn01:
+            # SeedWatcher
+            print("hello sw")
+            sel_dev = 0
+        elif evt.GetEventObject() is self.dev_panel.d_btn02:
+            # LocalFiles
+            print("hello files")
+            sel_dev = 1
+        elif evt.GetEventObject() is self.dev_panel.d_btn03:
+            # Ledger
+            print("hello ledger")
+            sel_dev = 3
+        elif evt.GetEventObject() is self.dev_panel.d_btn04:
+            # Cryptnox
+            print("hello cryptnox")
+            sel_dev = 4
+        elif evt.GetEventObject() is self.dev_panel.d_btn05:
+            # OpenPGP
+            print("hello pgp")
+            sel_dev = 2
+        else:
+            raise Exception("Bad device button object")
+        self.dev_selected(sel_dev)
 
     def BringWindowToFront(self):
         try:

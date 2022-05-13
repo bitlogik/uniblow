@@ -20,6 +20,7 @@ class InfoDialog ( wx.Dialog ):
 		wx.Dialog.__init__ ( self, parent, id = wx.ID_ANY, title = u"Info", pos = wx.DefaultPosition, size = wx.Size( 500,250 ), style = wx.DEFAULT_DIALOG_STYLE|wx.STAY_ON_TOP )
 
 		self.SetSizeHints( wx.Size( 500,250 ), wx.DefaultSize )
+		self.SetBackgroundColour( wx.Colour( 248, 250, 252 ) )
 
 		bSizer1 = wx.BoxSizer( wx.VERTICAL )
 

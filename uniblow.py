@@ -392,7 +392,7 @@ def cb_open_wallet(wallet_obj, pkey, waltype, sw_frame, pubkey_cpr):
     display_coin(app.wallet.get_account())
 
 
-def device_selected(device):
+def device_selected(sel_device):
     close_device()
     app.gui_panel.btn_chkaddr.Hide()
     app.gui_panel.coins_choice.Disable()
@@ -401,8 +401,7 @@ def device_selected(device):
     app.gui_panel.network_choice.Disable()
     app.gui_panel.wallopt_choice.Clear()
     erase_info(True)
-    sel_device = device.GetInt()
-    device_sel_name = DEVICES_LIST[sel_device - 1]
+    device_sel_name = DEVICES_LIST[sel_device]
     coins_list = ccopy(SUPPORTED_COINS)
     if device_sel_name == "Ledger":
         coins_list = [
@@ -950,28 +949,28 @@ def check_wallet(evt):
 
 
 def start_main_app():
-    app.load_devices(DEVICES_LIST)
-    app.load_coins_list(SUPPORTED_COINS)
-    app.gui_panel.devices_choice.Bind(wx.EVT_CHOICE, device_selected)
-    app.gui_panel.coins_choice.Bind(wx.EVT_CHOICE, coin_selected)
-    app.gui_panel.network_choice.Bind(wx.EVT_CHOICE, net_selected)
-    app.gui_panel.wallopt_choice.Bind(wx.EVT_CHOICE, wtype_selected)
-    app.gui_panel.send_button.Bind(wx.EVT_BUTTON, send)
-    app.gui_panel.send_all.Bind(wx.EVT_BUTTON, send_all)
-    app.gui_panel.dest_addr.Bind(wx.EVT_TEXT, check_addr)
-    app.gui_panel.amount.Bind(wx.EVT_TEXT_ENTER, send)
-    app.gui_panel.hist_button.Bind(wx.EVT_BUTTON, disp_history)
-    app.gui_panel.copy_button.Bind(wx.EVT_BUTTON, copy_account)
-    app.gui_panel.fee_slider.Bind(wx.EVT_SCROLL_CHANGED, fee_changed)
-    app.gui_panel.btn_chkaddr.Bind(wx.EVT_BUTTON, check_wallet)
-    app.gui_panel.btn_chkaddr.Hide()
-    erase_info(True)
+    # app.load_devices(DEVICES_LIST)
+    # app.load_coins_list(SUPPORTED_COINS)
+    # app.gui_panel.devices_choice.Bind(wx.EVT_CHOICE, device_selected)
+    # app.gui_panel.coins_choice.Bind(wx.EVT_CHOICE, coin_selected)
+    # app.gui_panel.network_choice.Bind(wx.EVT_CHOICE, net_selected)
+    # app.gui_panel.wallopt_choice.Bind(wx.EVT_CHOICE, wtype_selected)
+    # app.gui_panel.send_button.Bind(wx.EVT_BUTTON, send)
+    # app.gui_panel.send_all.Bind(wx.EVT_BUTTON, send_all)
+    # app.gui_panel.dest_addr.Bind(wx.EVT_TEXT, check_addr)
+    # app.gui_panel.amount.Bind(wx.EVT_TEXT_ENTER, send)
+    # app.gui_panel.hist_button.Bind(wx.EVT_BUTTON, disp_history)
+    # app.gui_panel.copy_button.Bind(wx.EVT_BUTTON, copy_account)
+    # app.gui_panel.fee_slider.Bind(wx.EVT_SCROLL_CHANGED, fee_changed)
+    # app.gui_panel.btn_chkaddr.Bind(wx.EVT_BUTTON, check_wallet)
+    # app.gui_panel.btn_chkaddr.Hide()
+    # erase_info(True)
     app.gui_frame.SetLabel(f"Uniblow  -  {VERSION}")
     app.gui_frame.Show()
 
 
 app = gui.app.UniblowApp(VERSION)
-
+app.dev_selected = device_selected
 
 if __name__ == "__main__":
 
