@@ -410,8 +410,10 @@ def device_selected(device):
             "BSC",
             "MATIC",
             "FTM",
+            "OP",
+            "METIS",
             "CELO",
-            "MOVR",
+            "GLMR",
             "ARB",
             "AVAX",
         ]
