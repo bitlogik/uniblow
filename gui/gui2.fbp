@@ -373,7 +373,7 @@
                                     <property name="permission">none</property>
                                     <object class="sizeritem" expanded="1">
                                         <property name="border">12</property>
-                                        <property name="flag">wxRIGHT|wxLEFT</property>
+                                        <property name="flag">wxLEFT</property>
                                         <property name="proportion">0</property>
                                         <object class="wxBitmapButton" expanded="1">
                                             <property name="BottomDockable">1</property>
@@ -445,7 +445,7 @@
                                     </object>
                                     <object class="sizeritem" expanded="1">
                                         <property name="border">36</property>
-                                        <property name="flag">wxRIGHT</property>
+                                        <property name="flag">wxRIGHT|wxLEFT</property>
                                         <property name="proportion">0</property>
                                         <object class="wxBitmapButton" expanded="1">
                                             <property name="BottomDockable">1</property>
@@ -1957,7 +1957,7 @@
                                     </object>
                                 </object>
                                 <object class="sizeritem" expanded="1">
-                                    <property name="border">6</property>
+                                    <property name="border">5</property>
                                     <property name="flag">wxTOP</property>
                                     <property name="proportion">0</property>
                                     <object class="wxStaticBitmap" expanded="1">

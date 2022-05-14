@@ -81,10 +81,10 @@ class WalletPanel ( wx.Panel ):
         bSizer9 = wx.BoxSizer( wx.HORIZONTAL )
 
         self.but_evt1 = wx.BitmapButton( self.m_panel1, wx.ID_ANY, wx.NullBitmap, wx.DefaultPosition, wx.DefaultSize, wx.BU_AUTODRAW|wx.BORDER_NONE )
-        bSizer9.Add( self.but_evt1, 0, wx.RIGHT|wx.LEFT, 12 )
+        bSizer9.Add( self.but_evt1, 0, wx.LEFT, 12 )
 
         self.but_evt2 = wx.BitmapButton( self.m_panel1, wx.ID_ANY, wx.NullBitmap, wx.DefaultPosition, wx.DefaultSize, wx.BU_AUTODRAW|wx.BORDER_NONE )
-        bSizer9.Add( self.but_evt2, 0, wx.RIGHT, 36 )
+        bSizer9.Add( self.but_evt2, 0, wx.RIGHT|wx.LEFT, 36 )
 
         self.btn_send = wx.BitmapButton( self.m_panel1, wx.ID_ANY, wx.NullBitmap, wx.DefaultPosition, wx.DefaultSize, wx.BU_AUTODRAW|wx.BORDER_NONE )
         bSizer9.Add( self.btn_send, 0, wx.ALL, 5 )
@@ -291,7 +291,7 @@ class SendPanel ( wx.Panel ):
         bSizer14.Add( ( 0, 0), 0, wx.RIGHT, 6 )
 
         self.bmp_chk = wx.StaticBitmap( self, wx.ID_ANY, wx.NullBitmap, wx.DefaultPosition, wx.DefaultSize, 0 )
-        bSizer14.Add( self.bmp_chk, 0, wx.TOP, 6 )
+        bSizer14.Add( self.bmp_chk, 0, wx.TOP, 5 )
 
 
         bSizer23.Add( bSizer14, 0, wx.EXPAND, 5 )
