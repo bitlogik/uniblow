@@ -25,7 +25,6 @@ if "windll" in globals():
     windll.shcore.SetProcessDpiAwareness(2)
 
 from copy import copy as ccopy
-from functools import partial
 from importlib import import_module
 from logging import basicConfig, DEBUG, getLogger
 from io import BytesIO
@@ -114,14 +113,14 @@ def check_coin_consistency(current_wallet=None, network_num=None):
 def display_balance():
     logger.debug("Checking for wallet balance")
     if not hasattr(app, "wallet"):
-        erase_info()
+        app.erase_info()
         return
     if not check_coin_consistency():
         return
     try:
         balance = app.wallet.get_balance()
     except Exception as exc:
-        erase_info()
+        app.erase_info()
         err_msg = (
             f"Error when getting account balance.\nCheck your Internet connection.\n{str(exc)}"
         )
@@ -146,7 +145,7 @@ def display_balance():
         # app.gui_panel.amount_label.Enable()
         # app.gui_panel.fee_slider.Enable()
         # app.gui_panel.fee_setting.Enable()
-        app.gui_panel.but_send.Enable()
+        app.enable_send()
         # app.gui_panel.send_all.Enable()
     else:
         # app.gui_panel.dest_addr.Clear()
@@ -157,48 +156,11 @@ def display_balance():
         # app.gui_panel.fee_setting.Disable()
         # app.gui_panel.dest_addr.Disable()
         # app.gui_panel.amount.Disable()
-        app.gui_panel.but_send.Disable()
+        app.disable_send()
         # app.gui_panel.send_all.Disable()
     if hasattr(app.wallet, "wc_timer"):
         # WalletConnect active
-        app.gui_panel.dest_addr.ChangeValue("   Use the connected dapp to transact")
-
-
-def erase_info(reset=False, first_time=False):
-    if hasattr(app, "balance_timer"):
-        app.balance_timer.Stop()
-    if hasattr(app, "wallet") and hasattr(app.wallet, "wc_timer"):
-        app.wallet.wc_client.close()
-        app.wallet.wc_timer.Stop()
-        delattr(app.wallet, "wc_timer")
-    paint_toaddr(wx.NullColour)
-    app.gui_panel.hist_button.Disable()
-    app.gui_panel.copy_button.Disable()
-    # app.gui_panel.dest_addr.Clear()
-    # app.gui_panel.dest_addr.Disable()
-    # app.gui_panel.amount.Clear()
-    # app.gui_panel.amount.Disable()
-    # app.gui_panel.send_all.Disable()
-    app.gui_panel.but_send.Disable()
-    app.gui_panel.wallopt_label.Disable()
-    app.gui_panel.wallopt_choice.Disable()
-    # app.gui_panel.account_label.Disable()
-    # app.gui_panel.balance_label.Disable()
-    # app.gui_panel.dest_label.Disable()
-    # app.gui_panel.amount_label.Disable()
-    # app.gui_panel.fee_slider.Disable()
-    # app.gui_panel.fee_setting.Disable()
-    # app.gui_panel.btn_chkaddr.Hide()
-    app.gui_panel.balance_info.SetLabel("")
-    if first_time:
-        app.gui_panel.balance_info.SetLabel("👈  Select a chain")
-    if reset:
-        app.gui_panel.wallopt_choice.SetSelection(0)
-    app.gui_panel.qrimg.SetBitmap(wx.Bitmap())
-    if hasattr(app, "wallet"):
-        del app.wallet
-    app.gui_panel.account_addr.SetLabel("")
-    app.gui_frame.Refresh()
+        app.disable_send("Use the connected dapp to transact")
 
 
 class DisplayTimer(wx.Timer):
@@ -300,10 +262,9 @@ def device_selected(sel_device):
     # app.gui_panel.btn_chkaddr.Hide()
     # app.gui_panel.coins_choice.Disable()
     # app.gui_panel.coins_choice.SetSelection(0)
-    app.gui_panel.network_choice.Clear()
-    app.gui_panel.network_choice.Disable()
-    app.gui_panel.wallopt_choice.Clear()
-    erase_info(True, True)
+    # app.gui_panel.network_choice.Clear()
+    # app.gui_panel.network_choice.Disable()
+    # app.gui_panel.wallopt_choice.Clear()
     device_sel_name = DEVICES_LIST[sel_device]
     coins_list = ccopy(SUPPORTED_COINS)
     if device_sel_name == "Ledger":
@@ -323,7 +284,6 @@ def device_selected(sel_device):
         coins_list.remove("SOL")
     if device_sel_name == "Cryptnox":
         coins_list.remove("SOL")
-    app.load_coins_list(coins_list)
     if sel_device == 0:
         # Seed Watcher
         start_seedwatcher(app, cb_open_wallet)
@@ -392,7 +352,7 @@ def device_selected(sel_device):
                         f"The chosen {the_device.admin_pass_name} must be\n{lenmsg} chars long."
                     )
                     while True:
-                        admin_password = get_password(device_sel_name, set_admin_message)
+                        admin_password = app.get_password(device_sel_name, set_admin_message)
                         if admin_password is None:
                             # app.gui_panel.devices_choice.SetSelection(0)
                             return
@@ -421,7 +381,7 @@ def device_selected(sel_device):
                         pintype = "digits"
                     inp_message += f"The chosen {pwd_pin} must be\n{lenmsg} {pintype} long."
                     while True:
-                        password = get_password(device_sel_name, inp_message)
+                        password = app.get_password(device_sel_name, inp_message)
                         if password is None:
                             # app.gui_panel.devices_choice.SetSelection(0)
                             return
@@ -467,7 +427,7 @@ def device_selected(sel_device):
                     try:
                         pin_left = device_loaded.get_pw_left()
                     except Exception as exc:
-                        device_error(exc)
+                        app.device_error(exc)
                         return
                     if pin_left == 0:
                         app.warn_modal(f"Device {pwd_pin} is locked.")
@@ -495,7 +455,7 @@ def device_selected(sel_device):
                     if device_loaded.is_pin_numeric:
                         pintype = "digits"
                     inp_message += f"\nThe {pwd_pin} to provide\nis {lenmsg} {pintype} long."
-                    password_default = get_password(device_sel_name, inp_message)
+                    password_default = app.get_password(device_sel_name, inp_message)
                     if password_default is None:
                         # app.gui_panel.devices_choice.SetSelection(0)
                         return
@@ -513,7 +473,7 @@ def device_selected(sel_device):
                         True,
                     )
             except Exception as exc:
-                return device_error(exc)
+                return app.device_error(exc)
         wx.MilliSleep(100)
         if the_device.has_password and the_device.is_HD and not the_device.password_retries_inf:
             # Kind of special for Cryptnox for now
@@ -524,51 +484,18 @@ def device_selected(sel_device):
                 "Device created",
                 f"A new {device_sel_name} device was successfully created.",
             )
-        # app.gui_panel.coins_choice.Enable()
-        # app.gui_panel.coins_choice.Hide()
-        # app.gui_panel.coins_choice.ShowWithEffect(wx.SHOW_EFFECT_ROLL_TO_RIGHT, 750)
-        # app.gui_panel.coins_choice.SetFocus()
-    else:
-        erase_info(True)
+        return coins_list
 
 
 def wallet_fallback():
     """Called when a user option failed"""
     # Reset the wallet to the first type
     wallet_type_fallback = 0
-    # # If Tezos, which have 2 different key types, must stick on the previous keytype
-    # if app.gui_panel.coins_choice.GetStringSelection() == "XTZ" and hasattr(
-        # app.device, "get_key_type"
-    # ):
-        # device_key_type = app.device.get_key_type()
-        # if device_key_type:
-            # # Inverse of XTZ get_key_type to set back the type selector
-            # if device_key_type == "ED":
-                # # tz1 first choice
-                # wallet_type_fallback = 0
-            # elif device_key_type == "K1":
-                # # tz2 second choice
-                # wallet_type_fallback = 1
     app.gui_panel.wallopt_choice.SetSelection(wallet_type_fallback)
     # Act like the user selected back the first wallet type
     # coin_sel = app.gui_panel.coins_choice.GetStringSelection()
-    net_sel = app.gui_panel.network_choice.GetSelection()
-    wx.CallLater(180, process_coin_select, coin_sel, net_sel, wallet_type_fallback)
-
-
-def device_error(exc):
-    # app.gui_panel.coins_choice.Disable()
-    # app.gui_panel.coins_choice.SetSelection(0)
-    app.gui_panel.network_choice.Clear()
-    app.gui_panel.network_choice.Disable()
-    app.gui_panel.wallopt_choice.Clear()
-    app.gui_panel.wallopt_choice.Disable()
-    # app.gui_panel.devices_choice.SetSelection(0)
-    # app.gui_panel.btn_chkaddr.Hide()
-    erase_info(True)
-    logger.error("Error with device : %s", str(exc), exc_info=exc, stack_info=True)
-    app.warn_modal(str(exc))
-    return
+    # net_sel = app.gui_panel.network_choice.GetSelection()
+    # wx.CallLater(180, process_coin_select, coin_sel, net_sel, wallet_type_fallback)
 
 
 def wallet_error(exc, level="hard"):
@@ -582,7 +509,7 @@ def wallet_error(exc, level="hard"):
         erase_option = app.wallet.coin != "BTC"
     else:
         erase_option = False
-    erase_info(erase_option)
+    app.erase_info(erase_option)
     logger.error("Error in the wallet : %s", str(exc), exc_info=exc, stack_info=True)
     if level == "fromwatch":
         exc = str(exc) + "\nYou can reconnect by selecting the network option."
@@ -637,7 +564,7 @@ def set_coin(coin, network, wallet_type):
         return
     except Exception as exc:
         if str(exc).endswith("disconnected."):
-            device_error(exc)
+            app.device_error(exc)
         else:
             wallet_error(exc)
         return
@@ -677,10 +604,10 @@ def display_coin(account_addr):
 def process_coin_select(coin, sel_network, sel_wallettype):
     app.gui_panel.network_choice.Enable()
     # if (
-        # app.gui_panel.coins_choice.IsEnabled()
-        # or app.gui_panel.coins_choice.GetStringSelection() != "BTC"
+    # app.gui_panel.coins_choice.IsEnabled()
+    # or app.gui_panel.coins_choice.GetStringSelection() != "BTC"
     # ):
-        # # Because BTC wallet types are different path/wallet from SeedWatcher
+    # # Because BTC wallet types are different path/wallet from SeedWatcher
     app.gui_panel.wallopt_choice.Enable()
     app.gui_panel.wallopt_label.Enable()
     app.deactivate_option_buttons()
@@ -697,18 +624,21 @@ def process_coin_select(coin, sel_network, sel_wallettype):
         "AVAX",
     ]:
         app.activate_option_buttons()
-        app.gui_panel.but_evt1.Bind(wx.EVT_BUTTON, lambda x: process_coin_select(coin, sel_network, 1))
-        app.gui_panel.but_evt2.Bind(wx.EVT_BUTTON, lambda x: process_coin_select(coin, sel_network, 2))
+        app.gui_panel.but_evt1.Bind(
+            wx.EVT_BUTTON, lambda x: process_coin_select(coin, sel_network, 1)
+        )
+        app.gui_panel.but_evt2.Bind(
+            wx.EVT_BUTTON, lambda x: process_coin_select(coin, sel_network, 2)
+        )
     app.gui_panel.network_choice.Bind(wx.EVT_CHOICE, lambda x: net_selected(coin, x.GetInt()))
     app.gui_panel.wallopt_choice.Bind(wx.EVT_CHOICE, lambda x: wtype_selected(coin, x))
     set_coin(coin, sel_network, sel_wallettype)
 
 
-def coin_selected(coin_sel):
+def coin_selected(coin_name):
     app.gui_panel.network_choice.Clear()
     app.gui_panel.wallopt_choice.Clear()
-    erase_info(True)
-    coin_name = SUPPORTED_COINS[coin_sel]
+    app.erase_info(True)
     networks = get_coin_class(coin_name).get_networks()
     acc_types = get_coin_class(coin_name).get_account_types()
     for netw in networks:
@@ -723,43 +653,21 @@ def coin_selected(coin_sel):
 
 
 def net_selected(coin_sel, net_sel):
-    erase_info()
+    app.erase_info()
     wtype_sel = app.gui_panel.wallopt_choice.GetSelection()
     wx.CallLater(180, process_coin_select, coin_sel, net_sel, wtype_sel)
 
 
 def wtype_selected(coin_sel, wtype_sel):
-    erase_info()
+    app.erase_info()
     net_sel = app.gui_panel.network_choice.GetSelection()
     wx.CallLater(180, process_coin_select, coin_sel, net_sel, wtype_sel.GetInt())
 
 
-def paint_toaddr(color):
-    # app.gui_panel.addr_panel.SetBackgroundColour(color)
-    pass
-
-
-def check_addr(ev):
-    ev.Skip()
-    paint_toaddr(wx.NullColour)
-    if not hasattr(app, "wallet"):
-        return
-    addr = ev.GetString()
-    if len(addr) < 7:
-        app.gui_frame.Refresh()
-        return
-    if app.wallet.check_address(addr):
-        paint_toaddr(GREEN_COLOR)
-    else:
-        paint_toaddr(RED_COLOR)
-    app.gui_frame.Refresh()
-
-
-def transfer(to, amount):
+def transfer(to, amount, fee_opt=1):
     conf = confirm_tx(to, amount)
     app.gui_panel.Enable()
     if conf == wx.ID_YES:
-        # fee_opt = app.gui_panel.fee_slider.GetValue()
         try:
             progress_modal = wx.ProgressDialog(
                 "Processing transaction",
@@ -791,39 +699,13 @@ def transfer(to, amount):
                 stack_info=True,
             )
             if str(exc).endswith("disconnected."):
-                device_error(exc)
+                app.device_error(exc)
             elif str(exc) == "Error status : 0x6600":
                 app.warn_modal("User button on PGP device timeout")
             else:
                 app.warn_modal(str(exc))
             wx.MilliSleep(250)
             return
-
-
-def end_checkwallet(modal, result):
-    wx.MilliSleep(200)
-    modal.Update(100, "done")
-    wx.MilliSleep(200)
-    if not result:
-        app.warn_modal("The address verification was rejected on the Ledger.")
-
-
-def check_wallet(evt):
-    progress_modal = wx.ProgressDialog(
-        "",
-        "",
-        style=wx.PD_APP_MODAL | wx.PD_AUTO_HIDE | wx.PD_SMOOTH,
-    )
-    wx.MilliSleep(200)
-    wait_msg = "Verify the address on the Ledger screen."
-    progress_modal.Update(50, wait_msg)
-    wx.MilliSleep(250)
-    try:
-        app.device.get_public_key(partial(end_checkwallet, progress_modal))
-    except Exception as exc:
-        progress_modal.Update(100, "failure")
-        wx.MilliSleep(200)
-        wx.CallAfter(device_error, exc)
 
 
 def start_main_app():
@@ -835,6 +717,7 @@ app = gui.app.UniblowApp(VERSION)
 app.dev_selected = device_selected
 app.coin_selected = coin_selected
 app.transfer = transfer
+
 
 if __name__ == "__main__":
 

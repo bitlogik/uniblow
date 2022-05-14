@@ -43,7 +43,7 @@ class WalletPanel ( wx.Panel ):
 
         sbSizer5 = wx.StaticBoxSizer( wx.StaticBox( self, wx.ID_ANY, u"chains" ), wx.VERTICAL )
 
-        self.scrolled_coins = wx.ScrolledWindow( sbSizer5.GetStaticBox(), wx.ID_ANY, wx.DefaultPosition, wx.Size( 64,280 ), wx.HSCROLL|wx.VSCROLL )
+        self.scrolled_coins = wx.ScrolledWindow( sbSizer5.GetStaticBox(), wx.ID_ANY, wx.DefaultPosition, wx.Size( 64,340 ), wx.HSCROLL|wx.VSCROLL )
         self.scrolled_coins.SetScrollRate( 5, 5 )
         sbSizer5.Add( self.scrolled_coins, 0, 0, 5 )
 
@@ -86,8 +86,15 @@ class WalletPanel ( wx.Panel ):
         self.but_evt2 = wx.BitmapButton( self.m_panel1, wx.ID_ANY, wx.NullBitmap, wx.DefaultPosition, wx.DefaultSize, wx.BU_AUTODRAW|wx.BORDER_NONE )
         bSizer9.Add( self.but_evt2, 0, wx.RIGHT, 36 )
 
-        self.but_send = wx.BitmapButton( self.m_panel1, wx.ID_ANY, wx.NullBitmap, wx.DefaultPosition, wx.DefaultSize, wx.BU_AUTODRAW|wx.BORDER_NONE )
-        bSizer9.Add( self.but_send, 0, wx.ALL, 5 )
+        self.btn_send = wx.BitmapButton( self.m_panel1, wx.ID_ANY, wx.NullBitmap, wx.DefaultPosition, wx.DefaultSize, wx.BU_AUTODRAW|wx.BORDER_NONE )
+        bSizer9.Add( self.btn_send, 0, wx.ALL, 5 )
+
+        self.alt_text = wx.StaticText( self.m_panel1, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, 0 )
+        self.alt_text.Wrap( 120 )
+
+        self.alt_text.SetFont( wx.Font( 11, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, False, wx.EmptyString ) )
+
+        bSizer9.Add( self.alt_text, 0, wx.ALL, 5 )
 
 
         bSizer6.Add( bSizer9, 1, wx.ALIGN_CENTER_HORIZONTAL, 5 )
@@ -122,6 +129,11 @@ class WalletPanel ( wx.Panel ):
         self.copy_status.Wrap( -1 )
 
         bSizer11.Add( self.copy_status, 0, wx.TOP|wx.LEFT, 15 )
+
+        self.btn_ledger = wx.BitmapButton( self.m_panel1, wx.ID_ANY, wx.NullBitmap, wx.DefaultPosition, wx.DefaultSize, wx.BU_AUTODRAW|0|wx.BORDER_NONE )
+        self.btn_ledger.Hide()
+
+        bSizer11.Add( self.btn_ledger, 0, wx.TOP|wx.LEFT, 12 )
 
 
         bSizer14.Add( bSizer11, 1, wx.EXPAND, 5 )
