@@ -1,5 +1,6 @@
 import wx
 
+from gui.utils import file_path
 from gui.maingui import SendDialog, SendPanel
 
 
@@ -15,15 +16,20 @@ class SendModal(SendDialog):
         super().__init__(parent)
         self.panel = SendPanel(self)
         self.panel.text_coin.SetLabel(coin)
+        self.check_addr_method = check
         self.cb = callback
         handcurs = wx.Cursor(wx.CURSOR_HAND)
+        self.GOOD_BMP = wx.Bitmap(file_path("gui/good.bmp"))
+        self.BAD_BMP = wx.Bitmap(file_path("gui/bad.bmp"))
         self.Bind(wx.EVT_CLOSE, self.close)
+        self.panel.text_dest.Bind(wx.EVT_TEXT, self.check_addr)
         self.panel.check_sendall.Bind(wx.EVT_CHECKBOX, self.check_all)
         self.panel.cancel_btn.SetCursor(handcurs)
         self.panel.ok_btn.SetCursor(handcurs)
         self.panel.fee_slider.Bind(wx.EVT_SCROLL, self.fee_changed)
         self.panel.cancel_btn.Bind(wx.EVT_BUTTON, self.click_cancel)
         self.panel.ok_btn.Bind(wx.EVT_BUTTON, self.click_ok)
+        self.panel.bmp_chk.SetBitmap(self.BAD_BMP)
 
     def close(self, evt):
         self.cb("CLOSE", "", "0")
@@ -34,10 +40,17 @@ class SendModal(SendDialog):
             self.panel.text_amount.SetValue("ALL")
             self.panel.text_amount.Disable()
         else:
+            self.panel.text_amount.SetValue("")
             self.panel.text_amount.Enable()
 
     def fee_changed(self, nfeesel):
         self.panel.text_fees.SetLabel(FEES_PRORITY_TEXT[nfeesel.GetSelection()])
+    
+    def check_addr(self, evt):
+        if self.check_addr_method(evt.GetString()):
+            self.panel.bmp_chk.SetBitmap(self.GOOD_BMP)
+        else:
+            self.panel.bmp_chk.SetBitmap(self.BAD_BMP)
 
     def click_cancel(self, event):
         self.cb("CANCEL", "", "0")

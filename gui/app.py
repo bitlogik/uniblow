@@ -19,13 +19,13 @@ from logging import getLogger
 import sys
 import os.path
 from os import environ
-from webbrowser import open as wopen
 
 import wx
 
 import gui.window
 import gui.maingui
 import gui.infodialog
+from gui.utils import file_path, show_history
 from gui.send_frame import SendModal
 
 from cryptolib.HDwallet import bip39_is_checksum_valid
@@ -65,16 +65,6 @@ class InfoBox(gui.infodialog.InfoDialog):
         if self.is_modal:
             self.EndModal(0)
         self.Destroy()
-
-
-def file_path(fpath):
-    if hasattr(sys, "_MEIPASS"):
-        return os.path.join(sys._MEIPASS, fpath)
-    return fpath
-
-
-def show_history(history_url):
-    wopen(history_url, new=1, autoraise=True)
 
 
 if sys.platform.startswith("darwin"):

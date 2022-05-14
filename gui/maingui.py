@@ -58,7 +58,7 @@ class WalletPanel ( wx.Panel ):
         self.balance_info = wx.StaticText( self.m_panel1, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, 0 )
         self.balance_info.Wrap( -1 )
 
-        self.balance_info.SetFont( wx.Font( 14, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, False, wx.EmptyString ) )
+        self.balance_info.SetFont( wx.Font( 16, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, False, wx.EmptyString ) )
 
         bSizer4.Add( self.balance_info, 1, wx.ALIGN_CENTER_VERTICAL|wx.LEFT, 24 )
 
@@ -242,7 +242,7 @@ class DevicesPanel ( wx.Panel ):
 class SendDialog ( wx.Dialog ):
 
     def __init__( self, parent ):
-        wx.Dialog.__init__ ( self, parent, id = wx.ID_ANY, title = u"Sending", pos = wx.DefaultPosition, size = wx.Size( 450,320 ), style = wx.DEFAULT_DIALOG_STYLE )
+        wx.Dialog.__init__ ( self, parent, id = wx.ID_ANY, title = u"Sending", pos = wx.DefaultPosition, size = wx.Size( 480,320 ), style = wx.DEFAULT_DIALOG_STYLE )
 
         self.SetSizeHints( wx.DefaultSize, wx.DefaultSize )
 
@@ -282,8 +282,8 @@ class SendPanel ( wx.Panel ):
         self.text_dest = wx.TextCtrl( self, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, 0 )
         bSizer14.Add( self.text_dest, 1, wx.RIGHT|wx.LEFT, 5 )
 
-        self.m_bitmap2 = wx.StaticBitmap( self, wx.ID_ANY, wx.NullBitmap, wx.DefaultPosition, wx.DefaultSize, 0 )
-        bSizer14.Add( self.m_bitmap2, 0, wx.ALL, 5 )
+        self.bmp_chk = wx.StaticBitmap( self, wx.ID_ANY, wx.NullBitmap, wx.DefaultPosition, wx.DefaultSize, 0 )
+        bSizer14.Add( self.bmp_chk, 0, wx.ALL, 5 )
 
 
         bSizer23.Add( bSizer14, 0, wx.EXPAND, 5 )
