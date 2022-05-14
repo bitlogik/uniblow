@@ -165,14 +165,14 @@ class ETHwalletCore:
             maxspendable = self.getbalance(False)
             balance_eth = self.getbalance()
             if balance_eth < (gprice * glimit):
-                raise NotEnoughTokens("Not enough native ETH funding for the tx fee")
+                raise NotEnoughTokens("Not enough native gas for the tx fee")
         else:
             maxspendable = self.getbalance() - (gprice * glimit)
         if paymentvalue > maxspendable or paymentvalue < 0:
             if self.ERC20:
                 sym = self.token_symbol
             else:
-                sym = "native ETH"
+                sym = "native gas"
             raise NotEnoughTokens(f"Not enough {sym} tokens for the tx")
         self.nonce = int2bytearray(self.getnonce())
         self.gasprice = int2bytearray(gprice)
