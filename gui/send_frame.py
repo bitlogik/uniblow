@@ -45,7 +45,7 @@ class SendModal(SendDialog):
 
     def fee_changed(self, nfeesel):
         self.panel.text_fees.SetLabel(FEES_PRORITY_TEXT[nfeesel.GetSelection()])
-    
+
     def check_addr(self, evt):
         if self.check_addr_method(evt.GetString()):
             self.panel.bmp_chk.SetBitmap(self.GOOD_BMP)
@@ -61,24 +61,3 @@ class SendModal(SendDialog):
         dest = self.panel.text_dest.GetValue()
         fee_level = self.panel.fee_slider.GetValue()
         self.cb("OK", dest, amount, fee_level)
-
-
-# def paint_toaddr(color):
-# # app.gui_panel.addr_panel.SetBackgroundColour(color)
-# pass
-
-
-# def check_addr(ev):
-# ev.Skip()
-# paint_toaddr(wx.NullColour)
-# if not hasattr(app, "wallet"):
-# return
-# addr = ev.GetString()
-# if len(addr) < 7:
-# app.gui_frame.Refresh()
-# return
-# if app.wallet.check_address(addr):
-# paint_toaddr(GREEN_COLOR)
-# else:
-# paint_toaddr(RED_COLOR)
-# app.gui_frame.Refresh()

@@ -67,9 +67,6 @@ DEVICES_LIST = [
 
 DEFAULT_PASSWORD = "NoPasswd"
 
-GREEN_COLOR = wx.Colour(73, 172, 73)
-RED_COLOR = wx.Colour(198, 60, 60)
-
 
 logger = getLogger(__name__)
 

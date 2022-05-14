@@ -70,7 +70,7 @@ class WalletPanel ( wx.Panel ):
         self.network_choice.SetFont( wx.Font( 12, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, False, wx.EmptyString ) )
         self.network_choice.SetMinSize( wx.Size( 120,-1 ) )
 
-        bSizer5.Add( self.network_choice, 0, wx.ALIGN_CENTER_HORIZONTAL|wx.TOP|wx.RIGHT, 24 )
+        bSizer5.Add( self.network_choice, 0, wx.ALIGN_CENTER_HORIZONTAL|wx.TOP|wx.RIGHT, 20 )
 
 
         bSizer4.Add( bSizer5, 0, wx.RIGHT, 24 )
@@ -102,9 +102,9 @@ class WalletPanel ( wx.Panel ):
         self.account_addr = wx.StaticText( self.m_panel1, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, wx.ST_ELLIPSIZE_END )
         self.account_addr.Wrap( -1 )
 
-        self.account_addr.SetFont( wx.Font( 11, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, False, wx.EmptyString ) )
+        self.account_addr.SetFont( wx.Font( 12, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, False, wx.EmptyString ) )
 
-        bSizer6.Add( self.account_addr, 0, wx.RIGHT|wx.LEFT, 5 )
+        bSizer6.Add( self.account_addr, 0, wx.LEFT, 12 )
 
         bSizer12 = wx.BoxSizer( wx.HORIZONTAL )
 
@@ -140,10 +140,13 @@ class WalletPanel ( wx.Panel ):
 
         bSizer15 = wx.BoxSizer( wx.VERTICAL )
 
+
+        bSizer15.Add( ( 0, 0), 0, wx.TOP, 16 )
+
         self.wallopt_label = wx.StaticText( self.m_panel1, wx.ID_ANY, u"Wallet type", wx.DefaultPosition, wx.DefaultSize, 0 )
         self.wallopt_label.Wrap( -1 )
 
-        bSizer15.Add( self.wallopt_label, 0, wx.ALL|wx.ALIGN_CENTER_HORIZONTAL, 5 )
+        bSizer15.Add( self.wallopt_label, 0, wx.ALIGN_CENTER_HORIZONTAL|wx.TOP|wx.RIGHT|wx.LEFT, 5 )
 
         wallopt_choiceChoices = []
         self.wallopt_choice = wx.Choice( self.m_panel1, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wallopt_choiceChoices, 0 )
@@ -262,6 +265,8 @@ class SendPanel ( wx.Panel ):
     def __init__( self, parent, id = wx.ID_ANY, pos = wx.DefaultPosition, size = wx.Size( -1,-1 ), style = wx.TAB_TRAVERSAL, name = wx.EmptyString ):
         wx.Panel.__init__ ( self, parent, id = id, pos = pos, size = size, style = style, name = name )
 
+        self.SetBackgroundColour( wx.Colour( 248, 250, 252 ) )
+
         bSizer13 = wx.BoxSizer( wx.HORIZONTAL )
 
 
@@ -282,8 +287,11 @@ class SendPanel ( wx.Panel ):
         self.text_dest = wx.TextCtrl( self, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, 0 )
         bSizer14.Add( self.text_dest, 1, wx.RIGHT|wx.LEFT, 5 )
 
+
+        bSizer14.Add( ( 0, 0), 0, wx.RIGHT, 6 )
+
         self.bmp_chk = wx.StaticBitmap( self, wx.ID_ANY, wx.NullBitmap, wx.DefaultPosition, wx.DefaultSize, 0 )
-        bSizer14.Add( self.bmp_chk, 0, wx.ALL, 5 )
+        bSizer14.Add( self.bmp_chk, 0, wx.TOP, 6 )
 
 
         bSizer23.Add( bSizer14, 0, wx.EXPAND, 5 )
@@ -302,7 +310,7 @@ class SendPanel ( wx.Panel ):
 
         bSizer20.Add( self.text_amount, 0, wx.BOTTOM|wx.RIGHT|wx.LEFT, 8 )
 
-        self.text_coin = wx.StaticText( sbSizer3.GetStaticBox(), wx.ID_ANY, u"XXX", wx.DefaultPosition, wx.DefaultSize, 0 )
+        self.text_coin = wx.StaticText( sbSizer3.GetStaticBox(), wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, 0 )
         self.text_coin.Wrap( -1 )
 
         bSizer20.Add( self.text_coin, 0, wx.TOP|wx.BOTTOM|wx.RIGHT, 5 )
