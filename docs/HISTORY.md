@@ -2,6 +2,12 @@
 Uniblow versions history
 
 
+## 1.6.5
+
+* Add Optimism
+* METIS in SeedWatcher
+* Fix Ledger device
+
 ## 1.6.4
 
 * Change CELO and ARB RPC to Ankr
