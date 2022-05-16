@@ -103,7 +103,7 @@ def check_coin_consistency(current_wallet=None, network_num=None):
     # are displayed : address and balance.
     # Changing the coin selected could mix crypto info. So this terminates some
     # process path that are no longer valid.
-    if hasattr(app, "wallet"):
+    if hasattr(app, "wallet") and app.current_chain is not None:
         current_wallet = type(app.wallet)
         coin_class = get_coin_class(app.current_chain)
         if coin_class is not current_wallet:
