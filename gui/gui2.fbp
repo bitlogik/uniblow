@@ -1181,7 +1181,7 @@
                                                 </object>
                                             </object>
                                             <object class="sizeritem" expanded="1">
-                                                <property name="border">32</property>
+                                                <property name="border">48</property>
                                                 <property name="flag">wxLEFT</property>
                                                 <property name="proportion">0</property>
                                                 <object class="wxBitmapButton" expanded="1">
