@@ -300,7 +300,7 @@ class UniblowApp(wx.App):
         self.gui_panel.btn_send.Bind(wx.EVT_BUTTON, self.open_send)
         self.gui_panel.btn_send.Hide()
         self.gui_panel.btn_chkaddr.SetBitmap(
-            wx.Bitmap(file_path("gui/images/btns/ledgerchk.png"), wx.BITMAP_TYPE_PNG)
+            wx.Bitmap(file_path("gui/images/btns/addrchk.png"), wx.BITMAP_TYPE_PNG)
         )
         self.gui_panel.btn_chkaddr.SetCursor(self.HAND_CURSOR)
         self.gui_panel.btn_chkaddr.Bind(wx.EVT_BUTTON, self.check_wallet)
