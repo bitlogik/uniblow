@@ -118,7 +118,7 @@ class Ledger(BaseDevice):
             response = self.ledger_device.exchange(bytearray(apdu))
             approved = True
         except LedgerException as exc:
-            if exc.sw == 0x6B0C:
+            if exc.sw == 0x6B0C or exc.sw == 0x6804:
                 raise Exception("Ledger is locked. Unlock it and retry.")
             if exc.sw == 0x6511:
                 raise Exception(
