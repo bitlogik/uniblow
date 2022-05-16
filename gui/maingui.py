@@ -165,7 +165,7 @@ class WalletPanel ( wx.Panel ):
         bSizer13.Add( bSizer14, 0, wx.EXPAND, 5 )
 
         self.hist_button = wx.BitmapButton( self.m_panel1, wx.ID_ANY, wx.NullBitmap, wx.DefaultPosition, wx.DefaultSize, wx.BU_AUTODRAW|wx.BORDER_NONE )
-        bSizer13.Add( self.hist_button, 0, wx.LEFT, 32 )
+        bSizer13.Add( self.hist_button, 0, wx.LEFT, 48 )
 
 
         bSizer12.Add( bSizer13, 1, wx.EXPAND, 5 )

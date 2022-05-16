@@ -108,15 +108,9 @@ def check_coin_consistency(current_wallet=None, network_num=None):
         current_wallet = type(app.wallet)
         coin_class = get_coin_class(app.current_chain)
         if coin_class is not current_wallet:
-            print("diff coin class")
-            print(coin_class)
-            print(current_wallet)
             return False
     if network_num is not None:
         net_sel = app.gui_panel.network_choice.GetSelection()
-        print("netwc")
-        print(network_num)
-        print(net_sel)
         if net_sel < 0:
             return False
         return net_sel == network_num
