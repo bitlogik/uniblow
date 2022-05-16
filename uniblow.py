@@ -17,12 +17,11 @@
 
 try:
     from ctypes import windll
+    windll.shcore.SetProcessDpiAwareness(2)
 except ImportError:
     # Not Windows, anyway
     pass
 
-if "windll" in globals():
-    windll.shcore.SetProcessDpiAwareness(2)
 
 from copy import copy as ccopy
 from importlib import import_module
