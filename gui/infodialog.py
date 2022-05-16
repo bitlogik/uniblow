@@ -38,6 +38,8 @@ class InfoDialog ( wx.Dialog ):
 		bSizer2.Add( ( 20, 0), 1, wx.EXPAND, 5 )
 
 		self.m_button_ok = wx.Button( self, wx.ID_ANY, u"OK", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.m_button_ok.SetFont( wx.Font( wx.NORMAL_FONT.GetPointSize(), wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_BOLD, False, wx.EmptyString ) )
+
 		bSizer2.Add( self.m_button_ok, 0, wx.ALL|wx.ALIGN_CENTER_VERTICAL, 5 )
 
 

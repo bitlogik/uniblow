@@ -22,7 +22,6 @@ from os import environ
 
 import wx
 
-import gui.window
 import gui.maingui
 import gui.infodialog
 from gui.utils import file_path, show_history
@@ -44,6 +43,9 @@ class InfoBox(gui.infodialog.InfoDialog):
         self.is_modal = block_modal
         self.message = message
         self.SetTitle(title)
+        HAND_CURSOR = wx.Cursor(wx.CURSOR_HAND)
+        self.m_button_cpy.SetCursor(HAND_CURSOR)
+        self.m_button_ok.SetCursor(HAND_CURSOR)
         self.m_textCtrl.SetBackgroundColour(self.GetBackgroundColour())
         self.m_textCtrl.SetValue(self.message)
         self.m_textCtrl.SelectNone()
@@ -84,6 +86,12 @@ if sys.platform.startswith("darwin"):
 
 
 class HDsetting_panel(gui.maingui.HDPanel):
+    def __init__(self, arg):
+        super().__init__(arg)
+        HAND_CURSOR = wx.Cursor(wx.CURSOR_HAND)
+        self.m_butOK.SetCursor(HAND_CURSOR)
+        self.m_butcancel.SetCursor(HAND_CURSOR)
+
     def hdmnemo_changed(self, evt):
         evt.Skip()
         self.m_bitmapHDwl.SetBitmap(self.BAD_BMP)
@@ -128,7 +136,15 @@ class HDsetting_panel(gui.maingui.HDPanel):
         self.GetParent().EndModal(wx.ID_CANCEL)
 
 
-class app_option_panel(gui.window.OptionPanel):
+class app_option_panel(gui.maingui.OptionPanel):
+    def __init__(self, arg):
+        super().__init__(arg)
+        HAND_CURSOR = wx.Cursor(wx.CURSOR_HAND)
+        self.known_choice.SetCursor(HAND_CURSOR)
+        self.m_but_paste.SetCursor(HAND_CURSOR)
+        self.m_but_ok.SetCursor(HAND_CURSOR)
+        self.m_but_cancel.SetCursor(HAND_CURSOR)
+
     def valid_custom(self, event):
         self.okOption(event)
 
@@ -278,6 +294,8 @@ class UniblowApp(wx.App):
         self.gui_panel.btn_send.SetBitmap(
             wx.Bitmap(file_path("gui/images/btns/send.png"), wx.BITMAP_TYPE_PNG)
         )
+        self.gui_panel.network_choice.SetCursor(self.HAND_CURSOR)
+        self.gui_panel.wallopt_choice.SetCursor(self.HAND_CURSOR)
         self.gui_panel.btn_send.SetCursor(self.HAND_CURSOR)
         self.gui_panel.btn_send.Bind(wx.EVT_BUTTON, self.open_send)
         self.gui_panel.btn_send.Hide()
@@ -286,16 +304,6 @@ class UniblowApp(wx.App):
         )
         self.gui_panel.btn_chkaddr.SetCursor(self.HAND_CURSOR)
         self.gui_panel.btn_chkaddr.Bind(wx.EVT_BUTTON, self.check_wallet)
-
-        # app.gui_panel.devices_choice.Bind(wx.EVT_CHOICE, device_selected)
-        # app.gui_panel.coins_choice.Bind(wx.EVT_CHOICE, coin_selected)
-        # app.gui_panel.send_button.Bind(wx.EVT_BUTTON, send)
-        # app.gui_panel.send_all.Bind(wx.EVT_BUTTON, send_all)
-        # app.gui_panel.dest_addr.Bind(wx.EVT_TEXT, check_addr)
-        # app.gui_panel.amount.Bind(wx.EVT_TEXT_ENTER, send)
-        # app.gui_panel.fee_slider.Bind(wx.EVT_SCROLL_CHANGED, fee_changed)
-        # app.gui_panel.btn_chkaddr.Bind(wx.EVT_BUTTON, check_wallet)
-        # app.gui_panel.btn_chkaddr.Hide()
 
     def gowallet(self, sdevice):
         dev_info = self.dev_selected(sdevice)
@@ -545,7 +553,7 @@ class UniblowApp(wx.App):
             return passval
 
     def get_option(self, network_id, input_value, preset_values):
-        option_dialog = gui.window.OptionDialog(self.gui_frame)
+        option_dialog = gui.maingui.OptionDialog(self.gui_frame)
         option_panel = app_option_panel(option_dialog)
         option_panel.SetTitle(f"Wallet settings : {input_value} selection")
         option_panel.SetPresetLabel(f"preset {input_value}")

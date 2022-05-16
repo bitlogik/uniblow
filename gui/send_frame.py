@@ -28,6 +28,7 @@ class SendModal(SendDialog):
         self.panel.check_sendall.Bind(wx.EVT_CHECKBOX, self.check_all)
         self.panel.cancel_btn.SetCursor(handcurs)
         self.panel.ok_btn.SetCursor(handcurs)
+        self.panel.paste_btn.SetCursor(handcurs)
         self.panel.fee_slider.Bind(wx.EVT_SCROLL, self.fee_changed)
         self.panel.cancel_btn.Bind(wx.EVT_BUTTON, self.click_cancel)
         self.panel.ok_btn.Bind(wx.EVT_BUTTON, self.click_ok)

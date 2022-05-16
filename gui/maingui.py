@@ -599,3 +599,123 @@ class SendPanel ( wx.Panel ):
         pass
 
 
+###########################################################################
+## Class OptionDialog
+###########################################################################
+
+class OptionDialog ( wx.Dialog ):
+
+    def __init__( self, parent ):
+        wx.Dialog.__init__ ( self, parent, id = wx.ID_ANY, title = wx.EmptyString, pos = wx.DefaultPosition, size = wx.Size( 455,375 ), style = wx.DEFAULT_DIALOG_STYLE )
+
+        self.SetSizeHints( wx.DefaultSize, wx.DefaultSize )
+
+
+        self.Centre( wx.BOTH )
+
+    def __del__( self ):
+        pass
+
+
+###########################################################################
+## Class OptionPanel
+###########################################################################
+
+class OptionPanel ( wx.Panel ):
+
+    def __init__( self, parent, id = wx.ID_ANY, pos = wx.DefaultPosition, size = wx.Size( -1,-1 ), style = wx.TAB_TRAVERSAL, name = wx.EmptyString ):
+        wx.Panel.__init__ ( self, parent, id = id, pos = pos, size = size, style = style, name = name )
+
+        self.SetBackgroundColour( wx.Colour( 248, 250, 252 ) )
+
+        bSizer18 = wx.BoxSizer( wx.VERTICAL )
+
+
+        bSizer18.Add( ( 0, 0), 1, wx.TOP, 16 )
+
+        self.preset_text = wx.StaticText( self, wx.ID_ANY, u"Known Preset", wx.DefaultPosition, wx.DefaultSize, 0 )
+        self.preset_text.Wrap( -1 )
+
+        self.preset_text.SetFont( wx.Font( 11, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, False, wx.EmptyString ) )
+
+        bSizer18.Add( self.preset_text, 0, wx.ALL|wx.ALIGN_CENTER_HORIZONTAL, 5 )
+
+        known_choiceChoices = []
+        self.known_choice = wx.Choice( self, wx.ID_ANY, wx.DefaultPosition, wx.Size( 360,-1 ), known_choiceChoices, 0 )
+        self.known_choice.SetSelection( 0 )
+        self.known_choice.SetFont( wx.Font( 11, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, False, wx.EmptyString ) )
+
+        bSizer18.Add( self.known_choice, 0, wx.ALL|wx.ALIGN_CENTER_HORIZONTAL, 5 )
+
+        self.m_staticTextor = wx.StaticText( self, wx.ID_ANY, u"OR", wx.DefaultPosition, wx.DefaultSize, 0 )
+        self.m_staticTextor.Wrap( -1 )
+
+        self.m_staticTextor.SetFont( wx.Font( 11, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, False, wx.EmptyString ) )
+
+        bSizer18.Add( self.m_staticTextor, 0, wx.ALL|wx.ALIGN_CENTER_HORIZONTAL, 5 )
+
+        self.custom_text = wx.StaticText( self, wx.ID_ANY, u"other custom", wx.DefaultPosition, wx.DefaultSize, 0 )
+        self.custom_text.Wrap( -1 )
+
+        self.custom_text.SetFont( wx.Font( 11, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, False, wx.EmptyString ) )
+
+        bSizer18.Add( self.custom_text, 0, wx.ALL|wx.ALIGN_CENTER_HORIZONTAL, 5 )
+
+        self.m_but_paste = wx.Button( self, wx.ID_ANY, u"Paste", wx.DefaultPosition, wx.DefaultSize, 0 )
+        bSizer18.Add( self.m_but_paste, 0, wx.ALL|wx.ALIGN_CENTER_HORIZONTAL, 5 )
+
+        self.new_choice = wx.TextCtrl( self, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.Size( 375,-1 ), wx.TE_PROCESS_ENTER )
+        self.new_choice.SetFont( wx.Font( 11, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, False, wx.EmptyString ) )
+
+        bSizer18.Add( self.new_choice, 0, wx.ALL|wx.ALIGN_CENTER_HORIZONTAL, 5 )
+
+        bSizer19 = wx.BoxSizer( wx.HORIZONTAL )
+
+        self.m_but_cancel = wx.Button( self, wx.ID_ANY, u"Cancel", wx.DefaultPosition, wx.Size( -1,40 ), 0 )
+        self.m_but_cancel.SetFont( wx.Font( 11, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, False, wx.EmptyString ) )
+
+        bSizer19.Add( self.m_but_cancel, 0, wx.ALL, 5 )
+
+
+        bSizer19.Add( ( 0, 0), 1, wx.LEFT, 16 )
+
+        self.m_but_ok = wx.Button( self, wx.ID_ANY, u"OK", wx.DefaultPosition, wx.Size( -1,40 ), 0 )
+        self.m_but_ok.SetFont( wx.Font( 11, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_BOLD, False, wx.EmptyString ) )
+
+        bSizer19.Add( self.m_but_ok, 0, wx.ALL, 5 )
+
+
+        bSizer18.Add( bSizer19, 0, wx.ALIGN_CENTER_HORIZONTAL|wx.TOP, 28 )
+
+
+        bSizer18.Add( ( 0, 0), 1, wx.EXPAND, 5 )
+
+
+        self.SetSizer( bSizer18 )
+        self.Layout()
+        bSizer18.Fit( self )
+
+        # Connect Events
+        self.m_but_paste.Bind( wx.EVT_BUTTON, self.pasteValue )
+        self.new_choice.Bind( wx.EVT_TEXT_ENTER, self.valid_custom )
+        self.m_but_cancel.Bind( wx.EVT_BUTTON, self.cancelOption )
+        self.m_but_ok.Bind( wx.EVT_BUTTON, self.okOption )
+
+    def __del__( self ):
+        pass
+
+
+    # Virtual event handlers, overide them in your derived class
+    def pasteValue( self, event ):
+        event.Skip()
+
+    def valid_custom( self, event ):
+        event.Skip()
+
+    def cancelOption( self, event ):
+        event.Skip()
+
+    def okOption( self, event ):
+        event.Skip()
+
+
