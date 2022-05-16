@@ -29,6 +29,7 @@ class SendModal(SendDialog):
         self.panel.fee_slider.Bind(wx.EVT_SCROLL, self.fee_changed)
         self.panel.cancel_btn.Bind(wx.EVT_BUTTON, self.click_cancel)
         self.panel.ok_btn.Bind(wx.EVT_BUTTON, self.click_ok)
+        self.panel.paste_btn.Bind(wx.EVT_BUTTON, self.paste_addr)
         self.panel.bmp_chk.SetBitmap(self.BAD_BMP)
 
     def close(self, evt):
@@ -44,6 +45,15 @@ class SendModal(SendDialog):
 
     def fee_changed(self, nfeesel):
         self.panel.text_fees.SetLabel(FEES_PRORITY_TEXT[nfeesel.GetSelection()])
+
+    def paste_addr(self, evt):
+        evt.Skip()
+        text_data = wx.TextDataObject()
+        if wx.TheClipboard.Open():
+            success = wx.TheClipboard.GetData(text_data)
+            wx.TheClipboard.Close()
+        if success:
+            self.panel.text_dest.SetValue(text_data.GetText())
 
     def check_addr(self, evt):
         if self.check_addr_method(evt.GetString()):

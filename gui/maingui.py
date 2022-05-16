@@ -280,10 +280,20 @@ class SendPanel ( wx.Panel ):
 
         bSizer23.Add( ( 0, 0), 0, wx.BOTTOM, 24 )
 
+        bSizer201 = wx.BoxSizer( wx.HORIZONTAL )
+
         self.m_staticText7 = wx.StaticText( self, wx.ID_ANY, u"Destination Address", wx.DefaultPosition, wx.DefaultSize, 0 )
         self.m_staticText7.Wrap( -1 )
 
-        bSizer23.Add( self.m_staticText7, 0, wx.LEFT, 5 )
+        bSizer201.Add( self.m_staticText7, 0, wx.LEFT, 5 )
+
+        self.paste_btn = wx.Button( self, wx.ID_ANY, u"Paste", wx.DefaultPosition, wx.Size( 80,24 ), 0 )
+        self.paste_btn.SetFont( wx.Font( 9, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, False, wx.EmptyString ) )
+
+        bSizer201.Add( self.paste_btn, 0, wx.LEFT, 24 )
+
+
+        bSizer23.Add( bSizer201, 0, 0, 5 )
 
         bSizer14 = wx.BoxSizer( wx.HORIZONTAL )
 
