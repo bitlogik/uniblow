@@ -242,6 +242,172 @@ class DevicesPanel ( wx.Panel ):
 
 
 ###########################################################################
+## Class HDDialog
+###########################################################################
+
+class HDDialog ( wx.Dialog ):
+
+    def __init__( self, parent ):
+        wx.Dialog.__init__ ( self, parent, id = wx.ID_ANY, title = u"Local File wallet setup", pos = wx.DefaultPosition, size = wx.Size( 600,480 ), style = wx.CAPTION|wx.CLOSE_BOX|wx.DEFAULT_DIALOG_STYLE|wx.STAY_ON_TOP|wx.SYSTEM_MENU )
+
+        self.SetSizeHints( wx.DefaultSize, wx.DefaultSize )
+
+
+        self.Centre( wx.BOTH )
+
+    def __del__( self ):
+        pass
+
+
+###########################################################################
+## Class HDPanel
+###########################################################################
+
+class HDPanel ( wx.Panel ):
+
+    def __init__( self, parent, id = wx.ID_ANY, pos = wx.DefaultPosition, size = wx.Size( -1,-1 ), style = wx.TAB_TRAVERSAL, name = wx.EmptyString ):
+        wx.Panel.__init__ ( self, parent, id = id, pos = pos, size = size, style = style, name = name )
+
+        self.SetBackgroundColour( wx.Colour( 248, 250, 252 ) )
+
+        bSizer11 = wx.BoxSizer( wx.VERTICAL )
+
+        bSizer15 = wx.BoxSizer( wx.HORIZONTAL )
+
+        self.title_text = wx.StaticText( self, wx.ID_ANY, u"Local wallet mnemonic setup", wx.DefaultPosition, wx.DefaultSize, 0 )
+        self.title_text.Wrap( -1 )
+
+        self.title_text.SetFont( wx.Font( 14, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, False, wx.EmptyString ) )
+
+        bSizer15.Add( self.title_text, 0, wx.ALIGN_CENTER_HORIZONTAL|wx.ALIGN_CENTER_VERTICAL|wx.LEFT, 32 )
+
+
+        bSizer15.Add( ( 24, 0), 0, 0, 15 )
+
+        self.m_textwl = wx.StaticText( self, wx.ID_ANY, u"Words in list", wx.DefaultPosition, wx.DefaultSize, 0 )
+        self.m_textwl.Wrap( -1 )
+
+        bSizer15.Add( self.m_textwl, 0, wx.ALIGN_BOTTOM|wx.ALL, 5 )
+
+        self.m_bitmapHDwl = wx.StaticBitmap( self, wx.ID_ANY, wx.NullBitmap, wx.DefaultPosition, wx.DefaultSize, 0 )
+        bSizer15.Add( self.m_bitmapHDwl, 0, wx.ALIGN_BOTTOM|wx.BOTTOM, 5 )
+
+        self.m_textcs = wx.StaticText( self, wx.ID_ANY, u"Checksum", wx.DefaultPosition, wx.DefaultSize, wx.ST_NO_AUTORESIZE )
+        self.m_textcs.Wrap( -1 )
+
+        bSizer15.Add( self.m_textcs, 0, wx.ALL|wx.ALIGN_BOTTOM, 5 )
+
+        self.m_bitmapHDcs = wx.StaticBitmap( self, wx.ID_ANY, wx.NullBitmap, wx.DefaultPosition, wx.DefaultSize, 0 )
+        bSizer15.Add( self.m_bitmapHDcs, 0, wx.ALIGN_BOTTOM|wx.BOTTOM, 5 )
+
+
+        bSizer15.Add( ( 0, 0), 1, wx.EXPAND|wx.RIGHT, 16 )
+
+
+        bSizer11.Add( bSizer15, 1, wx.EXPAND, 5 )
+
+        self.m_textCtrl_mnemo = wx.TextCtrl( self, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, wx.TE_MULTILINE )
+        self.m_textCtrl_mnemo.SetFont( wx.Font( 12, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, False, wx.EmptyString ) )
+
+        bSizer11.Add( self.m_textCtrl_mnemo, 1, wx.LEFT|wx.RIGHT|wx.EXPAND, 16 )
+
+        bSizer13 = wx.BoxSizer( wx.HORIZONTAL )
+
+
+        bSizer13.Add( ( 0, 0), 0, wx.RIGHT, 18 )
+
+        self.m_bwptxt = wx.StaticText( self, wx.ID_ANY, u"Deriv. password (opt.)", wx.DefaultPosition, wx.DefaultSize, 0 )
+        self.m_bwptxt.Wrap( -1 )
+
+        bSizer13.Add( self.m_bwptxt, 0, wx.ALIGN_CENTER_VERTICAL, 4 )
+
+        self.m_textCtrl_pwd = wx.TextCtrl( self, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.Size( 170,-1 ), 0 )
+        bSizer13.Add( self.m_textCtrl_pwd, 0, wx.ALL, 5 )
+
+        self.m_checkBox_secboost = wx.CheckBox( self, wx.ID_ANY, u"SecuBoost", wx.DefaultPosition, wx.DefaultSize, 0 )
+        self.m_checkBox_secboost.SetToolTip( u"Extra security boost for mnemonic.\nNot compatible with BIP39.\nRequires >1GB RAM free" )
+
+        bSizer13.Add( self.m_checkBox_secboost, 0, wx.ALIGN_CENTER_VERTICAL|wx.LEFT, 22 )
+
+
+        bSizer11.Add( bSizer13, 0, wx.ALIGN_CENTER_HORIZONTAL, 5 )
+
+        bSizer14 = wx.BoxSizer( wx.HORIZONTAL )
+
+        self.m_accounttxt = wx.StaticText( self, wx.ID_ANY, u"Account #", wx.DefaultPosition, wx.DefaultSize, 0 )
+        self.m_accounttxt.Wrap( -1 )
+
+        bSizer14.Add( self.m_accounttxt, 0, wx.ALIGN_CENTER_VERTICAL, 5 )
+
+        self.m_spinCtrl_account = wx.SpinCtrl( self, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.Size( 75,-1 ), wx.SP_ARROW_KEYS, 0, 2147483647, 0 )
+        bSizer14.Add( self.m_spinCtrl_account, 0, wx.ALL|wx.ALIGN_CENTER_VERTICAL, 5 )
+
+        self.m_indextxt = wx.StaticText( self, wx.ID_ANY, u"index", wx.DefaultPosition, wx.DefaultSize, 0 )
+        self.m_indextxt.Wrap( -1 )
+
+        bSizer14.Add( self.m_indextxt, 0, wx.LEFT|wx.ALIGN_CENTER_VERTICAL, 24 )
+
+        self.m_spinCtrl_index = wx.SpinCtrl( self, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.Size( 75,-1 ), wx.SP_ARROW_KEYS, 0, 2147483647, 0 )
+        bSizer14.Add( self.m_spinCtrl_index, 0, wx.ALL|wx.ALIGN_CENTER_VERTICAL, 5 )
+
+
+        bSizer11.Add( bSizer14, 1, wx.ALIGN_CENTER_HORIZONTAL|wx.TOP, 16 )
+
+        self.m_altderiv = wx.CheckBox( self, wx.ID_ANY, u"Alt. derivation path (Not BIP44, for ETH / EVM)", wx.DefaultPosition, wx.DefaultSize, 0 )
+        bSizer11.Add( self.m_altderiv, 0, wx.ALL|wx.ALIGN_CENTER_HORIZONTAL, 5 )
+
+
+        bSizer11.Add( ( 0, 0), 0, wx.TOP, 20 )
+
+        self.m_usertxt = wx.StaticText( self, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, 0 )
+        self.m_usertxt.Wrap( -1 )
+
+        self.m_usertxt.SetFont( wx.Font( 10, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, False, wx.EmptyString ) )
+
+        bSizer11.Add( self.m_usertxt, 0, wx.ALIGN_CENTER_HORIZONTAL|wx.LEFT|wx.RIGHT, 24 )
+
+        bSizer12 = wx.BoxSizer( wx.HORIZONTAL )
+
+        self.m_butOK = wx.Button( self, wx.ID_ANY, u"OK", wx.DefaultPosition, wx.Size( -1,36 ), 0 )
+        self.m_butOK.SetFont( wx.Font( wx.NORMAL_FONT.GetPointSize(), wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_BOLD, False, wx.EmptyString ) )
+
+        bSizer12.Add( self.m_butOK, 0, wx.ALL, 5 )
+
+
+        bSizer12.Add( ( 0, 0), 1, wx.RIGHT, 25 )
+
+        self.m_butcancel = wx.Button( self, wx.ID_ANY, u"Cancel", wx.DefaultPosition, wx.Size( -1,36 ), 0 )
+        bSizer12.Add( self.m_butcancel, 0, wx.ALL, 5 )
+
+
+        bSizer11.Add( bSizer12, 0, wx.ALIGN_CENTER_HORIZONTAL|wx.ALL, 18 )
+
+
+        self.SetSizer( bSizer11 )
+        self.Layout()
+        bSizer11.Fit( self )
+
+        # Connect Events
+        self.m_textCtrl_mnemo.Bind( wx.EVT_TEXT, self.hdmnemo_changed )
+        self.m_butOK.Bind( wx.EVT_BUTTON, self.hd_ok )
+        self.m_butcancel.Bind( wx.EVT_BUTTON, self.hd_cancel )
+
+    def __del__( self ):
+        pass
+
+
+    # Virtual event handlers, overide them in your derived class
+    def hdmnemo_changed( self, event ):
+        event.Skip()
+
+    def hd_ok( self, event ):
+        event.Skip()
+
+    def hd_cancel( self, event ):
+        event.Skip()
+
+
+###########################################################################
 ## Class SendDialog
 ###########################################################################
 

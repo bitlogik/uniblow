@@ -83,7 +83,7 @@ if sys.platform.startswith("darwin"):
         environ["SSL_CERT_FILE"] = cert_file_path
 
 
-class HDsetting_panel(gui.window.HDPanel):
+class HDsetting_panel(gui.maingui.HDPanel):
     def hdmnemo_changed(self, evt):
         evt.Skip()
         self.m_bitmapHDwl.SetBitmap(self.BAD_BMP)
@@ -566,7 +566,7 @@ class UniblowApp(wx.App):
 
     def hd_setup(self, proposal):
         """Call the HD device option window."""
-        self.gui_hdframe = gui.window.HDDialog(self.gui_frame)
+        self.gui_hdframe = gui.maingui.HDDialog(self.gui_frame)
         self.gui_hdpanel = HDsetting_panel(self.gui_hdframe)
         if proposal:
             # LocalFile wallet init setup
