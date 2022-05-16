@@ -102,8 +102,24 @@ def check_coin_consistency(current_wallet=None, network_num=None):
     """Check if selected coin is the same as the current wallet class used."""
     # Designed to fix a race condition when the async data of a wallet
     # are displayed : address and balance.
-    # Changing the coin selector could mix crypto info. So this terminates some
+    # Changing the coin selected could mix crypto info. So this terminates some
     # process path that are no longer valid.
+    if hasattr(app, "wallet"):
+        current_wallet = type(app.wallet)
+        coin_class = get_coin_class(app.current_chain)
+        if coin_class is not current_wallet:
+            print("diff coin class")
+            print(coin_class)
+            print(current_wallet)
+            return False
+    if network_num is not None:
+        net_sel = app.gui_panel.network_choice.GetSelection()
+        print("netwc")
+        print(network_num)
+        print(net_sel)
+        if net_sel < 0:
+            return False
+        return net_sel == network_num
     return True
 
 
@@ -270,9 +286,11 @@ def cb_open_wallet(wallet_obj, pkey, waltype, sw_frame, pubkey_cpr):
         app.gui_panel.but_evt2.Bind(
             wx.EVT_BUTTON, lambda x: process_coin_select(app.wallet.coin, 0, 2)
         )
-    app.gui_panel.network_choice.Bind(wx.EVT_CHOICE, lambda x: net_selected(app.wallet.coin, x.GetInt()))
+    app.gui_panel.network_choice.Bind(
+        wx.EVT_CHOICE, lambda x: net_selected(app.wallet.coin, x.GetInt())
+    )
     app.gui_panel.wallopt_choice.Bind(wx.EVT_CHOICE, lambda x: wtype_selected(app.wallet.coin, x))
-    
+
     coin_button = wx.BitmapButton(
         app.gui_panel.scrolled_coins,
         wx.ID_ANY,
@@ -534,6 +552,7 @@ def wallet_fallback():
     # coin_sel = app.gui_panel.coins_choice.GetStringSelection()
     # net_sel = app.gui_panel.network_choice.GetSelection()
     # wx.CallLater(180, process_coin_select, coin_sel, net_sel, wallet_type_fallback)
+    app.gui_panel.scrolled_coins.Enable()
 
 
 def wallet_error(exc, level="hard"):
@@ -546,6 +565,7 @@ def wallet_error(exc, level="hard"):
     if hasattr(app, "wallet"):
         erase_option = app.wallet.coin != "BTC"
     else:
+        app.clear_coin_selected()
         erase_option = False
     app.erase_info(erase_option)
     logger.error("Error in the wallet : %s", str(exc), exc_info=exc, stack_info=True)
@@ -608,27 +628,25 @@ def set_coin(coin, network, wallet_type):
         return
     if not check_coin_consistency(network_num=network):
         return
-    if app.device.has_screen:
-        # app.gui_panel.btn_chkaddr.Show()
-        pass
+    app.gui_panel.scrolled_coins.Enable()
     display_coin(account_id)
 
 
 def display_coin(account_addr):
-    imgbuf = BytesIO()
+    app.gui_panel.account_addr.SetLabel(account_addr)
     imgqr = qrcode.make(
         account_addr,
         error_correction=qrcode.constants.ERROR_CORRECT_L,
         box_size=4,
         border=3,
     )
+    imgbuf = BytesIO()
     imgqr.save(imgbuf, "PNG")
     if not check_coin_consistency():
         return
-    app.gui_panel.account_addr.SetLabel(account_addr)
     imgbuf.seek(0)
     wxi = wx.Image(imgbuf, type=wx.BITMAP_TYPE_PNG)
-    app.gui_panel.qrimg.SetScaleMode(wx.StaticBitmap.ScaleMode.Scale_None)  # or Scale_AspectFit
+    app.gui_panel.qrimg.SetScaleMode(wx.StaticBitmap.ScaleMode.Scale_None)
     app.gui_panel.qrimg.SetBitmap(wx.Bitmap(wxi))
     app.balance_timer = DisplayTimer()
     wx.CallLater(50, display_balance)
@@ -709,6 +727,7 @@ def transfer(to, amount, fee_opt=1):
                 "Processing transaction",
                 "",
                 style=wx.PD_APP_MODAL | wx.PD_AUTO_HIDE | wx.PD_SMOOTH,
+                parent=app.gui_frame,
             )
             wx.MilliSleep(50)
             wait_msg = "Buiding and signing the transaction"

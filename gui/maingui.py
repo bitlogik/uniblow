@@ -109,9 +109,9 @@ class WalletPanel ( wx.Panel ):
         bSizer12 = wx.BoxSizer( wx.HORIZONTAL )
 
         self.qrimg = wx.StaticBitmap( self.m_panel1, wx.ID_ANY, wx.NullBitmap, wx.DefaultPosition, wx.DefaultSize, 0 )
-        self.qrimg.SetMinSize( wx.Size( 125,125 ) )
+        self.qrimg.SetMinSize( wx.Size( 120,120 ) )
 
-        bSizer12.Add( self.qrimg, 0, wx.TOP|wx.BOTTOM|wx.RIGHT, 12 )
+        bSizer12.Add( self.qrimg, 0, wx.ALL, 12 )
 
 
         bSizer12.Add( ( 0, 0), 0, 0, 24 )
@@ -126,17 +126,17 @@ class WalletPanel ( wx.Panel ):
         bSizer11.Add( ( 0, 0), 0, wx.LEFT, 20 )
 
         self.copy_button = wx.BitmapButton( self.m_panel1, wx.ID_ANY, wx.NullBitmap, wx.DefaultPosition, wx.DefaultSize, wx.BU_AUTODRAW|wx.BORDER_NONE )
-        bSizer11.Add( self.copy_button, 0, wx.TOP, 12 )
+        bSizer11.Add( self.copy_button, 0, wx.TOP, 8 )
 
-        self.copy_status = wx.StaticText( self.m_panel1, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, 0 )
+        self.copy_status = wx.StaticText( self.m_panel1, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.Size( 60,-1 ), 0 )
         self.copy_status.Wrap( -1 )
 
-        bSizer11.Add( self.copy_status, 0, wx.TOP|wx.LEFT, 15 )
+        bSizer11.Add( self.copy_status, 0, wx.TOP|wx.LEFT, 10 )
 
-        self.btn_ledger = wx.BitmapButton( self.m_panel1, wx.ID_ANY, wx.NullBitmap, wx.DefaultPosition, wx.DefaultSize, wx.BU_AUTODRAW|0|wx.BORDER_NONE )
-        self.btn_ledger.Hide()
+        self.btn_chkaddr = wx.BitmapButton( self.m_panel1, wx.ID_ANY, wx.NullBitmap, wx.DefaultPosition, wx.DefaultSize, wx.BU_AUTODRAW|0|wx.BORDER_NONE )
+        self.btn_chkaddr.Hide()
 
-        bSizer11.Add( self.btn_ledger, 0, wx.TOP|wx.LEFT, 12 )
+        bSizer11.Add( self.btn_chkaddr, 0, wx.TOP|wx.LEFT, 8 )
 
 
         bSizer14.Add( bSizer11, 1, wx.EXPAND, 5 )

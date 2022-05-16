@@ -191,6 +191,7 @@ class UniblowApp(wx.App):
         self.Bind(wx.EVT_ACTIVATE_APP, self.OnActivate)
         self.dev_selected = None
         self.coin_selected = None
+        self.current_chain = None
 
     def OnInit(self):
         self.HAND_CURSOR = wx.Cursor(wx.CURSOR_HAND)
@@ -281,11 +282,11 @@ class UniblowApp(wx.App):
         self.gui_panel.btn_send.SetCursor(self.HAND_CURSOR)
         self.gui_panel.btn_send.Bind(wx.EVT_BUTTON, self.open_send)
         self.gui_panel.btn_send.Hide()
-        self.gui_panel.btn_ledger.SetBitmap(
+        self.gui_panel.btn_chkaddr.SetBitmap(
             wx.Bitmap(file_path("gui/images/btns/ledgerchk.png"), wx.BITMAP_TYPE_PNG)
         )
-        self.gui_panel.btn_ledger.SetCursor(self.HAND_CURSOR)
-        self.gui_panel.btn_ledger.Bind(wx.EVT_BUTTON, self.check_wallet)
+        self.gui_panel.btn_chkaddr.SetCursor(self.HAND_CURSOR)
+        self.gui_panel.btn_chkaddr.Bind(wx.EVT_BUTTON, self.check_wallet)
 
         # app.gui_panel.devices_choice.Bind(wx.EVT_CHOICE, device_selected)
         # app.gui_panel.coins_choice.Bind(wx.EVT_CHOICE, coin_selected)
@@ -304,7 +305,7 @@ class UniblowApp(wx.App):
             self.load_coins_list(dev_info)
             self.erase_info(True, True)
             if sdevice == 3:
-                self.gui_panel.btn_ledger.Show()
+                self.gui_panel.btn_chkaddr.Show()
 
     def load_device(self, evt):
         """Called from the device panel choice click."""
@@ -329,11 +330,18 @@ class UniblowApp(wx.App):
 
     def load_coin(self, evt):
         """Called from the chain panel choice click."""
-        coinsbtn = evt.GetEventObject().GetParent().GetChildren()
+        sel_coinbtn = evt.GetEventObject()
+        coinsbtn = sel_coinbtn.GetParent().GetChildren()
         for pos in range(len(coinsbtn)):
-            if coinsbtn[pos] is evt.GetEventObject():
+            if coinsbtn[pos] is sel_coinbtn:
                 coin_name = self.coins_list[pos]
-                self.coin_selected(coin_name)
+                if coin_name != self.current_chain:
+                    sel_coinbtn.SetBackgroundColour(wx.Colour(0x57, 0x46, 0xCC))
+                    self.gui_panel.scrolled_coins.Disable()
+                    self.current_chain = coin_name
+                    wx.CallAfter(self.coin_selected, coin_name)
+            else:
+                coinsbtn[pos].SetBackgroundColour(wx.Colour(248, 250, 252))
 
     def deactivate_option_buttons(self):
         self.gui_panel.but_evt1.SetBitmap(wx.NullBitmap)
@@ -421,6 +429,11 @@ class UniblowApp(wx.App):
         self.gui_panel.account_addr.SetLabel("")
         self.gui_frame.Refresh()
 
+    def clear_coin_selected(self):
+        coin_btns = self.gui_panel.scrolled_coins.GetChildren()
+        for btn in coin_btns:
+            btn.SetBackgroundColour(wx.Colour(255, 255, 255, 0))
+
     def load_coins_list(self, coins_list):
         sizer = wx.BoxSizer(wx.VERTICAL)
         for coin in coins_list:
@@ -432,15 +445,17 @@ class UniblowApp(wx.App):
                 wx.DefaultSize,
                 wx.BU_AUTODRAW | wx.BORDER_NONE,
             )
-            img = wx.Image(f"gui/images/icons/{coin.lower()}.png", wx.BITMAP_TYPE_PNG).Rescale(
-                32, 32
+            img = (
+                wx.Image(f"gui/images/icons/{coin.lower()}.png", wx.BITMAP_TYPE_PNG)
+                .Rescale(32, 32)
+                .Resize(wx.Size(42, 36), wx.Point(5, 2), red=-1, green=-1, blue=-1)
             )
             bmp = wx.Bitmap(img)
             coin_button.SetBackgroundColour(wx.Colour(248, 250, 252))
             coin_button.SetBitmap(bmp)
             coin_button.SetCursor(self.HAND_CURSOR)
             coin_button.Bind(wx.EVT_BUTTON, self.load_coin)
-            sizer.Add(coin_button, 0, wx.ALIGN_CENTER_HORIZONTAL | wx.BOTTOM | wx.TOP, 6)
+            sizer.Add(coin_button, 0, wx.ALIGN_CENTER_HORIZONTAL | wx.BOTTOM | wx.TOP, 3)
         self.coins_list = coins_list
         self.gui_panel.scrolled_coins.SetSizer(sizer)
         self.gui_panel.scrolled_coins.Layout()
@@ -524,6 +539,7 @@ class UniblowApp(wx.App):
             caption=f"{device_nam} wallet PIN/password",
             defaultValue="",
             pos=wx.DefaultPosition,
+            parent=self.gui_frame,
         )
         if pwd_dialog.ShowModal() == wx.ID_OK:
             passval = pwd_dialog.GetValue()
@@ -599,13 +615,17 @@ class UniblowApp(wx.App):
             self.warn_modal("The address verification was rejected on the Ledger.")
 
     def check_wallet(self, evt):
+        if not hasattr(self, "wallet"):
+            return
         progress_modal = wx.ProgressDialog(
             "",
             "",
             style=wx.PD_APP_MODAL | wx.PD_AUTO_HIDE | wx.PD_SMOOTH,
+            parent=self.gui_frame,
         )
         wx.MilliSleep(200)
-        wait_msg = "Verify the address on the Ledger screen."
+        wait_msg = "Verify the address on the Ledger screen.\n"
+        wait_msg += self.wallet.get_account()
         progress_modal.Update(50, wait_msg)
         wx.MilliSleep(250)
         try:
