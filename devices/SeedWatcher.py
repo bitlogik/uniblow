@@ -402,11 +402,15 @@ def start_seedwatcher(app, cb_wallet):
             "Select asset line, then right click on it to open menu"
         )
 
-    app.panel_sw.m_button_gen.SetBitmap(Bitmap(file_path("gui/images/btns/GenSeed.png"), BITMAP_TYPE_PNG))
+    app.panel_sw.m_button_gen.SetBitmap(
+        Bitmap(file_path("gui/images/btns/GenSeed.png"), BITMAP_TYPE_PNG)
+    )
     app.panel_sw.m_button_gen.SetBitmapPressed(
         Bitmap(file_path("gui/images/btns/GenSeeddn.png"), BITMAP_TYPE_PNG)
     )
-    app.panel_sw.m_btnseek.SetBitmap(Bitmap(file_path("gui/images/btns/SeekAssets.png"), BITMAP_TYPE_PNG))
+    app.panel_sw.m_btnseek.SetBitmap(
+        Bitmap(file_path("gui/images/btns/SeekAssets.png"), BITMAP_TYPE_PNG)
+    )
     app.panel_sw.m_btnseek.SetBitmapPressed(
         Bitmap(file_path("gui/images/btns/SeekAssetsdn.png"), BITMAP_TYPE_PNG)
     )

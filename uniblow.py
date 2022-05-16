@@ -17,6 +17,7 @@
 
 try:
     from ctypes import windll
+
     windll.shcore.SetProcessDpiAwareness(2)
 except ImportError:
     # Not Windows, anyway
