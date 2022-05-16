@@ -250,6 +250,48 @@ def cb_open_wallet(wallet_obj, pkey, waltype, sw_frame, pubkey_cpr):
     app.add_wallet_types(acc_types)
     app.gui_panel.network_choice.SetSelection(0)
     app.gui_panel.wallopt_choice.SetSelection(waltype)
+    app.deactivate_option_buttons()
+    if app.wallet.coin in [
+        "ETH",
+        "BSC",
+        "MATIC",
+        "FTM",
+        "OP",
+        "METIS",
+        "CELO",
+        "GLMR",
+        "ARB",
+        "AVAX",
+    ]:
+        app.activate_option_buttons()
+        app.gui_panel.but_evt1.Bind(
+            wx.EVT_BUTTON, lambda x: process_coin_select(app.wallet.coin, 0, 1)
+        )
+        app.gui_panel.but_evt2.Bind(
+            wx.EVT_BUTTON, lambda x: process_coin_select(app.wallet.coin, 0, 2)
+        )
+    app.gui_panel.network_choice.Bind(wx.EVT_CHOICE, lambda x: net_selected(app.wallet.coin, x.GetInt()))
+    app.gui_panel.wallopt_choice.Bind(wx.EVT_CHOICE, lambda x: wtype_selected(app.wallet.coin, x))
+    
+    coin_button = wx.BitmapButton(
+        app.gui_panel.scrolled_coins,
+        wx.ID_ANY,
+        wx.NullBitmap,
+        wx.DefaultPosition,
+        wx.DefaultSize,
+        wx.BU_AUTODRAW | wx.BORDER_NONE,
+    )
+    img = wx.Image(f"gui/images/icons/{app.wallet.coin.lower()}.png", wx.BITMAP_TYPE_PNG).Rescale(
+        32, 32
+    )
+    bmp = wx.Bitmap(img)
+    coin_button.SetBackgroundColour(wx.Colour(248, 250, 252))
+    coin_button.SetBitmap(bmp)
+    sizer = wx.BoxSizer(wx.VERTICAL)
+    sizer.Add(coin_button, 0, wx.ALIGN_CENTER_HORIZONTAL | wx.BOTTOM | wx.TOP, 6)
+    app.gui_panel.scrolled_coins.SetSizer(sizer)
+    app.gui_panel.scrolled_coins.Layout()
+    app.gui_frame.Layout()
     display_coin(app.wallet.get_account())
 
 
