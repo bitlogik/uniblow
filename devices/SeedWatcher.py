@@ -172,8 +172,8 @@ class SeedWatcherPanel(gui.swgui.MainPanel):
         self.generate_mnemonic(selnw)
 
     def initialize(self, cb_wallet):
-        self.GOOD_BMP = Bitmap(file_path("gui/good.bmp"))
-        self.BAD_BMP = Bitmap(file_path("gui/bad.bmp"))
+        self.GOOD_BMP = Bitmap(file_path("gui/images/good.bmp"))
+        self.BAD_BMP = Bitmap(file_path("gui/images/bad.bmp"))
         self.m_choice_nwords.Set(WORDSLEN_LIST)
         self.m_choice_nwords.SetSelection(0)
         ctab = self.m_dataViewListCtrl1
@@ -402,13 +402,13 @@ def start_seedwatcher(app, cb_wallet):
             "Select asset line, then right click on it to open menu"
         )
 
-    app.panel_sw.m_button_gen.SetBitmap(Bitmap(file_path("gui/GenSeed.png"), BITMAP_TYPE_PNG))
+    app.panel_sw.m_button_gen.SetBitmap(Bitmap(file_path("gui/images/btns/GenSeed.png"), BITMAP_TYPE_PNG))
     app.panel_sw.m_button_gen.SetBitmapPressed(
-        Bitmap(file_path("gui/GenSeeddn.png"), BITMAP_TYPE_PNG)
+        Bitmap(file_path("gui/images/btns/GenSeeddn.png"), BITMAP_TYPE_PNG)
     )
-    app.panel_sw.m_btnseek.SetBitmap(Bitmap(file_path("gui/SeekAssets.png"), BITMAP_TYPE_PNG))
+    app.panel_sw.m_btnseek.SetBitmap(Bitmap(file_path("gui/images/btns/SeekAssets.png"), BITMAP_TYPE_PNG))
     app.panel_sw.m_btnseek.SetBitmapPressed(
-        Bitmap(file_path("gui/SeekAssetsdn.png"), BITMAP_TYPE_PNG)
+        Bitmap(file_path("gui/images/btns/SeekAssetsdn.png"), BITMAP_TYPE_PNG)
     )
 
     app.panel_sw.m_button_gen.SetCursor(HAND_CURSOR)

@@ -20,8 +20,8 @@ class SendModal(SendDialog):
         self.cb = callback
         bal_txt = wallet.get_balance().split(" ")[0]
         handcurs = wx.Cursor(wx.CURSOR_HAND)
-        self.GOOD_BMP = wx.Bitmap(file_path("gui/good.bmp"))
-        self.BAD_BMP = wx.Bitmap(file_path("gui/bad.bmp"))
+        self.GOOD_BMP = wx.Bitmap(file_path("gui/images/good.bmp"))
+        self.BAD_BMP = wx.Bitmap(file_path("gui/images/bad.bmp"))
         self.panel.text_avail.SetLabel(bal_txt)
         self.Bind(wx.EVT_CLOSE, self.close)
         self.panel.text_dest.Bind(wx.EVT_TEXT, self.check_addr)

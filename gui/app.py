@@ -578,8 +578,8 @@ class UniblowApp(wx.App):
         self.gui_hdpanel = HDsetting_panel(self.gui_hdframe)
         if proposal:
             # LocalFile wallet init setup
-            self.gui_hdpanel.GOOD_BMP = wx.Bitmap(file_path("gui/good.bmp"))
-            self.gui_hdpanel.BAD_BMP = wx.Bitmap(file_path("gui/bad.bmp"))
+            self.gui_hdpanel.GOOD_BMP = wx.Bitmap(file_path("gui/images/good.bmp"))
+            self.gui_hdpanel.BAD_BMP = wx.Bitmap(file_path("gui/images/bad.bmp"))
             self.gui_hdpanel.m_bitmapHDwl.SetBitmap(self.gui_hdpanel.BAD_BMP)
             self.gui_hdpanel.m_bitmapHDcs.SetBitmap(self.gui_hdpanel.BAD_BMP)
             self.gui_hdpanel.m_checkBox_secboost.SetCursor(self.HAND_CURSOR)
