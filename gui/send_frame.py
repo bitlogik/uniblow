@@ -35,7 +35,6 @@ class SendModal(SendDialog):
         self.cb("CLOSE", "", "0")
 
     def check_all(self, evt):
-        print(evt.IsChecked())
         if evt.IsChecked():
             self.panel.text_amount.SetValue("ALL")
             self.panel.text_amount.Disable()
@@ -56,7 +55,6 @@ class SendModal(SendDialog):
         self.cb("CANCEL", "", "0")
 
     def click_ok(self, event):
-        print("OK")
         amount = self.panel.text_amount.GetValue()
         dest = self.panel.text_dest.GetValue()
         fee_level = self.panel.fee_slider.GetValue()
