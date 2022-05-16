@@ -46,6 +46,8 @@ class MainPanel ( wx.Panel ):
     def __init__( self, parent, id = wx.ID_ANY, pos = wx.DefaultPosition, size = wx.Size( -1,-1 ), style = wx.TAB_TRAVERSAL, name = wx.EmptyString ):
         wx.Panel.__init__ ( self, parent, id = id, pos = pos, size = size, style = style, name = name )
 
+        self.SetBackgroundColour( wx.Colour( 248, 250, 252 ) )
+
         bSizer11 = wx.BoxSizer( wx.VERTICAL )
 
 

@@ -559,9 +559,11 @@ def wallet_error(exc, level="hard"):
     """Process wallet exception"""
     if level == "hard":
         app.gui_panel.network_choice.Clear()
-        # app.gui_panel.coins_choice.SetSelection(0)
+        app.clear_coin_selected()
+        app.deactivate_option_buttons()
         app.gui_panel.wallopt_choice.Clear()
         app.gui_panel.wallopt_choice.Disable()
+        app.gui_panel.btn_chkaddr.Disable()
     if hasattr(app, "wallet"):
         erase_option = app.wallet.coin != "BTC"
     else:
@@ -571,6 +573,7 @@ def wallet_error(exc, level="hard"):
     logger.error("Error in the wallet : %s", str(exc), exc_info=exc, stack_info=True)
     if level == "fromwatch":
         exc = str(exc) + "\nYou can reconnect by selecting the network option."
+    app.gui_panel.scrolled_coins.Enable()
     app.warn_modal(str(exc))
 
 
@@ -613,6 +616,7 @@ def set_coin(coin, network, wallet_type):
         account_id = app.wallet.get_account()
         if not check_coin_consistency(network_num=network):
             return
+        app.gui_panel.btn_chkaddr.Enable()
         if option_info is not None and option_info.get("use_get_messages", False):
             app.wallet.wc_timer = wx.Timer()
             app.wallet.wc_timer.Notify = watch_messages
@@ -667,6 +671,7 @@ def process_coin_select(coin, sel_network, sel_wallettype):
     app.gui_panel.wallopt_choice.Enable()
     app.gui_panel.wallopt_label.Enable()
     app.deactivate_option_buttons()
+    app.gui_panel.btn_chkaddr.Disable()
     if coin in [
         "ETH",
         "BSC",
@@ -703,17 +708,20 @@ def coin_selected(coin_name):
     sele_wttype = 0
     app.gui_panel.network_choice.SetSelection(sele_network)
     app.gui_panel.wallopt_choice.SetSelection(sele_wttype)
+    app.gui_panel.btn_chkaddr.Disable()
     wx.CallLater(180, process_coin_select, coin_name, sele_network, sele_wttype)
 
 
 def net_selected(coin_sel, net_sel):
     app.erase_info()
+    app.gui_panel.btn_chkaddr.Disable()
     wtype_sel = app.gui_panel.wallopt_choice.GetSelection()
     wx.CallLater(180, process_coin_select, coin_sel, net_sel, wtype_sel)
 
 
 def wtype_selected(coin_sel, wtype_sel):
     app.erase_info()
+    app.gui_panel.btn_chkaddr.Disable()
     net_sel = app.gui_panel.network_choice.GetSelection()
     wx.CallLater(180, process_coin_select, coin_sel, net_sel, wtype_sel.GetInt())
 

@@ -255,7 +255,6 @@ class UniblowApp(wx.App):
         # self.dev_panel.copy_button.SetCursor(HAND_CURSOR)
         # self.dev_panel.send_button.SetCursor(HAND_CURSOR)
         # self.dev_panel.send_all.SetCursor(HAND_CURSOR)
-        # self.dev_panel.btn_chkaddr.SetCursor(HAND_CURSOR)
 
         self.SetTopWindow(self.gui_frame)
         return True
@@ -475,27 +474,25 @@ class UniblowApp(wx.App):
             return
         self.gui_panel.Disable()
         if not self.wallet.check_address(address):
-            self.warn_modal(BAD_ADDRESS)
+            self.warn_modal(BAD_ADDRESS, parent=self.send_dialog)
             return
         if len(amount_str) <= 0:
-            self.warn_modal("Input an amount value to transfer.")
+            self.warn_modal("Input an amount value to transfer.", parent=self.send_dialog)
             return
         if amount_str[0] == "-":
-            self.warn_modal("Amount input must be positive or null.")
+            self.warn_modal("Amount input must be positive or null.", parent=self.send_dialog)
             return
         try:
             if amount_str != "ALL":
                 float(amount_str)
         except ValueError:
-            self.warn_modal("Unvalid amount input")
+            self.warn_modal("Unvalid amount input", parent=self.send_dialog)
             return
         self.send_dialog.Destroy()
         self.transfer(address, amount_str, sel_fee)
 
     def open_send(self, evt):
-        self.send_dialog = SendModal(
-            self.gui_panel, self.wallet.coin, self.wallet.check_address, self.callback_send
-        )
+        self.send_dialog = SendModal(self.gui_panel, self.wallet, self.callback_send)
         self.gui_panel.Disable()
         self.send_dialog.Show()
 
@@ -526,8 +523,10 @@ class UniblowApp(wx.App):
         if hist_url:
             show_history(hist_url)
 
-    def warn_modal(self, warning_text, modal=False):
-        InfoBox(warning_text, "Error", wx.OK | wx.ICON_WARNING, self.gui_frame, block_modal=modal)
+    def warn_modal(self, warning_text, modal=False, parent=None):
+        if parent is None:
+            parent = self.gui_frame
+        InfoBox(warning_text, "Error", wx.OK | wx.ICON_WARNING, parent, block_modal=modal)
 
     def info_modal(self, title, info_text):
         InfoBox(info_text, title, wx.OK | wx.ICON_INFORMATION, self.gui_frame)
@@ -614,7 +613,16 @@ class UniblowApp(wx.App):
         if not result:
             self.warn_modal("The address verification was rejected on the Ledger.")
 
+    def check_device_address(self, pm):
+        try:
+            self.device.get_public_key(partial(self.end_checkwallet, pm))
+        except Exception as exc:
+            pm.Update(100, "failure")
+            wx.MilliSleep(200)
+            wx.CallAfter(self.device_error, exc)
+
     def check_wallet(self, evt):
+        evt.Skip()
         if not hasattr(self, "wallet"):
             return
         progress_modal = wx.ProgressDialog(
@@ -623,17 +631,12 @@ class UniblowApp(wx.App):
             style=wx.PD_APP_MODAL | wx.PD_AUTO_HIDE | wx.PD_SMOOTH,
             parent=self.gui_frame,
         )
-        wx.MilliSleep(200)
+        wx.MilliSleep(250)
         wait_msg = "Verify the address on the Ledger screen.\n"
         wait_msg += self.wallet.get_account()
         progress_modal.Update(50, wait_msg)
         wx.MilliSleep(250)
-        try:
-            self.device.get_public_key(partial(self.end_checkwallet, progress_modal))
-        except Exception as exc:
-            progress_modal.Update(100, "failure")
-            wx.MilliSleep(200)
-            wx.CallAfter(self.device_error, exc)
+        wx.CallAfter(self.check_device_address, progress_modal)
 
     def device_error(self, exc):
         # app.gui_panel.coins_choice.Disable()

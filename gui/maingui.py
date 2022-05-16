@@ -317,20 +317,20 @@ class SendPanel ( wx.Panel ):
         sbSizer3 = wx.StaticBoxSizer( wx.StaticBox( self, wx.ID_ANY, u"Amount" ), wx.VERTICAL )
 
         sbSizer3.SetMinSize( wx.Size( -1,175 ) )
-        bSizer18 = wx.BoxSizer( wx.HORIZONTAL )
+        bSizer18 = wx.BoxSizer( wx.VERTICAL )
 
         self.m_staticTextAvailLabel = wx.StaticText( sbSizer3.GetStaticBox(), wx.ID_ANY, u"Available : ", wx.DefaultPosition, wx.DefaultSize, 0 )
         self.m_staticTextAvailLabel.Wrap( -1 )
 
-        bSizer18.Add( self.m_staticTextAvailLabel, 0, wx.ALL, 5 )
+        bSizer18.Add( self.m_staticTextAvailLabel, 0, wx.RIGHT|wx.LEFT|wx.ALIGN_CENTER_HORIZONTAL, 5 )
 
-        self.text_avail = wx.StaticText( sbSizer3.GetStaticBox(), wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.Size( 120,-1 ), 0 )
+        self.text_avail = wx.StaticText( sbSizer3.GetStaticBox(), wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.Size( -1,-1 ), 0 )
         self.text_avail.Wrap( -1 )
 
-        bSizer18.Add( self.text_avail, 0, wx.ALL, 5 )
+        bSizer18.Add( self.text_avail, 0, wx.BOTTOM|wx.RIGHT|wx.LEFT, 5 )
 
 
-        sbSizer3.Add( bSizer18, 0, wx.BOTTOM|wx.LEFT, 8 )
+        sbSizer3.Add( bSizer18, 0, wx.LEFT, 8 )
 
         bSizer20 = wx.BoxSizer( wx.HORIZONTAL )
 

@@ -2142,16 +2142,16 @@
                                         <property name="permission">none</property>
                                         <object class="sizeritem" expanded="1">
                                             <property name="border">8</property>
-                                            <property name="flag">wxBOTTOM|wxLEFT</property>
+                                            <property name="flag">wxLEFT</property>
                                             <property name="proportion">0</property>
                                             <object class="wxBoxSizer" expanded="1">
                                                 <property name="minimum_size"></property>
                                                 <property name="name">bSizer18</property>
-                                                <property name="orient">wxHORIZONTAL</property>
+                                                <property name="orient">wxVERTICAL</property>
                                                 <property name="permission">none</property>
                                                 <object class="sizeritem" expanded="1">
                                                     <property name="border">5</property>
-                                                    <property name="flag">wxALL</property>
+                                                    <property name="flag">wxRIGHT|wxLEFT|wxALIGN_CENTER_HORIZONTAL</property>
                                                     <property name="proportion">0</property>
                                                     <object class="wxStaticText" expanded="1">
                                                         <property name="BottomDockable">1</property>
@@ -2212,7 +2212,7 @@
                                                 </object>
                                                 <object class="sizeritem" expanded="1">
                                                     <property name="border">5</property>
-                                                    <property name="flag">wxALL</property>
+                                                    <property name="flag">wxBOTTOM|wxRIGHT|wxLEFT</property>
                                                     <property name="proportion">0</property>
                                                     <object class="wxStaticText" expanded="1">
                                                         <property name="BottomDockable">1</property>
@@ -2260,7 +2260,7 @@
                                                         <property name="pos"></property>
                                                         <property name="resize">Resizable</property>
                                                         <property name="show">1</property>
-                                                        <property name="size">120,-1</property>
+                                                        <property name="size">-1,-1</property>
                                                         <property name="style"></property>
                                                         <property name="subclass">; ; forward_declare</property>
                                                         <property name="toolbar_pane">0</property>
