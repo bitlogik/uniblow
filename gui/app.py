@@ -263,6 +263,7 @@ class UniblowApp(wx.App):
         """Kill devices choice panel and start the wallet panel."""
         self.dev_panel.Destroy()
         self.gui_frame.SetSize((720, 420))
+        self.gui_frame.Layout()
         self.gui_panel = gui.maingui.WalletPanel(self.gui_frame)
         self.gui_panel.copy_button.SetBitmap(
             wx.Bitmap(file_path("gui/images/btns/copy.png"), wx.BITMAP_TYPE_PNG)
@@ -296,6 +297,15 @@ class UniblowApp(wx.App):
         # app.gui_panel.btn_chkaddr.Bind(wx.EVT_BUTTON, check_wallet)
         # app.gui_panel.btn_chkaddr.Hide()
 
+    def gowallet(self, sdevice):
+        dev_info = self.dev_selected(sdevice)
+        if isinstance(dev_info, list):
+            self.start_wallet_panel()
+            self.load_coins_list(dev_info)
+            self.erase_info(True, True)
+            if sdevice == 3:
+                self.gui_panel.btn_ledger.Show()
+
     def load_device(self, evt):
         """Called from the device panel choice click."""
         if evt.GetEventObject() is self.dev_panel.d_btn01:
@@ -315,13 +325,7 @@ class UniblowApp(wx.App):
             sel_dev = 2
         else:
             raise Exception("Bad device button object")
-        ret = self.dev_selected(sel_dev)
-        if isinstance(ret, list):
-            self.start_wallet_panel()
-            self.load_coins_list(ret)
-            self.erase_info(True, True)
-            if sel_dev == 3:
-                self.gui_panel.btn_ledger.Show()
+        wx.CallAfter(self.gowallet, sel_dev)
 
     def load_coin(self, evt):
         """Called from the chain panel choice click."""
@@ -538,6 +542,12 @@ class UniblowApp(wx.App):
         if option_dialog.ShowModal() == wx.ID_OK:
             optval = option_panel.GetValue()
             return optval
+
+    def add_wallet_types(self, wallets_types):
+        self.gui_panel.wallopt_choice.Clear()
+        for wtype in wallets_types:
+            if wtype not in ["ERC20", "WalletConnect"]:
+                self.gui_panel.wallopt_choice.Append(wtype)
 
     def hd_setup(self, proposal):
         """Call the HD device option window."""

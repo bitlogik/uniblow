@@ -248,7 +248,7 @@ class DevicesPanel ( wx.Panel ):
 class SendDialog ( wx.Dialog ):
 
     def __init__( self, parent ):
-        wx.Dialog.__init__ ( self, parent, id = wx.ID_ANY, title = u"Sending", pos = wx.DefaultPosition, size = wx.Size( 480,320 ), style = wx.DEFAULT_DIALOG_STYLE )
+        wx.Dialog.__init__ ( self, parent, id = wx.ID_ANY, title = u"Sending", pos = wx.DefaultPosition, size = wx.Size( 520,420 ), style = wx.DEFAULT_DIALOG_STYLE )
 
         self.SetSizeHints( wx.DefaultSize, wx.DefaultSize )
 
@@ -283,7 +283,7 @@ class SendPanel ( wx.Panel ):
         self.m_staticText7 = wx.StaticText( self, wx.ID_ANY, u"Destination Address", wx.DefaultPosition, wx.DefaultSize, 0 )
         self.m_staticText7.Wrap( -1 )
 
-        bSizer23.Add( self.m_staticText7, 0, wx.TOP|wx.BOTTOM|wx.LEFT, 5 )
+        bSizer23.Add( self.m_staticText7, 0, wx.LEFT, 5 )
 
         bSizer14 = wx.BoxSizer( wx.HORIZONTAL )
 
@@ -300,11 +300,27 @@ class SendPanel ( wx.Panel ):
         bSizer23.Add( bSizer14, 0, wx.EXPAND, 5 )
 
 
-        bSizer23.Add( ( 0, 0), 0, wx.TOP, 8 )
+        bSizer23.Add( ( 0, 0), 0, wx.TOP, 16 )
 
         bSizer15 = wx.BoxSizer( wx.HORIZONTAL )
 
         sbSizer3 = wx.StaticBoxSizer( wx.StaticBox( self, wx.ID_ANY, u"Amount" ), wx.VERTICAL )
+
+        sbSizer3.SetMinSize( wx.Size( -1,175 ) )
+        bSizer18 = wx.BoxSizer( wx.HORIZONTAL )
+
+        self.m_staticTextAvailLabel = wx.StaticText( sbSizer3.GetStaticBox(), wx.ID_ANY, u"Available : ", wx.DefaultPosition, wx.DefaultSize, 0 )
+        self.m_staticTextAvailLabel.Wrap( -1 )
+
+        bSizer18.Add( self.m_staticTextAvailLabel, 0, wx.ALL, 5 )
+
+        self.text_avail = wx.StaticText( sbSizer3.GetStaticBox(), wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.Size( 120,-1 ), 0 )
+        self.text_avail.Wrap( -1 )
+
+        bSizer18.Add( self.text_avail, 0, wx.ALL, 5 )
+
+
+        sbSizer3.Add( bSizer18, 0, wx.BOTTOM|wx.LEFT, 8 )
 
         bSizer20 = wx.BoxSizer( wx.HORIZONTAL )
 
@@ -325,9 +341,35 @@ class SendPanel ( wx.Panel ):
         sbSizer3.Add( self.check_sendall, 0, wx.LEFT, 32 )
 
 
-        bSizer15.Add( sbSizer3, 1, wx.EXPAND, 5 )
+        sbSizer3.Add( ( 0, 0), 0, wx.TOP, 8 )
+
+        bSizer191 = wx.BoxSizer( wx.HORIZONTAL )
+
+        self.m_staticTextFiat = wx.StaticText( sbSizer3.GetStaticBox(), wx.ID_ANY, u"value ~", wx.DefaultPosition, wx.DefaultSize, 0 )
+        self.m_staticTextFiat.Wrap( -1 )
+
+        self.m_staticTextFiat.SetFont( wx.Font( 9, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, False, wx.EmptyString ) )
+
+        bSizer191.Add( self.m_staticTextFiat, 0, wx.ALL, 5 )
+
+        self.fiat_value = wx.StaticText( sbSizer3.GetStaticBox(), wx.ID_ANY, u"1234 $", wx.DefaultPosition, wx.DefaultSize, 0 )
+        self.fiat_value.Wrap( -1 )
+
+        self.fiat_value.SetFont( wx.Font( 9, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, False, wx.EmptyString ) )
+
+        bSizer191.Add( self.fiat_value, 0, wx.ALL, 5 )
+
+
+        sbSizer3.Add( bSizer191, 0, 0, 5 )
+
+
+        bSizer15.Add( sbSizer3, 0, 0, 5 )
 
         sbSizer2 = wx.StaticBoxSizer( wx.StaticBox( self, wx.ID_ANY, u"Fees" ), wx.VERTICAL )
+
+        sbSizer2.SetMinSize( wx.Size( -1,175 ) )
+
+        sbSizer2.Add( ( 0, 0), 0, wx.TOP, 24 )
 
         self.fee_slider = wx.Slider( sbSizer2.GetStaticBox(), wx.ID_ANY, 1, 0, 2, wx.DefaultPosition, wx.DefaultSize, wx.SL_HORIZONTAL )
         sbSizer2.Add( self.fee_slider, 0, wx.ALL|wx.ALIGN_CENTER_HORIZONTAL, 5 )
@@ -343,7 +385,7 @@ class SendPanel ( wx.Panel ):
         bSizer15.Add( sbSizer2, 0, wx.ALIGN_CENTER_VERTICAL|wx.LEFT, 24 )
 
 
-        bSizer23.Add( bSizer15, 0, wx.EXPAND, 5 )
+        bSizer23.Add( bSizer15, 0, wx.ALIGN_CENTER_HORIZONTAL, 5 )
 
         bSizer19 = wx.BoxSizer( wx.HORIZONTAL )
 
@@ -361,7 +403,7 @@ class SendPanel ( wx.Panel ):
         bSizer19.Add( self.ok_btn, 0, wx.ALL, 5 )
 
 
-        bSizer23.Add( bSizer19, 0, wx.ALIGN_CENTER_HORIZONTAL|wx.TOP, 16 )
+        bSizer23.Add( bSizer19, 0, wx.ALIGN_CENTER_HORIZONTAL|wx.TOP, 24 )
 
 
         bSizer23.Add( ( 0, 0), 0, wx.TOP, 16 )

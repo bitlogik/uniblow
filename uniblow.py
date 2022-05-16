@@ -239,7 +239,6 @@ def cb_open_wallet(wallet_obj, pkey, waltype, sw_frame, pubkey_cpr):
     # app.gui_panel.coins_choice.SetSelection(0)
     # app.gui_panel.coins_choice.Disable()
     app.gui_panel.network_choice.Clear()
-    app.gui_panel.wallopt_choice.Clear()
     app.gui_panel.network_choice.Enable()
     if app.wallet.coin not in ["BTC", "XTZ"]:
         app.gui_panel.wallopt_choice.Enable()
@@ -248,8 +247,7 @@ def cb_open_wallet(wallet_obj, pkey, waltype, sw_frame, pubkey_cpr):
     acc_types = app.wallet.get_account_types()
     for netw in networks:
         app.gui_panel.network_choice.Append(netw)
-    for wtype in acc_types:
-        app.gui_panel.wallopt_choice.Append(wtype)
+    app.add_wallet_types(acc_types)
     app.gui_panel.network_choice.SetSelection(0)
     app.gui_panel.wallopt_choice.SetSelection(waltype)
     display_coin(app.wallet.get_account())
@@ -635,14 +633,12 @@ def process_coin_select(coin, sel_network, sel_wallettype):
 
 def coin_selected(coin_name):
     app.gui_panel.network_choice.Clear()
-    app.gui_panel.wallopt_choice.Clear()
     app.erase_info(True)
     networks = get_coin_class(coin_name).get_networks()
     acc_types = get_coin_class(coin_name).get_account_types()
     for netw in networks:
         app.gui_panel.network_choice.Append(netw)
-    for wtype in acc_types:
-        app.gui_panel.wallopt_choice.Append(wtype)
+    app.add_wallet_types(acc_types)
     sele_network = 0
     sele_wttype = 0
     app.gui_panel.network_choice.SetSelection(sele_network)
