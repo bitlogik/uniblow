@@ -394,7 +394,6 @@ def start_seedwatcher(app, cb_wallet):
     app.frame_sw = SeedWatcherFrame(app.gui_frame)
     app.frame_sw.SetIcons(IconBundle(file_path("gui/uniblow.ico")))
     HAND_CURSOR = Cursor(CURSOR_HAND)
-    app.gui_panel.devices_choice.SetSelection(0)
     app.gui_frame.Hide()
     app.panel_sw = SeedWatcherPanel(app.frame_sw)
     app.panel_sw.m_textCtrl_mnemo.SetFocus()

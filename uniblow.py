@@ -231,6 +231,7 @@ def cb_open_wallet(wallet_obj, pkey, waltype, sw_frame, pubkey_cpr):
         # Special case for Bitcoin Electrum old
         app.wallet = wallet_obj(key_device, pubkey_cpr)
     sw_frame.Close()
+    app.start_wallet_panel()
     # app.gui_panel.btn_chkaddr.Hide()
     # app.gui_panel.devices_choice.SetSelection(1)
     # app.gui_panel.coins_choice.Clear()
