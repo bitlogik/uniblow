@@ -453,7 +453,7 @@ class UniblowApp(wx.App):
                 wx.BU_AUTODRAW | wx.BORDER_NONE,
             )
             img = (
-                wx.Image(f"gui/images/icons/{coin.lower()}.png", wx.BITMAP_TYPE_PNG)
+                wx.Image(file_path(f"gui/images/icons/{coin.lower()}.png"), wx.BITMAP_TYPE_PNG)
                 .Rescale(32, 32)
                 .Resize(wx.Size(42, 36), wx.Point(5, 2), red=-1, green=-1, blue=-1)
             )
