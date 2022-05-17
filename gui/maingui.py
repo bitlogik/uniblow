@@ -34,7 +34,7 @@ class UniblowFrame ( wx.Frame ):
 
 class WalletPanel ( wx.Panel ):
 
-    def __init__( self, parent, id = wx.ID_ANY, pos = wx.DefaultPosition, size = wx.Size( 652,330 ), style = wx.TAB_TRAVERSAL, name = wx.EmptyString ):
+    def __init__( self, parent, id = wx.ID_ANY, pos = wx.DefaultPosition, size = wx.Size( -1,-1 ), style = wx.TAB_TRAVERSAL, name = wx.EmptyString ):
         wx.Panel.__init__ ( self, parent, id = id, pos = pos, size = size, style = style, name = name )
 
         self.SetBackgroundColour( wx.Colour( 248, 250, 252 ) )
@@ -84,7 +84,7 @@ class WalletPanel ( wx.Panel ):
 
         self.balance_unit.SetFont( wx.Font( 16, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, False, wx.EmptyString ) )
 
-        bSizer28.Add( self.balance_unit, 0, wx.ALIGN_BOTTOM|wx.TOP|wx.BOTTOM, 8 )
+        bSizer28.Add( self.balance_unit, 0, wx.ALIGN_BOTTOM|wx.TOP|wx.BOTTOM|wx.RIGHT, 8 )
 
         self.fiat_panel = wx.Panel( self.m_panel1, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.BORDER_SUNKEN|wx.TAB_TRAVERSAL )
         self.fiat_panel.SetBackgroundColour( wx.Colour( 100, 116, 139 ) )
@@ -129,13 +129,13 @@ class WalletPanel ( wx.Panel ):
         self.network_choice.SetFont( wx.Font( 12, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, False, wx.EmptyString ) )
         self.network_choice.SetMinSize( wx.Size( 120,-1 ) )
 
-        bSizer5.Add( self.network_choice, 0, wx.RIGHT, 16 )
+        bSizer5.Add( self.network_choice, 0, wx.RIGHT, 24 )
 
 
-        bSizer4.Add( bSizer5, 0, wx.RIGHT, 24 )
+        bSizer4.Add( bSizer5, 0, 0, 24 )
 
 
-        bSizer6.Add( bSizer4, 0, wx.EXPAND|wx.TOP, 16 )
+        bSizer6.Add( bSizer4, 0, wx.TOP|wx.EXPAND, 16 )
 
         bSizer9 = wx.BoxSizer( wx.HORIZONTAL )
 
@@ -247,6 +247,7 @@ class WalletPanel ( wx.Panel ):
 
         self.SetSizer( bSizer1 )
         self.Layout()
+        bSizer1.Fit( self )
 
     def __del__( self ):
         pass

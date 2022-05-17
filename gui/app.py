@@ -563,7 +563,7 @@ class UniblowApp(wx.App):
             self.gui_hdpanel.m_textCtrl_pwd.Destroy()
             self.gui_hdpanel.m_checkBox_secboost.Destroy()
             self.gui_hdpanel.m_usertxt.SetLabel("Choose account and index for the key to use.")
-            self.gui_hdframe.SetSize(480, 320)
+            self.gui_hdframe.SetSize(580, 340)
         self.gui_hdpanel.m_butOK.SetCursor(self.HAND_CURSOR)
         self.gui_hdpanel.m_butcancel.SetCursor(self.HAND_CURSOR)
         ret = self.gui_hdframe.ShowModal()
@@ -666,6 +666,9 @@ class UniblowApp(wx.App):
         if hasattr(self.wallet, "wc_timer"):
             # WalletConnect active
             self.disable_send("Use the connected dapp to transact")
+        self.gui_panel.Refresh()
+        self.gui_panel.Update()
+        self.gui_panel.Layout()
 
     def device_error(self, exc):
         if hasattr(self, "gui_panel"):

@@ -71,7 +71,7 @@
             <property name="minimum_size"></property>
             <property name="name">WalletPanel</property>
             <property name="pos"></property>
-            <property name="size">652,330</property>
+            <property name="size">-1,-1</property>
             <property name="subclass">; ; forward_declare</property>
             <property name="tooltip"></property>
             <property name="window_extra_style"></property>
@@ -291,7 +291,7 @@
                                                             <property name="maximum_size"></property>
                                                             <property name="min_size"></property>
                                                             <property name="minimize_button">0</property>
-                                                            <property name="minimum_size"></property>
+                                                            <property name="minimum_size">-1,-1</property>
                                                             <property name="moveable">1</property>
                                                             <property name="name">balance_info</property>
                                                             <property name="pane_border">1</property>

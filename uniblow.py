@@ -570,6 +570,7 @@ def display_coin(account_addr):
         app.wallet.wc_timer.Start(2500, oneShot=wx.TIMER_CONTINUOUS)
     app.gui_frame.Refresh()
     app.gui_frame.Update()
+    app.gui_frame.Layout()
 
 
 def process_coin_select(coin, sel_network, sel_wallettype):
