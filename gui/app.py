@@ -280,6 +280,9 @@ class UniblowApp(wx.App):
         )
         self.gui_panel.btn_chkaddr.SetCursor(self.HAND_CURSOR)
         self.gui_panel.btn_chkaddr.Bind(wx.EVT_BUTTON, self.check_wallet)
+        self.gui_panel.wallopt_label.Disable()
+        self.gui_panel.wallopt_choice.Disable()
+        self.gui_panel.network_choice.Disable()
 
     def gowallet(self, sdevice):
         dev_info = self.dev_selected(sdevice)
@@ -611,17 +614,18 @@ class UniblowApp(wx.App):
         wx.CallAfter(self.check_device_address, progress_modal)
 
     def device_error(self, exc):
-        # app.gui_panel.coins_choice.Disable()
-        # app.gui_panel.coins_choice.SetSelection(0)
-        # app.gui_panel.network_choice.Clear()
-        # app.gui_panel.network_choice.Disable()
-        # app.gui_panel.wallopt_choice.Clear()
-        # app.gui_panel.wallopt_choice.Disable()
-        # # app.gui_panel.devices_choice.SetSelection(0)
-        # # app.gui_panel.btn_chkaddr.Hide()
+        self.gui_panel.network_choice.Clear()
+        self.gui_panel.network_choice.Disable()
+        self.gui_panel.wallopt_choice.Clear()
+        self.gui_panel.wallopt_choice.Disable()
+        self.gui_panel.btn_chkaddr.Hide()
+        self.deactivate_option_buttons()
+        self.clear_coin_selected()
+        self.erase_info(True)
 
         # What can we do? Back to device panel ?
-        # self.erase_info(True)
+        # # app.gui_panel.devices_choice.SetSelection(0)
+
         logger.error("Error with device : %s", str(exc), exc_info=exc, stack_info=True)
         self.warn_modal(str(exc))
         return

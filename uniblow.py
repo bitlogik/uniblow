@@ -261,6 +261,7 @@ def cb_open_wallet(wallet_obj, pkey, waltype, sw_frame, pubkey_cpr):
     app.gui_panel.network_choice.SetSelection(0)
     app.gui_panel.wallopt_choice.SetSelection(waltype)
     app.deactivate_option_buttons()
+    app.current_chain = app.wallet.coin
     if app.wallet.coin in [
         "ETH",
         "BSC",
@@ -647,13 +648,10 @@ def display_coin(account_addr):
 
 def process_coin_select(coin, sel_network, sel_wallettype):
     app.gui_panel.network_choice.Enable()
-    # if (
-    # app.gui_panel.coins_choice.IsEnabled()
-    # or app.gui_panel.coins_choice.GetStringSelection() != "BTC"
-    # ):
-    # # Because BTC wallet types are different path/wallet from SeedWatcher
-    app.gui_panel.wallopt_choice.Enable()
-    app.gui_panel.wallopt_label.Enable()
+    if len(app.gui_panel.scrolled_coins.GetChildren()) > 1 or app.current_chain != "BTC":
+        # Because BTC wallet types are different path/wallet from SeedWatcher
+        app.gui_panel.wallopt_choice.Enable()
+        app.gui_panel.wallopt_label.Enable()
     app.deactivate_option_buttons()
     app.gui_panel.btn_chkaddr.Disable()
     if coin in [
@@ -710,49 +708,51 @@ def wtype_selected(coin_sel, wtype_sel):
     wx.CallLater(180, process_coin_select, coin_sel, net_sel, wtype_sel.GetInt())
 
 
+def perform_transfer(to, amnt, fees, status_modal):
+    try:
+        if amnt == "ALL":
+            tx_info = app.wallet.transfer_all(to, fees)
+        else:
+            tx_info = app.wallet.transfer(amnt, to, fees)
+        status_modal.Update(100, "done")
+        status_modal.Fit()
+        tx_success(tx_info)
+    except Exception as exc:
+        status_modal.Update(100)
+        wx.MilliSleep(100)
+        status_modal.Destroy()
+        wx.MilliSleep(100)
+        logger.error(
+            "Error during the transaction processing : %s",
+            str(exc),
+            exc_info=exc,
+            stack_info=True,
+        )
+        if str(exc).endswith("disconnected."):
+            app.device_error(exc)
+        elif str(exc) == "Error status : 0x6600":
+            app.warn_modal("User button on PGP device timeout")
+        else:
+            app.warn_modal(str(exc))
+        wx.MilliSleep(250)
+
+
 def transfer(to, amount, fee_opt=1):
     conf = confirm_tx(to, amount)
     app.gui_panel.Enable()
     if conf == wx.ID_YES:
-        try:
-            progress_modal = wx.ProgressDialog(
-                "Processing transaction",
-                "",
-                style=wx.PD_APP_MODAL | wx.PD_AUTO_HIDE | wx.PD_SMOOTH,
-                parent=app.gui_frame,
-            )
-            wx.MilliSleep(50)
-            wait_msg = "Buiding and signing the transaction"
-            if app.wallet.current_device.has_hardware_button:
-                wait_msg += "\nPress the button on the physical device to confirm."
-            progress_modal.Update(50, wait_msg)
-            wx.MilliSleep(250)
-            if amount == "ALL":
-                tx_info = app.wallet.transfer_all(to, fee_opt)
-            else:
-                tx_info = app.wallet.transfer(amount, to, fee_opt)
-            progress_modal.Update(100, "done")
-            wx.MilliSleep(250)
-            tx_success(tx_info)
-        except Exception as exc:
-            progress_modal.Update(100)
-            wx.MilliSleep(100)
-            progress_modal.Destroy()
-            wx.MilliSleep(100)
-            logger.error(
-                "Error during the transaction processing : %s",
-                str(exc),
-                exc_info=exc,
-                stack_info=True,
-            )
-            if str(exc).endswith("disconnected."):
-                app.device_error(exc)
-            elif str(exc) == "Error status : 0x6600":
-                app.warn_modal("User button on PGP device timeout")
-            else:
-                app.warn_modal(str(exc))
-            wx.MilliSleep(250)
-            return
+        progress_modal = wx.ProgressDialog(
+            "Processing transaction",
+            "",
+            style=wx.PD_APP_MODAL | wx.PD_AUTO_HIDE | wx.PD_SMOOTH,
+            parent=app.gui_frame,
+        )
+        wait_msg = "Buiding and signing the transaction"
+        if app.wallet.current_device.has_hardware_button:
+            wait_msg += "\nPress the button on the physical device to confirm."
+        progress_modal.Update(50, wait_msg)
+        progress_modal.Fit()
+        wx.CallLater(250, perform_transfer, to, amount, fee_opt, progress_modal)
 
 
 def start_main_app():
