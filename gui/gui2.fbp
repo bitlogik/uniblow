@@ -217,7 +217,7 @@
                             <property name="permission">none</property>
                             <object class="sizeritem" expanded="1">
                                 <property name="border">16</property>
-                                <property name="flag">wxEXPAND|wxTOP</property>
+                                <property name="flag">wxTOP|wxEXPAND</property>
                                 <property name="proportion">0</property>
                                 <object class="wxBoxSizer" expanded="1">
                                     <property name="minimum_size"></property>
@@ -386,7 +386,7 @@
                                                     </object>
                                                     <object class="sizeritem" expanded="1">
                                                         <property name="border">8</property>
-                                                        <property name="flag">wxALIGN_BOTTOM|wxTOP|wxBOTTOM</property>
+                                                        <property name="flag">wxALIGN_BOTTOM|wxTOP|wxBOTTOM|wxRIGHT</property>
                                                         <property name="proportion">0</property>
                                                         <object class="wxStaticText" expanded="1">
                                                             <property name="BottomDockable">1</property>
@@ -605,7 +605,7 @@
                                     </object>
                                     <object class="sizeritem" expanded="1">
                                         <property name="border">24</property>
-                                        <property name="flag">wxRIGHT</property>
+                                        <property name="flag"></property>
                                         <property name="proportion">0</property>
                                         <object class="wxBoxSizer" expanded="1">
                                             <property name="minimum_size"></property>
@@ -613,7 +613,7 @@
                                             <property name="orient">wxVERTICAL</property>
                                             <property name="permission">none</property>
                                             <object class="sizeritem" expanded="0">
-                                                <property name="border">16</property>
+                                                <property name="border">24</property>
                                                 <property name="flag">wxRIGHT</property>
                                                 <property name="proportion">0</property>
                                                 <object class="wxChoice" expanded="0">
