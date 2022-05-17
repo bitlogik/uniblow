@@ -692,7 +692,7 @@ app.transfer = transfer
 if __name__ == "__main__":
 
     if "-v" in argv[1:]:
-        basicConfig(level=0)
+        basicConfig(level=DEBUG)
 
     start_main_app()
     app.MainLoop()
