@@ -13,7 +13,8 @@ FEES_PRORITY_TEXT = [
 
 class SendModal(SendDialog):
     def __init__(self, parent, coin, check, callback):
-        bal_txt = parent.balance_info.GetLabel().split(" ")[0]
+        bal_txt = parent.balance_info.GetLabel()
+        bal_txt += parent.balance_small.GetLabel()
         super().__init__(parent)
         self.panel = SendPanel(self)
         self.panel.text_coin.SetLabel(coin)

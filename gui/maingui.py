@@ -55,12 +55,35 @@ class WalletPanel ( wx.Panel ):
 
         bSizer4 = wx.BoxSizer( wx.HORIZONTAL )
 
-        self.balance_info = wx.StaticText( self.m_panel1, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, 0 )
+
+        bSizer4.Add( ( 0, 0), 0, wx.RIGHT, 24 )
+
+        self.balance_info = wx.StaticText( self.m_panel1, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.Size( -1,-1 ), 0 )
         self.balance_info.Wrap( -1 )
 
         self.balance_info.SetFont( wx.Font( 16, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, False, wx.EmptyString ) )
 
-        bSizer4.Add( self.balance_info, 1, wx.ALIGN_CENTER_VERTICAL|wx.TOP|wx.LEFT, 24 )
+        bSizer4.Add( self.balance_info, 0, wx.TOP|wx.BOTTOM|wx.LEFT|wx.ALIGN_BOTTOM, 8 )
+
+
+        bSizer4.Add( ( 0, 0), 0, wx.LEFT, 2 )
+
+        self.balance_small = wx.StaticText( self.m_panel1, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, 0 )
+        self.balance_small.Wrap( -1 )
+
+        self.balance_small.SetFont( wx.Font( 10, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, False, wx.EmptyString ) )
+
+        bSizer4.Add( self.balance_small, 0, wx.TOP|wx.BOTTOM|wx.RIGHT|wx.ALIGN_BOTTOM, 10 )
+
+        self.balance_unit = wx.StaticText( self.m_panel1, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, 0 )
+        self.balance_unit.Wrap( -1 )
+
+        self.balance_unit.SetFont( wx.Font( 16, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, False, wx.EmptyString ) )
+
+        bSizer4.Add( self.balance_unit, 0, wx.ALIGN_BOTTOM|wx.TOP|wx.BOTTOM|wx.RIGHT, 8 )
+
+
+        bSizer4.Add( ( 0, 0), 1, 0, 5 )
 
         bSizer5 = wx.BoxSizer( wx.VERTICAL )
 
@@ -70,13 +93,13 @@ class WalletPanel ( wx.Panel ):
         self.network_choice.SetFont( wx.Font( 12, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, False, wx.EmptyString ) )
         self.network_choice.SetMinSize( wx.Size( 120,-1 ) )
 
-        bSizer5.Add( self.network_choice, 0, wx.ALIGN_CENTER_HORIZONTAL|wx.TOP|wx.RIGHT, 20 )
+        bSizer5.Add( self.network_choice, 0, wx.ALIGN_CENTER_HORIZONTAL|wx.RIGHT, 20 )
 
 
         bSizer4.Add( bSizer5, 0, wx.RIGHT, 24 )
 
 
-        bSizer6.Add( bSizer4, 0, wx.EXPAND, 5 )
+        bSizer6.Add( bSizer4, 0, wx.EXPAND|wx.TOP, 16 )
 
         bSizer9 = wx.BoxSizer( wx.HORIZONTAL )
 

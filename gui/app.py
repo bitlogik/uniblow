@@ -380,6 +380,8 @@ class UniblowApp(wx.App):
         self.gui_panel.wallopt_label.Disable()
         self.gui_panel.wallopt_choice.Disable()
         self.gui_panel.balance_info.SetLabel("")
+        self.gui_panel.balance_small.SetLabel("")
+        self.gui_panel.balance_unit.SetLabel("")
         if first_time:
             self.gui_panel.balance_info.SetLabel("👈  Select a chain")
         if reset:
@@ -619,7 +621,16 @@ class UniblowApp(wx.App):
             logger.error("Error in display_balance : %s", err_msg, exc_info=exc, stack_info=True)
             self.warn_modal(err_msg)
             return
-        self.gui_panel.balance_info.SetLabel(balance)
+        balance_num, balance_coin = balance.split(" ")
+        if "." in balance_num:
+            balance_int, balance_float = balance_num.split(".")
+            balance_int += "."
+        else:
+            balance_int = balance_num
+            balance_float = ""
+        self.gui_panel.balance_info.SetLabel(f"{balance_int}{balance_float[:2]}")
+        self.gui_panel.balance_small.SetLabel(f"{balance_float[2:]}")
+        self.gui_panel.balance_unit.SetLabel(balance_coin)
         self.gui_panel.hist_button.Enable()
         self.gui_panel.copy_button.Enable()
         bal_str = balance.split(" ")[0]
