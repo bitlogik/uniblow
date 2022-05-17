@@ -60,9 +60,9 @@ SUPPORTED_COINS = [
 DEVICES_LIST = [
     "SeedWatcher",
     "LocalFile",
-    "OpenPGP",
     "Ledger",
     "Cryptnox",
+    "OpenPGP",
 ]
 
 DEFAULT_PASSWORD = "NoPasswd"
@@ -540,6 +540,9 @@ def set_coin(coin, network, wallet_type):
         return
     if not app.check_coin_consistency(network_num=network):
         return
+    if app.gui_panel.network_choice.GetSelection() > 0 and app.current_chain != "GLMR":
+        # Testnet
+        app.wallet.coin = "t" + app.wallet.coin
     app.gui_panel.scrolled_coins.Enable()
     display_coin(account_id)
 

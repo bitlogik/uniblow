@@ -26,6 +26,7 @@ import gui.maingui
 import gui.infodialog
 from gui.utils import file_path, show_history
 from gui.send_frame import SendModal
+from gui.fiat_price import PriceAPI
 
 from cryptolib.HDwallet import bip39_is_checksum_valid
 
@@ -277,7 +278,7 @@ class UniblowApp(wx.App):
             self.start_wallet_panel()
             self.load_coins_list(dev_info)
             self.erase_info(True, True)
-            if sdevice == 3:
+            if sdevice == 2:  # Ledger
                 self.gui_panel.btn_chkaddr.Show()
 
     def load_device(self, evt):
@@ -290,13 +291,13 @@ class UniblowApp(wx.App):
             sel_dev = 1
         elif evt.GetEventObject() is self.dev_panel.d_btn03:
             # Ledger
-            sel_dev = 3
+            sel_dev = 2
         elif evt.GetEventObject() is self.dev_panel.d_btn04:
             # Cryptnox
-            sel_dev = 4
+            sel_dev = 3
         elif evt.GetEventObject() is self.dev_panel.d_btn05:
             # OpenPGP
-            sel_dev = 2
+            sel_dev = 4
         else:
             raise Exception("Bad device button object")
         wx.CallAfter(self.gowallet, sel_dev)
@@ -382,6 +383,10 @@ class UniblowApp(wx.App):
         self.gui_panel.balance_info.SetLabel("")
         self.gui_panel.balance_small.SetLabel("")
         self.gui_panel.balance_unit.SetLabel("")
+        self.gui_panel.txt_fiat.SetLabel("0 $")
+        self.gui_panel.fiat_panel.Hide()
+        if hasattr(self.gui_panel, "fiat_price"):
+            del self.gui_panel.fiat_price
         if first_time:
             self.gui_panel.balance_info.SetLabel("👈  Select a chain")
         if reset:
@@ -604,6 +609,12 @@ class UniblowApp(wx.App):
         wx.MilliSleep(250)
         wx.CallAfter(self.check_device_address, progress_modal)
 
+    def display_fiat(self, balance, fiat_price):
+        self.gui_panel.fiat_price = fiat_price
+        self.gui_panel.fiat_panel.Show()
+        self.gui_panel.txt_fiat.SetLabel(f"{balance * fiat_price:.2f} $")
+        self.gui_panel.Layout()
+
     def display_balance(self):
         logger.debug("Checking for wallet balance")
         if not hasattr(self, "wallet"):
@@ -621,7 +632,7 @@ class UniblowApp(wx.App):
             logger.error("Error in display_balance : %s", err_msg, exc_info=exc, stack_info=True)
             self.warn_modal(err_msg)
             return
-        balance_num, balance_coin = balance.split(" ")
+        balance_num, balance_coin = balance.split(" ")[:2]
         if "." in balance_num:
             balance_int, balance_float = balance_num.split(".")
             balance_int += "."
@@ -633,16 +644,23 @@ class UniblowApp(wx.App):
         self.gui_panel.balance_unit.SetLabel(balance_coin)
         self.gui_panel.hist_button.Enable()
         self.gui_panel.copy_button.Enable()
-        bal_str = balance.split(" ")[0]
         if (
             # No fund in the wallet
-            bal_str not in ("0", "0.0")
+            balance_num not in ("0", "0.0")
             # EOS when register pubkey mode : disable sending
-            and not bal_str.startswith("Register")
+            and balance_num != "Register"
             # WalletConnect : disable sending
             and not hasattr(self.wallet, "wc_timer")
         ):
             self.enable_send()
+            cb_fiat = partial(self.display_fiat, float(balance_num))
+            # Read the coin price
+            # if not testnet
+            if self.gui_panel.network_choice.GetSelection() == 0 or self.current_chain == "GLMR":
+                if hasattr(self.wallet, "eth") and self.wallet.eth.ERC20:
+                    PriceAPI(cb_fiat, self.wallet.eth.ERC20, self.wallet.coin)
+                else:
+                    PriceAPI(cb_fiat, self.wallet.coin)
         else:
             self.disable_send()
         if hasattr(self.wallet, "wc_timer"):

@@ -55,32 +55,68 @@ class WalletPanel ( wx.Panel ):
 
         bSizer4 = wx.BoxSizer( wx.HORIZONTAL )
 
+        bSizer29 = wx.BoxSizer( wx.VERTICAL )
 
-        bSizer4.Add( ( 0, 0), 0, wx.RIGHT, 24 )
+        bSizer28 = wx.BoxSizer( wx.HORIZONTAL )
+
+
+        bSizer28.Add( ( 0, 0), 0, wx.RIGHT, 24 )
 
         self.balance_info = wx.StaticText( self.m_panel1, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.Size( -1,-1 ), 0 )
         self.balance_info.Wrap( -1 )
 
         self.balance_info.SetFont( wx.Font( 16, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, False, wx.EmptyString ) )
 
-        bSizer4.Add( self.balance_info, 0, wx.TOP|wx.BOTTOM|wx.LEFT|wx.ALIGN_BOTTOM, 8 )
+        bSizer28.Add( self.balance_info, 0, wx.TOP|wx.BOTTOM|wx.LEFT|wx.ALIGN_BOTTOM, 8 )
 
 
-        bSizer4.Add( ( 0, 0), 0, wx.LEFT, 2 )
+        bSizer28.Add( ( 0, 0), 0, wx.LEFT, 2 )
 
         self.balance_small = wx.StaticText( self.m_panel1, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, 0 )
         self.balance_small.Wrap( -1 )
 
         self.balance_small.SetFont( wx.Font( 10, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, False, wx.EmptyString ) )
 
-        bSizer4.Add( self.balance_small, 0, wx.TOP|wx.BOTTOM|wx.RIGHT|wx.ALIGN_BOTTOM, 10 )
+        bSizer28.Add( self.balance_small, 0, wx.TOP|wx.BOTTOM|wx.RIGHT|wx.ALIGN_BOTTOM, 10 )
 
         self.balance_unit = wx.StaticText( self.m_panel1, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, 0 )
         self.balance_unit.Wrap( -1 )
 
         self.balance_unit.SetFont( wx.Font( 16, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, False, wx.EmptyString ) )
 
-        bSizer4.Add( self.balance_unit, 0, wx.ALIGN_BOTTOM|wx.TOP|wx.BOTTOM|wx.RIGHT, 8 )
+        bSizer28.Add( self.balance_unit, 0, wx.ALIGN_BOTTOM|wx.TOP|wx.BOTTOM, 8 )
+
+        self.fiat_panel = wx.Panel( self.m_panel1, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.BORDER_SUNKEN|wx.TAB_TRAVERSAL )
+        self.fiat_panel.SetBackgroundColour( wx.Colour( 100, 116, 139 ) )
+        self.fiat_panel.Hide()
+
+        bSizer31 = wx.BoxSizer( wx.HORIZONTAL )
+
+
+        bSizer31.Add( ( 0, 0), 0, wx.LEFT, 8 )
+
+        self.txt_fiat = wx.StaticText( self.fiat_panel, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, 0 )
+        self.txt_fiat.Wrap( -1 )
+
+        self.txt_fiat.SetFont( wx.Font( 10, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, False, wx.EmptyString ) )
+        self.txt_fiat.SetForegroundColour( wx.Colour( 255, 255, 255 ) )
+
+        bSizer31.Add( self.txt_fiat, 0, wx.ALL, 3 )
+
+
+        bSizer31.Add( ( 0, 0), 0, wx.LEFT, 8 )
+
+
+        self.fiat_panel.SetSizer( bSizer31 )
+        self.fiat_panel.Layout()
+        bSizer31.Fit( self.fiat_panel )
+        bSizer28.Add( self.fiat_panel, 0, wx.ALIGN_CENTER_VERTICAL|wx.LEFT, 18 )
+
+
+        bSizer29.Add( bSizer28, 0, 0, 5 )
+
+
+        bSizer4.Add( bSizer29, 0, 0, 5 )
 
 
         bSizer4.Add( ( 0, 0), 1, 0, 5 )
@@ -93,7 +129,7 @@ class WalletPanel ( wx.Panel ):
         self.network_choice.SetFont( wx.Font( 12, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, False, wx.EmptyString ) )
         self.network_choice.SetMinSize( wx.Size( 120,-1 ) )
 
-        bSizer5.Add( self.network_choice, 0, wx.ALIGN_CENTER_HORIZONTAL|wx.RIGHT, 20 )
+        bSizer5.Add( self.network_choice, 0, wx.RIGHT, 16 )
 
 
         bSizer4.Add( bSizer5, 0, wx.RIGHT, 24 )
@@ -547,14 +583,14 @@ class SendPanel ( wx.Panel ):
 
         bSizer191 = wx.BoxSizer( wx.HORIZONTAL )
 
-        self.m_staticTextFiat = wx.StaticText( sbSizer3.GetStaticBox(), wx.ID_ANY, u"value ~", wx.DefaultPosition, wx.DefaultSize, 0 )
-        self.m_staticTextFiat.Wrap( -1 )
+        self.fiat_label = wx.StaticText( sbSizer3.GetStaticBox(), wx.ID_ANY, u"value ~", wx.DefaultPosition, wx.DefaultSize, 0 )
+        self.fiat_label.Wrap( -1 )
 
-        self.m_staticTextFiat.SetFont( wx.Font( 9, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, False, wx.EmptyString ) )
+        self.fiat_label.SetFont( wx.Font( 9, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, False, wx.EmptyString ) )
 
-        bSizer191.Add( self.m_staticTextFiat, 0, wx.ALL, 5 )
+        bSizer191.Add( self.fiat_label, 0, wx.ALL, 5 )
 
-        self.fiat_value = wx.StaticText( sbSizer3.GetStaticBox(), wx.ID_ANY, u"1234 $", wx.DefaultPosition, wx.DefaultSize, 0 )
+        self.fiat_value = wx.StaticText( sbSizer3.GetStaticBox(), wx.ID_ANY, u"0 $", wx.DefaultPosition, wx.DefaultSize, 0 )
         self.fiat_value.Wrap( -1 )
 
         self.fiat_value.SetFont( wx.Font( 9, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, False, wx.EmptyString ) )

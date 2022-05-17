@@ -23,9 +23,12 @@ class SendModal(SendDialog):
         handcurs = wx.Cursor(wx.CURSOR_HAND)
         self.GOOD_BMP = wx.Bitmap(file_path("gui/images/good.bmp"))
         self.BAD_BMP = wx.Bitmap(file_path("gui/images/bad.bmp"))
+        self.panel.fiat_label.Hide()
+        self.panel.fiat_value.Hide()
         self.panel.text_avail.SetLabel(bal_txt)
         self.Bind(wx.EVT_CLOSE, self.close)
         self.panel.text_dest.Bind(wx.EVT_TEXT, self.check_addr)
+        self.panel.text_amount.Bind(wx.EVT_TEXT, self.compute_value)
         self.panel.check_sendall.Bind(wx.EVT_CHECKBOX, self.check_all)
         self.panel.cancel_btn.SetCursor(handcurs)
         self.panel.ok_btn.SetCursor(handcurs)
@@ -64,6 +67,28 @@ class SendModal(SendDialog):
             self.panel.bmp_chk.SetBitmap(self.GOOD_BMP)
         else:
             self.panel.bmp_chk.SetBitmap(self.BAD_BMP)
+
+    def compute_value(self, evt):
+        # Update total balance
+        bal_txt = self.GetParent().balance_info.GetLabel()
+        bal_txt += self.GetParent().balance_small.GetLabel()
+        self.panel.text_avail.SetLabel(bal_txt)
+        app_panel = self.GetParent()
+        if hasattr(app_panel, "fiat_price"):
+            try:
+                amnt_str = evt.GetString()
+                if amnt_str == "ALL":
+                    amnt = float(bal_txt)
+                else:
+                    amnt = float(evt.GetString())
+                rate = self.GetParent().fiat_price
+                self.panel.fiat_label.Show()
+                self.panel.fiat_value.Show()
+                self.panel.fiat_value.SetLabel(f"{amnt * rate:.2f} $")
+                self.panel.Layout()
+            except ValueError:
+                self.panel.fiat_label.Hide()
+                self.panel.fiat_value.Hide()
 
     def click_cancel(self, event):
         self.cb("CANCEL", "", "0")
