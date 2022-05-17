@@ -683,7 +683,7 @@ def start_main_app():
     app.gui_frame.Show()
 
 
-app = gui.app.UniblowApp(get_coin_class)
+app = gui.app.UniblowApp(DEVICES_LIST, get_coin_class)
 app.dev_selected = device_selected
 app.coin_selected = coin_selected
 app.transfer = transfer

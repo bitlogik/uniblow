@@ -201,7 +201,8 @@ class app_option_panel(gui.maingui.OptionPanel):
 
 
 class UniblowApp(wx.App):
-    def __init__(self, coinclasses):
+    def __init__(self, devices, coinclasses):
+        self.devices = devices
         super().__init__(redirect=False)
         self.Bind(wx.EVT_ACTIVATE_APP, self.OnActivate)
         self.coin_classes = coinclasses
@@ -227,34 +228,15 @@ class UniblowApp(wx.App):
 
     def open_devices_panel(self):
         self.dev_panel = gui.maingui.DevicesPanel(self.gui_frame)
-
-        self.dev_panel.d_btn01.SetBitmap(
-            wx.Bitmap(file_path("gui/images/btns/dev_sw.png"), wx.BITMAP_TYPE_PNG)
-        )
-        self.dev_panel.d_btn02.SetBitmap(
-            wx.Bitmap(file_path("gui/images/btns/dev_local.png"), wx.BITMAP_TYPE_PNG)
-        )
-        self.dev_panel.d_btn03.SetBitmap(
-            wx.Bitmap(file_path("gui/images/btns/dev_ledger.png"), wx.BITMAP_TYPE_PNG)
-        )
-        self.dev_panel.d_btn04.SetBitmap(
-            wx.Bitmap(file_path("gui/images/btns/dev_cryptnox.png"), wx.BITMAP_TYPE_PNG)
-        )
-        self.dev_panel.d_btn05.SetBitmap(
-            wx.Bitmap(file_path("gui/images/btns/dev_pgp.png"), wx.BITMAP_TYPE_PNG)
-        )
-
-        self.dev_panel.d_btn01.Bind(wx.EVT_BUTTON, self.load_device)
-        self.dev_panel.d_btn02.Bind(wx.EVT_BUTTON, self.load_device)
-        self.dev_panel.d_btn03.Bind(wx.EVT_BUTTON, self.load_device)
-        self.dev_panel.d_btn04.Bind(wx.EVT_BUTTON, self.load_device)
-        self.dev_panel.d_btn05.Bind(wx.EVT_BUTTON, self.load_device)
-
-        self.dev_panel.d_btn01.SetCursor(self.HAND_CURSOR)
-        self.dev_panel.d_btn02.SetCursor(self.HAND_CURSOR)
-        self.dev_panel.d_btn03.SetCursor(self.HAND_CURSOR)
-        self.dev_panel.d_btn04.SetCursor(self.HAND_CURSOR)
-        self.dev_panel.d_btn05.SetCursor(self.HAND_CURSOR)
+        for dev_idx, device in enumerate(self.devices, start=1):
+            dbtn = getattr(self.dev_panel, f"d_btn{dev_idx:02d}")
+            dbtn.SetBitmap(
+                wx.Bitmap(
+                    file_path(f"gui/images/btns/dev_{device.lower()}.png"), wx.BITMAP_TYPE_PNG
+                )
+            )
+            dbtn.Bind(wx.EVT_BUTTON, self.load_device)
+            dbtn.SetCursor(self.HAND_CURSOR)
 
     def start_wallet_panel(self):
         """Kill devices choice panel and start the wallet panel."""
