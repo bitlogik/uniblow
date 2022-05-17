@@ -248,30 +248,6 @@ class UniblowApp(wx.App):
         self.dev_panel.d_btn04.SetCursor(self.HAND_CURSOR)
         self.dev_panel.d_btn05.SetCursor(self.HAND_CURSOR)
 
-        # self.dev_panel.hist_button.SetBitmapPressed(
-        # Bitmap(file_path("gui/histodn.png"), BITMAP_TYPE_PNG)
-        # )
-        # self.dev_panel.copy_button.SetBitmap(Bitmap(file_path("gui/copy.png"), BITMAP_TYPE_PNG))
-        # self.dev_panel.copy_button.SetBitmapPressed(
-        # Bitmap(file_path("gui/copydn.png"), BITMAP_TYPE_PNG)
-        # )
-        # self.dev_panel.send_button.SetBitmap(Bitmap(file_path("gui/send.png"), BITMAP_TYPE_PNG))
-        # self.dev_panel.send_button.SetBitmapPressed(
-        # Bitmap(file_path("gui/senddn.png"), BITMAP_TYPE_PNG)
-        # )
-        # self.dev_panel.send_all.SetBitmap(Bitmap(file_path("gui/swipe.png"), BITMAP_TYPE_PNG))
-        # self.dev_panel.send_all.SetBitmapPressed(
-        # Bitmap(file_path("gui/swipedn.png"), BITMAP_TYPE_PNG)
-        # )
-        # self.dev_panel.devices_choice.SetCursor(HAND_CURSOR)
-        # self.dev_panel.coins_choice.SetCursor(HAND_CURSOR)
-        # self.dev_panel.network_choice.SetCursor(HAND_CURSOR)
-        # self.dev_panel.wallopt_choice.SetCursor(HAND_CURSOR)
-        # self.dev_panel.hist_button.SetCursor(HAND_CURSOR)
-        # self.dev_panel.copy_button.SetCursor(HAND_CURSOR)
-        # self.dev_panel.send_button.SetCursor(HAND_CURSOR)
-        # self.dev_panel.send_all.SetCursor(HAND_CURSOR)
-
         self.SetTopWindow(self.gui_frame)
         return True
 
@@ -410,21 +386,9 @@ class UniblowApp(wx.App):
             delattr(self.wallet, "wc_timer")
         self.gui_panel.hist_button.Disable()
         self.gui_panel.copy_button.Disable()
-        # self.gui_panel.dest_addr.Clear()
-        # self.gui_panel.dest_addr.Disable()
-        # self.gui_panel.amount.Clear()
-        # self.gui_panel.amount.Disable()
-        # self.gui_panel.send_all.Disable()
         self.disable_send()
         self.gui_panel.wallopt_label.Disable()
         self.gui_panel.wallopt_choice.Disable()
-        # self.gui_panel.account_label.Disable()
-        # self.gui_panel.balance_label.Disable()
-        # self.gui_panel.dest_label.Disable()
-        # self.gui_panel.amount_label.Disable()
-        # self.gui_panel.fee_slider.Disable()
-        # self.gui_panel.fee_setting.Disable()
-        # self.gui_panel.btn_chkaddr.Hide()
         self.gui_panel.balance_info.SetLabel("")
         if first_time:
             self.gui_panel.balance_info.SetLabel("👈  Select a chain")

@@ -309,12 +309,6 @@ def cb_open_wallet(wallet_obj, pkey, waltype, sw_frame, pubkey_cpr):
 
 def device_selected(sel_device):
     close_device()
-    # app.gui_panel.btn_chkaddr.Hide()
-    # app.gui_panel.coins_choice.Disable()
-    # app.gui_panel.coins_choice.SetSelection(0)
-    # app.gui_panel.network_choice.Clear()
-    # app.gui_panel.network_choice.Disable()
-    # app.gui_panel.wallopt_choice.Clear()
     device_sel_name = DEVICES_LIST[sel_device]
     coins_list = ccopy(SUPPORTED_COINS)
     if device_sel_name == "Ledger":
@@ -542,10 +536,6 @@ def wallet_fallback():
     # Reset the wallet to the first type
     wallet_type_fallback = 0
     app.gui_panel.wallopt_choice.SetSelection(wallet_type_fallback)
-    # Act like the user selected back the first wallet type
-    # coin_sel = app.gui_panel.coins_choice.GetStringSelection()
-    # net_sel = app.gui_panel.network_choice.GetSelection()
-    # wx.CallLater(180, process_coin_select, coin_sel, net_sel, wallet_type_fallback)
     app.gui_panel.scrolled_coins.Enable()
 
 
