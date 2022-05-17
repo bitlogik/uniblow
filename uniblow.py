@@ -98,84 +98,12 @@ def get_device_class(device_str):
     return device_class
 
 
-def check_coin_consistency(current_wallet=None, network_num=None):
-    """Check if selected coin is the same as the current wallet class used."""
-    # Designed to fix a race condition when the async data of a wallet
-    # are displayed : address and balance.
-    # Changing the coin selected could mix crypto info. So this terminates some
-    # process path that are no longer valid.
-    if hasattr(app, "wallet") and app.current_chain is not None:
-        current_wallet = type(app.wallet)
-        coin_class = get_coin_class(app.current_chain)
-        if coin_class is not current_wallet:
-            return False
-    if network_num is not None:
-        net_sel = app.gui_panel.network_choice.GetSelection()
-        if net_sel < 0:
-            return False
-        return net_sel == network_num
-    return True
-
-
-def display_balance():
-    logger.debug("Checking for wallet balance")
-    if not hasattr(app, "wallet"):
-        app.erase_info()
-        return
-    if not check_coin_consistency():
-        return
-    try:
-        balance = app.wallet.get_balance()
-    except Exception as exc:
-        app.erase_info()
-        err_msg = (
-            f"Error when getting account balance.\nCheck your Internet connection.\n{str(exc)}"
-        )
-        logger.error("Error in display_balance : %s", err_msg, exc_info=exc, stack_info=True)
-        app.warn_modal(err_msg)
-        return
-    app.gui_panel.balance_info.SetLabel(balance)
-    app.gui_panel.hist_button.Enable()
-    app.gui_panel.copy_button.Enable()
-    bal_str = balance.split(" ")[0]
-    if (
-        # No fund in the wallet
-        bal_str not in ("0", "0.0")
-        # EOS when register pubkey mode : disable sending
-        and not bal_str.startswith("Register")
-        # WalletConnect : disable sending
-        and not hasattr(app.wallet, "wc_timer")
-    ):
-        # app.gui_panel.dest_addr.Enable()
-        # app.gui_panel.amount.Enable()
-        # app.gui_panel.dest_label.Enable()
-        # app.gui_panel.amount_label.Enable()
-        # app.gui_panel.fee_slider.Enable()
-        # app.gui_panel.fee_setting.Enable()
-        app.enable_send()
-        # app.gui_panel.send_all.Enable()
-    else:
-        # app.gui_panel.dest_addr.Clear()
-        # app.gui_panel.amount.Clear()
-        # app.gui_panel.dest_label.Disable()
-        # app.gui_panel.amount_label.Disable()
-        # app.gui_panel.fee_slider.Disable()
-        # app.gui_panel.fee_setting.Disable()
-        # app.gui_panel.dest_addr.Disable()
-        # app.gui_panel.amount.Disable()
-        app.disable_send()
-        # app.gui_panel.send_all.Disable()
-    if hasattr(app.wallet, "wc_timer"):
-        # WalletConnect active
-        app.disable_send("Use the connected dapp to transact")
-
-
 class DisplayTimer(wx.Timer):
     def __init__(self):
         wx.Timer.__init__(self)
 
     def Notify(self):
-        display_balance()
+        app.display_balance()
 
 
 def confirm_tx(to_addr, amount):
@@ -242,12 +170,7 @@ def cb_open_wallet(wallet_obj, pkey, waltype, sw_frame, pubkey_cpr):
         app.wallet = wallet_obj(key_device, pubkey_cpr)
     sw_frame.Close()
     app.start_wallet_panel()
-    # app.gui_panel.btn_chkaddr.Hide()
-    # app.gui_panel.devices_choice.SetSelection(1)
-    # app.gui_panel.coins_choice.Clear()
-    # app.gui_panel.coins_choice.Append(app.wallet.coin)
-    # app.gui_panel.coins_choice.SetSelection(0)
-    # app.gui_panel.coins_choice.Disable()
+    app.gui_panel.btn_chkaddr.Hide()
     app.gui_panel.network_choice.Clear()
     app.gui_panel.network_choice.Enable()
     if app.wallet.coin not in ["BTC", "XTZ"]:
@@ -579,7 +502,7 @@ def set_coin(coin, network, wallet_type):
                     wx.CallAfter(wallet_fallback)
                     return
         key_type = get_coin_class(coin).get_key_type(wallet_type)
-        if not check_coin_consistency(get_coin_class(coin), network):
+        if not app.check_coin_consistency(get_coin_class(coin), network):
             return
         if app.device.is_HD:
             current_path = (
@@ -596,10 +519,10 @@ def set_coin(coin, network, wallet_type):
                 "confirm_callback": confirm_request,
             }
         app.wallet = get_coin_class(coin)(network, wallet_type, app.device, **option_arg)
-        if not check_coin_consistency(network_num=network):
+        if not app.check_coin_consistency(network_num=network):
             return
         account_id = app.wallet.get_account()
-        if not check_coin_consistency(network_num=network):
+        if not app.check_coin_consistency(network_num=network):
             return
         app.gui_panel.btn_chkaddr.Enable()
         if option_info is not None and option_info.get("use_get_messages", False):
@@ -615,7 +538,7 @@ def set_coin(coin, network, wallet_type):
         else:
             wallet_error(exc)
         return
-    if not check_coin_consistency(network_num=network):
+    if not app.check_coin_consistency(network_num=network):
         return
     app.gui_panel.scrolled_coins.Enable()
     display_coin(account_id)
@@ -631,15 +554,15 @@ def display_coin(account_addr):
     )
     imgbuf = BytesIO()
     imgqr.save(imgbuf, "PNG")
-    if not check_coin_consistency():
+    if not app.check_coin_consistency():
         return
     imgbuf.seek(0)
     wxi = wx.Image(imgbuf, type=wx.BITMAP_TYPE_PNG)
     app.gui_panel.qrimg.SetScaleMode(wx.StaticBitmap.ScaleMode.Scale_None)
     app.gui_panel.qrimg.SetBitmap(wx.Bitmap(wxi))
     app.balance_timer = DisplayTimer()
-    wx.CallLater(50, display_balance)
-    app.balance_timer.Start(10000)
+    wx.CallLater(50, app.display_balance)
+    app.balance_timer.Start(12000)
     if hasattr(app.wallet, "wc_timer"):
         app.wallet.wc_timer.Start(2500, oneShot=wx.TIMER_CONTINUOUS)
     app.gui_frame.Refresh()
@@ -760,7 +683,7 @@ def start_main_app():
     app.gui_frame.Show()
 
 
-app = gui.app.UniblowApp(VERSION)
+app = gui.app.UniblowApp(get_coin_class)
 app.dev_selected = device_selected
 app.coin_selected = coin_selected
 app.transfer = transfer
@@ -769,7 +692,7 @@ app.transfer = transfer
 if __name__ == "__main__":
 
     if "-v" in argv[1:]:
-        basicConfig(level=DEBUG)
+        basicConfig(level=0)
 
     start_main_app()
     app.MainLoop()

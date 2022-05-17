@@ -34,7 +34,7 @@ class UniblowFrame ( wx.Frame ):
 
 class WalletPanel ( wx.Panel ):
 
-    def __init__( self, parent, id = wx.ID_ANY, pos = wx.DefaultPosition, size = wx.Size( 652,337 ), style = wx.TAB_TRAVERSAL, name = wx.EmptyString ):
+    def __init__( self, parent, id = wx.ID_ANY, pos = wx.DefaultPosition, size = wx.Size( 652,330 ), style = wx.TAB_TRAVERSAL, name = wx.EmptyString ):
         wx.Panel.__init__ ( self, parent, id = id, pos = pos, size = size, style = style, name = name )
 
         self.SetBackgroundColour( wx.Colour( 248, 250, 252 ) )
@@ -60,7 +60,7 @@ class WalletPanel ( wx.Panel ):
 
         self.balance_info.SetFont( wx.Font( 16, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, False, wx.EmptyString ) )
 
-        bSizer4.Add( self.balance_info, 1, wx.ALIGN_CENTER_VERTICAL|wx.LEFT, 24 )
+        bSizer4.Add( self.balance_info, 1, wx.ALIGN_CENTER_VERTICAL|wx.TOP|wx.LEFT, 24 )
 
         bSizer5 = wx.BoxSizer( wx.VERTICAL )
 
@@ -76,18 +76,18 @@ class WalletPanel ( wx.Panel ):
         bSizer4.Add( bSizer5, 0, wx.RIGHT, 24 )
 
 
-        bSizer6.Add( bSizer4, 1, wx.EXPAND, 5 )
+        bSizer6.Add( bSizer4, 0, wx.EXPAND, 5 )
 
         bSizer9 = wx.BoxSizer( wx.HORIZONTAL )
 
         self.but_evt1 = wx.BitmapButton( self.m_panel1, wx.ID_ANY, wx.NullBitmap, wx.DefaultPosition, wx.DefaultSize, wx.BU_AUTODRAW|wx.BORDER_NONE )
-        bSizer9.Add( self.but_evt1, 0, wx.LEFT, 12 )
+        bSizer9.Add( self.but_evt1, 0, wx.LEFT|wx.ALIGN_CENTER_VERTICAL, 12 )
 
         self.but_evt2 = wx.BitmapButton( self.m_panel1, wx.ID_ANY, wx.NullBitmap, wx.DefaultPosition, wx.DefaultSize, wx.BU_AUTODRAW|wx.BORDER_NONE )
-        bSizer9.Add( self.but_evt2, 0, wx.RIGHT|wx.LEFT, 36 )
+        bSizer9.Add( self.but_evt2, 0, wx.RIGHT|wx.LEFT|wx.ALIGN_CENTER_VERTICAL, 36 )
 
         self.btn_send = wx.BitmapButton( self.m_panel1, wx.ID_ANY, wx.NullBitmap, wx.DefaultPosition, wx.DefaultSize, wx.BU_AUTODRAW|wx.BORDER_NONE )
-        bSizer9.Add( self.btn_send, 0, wx.ALL, 5 )
+        bSizer9.Add( self.btn_send, 0, wx.ALL|wx.ALIGN_BOTTOM, 5 )
 
         self.alt_text = wx.StaticText( self.m_panel1, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, 0 )
         self.alt_text.Wrap( 120 )
@@ -104,7 +104,7 @@ class WalletPanel ( wx.Panel ):
 
         self.account_addr.SetFont( wx.Font( 12, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, False, wx.EmptyString ) )
 
-        bSizer6.Add( self.account_addr, 0, wx.LEFT, 12 )
+        bSizer6.Add( self.account_addr, 0, wx.TOP|wx.BOTTOM|wx.LEFT, 12 )
 
         bSizer12 = wx.BoxSizer( wx.HORIZONTAL )
 
@@ -171,7 +171,7 @@ class WalletPanel ( wx.Panel ):
         bSizer12.Add( bSizer13, 1, wx.EXPAND, 5 )
 
 
-        bSizer6.Add( bSizer12, 0, wx.EXPAND, 5 )
+        bSizer6.Add( bSizer12, 0, wx.EXPAND|wx.BOTTOM, 5 )
 
 
         bSizer6.Add( ( 0, 0), 0, wx.TOP, 8 )

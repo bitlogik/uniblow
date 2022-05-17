@@ -201,10 +201,10 @@ class app_option_panel(gui.maingui.OptionPanel):
 
 
 class UniblowApp(wx.App):
-    def __init__(self, version):
-        self.version = version
+    def __init__(self, coinclasses):
         super().__init__(redirect=False)
         self.Bind(wx.EVT_ACTIVATE_APP, self.OnActivate)
+        self.coin_classes = coinclasses
         self.dev_selected = None
         self.coin_selected = None
         self.current_chain = None
@@ -467,7 +467,7 @@ class UniblowApp(wx.App):
         self.transfer(address, amount_str, sel_fee)
 
     def open_send(self, evt):
-        self.send_dialog = SendModal(self.gui_panel, self.wallet, self.callback_send)
+        self.send_dialog = SendModal(self.gui_panel, self.wallet.coin, self.wallet.check_address, self.callback_send)
         self.gui_panel.Disable()
         self.send_dialog.Show()
 
@@ -613,15 +613,52 @@ class UniblowApp(wx.App):
         wx.MilliSleep(250)
         wx.CallAfter(self.check_device_address, progress_modal)
 
+    def display_balance(self):
+        logger.debug("Checking for wallet balance")
+        if not hasattr(self, "wallet"):
+            self.erase_info()
+            return
+        if not self.check_coin_consistency():
+            return
+        try:
+            balance = self.wallet.get_balance()
+        except Exception as exc:
+            self.erase_info()
+            err_msg = (
+                f"Error when getting account balance.\nCheck your Internet connection.\n{str(exc)}"
+            )
+            logger.error("Error in display_balance : %s", err_msg, exc_info=exc, stack_info=True)
+            self.warn_modal(err_msg)
+            return
+        self.gui_panel.balance_info.SetLabel(balance)
+        self.gui_panel.hist_button.Enable()
+        self.gui_panel.copy_button.Enable()
+        bal_str = balance.split(" ")[0]
+        if (
+            # No fund in the wallet
+            bal_str not in ("0", "0.0")
+            # EOS when register pubkey mode : disable sending
+            and not bal_str.startswith("Register")
+            # WalletConnect : disable sending
+            and not hasattr(self.wallet, "wc_timer")
+        ):
+            self.enable_send()
+        else:
+            self.disable_send()
+        if hasattr(self.wallet, "wc_timer"):
+            # WalletConnect active
+            self.disable_send("Use the connected dapp to transact")
+
     def device_error(self, exc):
-        self.gui_panel.network_choice.Clear()
-        self.gui_panel.network_choice.Disable()
-        self.gui_panel.wallopt_choice.Clear()
-        self.gui_panel.wallopt_choice.Disable()
-        self.gui_panel.btn_chkaddr.Hide()
-        self.deactivate_option_buttons()
-        self.clear_coin_selected()
-        self.erase_info(True)
+        if hasattr(self, "gui_panel"):
+            self.gui_panel.network_choice.Clear()
+            self.gui_panel.network_choice.Disable()
+            self.gui_panel.wallopt_choice.Clear()
+            self.gui_panel.wallopt_choice.Disable()
+            self.gui_panel.btn_chkaddr.Hide()
+            self.deactivate_option_buttons()
+            self.clear_coin_selected()
+            self.erase_info(True)
 
         # What can we do? Back to device panel ?
         # # app.gui_panel.devices_choice.SetSelection(0)
@@ -629,3 +666,22 @@ class UniblowApp(wx.App):
         logger.error("Error with device : %s", str(exc), exc_info=exc, stack_info=True)
         self.warn_modal(str(exc))
         return
+
+    
+    def check_coin_consistency(self, current_wallet=None, network_num=None):
+        """Check if selected coin is the same as the current wallet class used."""
+        # Designed to fix a race condition when the async data of a wallet
+        # are displayed : address and balance.
+        # Changing the coin selected could mix crypto info. So this terminates some
+        # process path that are no longer valid.
+        if hasattr(self, "wallet") and self.current_chain is not None:
+            current_wallet = type(self.wallet)
+            coin_class = self.coin_classes(self.current_chain)
+            if coin_class is not current_wallet:
+                return False
+        if network_num is not None:
+            net_sel = self.gui_panel.network_choice.GetSelection()
+            if net_sel < 0:
+                return False
+            return net_sel == network_num
+        return True

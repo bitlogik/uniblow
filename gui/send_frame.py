@@ -12,13 +12,13 @@ FEES_PRORITY_TEXT = [
 
 
 class SendModal(SendDialog):
-    def __init__(self, parent, wallet, callback):
+    def __init__(self, parent, coin, check, callback):
+        bal_txt = parent.balance_info.GetLabel().split(" ")[0]
         super().__init__(parent)
         self.panel = SendPanel(self)
-        self.panel.text_coin.SetLabel(wallet.coin)
-        self.check_addr_method = wallet.check_address
+        self.panel.text_coin.SetLabel(coin)
+        self.check_addr_method = check
         self.cb = callback
-        bal_txt = wallet.get_balance().split(" ")[0]
         handcurs = wx.Cursor(wx.CURSOR_HAND)
         self.GOOD_BMP = wx.Bitmap(file_path("gui/images/good.bmp"))
         self.BAD_BMP = wx.Bitmap(file_path("gui/images/bad.bmp"))

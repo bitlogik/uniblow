@@ -71,7 +71,7 @@
             <property name="minimum_size"></property>
             <property name="name">WalletPanel</property>
             <property name="pos"></property>
-            <property name="size">652,337</property>
+            <property name="size">652,330</property>
             <property name="subclass">; ; forward_declare</property>
             <property name="tooltip"></property>
             <property name="window_extra_style"></property>
@@ -218,7 +218,7 @@
                             <object class="sizeritem" expanded="1">
                                 <property name="border">5</property>
                                 <property name="flag">wxEXPAND</property>
-                                <property name="proportion">1</property>
+                                <property name="proportion">0</property>
                                 <object class="wxBoxSizer" expanded="1">
                                     <property name="minimum_size"></property>
                                     <property name="name">bSizer4</property>
@@ -226,7 +226,7 @@
                                     <property name="permission">none</property>
                                     <object class="sizeritem" expanded="0">
                                         <property name="border">24</property>
-                                        <property name="flag">wxALIGN_CENTER_VERTICAL|wxLEFT</property>
+                                        <property name="flag">wxALIGN_CENTER_VERTICAL|wxTOP|wxLEFT</property>
                                         <property name="proportion">1</property>
                                         <object class="wxStaticText" expanded="0">
                                             <property name="BottomDockable">1</property>
@@ -373,7 +373,7 @@
                                     <property name="permission">none</property>
                                     <object class="sizeritem" expanded="1">
                                         <property name="border">12</property>
-                                        <property name="flag">wxLEFT</property>
+                                        <property name="flag">wxLEFT|wxALIGN_CENTER_VERTICAL</property>
                                         <property name="proportion">0</property>
                                         <object class="wxBitmapButton" expanded="1">
                                             <property name="BottomDockable">1</property>
@@ -445,7 +445,7 @@
                                     </object>
                                     <object class="sizeritem" expanded="1">
                                         <property name="border">36</property>
-                                        <property name="flag">wxRIGHT|wxLEFT</property>
+                                        <property name="flag">wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL</property>
                                         <property name="proportion">0</property>
                                         <object class="wxBitmapButton" expanded="1">
                                             <property name="BottomDockable">1</property>
@@ -517,7 +517,7 @@
                                     </object>
                                     <object class="sizeritem" expanded="1">
                                         <property name="border">5</property>
-                                        <property name="flag">wxALL</property>
+                                        <property name="flag">wxALL|wxALIGN_BOTTOM</property>
                                         <property name="proportion">0</property>
                                         <object class="wxBitmapButton" expanded="1">
                                             <property name="BottomDockable">1</property>
@@ -652,7 +652,7 @@
                             </object>
                             <object class="sizeritem" expanded="1">
                                 <property name="border">12</property>
-                                <property name="flag">wxLEFT</property>
+                                <property name="flag">wxTOP|wxBOTTOM|wxLEFT</property>
                                 <property name="proportion">0</property>
                                 <object class="wxStaticText" expanded="1">
                                     <property name="BottomDockable">1</property>
@@ -713,7 +713,7 @@
                             </object>
                             <object class="sizeritem" expanded="1">
                                 <property name="border">5</property>
-                                <property name="flag">wxEXPAND</property>
+                                <property name="flag">wxEXPAND|wxBOTTOM</property>
                                 <property name="proportion">0</property>
                                 <object class="wxBoxSizer" expanded="1">
                                     <property name="minimum_size"></property>
