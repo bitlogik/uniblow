@@ -215,10 +215,18 @@ class UniblowApp(wx.App):
         wicon = wx.IconBundle(icon_path)
         self.gui_frame = gui.maingui.UniblowFrame(None)
         self.gui_frame.Bind(wx.EVT_CLOSE, self.OnClose)
+        self.gui_frame.SetIcons(wicon)
+
         # if sys.platform.startswith("darwin"):
         # self.gui_frame.SetSize((996, 418))
+
+        self.open_devices_panel()
+
+        self.SetTopWindow(self.gui_frame)
+        return True
+
+    def open_devices_panel(self):
         self.dev_panel = gui.maingui.DevicesPanel(self.gui_frame)
-        self.gui_frame.SetIcons(wicon)
 
         self.dev_panel.d_btn01.SetBitmap(
             wx.Bitmap(file_path("gui/images/btns/dev_sw.png"), wx.BITMAP_TYPE_PNG)
@@ -247,9 +255,6 @@ class UniblowApp(wx.App):
         self.dev_panel.d_btn03.SetCursor(self.HAND_CURSOR)
         self.dev_panel.d_btn04.SetCursor(self.HAND_CURSOR)
         self.dev_panel.d_btn05.SetCursor(self.HAND_CURSOR)
-
-        self.SetTopWindow(self.gui_frame)
-        return True
 
     def start_wallet_panel(self):
         """Kill devices choice panel and start the wallet panel."""
@@ -467,7 +472,9 @@ class UniblowApp(wx.App):
         self.transfer(address, amount_str, sel_fee)
 
     def open_send(self, evt):
-        self.send_dialog = SendModal(self.gui_panel, self.wallet.coin, self.wallet.check_address, self.callback_send)
+        self.send_dialog = SendModal(
+            self.gui_panel, self.wallet.coin, self.wallet.check_address, self.callback_send
+        )
         self.gui_panel.Disable()
         self.send_dialog.Show()
 
@@ -651,23 +658,17 @@ class UniblowApp(wx.App):
 
     def device_error(self, exc):
         if hasattr(self, "gui_panel"):
-            self.gui_panel.network_choice.Clear()
-            self.gui_panel.network_choice.Disable()
-            self.gui_panel.wallopt_choice.Clear()
-            self.gui_panel.wallopt_choice.Disable()
-            self.gui_panel.btn_chkaddr.Hide()
-            self.deactivate_option_buttons()
-            self.clear_coin_selected()
-            self.erase_info(True)
-
-        # What can we do? Back to device panel ?
-        # # app.gui_panel.devices_choice.SetSelection(0)
+            # Back to device panel
+            self.gui_panel.Destroy()
+            del self.gui_panel
+            self.open_devices_panel()
+            self.gui_frame.Layout()
+            self.dev_panel.Layout()
 
         logger.error("Error with device : %s", str(exc), exc_info=exc, stack_info=True)
         self.warn_modal(str(exc))
         return
 
-    
     def check_coin_consistency(self, current_wallet=None, network_num=None):
         """Check if selected coin is the same as the current wallet class used."""
         # Designed to fix a race condition when the async data of a wallet
