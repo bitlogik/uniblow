@@ -80,8 +80,14 @@ class WalletPanel ( wx.Panel ):
 
         bSizer9 = wx.BoxSizer( wx.HORIZONTAL )
 
+
+        bSizer9.Add( ( 0, 0), 1, wx.EXPAND|wx.LEFT, 48 )
+
+        self.hist_button = wx.BitmapButton( self.m_panel1, wx.ID_ANY, wx.NullBitmap, wx.DefaultPosition, wx.DefaultSize, wx.BU_AUTODRAW|wx.BORDER_NONE )
+        bSizer9.Add( self.hist_button, 0, wx.ALIGN_CENTER_VERTICAL|wx.RIGHT, 48 )
+
         self.but_evt1 = wx.BitmapButton( self.m_panel1, wx.ID_ANY, wx.NullBitmap, wx.DefaultPosition, wx.DefaultSize, wx.BU_AUTODRAW|wx.BORDER_NONE )
-        bSizer9.Add( self.but_evt1, 0, wx.LEFT|wx.ALIGN_CENTER_VERTICAL, 12 )
+        bSizer9.Add( self.but_evt1, 0, wx.ALIGN_CENTER_VERTICAL, 12 )
 
         self.but_evt2 = wx.BitmapButton( self.m_panel1, wx.ID_ANY, wx.NullBitmap, wx.DefaultPosition, wx.DefaultSize, wx.BU_AUTODRAW|wx.BORDER_NONE )
         bSizer9.Add( self.but_evt2, 0, wx.RIGHT|wx.LEFT|wx.ALIGN_CENTER_VERTICAL, 36 )
@@ -97,7 +103,7 @@ class WalletPanel ( wx.Panel ):
         bSizer9.Add( self.alt_text, 0, wx.ALL, 5 )
 
 
-        bSizer6.Add( bSizer9, 1, wx.ALIGN_CENTER_HORIZONTAL, 5 )
+        bSizer6.Add( bSizer9, 1, 0, 5 )
 
         self.account_addr = wx.StaticText( self.m_panel1, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, wx.ST_ELLIPSIZE_END )
         self.account_addr.Wrap( -1 )
@@ -126,7 +132,7 @@ class WalletPanel ( wx.Panel ):
         bSizer11.Add( ( 0, 0), 0, wx.LEFT, 20 )
 
         self.copy_button = wx.BitmapButton( self.m_panel1, wx.ID_ANY, wx.NullBitmap, wx.DefaultPosition, wx.DefaultSize, wx.BU_AUTODRAW|wx.BORDER_NONE )
-        bSizer11.Add( self.copy_button, 0, wx.TOP, 8 )
+        bSizer11.Add( self.copy_button, 0, 0, 6 )
 
         self.copy_status = wx.StaticText( self.m_panel1, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.Size( 60,-1 ), 0 )
         self.copy_status.Wrap( -1 )
@@ -163,9 +169,6 @@ class WalletPanel ( wx.Panel ):
 
 
         bSizer13.Add( bSizer14, 0, wx.EXPAND, 5 )
-
-        self.hist_button = wx.BitmapButton( self.m_panel1, wx.ID_ANY, wx.NullBitmap, wx.DefaultPosition, wx.DefaultSize, wx.BU_AUTODRAW|wx.BORDER_NONE )
-        bSizer13.Add( self.hist_button, 0, wx.LEFT, 48 )
 
 
         bSizer12.Add( bSizer13, 1, wx.EXPAND, 5 )
