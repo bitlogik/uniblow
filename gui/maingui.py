@@ -159,7 +159,7 @@ class WalletPanel ( wx.Panel ):
 
         self.alt_text.SetFont( wx.Font( 11, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, False, wx.EmptyString ) )
 
-        bSizer9.Add( self.alt_text, 0, wx.ALL, 5 )
+        bSizer9.Add( self.alt_text, 0, wx.ALL|wx.EXPAND, 5 )
 
 
         bSizer6.Add( bSizer9, 1, 0, 5 )
