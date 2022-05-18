@@ -649,8 +649,6 @@ class UniblowApp(wx.App):
         self.gui_panel.balance_info.SetLabel(f"{balance_int}{balance_float[:2]}")
         self.gui_panel.balance_small.SetLabel(f"{balance_float[2:]}")
         self.gui_panel.balance_unit.SetLabel(balance_coin)
-        self.gui_panel.hist_button.Enable()
-        self.gui_panel.copy_button.Enable()
         if (
             # No fund in the wallet
             balance_num not in ("0", "0.0")
