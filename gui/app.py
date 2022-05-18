@@ -609,7 +609,10 @@ class UniblowApp(wx.App):
         wx.MilliSleep(250)
         wx.CallAfter(self.check_device_address, progress_modal)
 
-    def display_fiat(self, balance, fiat_price):
+    def display_fiat(self, chain, net, balance, fiat_price):
+        if not self.check_coin_consistency(chain, net):
+            # User changed the coin or network the time of the get price
+            return
         self.gui_panel.fiat_price = fiat_price
         self.gui_panel.fiat_panel.Show()
         self.gui_panel.txt_fiat.SetLabel(f"{balance * fiat_price:.2f} $")
@@ -658,12 +661,12 @@ class UniblowApp(wx.App):
             and not hasattr(self.wallet, "wc_timer")
         ):
             self.enable_send()
-            cb_fiat = partial(self.display_fiat, float(balance_num))
+            cb_fiat = partial(self.display_fiat, coinw, wall_net, float(balance_num))
             # Read the coin price
             # if not testnet
             if self.gui_panel.network_choice.GetSelection() == 0 or self.current_chain == "GLMR":
                 if hasattr(self.wallet, "eth") and self.wallet.eth.ERC20:
-                    PriceAPI(cb_fiat, self.wallet.eth.ERC20, self.wallet.coin)
+                    PriceAPI(cb_fiat, self.wallet.eth.ERC20, self.current_chain)
                 else:
                     PriceAPI(cb_fiat, self.wallet.coin)
         else:
@@ -676,6 +679,7 @@ class UniblowApp(wx.App):
         self.gui_panel.Layout()
 
     def device_error(self, exc):
+        self.current_chain = ""
         if hasattr(self, "gui_panel"):
             # Back to device panel
             self.gui_panel.Destroy()
@@ -683,7 +687,6 @@ class UniblowApp(wx.App):
             self.open_devices_panel()
             self.gui_frame.Layout()
             self.dev_panel.Layout()
-
         logger.error("Error with device : %s", str(exc), exc_info=exc, stack_info=True)
         self.warn_modal(str(exc))
         return

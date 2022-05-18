@@ -549,6 +549,10 @@ def set_coin(coin, network, wallet_type):
         # Testnet
         app.wallet.coin = "t" + app.wallet.coin
     app.gui_panel.scrolled_coins.Enable()
+    app.gui_panel.txt_fiat.SetLabel("0 $")
+    app.gui_panel.fiat_panel.Hide()
+    if hasattr(app.gui_panel, "fiat_price"):
+        del app.gui_panel.fiat_price
     display_coin(account_id)
 
 
