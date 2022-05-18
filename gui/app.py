@@ -620,8 +620,8 @@ class UniblowApp(wx.App):
         if not hasattr(self, "wallet"):
             self.erase_info()
             return
-        if not self.check_coin_consistency():
-            return
+        coinw = type(self.wallet)
+        wall_net = self.gui_panel.network_choice.GetSelection()
         try:
             balance = self.wallet.get_balance()
         except Exception as exc:
@@ -631,6 +631,11 @@ class UniblowApp(wx.App):
             )
             logger.error("Error in display_balance : %s", err_msg, exc_info=exc, stack_info=True)
             self.warn_modal(err_msg)
+            return
+        if not self.check_coin_consistency(coinw, wall_net):
+            # User changed the coin or network the time of the get balance
+            return
+        if not hasattr(self, "wallet"):
             return
         balance_num, balance_coin = balance.split(" ")[:2]
         if "." in balance_num:
@@ -663,7 +668,7 @@ class UniblowApp(wx.App):
                     PriceAPI(cb_fiat, self.wallet.coin)
         else:
             self.disable_send()
-        if hasattr(self.wallet, "wc_timer"):
+        if hasattr(self, "wallet") and hasattr(self.wallet, "wc_timer"):
             # WalletConnect active
             self.disable_send("Use the connected dapp to transact")
         self.gui_panel.Refresh()
@@ -690,7 +695,8 @@ class UniblowApp(wx.App):
         # Changing the coin selected could mix crypto info. So this terminates some
         # process path that are no longer valid.
         if hasattr(self, "wallet") and self.current_chain is not None:
-            current_wallet = type(self.wallet)
+            if current_wallet is None:
+                current_wallet = type(self.wallet)
             coin_class = self.coin_classes(self.current_chain)
             if coin_class is not current_wallet:
                 return False
