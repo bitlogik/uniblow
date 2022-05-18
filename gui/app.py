@@ -509,7 +509,6 @@ class UniblowApp(wx.App):
             caption=f"{device_nam} wallet PIN/password",
             defaultValue="",
             pos=wx.DefaultPosition,
-            parent=self.gui_frame,
         )
         if pwd_dialog.ShowModal() == wx.ID_OK:
             passval = pwd_dialog.GetValue()
