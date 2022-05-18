@@ -29,6 +29,7 @@ from importlib import import_module
 from logging import basicConfig, DEBUG, getLogger
 from io import BytesIO
 from sys import argv
+from threading import Thread
 
 import wx
 import qrcode
@@ -98,12 +99,16 @@ def get_device_class(device_str):
     return device_class
 
 
+def run_async(target, args=(), kwargs={}):
+    Thread(target=target, args=args, kwargs=kwargs).start()
+
+
 class DisplayTimer(wx.Timer):
     def __init__(self):
         wx.Timer.__init__(self)
 
     def Notify(self):
-        app.display_balance()
+        run_async(app.display_balance)
 
 
 def confirm_tx(to_addr, amount):
@@ -564,7 +569,7 @@ def display_coin(account_addr):
     app.gui_panel.qrimg.SetScaleMode(wx.StaticBitmap.ScaleMode.Scale_None)
     app.gui_panel.qrimg.SetBitmap(wx.Bitmap(wxi))
     app.balance_timer = DisplayTimer()
-    wx.CallLater(50, app.display_balance)
+    run_async(app.display_balance)
     app.balance_timer.Start(12000)
     if hasattr(app.wallet, "wc_timer"):
         app.wallet.wc_timer.Start(2500, oneShot=wx.TIMER_CONTINUOUS)
