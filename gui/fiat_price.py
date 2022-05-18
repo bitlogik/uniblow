@@ -59,7 +59,7 @@ class PriceAPI:
             call_url = (
                 f"{PriceAPI.BASE_URL}simple/token_price/"
                 f"{chain_names.get(chainid)}?"
-                f"contract_addresses={token_id}"
+                f"contract_addresses={token_id.lower()}"
                 "&vs_currencies=usd"
             )
         else:
