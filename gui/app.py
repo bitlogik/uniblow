@@ -383,7 +383,7 @@ class UniblowApp(wx.App):
         self.gui_panel.balance_info.SetLabel("")
         self.gui_panel.balance_small.SetLabel("")
         self.gui_panel.balance_unit.SetLabel("")
-        self.gui_panel.txt_fiat.SetLabel("0 $")
+        self.gui_panel.txt_fiat.SetLabel("$ 0")
         self.gui_panel.fiat_panel.Hide()
         if hasattr(self.gui_panel, "fiat_price"):
             del self.gui_panel.fiat_price
@@ -614,7 +614,7 @@ class UniblowApp(wx.App):
             return
         self.gui_panel.fiat_price = fiat_price
         self.gui_panel.fiat_panel.Show()
-        self.gui_panel.txt_fiat.SetLabel(f"{balance * fiat_price:.2f} $")
+        self.gui_panel.txt_fiat.SetLabel(f"$ {balance * fiat_price:.2f}")
         self.gui_panel.Layout()
 
     def display_balance(self):

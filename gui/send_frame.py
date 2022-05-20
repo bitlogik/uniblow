@@ -84,7 +84,7 @@ class SendModal(SendDialog):
                 rate = self.GetParent().fiat_price
                 self.panel.fiat_label.Show()
                 self.panel.fiat_value.Show()
-                self.panel.fiat_value.SetLabel(f"{amnt * rate:.2f} $")
+                self.panel.fiat_value.SetLabel(f"$ {amnt * rate:.2f}")
                 self.panel.Layout()
             except ValueError:
                 self.panel.fiat_label.Hide()

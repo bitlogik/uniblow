@@ -591,7 +591,7 @@ class SendPanel ( wx.Panel ):
 
         bSizer191.Add( self.fiat_label, 0, wx.ALL, 5 )
 
-        self.fiat_value = wx.StaticText( sbSizer3.GetStaticBox(), wx.ID_ANY, u"0 $", wx.DefaultPosition, wx.DefaultSize, 0 )
+        self.fiat_value = wx.StaticText( sbSizer3.GetStaticBox(), wx.ID_ANY, u"$ 0", wx.DefaultPosition, wx.DefaultSize, 0 )
         self.fiat_value.Wrap( -1 )
 
         self.fiat_value.SetFont( wx.Font( 9, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, False, wx.EmptyString ) )
