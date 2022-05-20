@@ -413,14 +413,11 @@ class UniblowApp(wx.App):
                 wx.DefaultSize,
                 wx.BU_AUTODRAW | wx.BORDER_NONE,
             )
-            img = (
-                wx.Image(file_path(f"gui/images/icons/{coin.lower()}.png"), wx.BITMAP_TYPE_PNG)
-                .Rescale(32, 32)
-                .Resize(wx.Size(42, 36), wx.Point(5, 2), red=-1, green=-1, blue=-1)
-            )
-            bmp = wx.Bitmap(img)
+            img = wx.Image(file_path(f"gui/images/icons/{coin.lower()}.png"), wx.BITMAP_TYPE_PNG)
+            img.Rescale(48, 48, wx.IMAGE_QUALITY_BILINEAR)
+            img.Resize(wx.Size(58, 56), wx.Point(5, 4), red=-1, green=-1, blue=-1)
             coin_button.SetBackgroundColour(wx.Colour(248, 250, 252))
-            coin_button.SetBitmap(bmp)
+            coin_button.SetBitmap(wx.Bitmap(img))
             coin_button.SetCursor(self.HAND_CURSOR)
             coin_button.Bind(wx.EVT_BUTTON, self.load_coin)
             sizer.Add(coin_button, 0, wx.ALIGN_CENTER_HORIZONTAL | wx.BOTTOM | wx.TOP, 3)

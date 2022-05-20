@@ -144,7 +144,7 @@
                                 <property name="scroll_rate_x">5</property>
                                 <property name="scroll_rate_y">5</property>
                                 <property name="show">1</property>
-                                <property name="size">64,340</property>
+                                <property name="size">72,340</property>
                                 <property name="subclass">; ; forward_declare</property>
                                 <property name="toolbar_pane">0</property>
                                 <property name="tooltip"></property>
