@@ -27,12 +27,10 @@ except ImportError:
 from copy import copy as ccopy
 from importlib import import_module
 from logging import basicConfig, DEBUG, getLogger
-from io import BytesIO
 from sys import argv
 from threading import Thread
 
 import wx
-import qrcode
 import gui.app
 from devices.SeedWatcher import start_seedwatcher
 from devices.SingleKey import SKdevice
@@ -558,21 +556,10 @@ def set_coin(coin, network, wallet_type):
 
 
 def display_coin(account_addr):
-    app.gui_panel.account_addr.SetLabel(account_addr)
-    imgqr = qrcode.make(
-        account_addr,
-        error_correction=qrcode.constants.ERROR_CORRECT_L,
-        box_size=4,
-        border=3,
-    )
-    imgbuf = BytesIO()
-    imgqr.save(imgbuf, "PNG")
     if not app.check_coin_consistency():
         return
-    imgbuf.seek(0)
-    wxi = wx.Image(imgbuf, type=wx.BITMAP_TYPE_PNG)
-    app.gui_panel.qrimg.SetScaleMode(wx.StaticBitmap.ScaleMode.Scale_None)
-    app.gui_panel.qrimg.SetBitmap(wx.Bitmap(wxi))
+    app.gui_panel.account_addr.SetLabel(account_addr)
+    app.gui_panel.qr_button.Enable()
     app.gui_panel.copy_button.Enable()
     app.gui_panel.hist_button.Enable()
     app.gui_panel.balance_info.SetLabel(f"  ...  ")

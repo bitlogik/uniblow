@@ -26,6 +26,7 @@ import gui.maingui
 import gui.infodialog
 from gui.utils import file_path, show_history
 from gui.send_frame import SendModal
+from gui.qrframe import QRFrame
 from gui.fiat_price import PriceAPI
 
 from cryptolib.HDwallet import bip39_is_checksum_valid
@@ -248,12 +249,17 @@ class UniblowApp(wx.App):
         self.gui_panel.copy_button.SetBitmap(
             wx.Bitmap(file_path("gui/images/btns/copy.png"), wx.BITMAP_TYPE_PNG)
         )
+        self.gui_panel.qr_button.SetBitmap(
+            wx.Bitmap(file_path("gui/images/btns/qr.png"), wx.BITMAP_TYPE_PNG)
+        )
         self.gui_panel.hist_button.SetBitmap(
             wx.Bitmap(file_path("gui/images/btns/history.png"), wx.BITMAP_TYPE_PNG)
         )
         self.gui_panel.hist_button.SetCursor(self.HAND_CURSOR)
         self.gui_panel.copy_button.SetCursor(self.HAND_CURSOR)
+        self.gui_panel.qr_button.SetCursor(self.HAND_CURSOR)
         self.gui_panel.hist_button.Bind(wx.EVT_BUTTON, self.disp_history)
+        self.gui_panel.qr_button.Bind(wx.EVT_BUTTON, self.qr_open)
         self.gui_panel.copy_button.Bind(wx.EVT_BUTTON, self.copy_account)
         self.gui_panel.btn_send.SetBitmap(
             wx.Bitmap(file_path("gui/images/btns/send.png"), wx.BITMAP_TYPE_PNG)
@@ -391,7 +397,7 @@ class UniblowApp(wx.App):
             self.gui_panel.balance_info.SetLabel("👈  Select a chain")
         if reset:
             self.gui_panel.wallopt_choice.SetSelection(0)
-        self.gui_panel.qrimg.SetBitmap(wx.Bitmap())
+        self.gui_panel.qr_button.Disable()
         if hasattr(self, "wallet"):
             del self.wallet
         self.gui_panel.account_addr.SetLabel("")
@@ -463,6 +469,10 @@ class UniblowApp(wx.App):
         )
         self.gui_panel.Disable()
         self.send_dialog.Show()
+
+    def qr_open(self, evt):
+        addr = self.wallet.get_account()
+        QRFrame(self.gui_frame, self.wallet.coin, addr)
 
     def copy_result(self, restxt):
         self.gui_panel.copy_status.SetLabel(restxt)
