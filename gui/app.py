@@ -39,6 +39,13 @@ ICON_FILE = "gui/uniblow.ico"
 BAD_ADDRESS = "Wrong destination account address checksum or wrong format."
 
 
+def attach_tt(elt, txt):
+    ttc = wx.ToolTip(txt)
+    ttc.SetDelay(0)
+    elt.SetToolTip(ttc)
+    wx.CallLater(1750, lambda: ttc.SetTip(""))
+
+
 class InfoBox(gui.infodialog.InfoDialog):
     def __init__(self, message, title, style, parent, block_modal=False):
         super().__init__(parent)
@@ -474,14 +481,9 @@ class UniblowApp(wx.App):
         addr = self.wallet.get_account()
         QRFrame(self.gui_frame, self.wallet.coin, addr)
 
-    def copy_result(self, restxt):
-        self.gui_panel.copy_status.SetLabel(restxt)
-        if restxt != "":
-            wx.CallLater(1800, self.copy_result, "")
-
     def copy_account(self, ev):
         if not hasattr(self, "wallet"):
-            self.copy_result("No wallet")
+            attach_tt(self.gui_panel.copy_button, "No wallet")
             return
         try:
             if wx.TheClipboard.IsOpened() or wx.TheClipboard.Open():
@@ -490,11 +492,11 @@ class UniblowApp(wx.App):
                 wx.TheClipboard.SetData(wx.TextDataObject(addr))
                 wx.TheClipboard.Flush()
                 wx.TheClipboard.Close()
-                self.copy_result("Copied")
+                attach_tt(self.gui_panel.copy_button, "Copied")
             else:
-                self.copy_result("No Access")
+                attach_tt(self.gui_panel.copy_button, "No Access")
         except Exception:
-            self.copy_result("Error")
+            attach_tt(self.gui_panel.copy_button, "Error")
 
     def disp_history(self, ev):
         hist_url = self.wallet.history()
