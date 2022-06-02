@@ -77,7 +77,7 @@ class BaseDevice(ABC):
 
     @abstractmethod
     def get_public_key(self):
-        """Provide the publie key in hex X962.
+        """Provide the public key in hex X962.
         Compressed format, can be provided uncompressed for EVM wallets.
         For EdDSA provide the "raw" 32 bytes public key in hex.
         """
