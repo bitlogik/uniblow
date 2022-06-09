@@ -2,17 +2,22 @@ from io import BytesIO
 import qrcode
 import wx
 
+from gui.utils import icon_file
+
 
 class QRFrame(wx.Frame):
-    def __init__(self, parent, coin, address):
+    def __init__(self, parent, coin, address, btn):
 
         super().__init__(
             parent,
             id=wx.ID_ANY,
-            title=f"Receive {coin}",
+            title=f"  Receive {coin}",
             size=wx.Size(360, 328),
             style=wx.FRAME_FLOAT_ON_PARENT | wx.DEFAULT_FRAME_STYLE | wx.TAB_TRAVERSAL,
         )
+        self.btn = btn
+        self.SetIcons(wx.IconBundle(icon_file))
+
         self.SetSizeHints(wx.DefaultSize, wx.DefaultSize)
         self.Centre(wx.BOTH)
         qrpanel = wx.Panel(
@@ -65,6 +70,7 @@ class QRFrame(wx.Frame):
         )
         siz1.Add(qrpanel.close_btn, 0, wx.ALIGN_CENTER_HORIZONTAL | wx.TOP, 12)
         qrpanel.close_btn.Bind(wx.EVT_BUTTON, self.close)
+        self.Bind(wx.EVT_CLOSE, self.close)
         qrpanel.close_btn.SetCursor(wx.Cursor(wx.CURSOR_HAND))
         qrpanel.SetSizer(siz1)
         qrpanel.Layout()
@@ -72,5 +78,6 @@ class QRFrame(wx.Frame):
         self.Show()
 
     def close(self, event):
+        self.btn.Enable()
         event.Skip()
         self.Close(True)

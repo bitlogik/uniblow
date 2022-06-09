@@ -24,7 +24,7 @@ import wx
 
 import gui.maingui
 import gui.infodialog
-from gui.utils import file_path, show_history
+from gui.utils import file_path, show_history, icon_file
 from gui.send_frame import SendModal
 from gui.qrframe import QRFrame
 from gui.fiat_price import PriceAPI
@@ -35,7 +35,6 @@ from cryptolib.HDwallet import bip39_is_checksum_valid
 logger = getLogger(__name__)
 
 
-ICON_FILE = "gui/uniblow.ico"
 BAD_ADDRESS = "Wrong destination account address checksum or wrong format."
 
 
@@ -221,8 +220,7 @@ class UniblowApp(wx.App):
 
     def OnInit(self):
         self.HAND_CURSOR = wx.Cursor(wx.CURSOR_HAND)
-        icon_path = file_path(ICON_FILE)
-        wicon = wx.IconBundle(icon_path)
+        wicon = wx.IconBundle(icon_file)
         self.gui_frame = gui.maingui.UniblowFrame(None)
         self.gui_frame.Bind(wx.EVT_CLOSE, self.OnClose)
         self.gui_frame.SetIcons(wicon)
@@ -484,7 +482,8 @@ class UniblowApp(wx.App):
 
     def qr_open(self, evt):
         addr = self.wallet.get_account()
-        QRFrame(self.gui_frame, self.wallet.coin, addr)
+        self.gui_panel.qr_button.Disable()
+        QRFrame(self.gui_frame, self.wallet.coin, addr, self.gui_panel.qr_button)
 
     def copy_account(self, ev):
         if not hasattr(self, "wallet"):
