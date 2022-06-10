@@ -237,9 +237,7 @@ class UniblowApp(wx.App):
         self.dev_panel = gui.maingui.DevicesPanel(self.gui_frame)
         logo = wx.Image(file_path(f"gui/images/logo.png"), wx.BITMAP_TYPE_PNG)
         logo.Rescale(64, 64)
-        self.dev_panel.bmp_logo.SetBitmap(
-            logo.ConvertToBitmap()
-        )
+        self.dev_panel.bmp_logo.SetBitmap(logo.ConvertToBitmap())
         for dev_idx, device in enumerate(self.devices, start=1):
             dbtn = getattr(self.dev_panel, f"d_btn{dev_idx:02d}")
             dbtn.SetBitmap(

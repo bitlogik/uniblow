@@ -116,7 +116,7 @@ def bip39_is_checksum_valid(mnemonic):
     if words_len not in [12, 15, 18, 21, 24]:
         return False, True
     entropy = i >> checksum_length
-    checksum = i % 2 ** checksum_length
+    checksum = i % 2**checksum_length
     entb = entropy.to_bytes(entropy_length >> 3, "big")
     hashed = int.from_bytes(sha2(entb), "big")
     computed_checksum = hashed >> (256 - checksum_length)
@@ -177,7 +177,7 @@ def generate_mnemonic(nwords):
 
 class BIP32node:
 
-    HARDENED_LIMIT = 2 ** 31
+    HARDENED_LIMIT = 2**31
 
     def __init__(self, i, depth, pvkey, chaincode, curve, parent_fingerprint):
         # self.vpub_bytes = bytes.fromhex("0488B21E")  # testnet 0x043587CF
