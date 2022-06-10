@@ -109,18 +109,6 @@ class DisplayTimer(wx.Timer):
         run_async(app.display_balance)
 
 
-def confirm_tx(to_addr, amount):
-    conf_txt = f"Confirm this transaction ?\n{amount} {app.wallet.coin} to {to_addr}"
-    confirm_tx_modal = wx.MessageDialog(
-        app.gui_frame,
-        conf_txt,
-        "Confirmation",
-        wx.YES_NO | wx.NO_DEFAULT | wx.ICON_QUESTION | wx.STAY_ON_TOP | wx.CENTER,
-        wx.DefaultPosition,
-    )
-    return confirm_tx_modal.ShowModal()
-
-
 def confirm_request(request_ui_message):
     """Display a modal to the user.
     returns True if the user approves the request.
@@ -665,21 +653,18 @@ def perform_transfer(to, amnt, fees, status_modal):
 
 
 def transfer(to, amount, fee_opt=1):
-    conf = confirm_tx(to, amount)
-    app.gui_panel.Enable()
-    if conf == wx.ID_YES:
-        progress_modal = wx.ProgressDialog(
-            "Processing transaction",
-            "",
-            style=wx.PD_APP_MODAL | wx.PD_AUTO_HIDE | wx.PD_SMOOTH,
-            parent=app.gui_frame,
-        )
-        wait_msg = "Buiding and signing the transaction"
-        if app.wallet.current_device.has_hardware_button:
-            wait_msg += "\nPress the button on the physical device to confirm."
-        progress_modal.Update(50, wait_msg)
-        progress_modal.Fit()
-        wx.CallLater(250, perform_transfer, to, amount, fee_opt, progress_modal)
+    progress_modal = wx.ProgressDialog(
+        "Processing transaction",
+        "",
+        style=wx.PD_APP_MODAL | wx.PD_AUTO_HIDE | wx.PD_SMOOTH,
+        parent=app.gui_frame,
+    )
+    wait_msg = "Buiding and signing the transaction"
+    if app.wallet.current_device.has_hardware_button:
+        wait_msg += "\nPress the button on the physical device to confirm."
+    progress_modal.Update(50, wait_msg)
+    progress_modal.Fit()
+    wx.CallLater(250, perform_transfer, to, amount, fee_opt, progress_modal)
 
 
 def start_main_app():

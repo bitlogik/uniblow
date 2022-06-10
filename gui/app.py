@@ -443,6 +443,17 @@ class UniblowApp(wx.App):
         self.gui_panel.Layout()
         self.gui_frame.Layout()
 
+    def confirm_tx(self, to_addr, amount):
+        conf_txt = f"Confirm this transaction ?\n{amount} {self.wallet.coin} to {to_addr}"
+        confirm_tx_modal = wx.MessageDialog(
+            self.gui_frame,
+            conf_txt,
+            "Confirmation",
+            wx.YES_NO | wx.NO_DEFAULT | wx.ICON_QUESTION | wx.STAY_ON_TOP | wx.CENTER,
+            wx.DefaultPosition,
+        )
+        return confirm_tx_modal.ShowModal()
+
     def callback_send(self, status, address, amount_str, sel_fee=1):
         self.gui_panel.Enable()
         if status != "OK":
@@ -470,8 +481,14 @@ class UniblowApp(wx.App):
         except ValueError:
             self.warn_modal("Unvalid amount input", parent=self.send_dialog)
             return
-        self.send_dialog.Destroy()
-        self.transfer(address, amount_str, sel_fee)
+        self.send_dialog.Disable()
+        conf = self.confirm_tx(address, amount_str)
+        if conf == wx.ID_YES:
+            self.gui_panel.Enable()
+            self.send_dialog.Destroy()
+            self.transfer(address, amount_str, sel_fee)
+            return
+        self.send_dialog.Enable()
 
     def open_send(self, evt):
         self.send_dialog = SendModal(
