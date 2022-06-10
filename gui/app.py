@@ -477,7 +477,9 @@ class UniblowApp(wx.App):
             return
         try:
             if amount_str != "ALL":
-                float(amount_str)
+                if float(amount_str) <= 0:
+                    self.warn_modal("Input a positive amount value.", parent=self.send_dialog)
+                    return
         except ValueError:
             self.warn_modal("Unvalid amount input", parent=self.send_dialog)
             return
