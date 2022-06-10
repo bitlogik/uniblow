@@ -42,7 +42,7 @@ def attach_tt(elt, txt):
     ttc = wx.ToolTip(txt)
     ttc.SetDelay(0)
     elt.SetToolTip(ttc)
-    wx.CallLater(1750, lambda: ttc.SetTip(""))
+    wx.CallLater(1200, lambda: ttc.SetTip(""))
 
 
 class InfoBox(gui.infodialog.InfoDialog):
