@@ -143,7 +143,14 @@ class CryptnoxCard:
 
     def send_apdu(self, APDU):
         """Send a full APDU command, APDU is a list of integers."""
-        logger.debug("--> sending : %i bytes data ", (len(APDU) - 5))
+        data_send = len(APDU) - 5
+        command = "0x" + hex(APDU[1])[2:].upper()
+        if data_send > 0:
+            if data_send >= 2 and APDU[4] != data_send:
+                data_send -= 2
+            logger.debug("--> sending %s with %i bytes data ", command, data_send)
+        else:
+            logger.debug("--> sending %s", command)
         logger.debug(bytes(APDU).hex())
         try:
             data, sw1, sw2 = self.connection.transmit(APDU)
