@@ -569,7 +569,7 @@ class CryptnoxCard:
         return xpubkey
 
     def get_path(self, curvetype="K1", path=b""):
-        """Read the cuuren tkey path."""
+        """Read the current key path."""
         curve_code = 0x00
         if curvetype[-2:].upper() == "R1":
             curve_code = 0x10
