@@ -36,6 +36,7 @@ logger = getLogger(__name__)
 
 
 BAD_ADDRESS = "Wrong destination account address checksum or wrong format."
+BLANK_ADDR = " " * 65
 
 
 def attach_tt(elt, txt):
@@ -326,6 +327,7 @@ class UniblowApp(wx.App):
         self.gui_panel.wallopt_label.Disable()
         self.gui_panel.wallopt_choice.Disable()
         self.gui_panel.network_choice.Disable()
+        self.gui_panel.account_addr.SetLabel(BLANK_ADDR)
 
     def gowallet(self, sdevice):
         dev_info = self.dev_selected(sdevice)
@@ -459,7 +461,7 @@ class UniblowApp(wx.App):
         self.gui_panel.qr_button.Disable()
         if hasattr(self, "wallet"):
             del self.wallet
-        self.gui_panel.account_addr.SetLabel("")
+        self.gui_panel.account_addr.SetLabel(BLANK_ADDR)
         self.gui_frame.Refresh()
 
     def clear_coin_selected(self):
