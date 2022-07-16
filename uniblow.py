@@ -538,6 +538,9 @@ def set_coin(coin, network, wallet_type):
     app.gui_panel.scrolled_coins.Enable()
     app.gui_panel.txt_fiat.SetLabel("$ 0")
 
+    app.gui_panel.but_evt1.Enable()
+    app.gui_panel.but_evt2.Enable()
+
     # Detect is token or wallet connect
     if coin in [
         "ETH",
@@ -611,6 +614,7 @@ def process_coin_select(coin, sel_network, sel_wallettype):
         app.gui_panel.but_evt2.Bind(
             wx.EVT_BUTTON, lambda x: process_coin_select(coin, sel_network, 2)
         )
+        app.gui_panel.wallopt_choice.Disable()
     app.gui_panel.network_choice.Bind(wx.EVT_CHOICE, lambda x: net_selected(coin, x.GetInt()))
     app.gui_panel.wallopt_choice.Bind(wx.EVT_CHOICE, lambda x: wtype_selected(coin, x))
     set_coin(coin, sel_network, sel_wallettype)

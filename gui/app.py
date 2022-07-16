@@ -800,6 +800,7 @@ class UniblowApp(wx.App):
         self.gui_panel.but_evt1.SetBitmap(
             wx.Bitmap(file_path("gui/images/btns/quit.png"), wx.BITMAP_TYPE_PNG)
         )
+        self.gui_panel.but_evt2.Disable()
         return self.gui_panel.but_evt1
 
     def wc_started(self):
@@ -807,4 +808,5 @@ class UniblowApp(wx.App):
         self.gui_panel.but_evt2.SetBitmap(
             wx.Bitmap(file_path("gui/images/btns/endwc.png"), wx.BITMAP_TYPE_PNG)
         )
+        self.gui_panel.but_evt1.Disable()
         return self.gui_panel.but_evt2
