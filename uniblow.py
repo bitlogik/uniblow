@@ -699,13 +699,12 @@ def start_main_app():
     app.gui_frame.Show()
 
 
-app = gui.app.UniblowApp(DEVICES_LIST, get_coin_class)
-app.dev_selected = device_selected
-app.coin_selected = coin_selected
-app.transfer = transfer
-
-
 if __name__ == "__main__":
+
+    app = gui.app.UniblowApp(DEVICES_LIST, get_coin_class)
+    app.dev_selected = device_selected
+    app.coin_selected = coin_selected
+    app.transfer = transfer
 
     if "-v" in argv[1:]:
         basicConfig(level=DEBUG)
