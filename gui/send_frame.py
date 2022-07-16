@@ -32,13 +32,16 @@ class SendModal(SendDialog):
         self.panel.check_sendall.Bind(wx.EVT_CHECKBOX, self.check_all)
         self.panel.cancel_btn.SetCursor(handcurs)
         self.panel.ok_btn.SetCursor(handcurs)
-        self.panel.paste_btn.SetCursor(handcurs)
+        self.panel.paste_btn.SetBitmap(
+            wx.Bitmap(file_path("gui/images/btns/paste.png"), wx.BITMAP_TYPE_ANY)
+        )
         self.panel.ok_btn.SetBitmap(
             wx.Bitmap(file_path("gui/images/btns/ok.png"), wx.BITMAP_TYPE_ANY)
         )
         self.panel.cancel_btn.SetBitmap(
             wx.Bitmap(file_path("gui/images/btns/cancel.png"), wx.BITMAP_TYPE_ANY)
         )
+        self.panel.paste_btn.SetCursor(handcurs)
         self.panel.fee_slider.Bind(wx.EVT_SCROLL, self.fee_changed)
         self.panel.cancel_btn.Bind(wx.EVT_BUTTON, self.click_cancel)
         self.panel.ok_btn.Bind(wx.EVT_BUTTON, self.click_ok)

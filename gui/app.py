@@ -154,6 +154,7 @@ class app_option_panel(gui.maingui.OptionPanel):
         HAND_CURSOR = wx.Cursor(wx.CURSOR_HAND)
         self.known_choice.SetCursor(HAND_CURSOR)
         self.m_but_paste.SetCursor(HAND_CURSOR)
+        self.m_but_paste.SetBitmap(wx.Bitmap(file_path("gui/images/btns/paste.png"), wx.BITMAP_TYPE_ANY))
         self.m_but_ok.SetBitmap(wx.Bitmap(file_path("gui/images/btns/ok.png"), wx.BITMAP_TYPE_ANY))
         self.m_but_cancel.SetBitmap(
             wx.Bitmap(file_path("gui/images/btns/cancel.png"), wx.BITMAP_TYPE_ANY)
@@ -281,11 +282,12 @@ class UniblowApp(wx.App):
             dbtn.SetCursor(self.HAND_CURSOR)
         self.dev_panel.Layout()
         self.gui_frame.Layout()
+        self.gui_frame.SetSize((500, 450))
 
     def start_wallet_panel(self):
         """Kill devices choice panel and start the wallet panel."""
         self.dev_panel.Destroy()
-        self.gui_frame.SetSize((820, 420))
+        self.gui_frame.SetSize((820, 460))
         self.gui_frame.Layout()
         self.gui_panel = gui.maingui.WalletPanel(self.gui_frame)
         self.gui_panel.copy_button.SetBitmap(
@@ -356,10 +358,12 @@ class UniblowApp(wx.App):
         wx.CallAfter(self.gowallet, sel_dev)
 
     def change_device(self, evt):
+        if hasattr(self, "balance_timer"):
+            self.balance_timer.Stop()
         self.gui_panel.Destroy()
+        self.current_chain = ""
         del self.gui_panel
         self.open_devices_panel()
-        self.gui_frame.SetSize((500, 450))
 
     def load_coin(self, evt):
         """Called from the chain panel choice click."""
@@ -418,6 +422,8 @@ class UniblowApp(wx.App):
         event.Skip()
 
     def OnClose(self, event):
+        if hasattr(self, "balance_timer"):
+            self.balance_timer.Stop()
         if hasattr(self, "device"):
             del self.device
         if hasattr(self, "wallet"):
@@ -558,7 +564,7 @@ class UniblowApp(wx.App):
                 wx.TheClipboard.SetData(wx.TextDataObject(addr))
                 wx.TheClipboard.Flush()
                 wx.TheClipboard.Close()
-                attach_tt(self.gui_panel.copy_button, "Copied")
+                attach_tt(self.gui_panel.copy_button, "Address copied")
             else:
                 attach_tt(self.gui_panel.copy_button, "No Access")
         except Exception:
@@ -637,7 +643,7 @@ class UniblowApp(wx.App):
             self.gui_hdpanel.m_textCtrl_pwd.Destroy()
             self.gui_hdpanel.m_checkBox_secboost.Destroy()
             self.gui_hdpanel.m_usertxt.SetLabel("Choose account and index for the key to use.")
-            self.gui_hdframe.SetSize(580, 340)
+            self.gui_hdframe.SetSize(580, 360)
         self.gui_hdpanel.m_butOK.SetCursor(self.HAND_CURSOR)
         self.gui_hdpanel.m_butcancel.SetCursor(self.HAND_CURSOR)
         ret = self.gui_hdframe.ShowModal()

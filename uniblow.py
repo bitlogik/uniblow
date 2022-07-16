@@ -572,6 +572,8 @@ def display_coin(account_addr):
     app.gui_panel.copy_button.Enable()
     app.gui_panel.hist_button.Enable()
     app.gui_panel.balance_info.SetLabel(f"  ...  ")
+    if hasattr(app, "balance_timer"):
+        app.balance_timer.Stop()
     app.balance_timer = DisplayTimer()
     run_async(app.display_balance)
     app.balance_timer.Start(12000)

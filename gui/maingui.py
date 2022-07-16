@@ -43,7 +43,7 @@ class WalletPanel ( wx.Panel ):
 
         sbSizer5 = wx.StaticBoxSizer( wx.StaticBox( self, wx.ID_ANY, u"chains" ), wx.VERTICAL )
 
-        self.scrolled_coins = wx.ScrolledWindow( sbSizer5.GetStaticBox(), wx.ID_ANY, wx.DefaultPosition, wx.Size( 82,340 ), wx.HSCROLL|wx.VSCROLL )
+        self.scrolled_coins = wx.ScrolledWindow( sbSizer5.GetStaticBox(), wx.ID_ANY, wx.DefaultPosition, wx.Size( 82,370 ), wx.HSCROLL|wx.VSCROLL )
         self.scrolled_coins.SetScrollRate( 5, 5 )
         sbSizer5.Add( self.scrolled_coins, 0, 0, 5 )
 
@@ -113,10 +113,10 @@ class WalletPanel ( wx.Panel ):
         bSizer28.Add( self.fiat_panel, 0, wx.ALIGN_CENTER_VERTICAL|wx.LEFT, 18 )
 
 
-        bSizer29.Add( bSizer28, 0, wx.TOP, 5 )
+        bSizer29.Add( bSizer28, 0, wx.TOP, 12 )
 
 
-        bSizer4.Add( bSizer29, 0, 0, 5 )
+        bSizer4.Add( bSizer29, 0, wx.ALIGN_CENTER_VERTICAL, 5 )
 
 
         bSizer4.Add( ( 0, 0), 1, 0, 5 )
@@ -124,7 +124,12 @@ class WalletPanel ( wx.Panel ):
         bSizer5 = wx.BoxSizer( wx.VERTICAL )
 
         self.m_but_changedevice = wx.BitmapButton( self.m_panel1, wx.ID_ANY, wx.NullBitmap, wx.DefaultPosition, wx.DefaultSize, wx.BU_AUTODRAW|0|wx.BORDER_NONE )
-        bSizer5.Add( self.m_but_changedevice, 0, wx.BOTTOM, 12 )
+        bSizer5.Add( self.m_but_changedevice, 0, wx.BOTTOM|wx.LEFT, 12 )
+
+        self.m_staticText26 = wx.StaticText( self.m_panel1, wx.ID_ANY, u"Network", wx.DefaultPosition, wx.DefaultSize, 0 )
+        self.m_staticText26.Wrap( -1 )
+
+        bSizer5.Add( self.m_staticText26, 0, wx.ALIGN_CENTER_HORIZONTAL|wx.TOP|wx.BOTTOM|wx.RIGHT, 5 )
 
         network_choiceChoices = []
         self.network_choice = wx.Choice( self.m_panel1, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, network_choiceChoices, 0 )
@@ -132,13 +137,13 @@ class WalletPanel ( wx.Panel ):
         self.network_choice.SetFont( wx.Font( 12, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, False, wx.EmptyString ) )
         self.network_choice.SetMinSize( wx.Size( 120,-1 ) )
 
-        bSizer5.Add( self.network_choice, 0, wx.RIGHT, 24 )
+        bSizer5.Add( self.network_choice, 0, wx.ALIGN_CENTER_HORIZONTAL|wx.RIGHT, 12 )
 
 
         bSizer4.Add( bSizer5, 0, 0, 24 )
 
 
-        bSizer6.Add( bSizer4, 0, wx.TOP|wx.EXPAND, 16 )
+        bSizer6.Add( bSizer4, 0, wx.EXPAND, 16 )
 
         bSizer9 = wx.BoxSizer( wx.HORIZONTAL )
 
@@ -150,13 +155,6 @@ class WalletPanel ( wx.Panel ):
 
         self.but_evt2 = wx.BitmapButton( self.m_panel1, wx.ID_ANY, wx.NullBitmap, wx.DefaultPosition, wx.DefaultSize, wx.BU_AUTODRAW|wx.BORDER_NONE|wx.BORDER_NONE )
         bSizer9.Add( self.but_evt2, 0, wx.RIGHT|wx.LEFT|wx.ALIGN_CENTER_VERTICAL, 36 )
-
-        self.alt_text = wx.StaticText( self.m_panel1, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, 0 )
-        self.alt_text.Wrap( 120 )
-
-        self.alt_text.SetFont( wx.Font( 11, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, False, wx.EmptyString ) )
-
-        bSizer9.Add( self.alt_text, 0, wx.ALL|wx.EXPAND, 5 )
 
 
         bSizer6.Add( bSizer9, 0, wx.BOTTOM, 16 )
@@ -244,6 +242,13 @@ class WalletPanel ( wx.Panel ):
 
         self.btn_send = wx.BitmapButton( self.m_panel1, wx.ID_ANY, wx.NullBitmap, wx.DefaultPosition, wx.DefaultSize, wx.BU_AUTODRAW|wx.BORDER_NONE|wx.BORDER_NONE )
         bSizer6.Add( self.btn_send, 0, wx.ALIGN_CENTER_HORIZONTAL, 48 )
+
+        self.alt_text = wx.StaticText( self.m_panel1, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, 0 )
+        self.alt_text.Wrap( 120 )
+
+        self.alt_text.SetFont( wx.Font( 11, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, False, wx.EmptyString ) )
+
+        bSizer6.Add( self.alt_text, 0, wx.ALIGN_CENTER_HORIZONTAL, 5 )
 
 
         self.m_panel1.SetSizer( bSizer6 )
@@ -526,12 +531,13 @@ class SendPanel ( wx.Panel ):
         self.m_staticText7 = wx.StaticText( self, wx.ID_ANY, u"Destination Address", wx.DefaultPosition, wx.DefaultSize, 0 )
         self.m_staticText7.Wrap( -1 )
 
-        bSizer201.Add( self.m_staticText7, 0, wx.LEFT, 5 )
+        bSizer201.Add( self.m_staticText7, 0, wx.TOP|wx.LEFT, 5 )
 
-        self.paste_btn = wx.Button( self, wx.ID_ANY, u"Paste", wx.DefaultPosition, wx.Size( 80,24 ), 0 )
-        self.paste_btn.SetFont( wx.Font( 9, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, False, wx.EmptyString ) )
 
-        bSizer201.Add( self.paste_btn, 0, wx.LEFT, 24 )
+        bSizer201.Add( ( 0, 0), 0, wx.LEFT, 20 )
+
+        self.paste_btn = wx.BitmapButton( self, wx.ID_ANY, wx.NullBitmap, wx.DefaultPosition, wx.DefaultSize, wx.BU_AUTODRAW|0|wx.BORDER_NONE )
+        bSizer201.Add( self.paste_btn, 0, wx.BOTTOM, 8 )
 
 
         bSizer23.Add( bSizer201, 0, 0, 5 )
@@ -746,8 +752,8 @@ class OptionPanel ( wx.Panel ):
 
         bSizer18.Add( self.custom_text, 0, wx.ALL|wx.ALIGN_CENTER_HORIZONTAL, 5 )
 
-        self.m_but_paste = wx.Button( self, wx.ID_ANY, u"Paste", wx.DefaultPosition, wx.DefaultSize, 0 )
-        bSizer18.Add( self.m_but_paste, 0, wx.ALL|wx.ALIGN_CENTER_HORIZONTAL, 5 )
+        self.m_but_paste = wx.BitmapButton( self, wx.ID_ANY, wx.NullBitmap, wx.DefaultPosition, wx.DefaultSize, wx.BU_AUTODRAW|0|wx.BORDER_NONE )
+        bSizer18.Add( self.m_but_paste, 0, wx.ALIGN_CENTER_HORIZONTAL|wx.TOP|wx.RIGHT|wx.LEFT, 5 )
 
         self.new_choice = wx.TextCtrl( self, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.Size( 375,-1 ), wx.TE_PROCESS_ENTER )
         self.new_choice.SetFont( wx.Font( 11, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, False, wx.EmptyString ) )
