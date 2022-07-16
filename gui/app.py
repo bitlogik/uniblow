@@ -186,12 +186,16 @@ class app_option_panel(gui.maingui.OptionPanel):
                 filter(lambda val: search.lower() in val[0].lower(), self.full_options.items())
             )
             self.known_choice.Clear()
-            self.known_choice.Append(f"Select preset filtered with {search}")
+            self.known_choice.Append(f"> Select preset filtered with {search}")
             self.preset_values = filt_values
             for preset_txt in filt_values.keys():
                 self.known_choice.Append(preset_txt)
             if len(filt_values) == 1:
                 self.known_choice.SetSelection(1)
+            elif len(filt_values) == 0:
+                self.known_choice.Clear()
+                self.known_choice.Append(f"No preset found for {search}")
+                self.known_choice.SetSelection(0)
             else:
                 self.known_choice.SetSelection(0)
         else:
