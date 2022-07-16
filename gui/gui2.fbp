@@ -1489,7 +1489,7 @@
                                                         <property name="orient">wxHORIZONTAL</property>
                                                         <property name="permission">none</property>
                                                         <object class="sizeritem" expanded="0">
-                                                            <property name="border">5</property>
+                                                            <property name="border">8</property>
                                                             <property name="flag">wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT</property>
                                                             <property name="proportion">0</property>
                                                             <object class="wxStaticText" expanded="0">

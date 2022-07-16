@@ -213,7 +213,7 @@ class WalletPanel ( wx.Panel ):
 
         self.wallopt_label.SetFont( wx.Font( 11, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, False, wx.EmptyString ) )
 
-        bSizer37.Add( self.wallopt_label, 0, wx.ALIGN_CENTER_VERTICAL|wx.RIGHT|wx.LEFT, 5 )
+        bSizer37.Add( self.wallopt_label, 0, wx.ALIGN_CENTER_VERTICAL|wx.RIGHT|wx.LEFT, 8 )
 
         wallopt_choiceChoices = []
         self.wallopt_choice = wx.Choice( self.m_panel4, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wallopt_choiceChoices, 0 )
