@@ -208,9 +208,9 @@ def cb_open_wallet(wallet_obj, pkey, waltype, sw_frame, pubkey_cpr):
         wx.DefaultSize,
         wx.BU_AUTODRAW | wx.BORDER_NONE,
     )
-    img = wx.Image(f"gui/images/icons/{app.wallet.coin.lower()}.png", wx.BITMAP_TYPE_PNG).Rescale(
-        32, 32
-    )
+    img = wx.Image(f"gui/images/icons/{app.wallet.coin.lower()}.png", wx.BITMAP_TYPE_PNG)
+    img.Rescale(48, 48, wx.IMAGE_QUALITY_BILINEAR)
+    img.Resize(wx.Size(58, 56), wx.Point(5, 4), red=-1, green=-1, blue=-1)
     bmp = wx.Bitmap(img)
     coin_button.SetBackgroundColour(wx.Colour(248, 250, 252))
     coin_button.SetBitmap(bmp)
