@@ -304,6 +304,9 @@ class UniblowApp(wx.App):
         self.gui_panel.hist_button.SetBitmap(
             wx.Bitmap(file_path("gui/images/btns/history.png"), wx.BITMAP_TYPE_PNG)
         )
+        tt_hist = wx.ToolTip("Open in a block explorer")
+        tt_hist.SetDelay(400)
+        self.gui_panel.hist_button.SetToolTip(tt_hist)
         self.gui_panel.m_but_changedevice.SetBitmap(
             wx.Bitmap(file_path("gui/images/btns/chdev.png"), wx.BITMAP_TYPE_PNG)
         )
