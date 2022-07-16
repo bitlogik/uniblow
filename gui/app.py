@@ -789,6 +789,8 @@ class UniblowApp(wx.App):
             if coin_class is not current_wallet:
                 return False
         if network_num is not None:
+            if self.gui_panel.network_choice.IsEmpty():
+                return
             net_sel = self.gui_panel.network_choice.GetSelection()
             if net_sel < 0:
                 return False
