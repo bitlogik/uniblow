@@ -155,7 +155,9 @@ class app_option_panel(gui.maingui.OptionPanel):
         HAND_CURSOR = wx.Cursor(wx.CURSOR_HAND)
         self.known_choice.SetCursor(HAND_CURSOR)
         self.m_but_paste.SetCursor(HAND_CURSOR)
-        self.m_but_paste.SetBitmap(wx.Bitmap(file_path("gui/images/btns/paste.png"), wx.BITMAP_TYPE_ANY))
+        self.m_but_paste.SetBitmap(
+            wx.Bitmap(file_path("gui/images/btns/paste.png"), wx.BITMAP_TYPE_ANY)
+        )
         self.m_but_ok.SetBitmap(wx.Bitmap(file_path("gui/images/btns/ok.png"), wx.BITMAP_TYPE_ANY))
         self.m_but_cancel.SetBitmap(
             wx.Bitmap(file_path("gui/images/btns/cancel.png"), wx.BITMAP_TYPE_ANY)
