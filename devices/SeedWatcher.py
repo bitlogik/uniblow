@@ -127,7 +127,7 @@ class ContextOptionsMenu(Menu):
         Menu.__init__(self)
         self.parent = parent
 
-        men1 = MenuItem(self, 1, "Copy Address")
+        men1 = MenuItem(self, 1, "Copy address")
         self.Append(men1)
         self.Bind(EVT_MENU, self.parent.copy_account, men1)
 
@@ -348,7 +348,7 @@ class SeedWatcherPanel(gui.swgui.MainPanel):
             copied_modal = MessageDialog(
                 self,
                 f"Account address {addr}\nwas copied in the clipboard",
-                "Copied",
+                "Address copied",
                 STAY_ON_TOP | CENTER,
                 DefaultPosition,
             )
