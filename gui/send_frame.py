@@ -21,8 +21,8 @@ class SendModal(SendDialog):
         self.check_addr_method = check
         self.cb = callback
         handcurs = wx.Cursor(wx.CURSOR_HAND)
-        self.GOOD_BMP = wx.Bitmap(file_path("gui/images/good.bmp"))
-        self.BAD_BMP = wx.Bitmap(file_path("gui/images/bad.bmp"))
+        self.GOOD_BMP = wx.Bitmap(file_path("gui/images/good.png"))
+        self.BAD_BMP = wx.Bitmap(file_path("gui/images/bad.png"))
         self.panel.fiat_label.Hide()
         self.panel.fiat_value.Hide()
         self.panel.text_avail.SetLabel(bal_txt)
@@ -33,6 +33,12 @@ class SendModal(SendDialog):
         self.panel.cancel_btn.SetCursor(handcurs)
         self.panel.ok_btn.SetCursor(handcurs)
         self.panel.paste_btn.SetCursor(handcurs)
+        self.panel.ok_btn.SetBitmap(
+            wx.Bitmap(file_path("gui/images/btns/ok.png"), wx.BITMAP_TYPE_ANY)
+        )
+        self.panel.cancel_btn.SetBitmap(
+            wx.Bitmap(file_path("gui/images/btns/cancel.png"), wx.BITMAP_TYPE_ANY)
+        )
         self.panel.fee_slider.Bind(wx.EVT_SCROLL, self.fee_changed)
         self.panel.cancel_btn.Bind(wx.EVT_BUTTON, self.click_cancel)
         self.panel.ok_btn.Bind(wx.EVT_BUTTON, self.click_ok)

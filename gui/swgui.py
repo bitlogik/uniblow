@@ -51,16 +51,11 @@ class MainPanel ( wx.Panel ):
         bSizer11 = wx.BoxSizer( wx.VERTICAL )
 
 
-        bSizer11.Add( ( 0, 0), 0, wx.BOTTOM, 15 )
+        bSizer11.Add( ( 0, 0), 0, wx.BOTTOM, 8 )
 
         bSizer31 = wx.BoxSizer( wx.HORIZONTAL )
 
         bSizer31.SetMinSize( wx.Size( -1,40 ) )
-        self.m_button_gen = wx.BitmapButton( self, wx.ID_ANY, wx.NullBitmap, wx.DefaultPosition, wx.DefaultSize, wx.BU_AUTODRAW|wx.BORDER_NONE )
-
-        self.m_button_gen.SetBitmap( wx.NullBitmap )
-        bSizer31.Add( self.m_button_gen, 0, wx.ALIGN_CENTER_VERTICAL|wx.BOTTOM|wx.RIGHT|wx.LEFT, 10 )
-
         bSizer6 = wx.BoxSizer( wx.VERTICAL )
 
         self.m_staticText9 = wx.StaticText( self, wx.ID_ANY, u"Generation option", wx.DefaultPosition, wx.DefaultSize, 0 )
@@ -80,11 +75,16 @@ class MainPanel ( wx.Panel ):
 
         bSizer31.Add( bSizer6, 1, wx.EXPAND, 5 )
 
+        self.m_button_gen = wx.BitmapButton( self, wx.ID_ANY, wx.NullBitmap, wx.DefaultPosition, wx.DefaultSize, wx.BU_AUTODRAW|wx.BORDER_NONE|wx.BORDER_NONE )
+
+        self.m_button_gen.SetBitmap( wx.NullBitmap )
+        bSizer31.Add( self.m_button_gen, 0, wx.ALIGN_CENTER_VERTICAL|wx.TOP|wx.BOTTOM|wx.LEFT, 10 )
+
 
         bSizer11.Add( bSizer31, 0, wx.ALIGN_CENTER_HORIZONTAL, 5 )
 
 
-        bSizer11.Add( ( 0, 0), 0, wx.TOP, 8 )
+        bSizer11.Add( ( 0, 0), 0, wx.TOP, 12 )
 
         bSizer3 = wx.BoxSizer( wx.HORIZONTAL )
 
@@ -100,7 +100,7 @@ class MainPanel ( wx.Panel ):
 
         bSizer3.Add( self.m_staticText5, 0, wx.ALL, 5 )
 
-        self.m_bitmap_wl = wx.StaticBitmap( self, wx.ID_ANY, wx.NullBitmap, wx.DefaultPosition, wx.DefaultSize, 0 )
+        self.m_bitmap_wl = wx.StaticBitmap( self, wx.ID_ANY, wx.NullBitmap, wx.DefaultPosition, wx.DefaultSize, wx.BORDER_NONE )
         bSizer3.Add( self.m_bitmap_wl, 0, wx.ALIGN_CENTER, 7 )
 
 
@@ -111,7 +111,7 @@ class MainPanel ( wx.Panel ):
 
         bSizer3.Add( self.m_staticText6, 0, wx.ALL, 5 )
 
-        self.m_bitmap_cs = wx.StaticBitmap( self, wx.ID_ANY, wx.NullBitmap, wx.DefaultPosition, wx.DefaultSize, 0 )
+        self.m_bitmap_cs = wx.StaticBitmap( self, wx.ID_ANY, wx.NullBitmap, wx.DefaultPosition, wx.DefaultSize, wx.BORDER_NONE )
         bSizer3.Add( self.m_bitmap_cs, 0, wx.ALIGN_CENTER_VERTICAL, 7 )
 
 
@@ -178,7 +178,7 @@ class MainPanel ( wx.Panel ):
 
         bSizer11.Add( bSizer5, 0, wx.ALIGN_CENTER, 5 )
 
-        self.m_btnseek = wx.BitmapButton( self, wx.ID_ANY, wx.NullBitmap, wx.DefaultPosition, wx.DefaultSize, wx.BU_AUTODRAW|wx.BORDER_NONE )
+        self.m_btnseek = wx.BitmapButton( self, wx.ID_ANY, wx.NullBitmap, wx.DefaultPosition, wx.DefaultSize, wx.BU_AUTODRAW|wx.BORDER_NONE|wx.BORDER_NONE )
 
         self.m_btnseek.SetBitmap( wx.NullBitmap )
         bSizer11.Add( self.m_btnseek, 0, wx.ALL|wx.ALIGN_CENTER_HORIZONTAL, 14 )

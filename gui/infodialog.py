@@ -31,16 +31,18 @@ class InfoDialog ( wx.Dialog ):
 
 		bSizer2 = wx.BoxSizer( wx.HORIZONTAL )
 
-		self.m_button_cpy = wx.Button( self, wx.ID_ANY, u"Copy Text", wx.DefaultPosition, wx.DefaultSize, 0 )
-		bSizer2.Add( self.m_button_cpy, 0, wx.ALL|wx.ALIGN_CENTER_VERTICAL, 5 )
+		self.m_button_ok = wx.Button( self, wx.ID_ANY, u"OK", wx.DefaultPosition, wx.DefaultSize, 0 )
+
+		self.m_button_ok.SetBitmap( wx.NullBitmap )
+		self.m_button_ok.SetFont( wx.Font( wx.NORMAL_FONT.GetPointSize(), wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_BOLD, False, wx.EmptyString ) )
+
+		bSizer2.Add( self.m_button_ok, 0, wx.ALL|wx.ALIGN_CENTER_VERTICAL, 5 )
 
 
 		bSizer2.Add( ( 20, 0), 1, wx.EXPAND, 5 )
 
-		self.m_button_ok = wx.Button( self, wx.ID_ANY, u"OK", wx.DefaultPosition, wx.DefaultSize, 0 )
-		self.m_button_ok.SetFont( wx.Font( wx.NORMAL_FONT.GetPointSize(), wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_BOLD, False, wx.EmptyString ) )
-
-		bSizer2.Add( self.m_button_ok, 0, wx.ALL|wx.ALIGN_CENTER_VERTICAL, 5 )
+		self.m_button_cpy = wx.Button( self, wx.ID_ANY, u"Copy Text", wx.DefaultPosition, wx.DefaultSize, 0 )
+		bSizer2.Add( self.m_button_cpy, 0, wx.ALL|wx.ALIGN_CENTER_VERTICAL, 5 )
 
 
 		bSizer1.Add( bSizer2, 0, wx.ALIGN_CENTER_HORIZONTAL, 5 )
@@ -55,18 +57,18 @@ class InfoDialog ( wx.Dialog ):
 		self.Centre( wx.BOTH )
 
 		# Connect Events
-		self.m_button_cpy.Bind( wx.EVT_BUTTON, self.copy_text_dialog )
 		self.m_button_ok.Bind( wx.EVT_BUTTON, self.close_info )
+		self.m_button_cpy.Bind( wx.EVT_BUTTON, self.copy_text_dialog )
 
 	def __del__( self ):
 		pass
 
 
 	# Virtual event handlers, overide them in your derived class
-	def copy_text_dialog( self, event ):
+	def close_info( self, event ):
 		event.Skip()
 
-	def close_info( self, event ):
+	def copy_text_dialog( self, event ):
 		event.Skip()
 
 

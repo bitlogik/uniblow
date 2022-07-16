@@ -49,10 +49,17 @@ pkgs_remove = [
 datai = [
     (ICON, "gui/"),
     ("../cryptolib/wordslist/english.txt", "cryptolib/wordslist/"),
-    ("../gui/images/good.bmp", "gui/images/"),
-    ("../gui/images/bad.bmp", "gui/images/"),
+    ("../gui/images/good.png", "gui/images/"),
+    ("../gui/images/bad.png", "gui/images/"),
     ("../gui/images/btns/GenSeed.png", "gui/images/btns/"),
     ("../gui/images/btns/GenSeeddn.png", "gui/images/btns/"),
+    ("../gui/images/btns/cancel.png", "gui/images/btns/"),
+    ("../gui/images/btns/chdev.png", "gui/images/btns/"),
+    ("../gui/images/btns/close.png", "gui/images/btns/"),
+    ("../gui/images/btns/proceed.png", "gui/images/btns/"),
+    ("../gui/images/btns/paste.png", "gui/images/btns/"),
+    ("../gui/images/btns/ok.png", "gui/images/btns/"),
+    ("../gui/images/btns/quit.png", "gui/images/btns/"),
     ("../gui/images/btns/copy.png", "gui/images/btns/"),
     ("../gui/images/btns/history.png", "gui/images/btns/"),
     ("../gui/images/btns/SeekAssets.png", "gui/images/btns/"),
@@ -66,6 +73,7 @@ datai = [
     ("../gui/images/btns/addrchk.png", "gui/images/btns/"),
     ("../gui/images/btns/tokens.png", "gui/images/btns/"),
     ("../gui/images/btns/wc.png", "gui/images/btns/"),
+    ("../gui/images/btns/endwc.png", "gui/images/btns/"),
 ]
 datai += [
     (f"../gui/images/icons/{coin.lower()}.png", "gui/images/icons/") for coin in SUPPORTED_COINS

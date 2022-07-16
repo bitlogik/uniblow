@@ -55,20 +55,18 @@ class QRFrame(wx.Frame):
         )
         qrpanel.stxt.Wrap(-1)
         siz1.Add(qrpanel.stxt, 0, wx.ALL | wx.ALIGN_CENTER_HORIZONTAL, 5)
-        qrpanel.close_btn = wx.Button(
-            qrpanel, wx.ID_ANY, "Close", wx.DefaultPosition, wx.Size(-1, 30), 0
+
+        qrpanel.close_btn = wx.BitmapButton(
+            qrpanel,
+            wx.ID_ANY,
+            wx.NullBitmap,
+            wx.DefaultPosition,
+            wx.DefaultSize,
+            wx.BU_AUTODRAW | 0 | wx.BORDER_NONE,
         )
-        qrpanel.close_btn.SetFont(
-            wx.Font(
-                12,
-                wx.FONTFAMILY_DEFAULT,
-                wx.FONTSTYLE_NORMAL,
-                wx.FONTWEIGHT_NORMAL,
-                False,
-                wx.EmptyString,
-            )
-        )
-        siz1.Add(qrpanel.close_btn, 0, wx.ALIGN_CENTER_HORIZONTAL | wx.TOP, 12)
+        qrpanel.close_btn.SetBitmap(wx.Bitmap("gui/images/btns/close.png", wx.BITMAP_TYPE_ANY))
+
+        siz1.Add(qrpanel.close_btn, 0, wx.ALIGN_CENTER_HORIZONTAL | wx.TOP, 16)
         qrpanel.close_btn.Bind(wx.EVT_BUTTON, self.close)
         self.Bind(wx.EVT_CLOSE, self.close)
         qrpanel.close_btn.SetCursor(wx.Cursor(wx.CURSOR_HAND))

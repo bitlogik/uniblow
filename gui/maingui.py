@@ -113,7 +113,7 @@ class WalletPanel ( wx.Panel ):
         bSizer28.Add( self.fiat_panel, 0, wx.ALIGN_CENTER_VERTICAL|wx.LEFT, 18 )
 
 
-        bSizer29.Add( bSizer28, 0, 0, 5 )
+        bSizer29.Add( bSizer28, 0, wx.TOP, 5 )
 
 
         bSizer4.Add( bSizer29, 0, 0, 5 )
@@ -122,6 +122,9 @@ class WalletPanel ( wx.Panel ):
         bSizer4.Add( ( 0, 0), 1, 0, 5 )
 
         bSizer5 = wx.BoxSizer( wx.VERTICAL )
+
+        self.m_but_changedevice = wx.BitmapButton( self.m_panel1, wx.ID_ANY, wx.NullBitmap, wx.DefaultPosition, wx.DefaultSize, wx.BU_AUTODRAW|0|wx.BORDER_NONE )
+        bSizer5.Add( self.m_but_changedevice, 0, wx.BOTTOM, 12 )
 
         network_choiceChoices = []
         self.network_choice = wx.Choice( self.m_panel1, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, network_choiceChoices, 0 )
@@ -140,19 +143,13 @@ class WalletPanel ( wx.Panel ):
         bSizer9 = wx.BoxSizer( wx.HORIZONTAL )
 
 
-        bSizer9.Add( ( 0, 0), 1, wx.EXPAND|wx.LEFT, 48 )
+        bSizer9.Add( ( 0, 0), 1, wx.EXPAND|wx.LEFT, 45 )
 
-        self.hist_button = wx.BitmapButton( self.m_panel1, wx.ID_ANY, wx.NullBitmap, wx.DefaultPosition, wx.DefaultSize, wx.BU_AUTODRAW|wx.BORDER_NONE )
-        bSizer9.Add( self.hist_button, 0, wx.ALIGN_CENTER_VERTICAL|wx.RIGHT, 48 )
-
-        self.but_evt1 = wx.BitmapButton( self.m_panel1, wx.ID_ANY, wx.NullBitmap, wx.DefaultPosition, wx.DefaultSize, wx.BU_AUTODRAW|wx.BORDER_NONE )
+        self.but_evt1 = wx.BitmapButton( self.m_panel1, wx.ID_ANY, wx.NullBitmap, wx.DefaultPosition, wx.DefaultSize, wx.BU_AUTODRAW|wx.BORDER_NONE|wx.BORDER_NONE )
         bSizer9.Add( self.but_evt1, 0, wx.ALIGN_CENTER_VERTICAL, 12 )
 
-        self.but_evt2 = wx.BitmapButton( self.m_panel1, wx.ID_ANY, wx.NullBitmap, wx.DefaultPosition, wx.DefaultSize, wx.BU_AUTODRAW|wx.BORDER_NONE )
+        self.but_evt2 = wx.BitmapButton( self.m_panel1, wx.ID_ANY, wx.NullBitmap, wx.DefaultPosition, wx.DefaultSize, wx.BU_AUTODRAW|wx.BORDER_NONE|wx.BORDER_NONE )
         bSizer9.Add( self.but_evt2, 0, wx.RIGHT|wx.LEFT|wx.ALIGN_CENTER_VERTICAL, 36 )
-
-        self.btn_send = wx.BitmapButton( self.m_panel1, wx.ID_ANY, wx.NullBitmap, wx.DefaultPosition, wx.DefaultSize, wx.BU_AUTODRAW|wx.BORDER_NONE )
-        bSizer9.Add( self.btn_send, 0, wx.ALL|wx.ALIGN_BOTTOM, 5 )
 
         self.alt_text = wx.StaticText( self.m_panel1, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, 0 )
         self.alt_text.Wrap( 120 )
@@ -162,74 +159,91 @@ class WalletPanel ( wx.Panel ):
         bSizer9.Add( self.alt_text, 0, wx.ALL|wx.EXPAND, 5 )
 
 
-        bSizer6.Add( bSizer9, 1, 0, 5 )
+        bSizer6.Add( bSizer9, 0, wx.BOTTOM, 16 )
 
-        self.account_addr = wx.StaticText( self.m_panel1, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, wx.ST_ELLIPSIZE_END )
+        self.m_panel4 = wx.Panel( self.m_panel1, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL )
+        self.m_panel4.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_MENU ) )
+
+        bSizer32 = wx.BoxSizer( wx.VERTICAL )
+
+
+        bSizer32.Add( ( 0, 0), 0, wx.TOP, 18 )
+
+        self.m_panel5 = wx.Panel( self.m_panel4, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL )
+        self.m_panel5.SetBackgroundColour( wx.Colour( 255, 255, 255 ) )
+
+        bSizer36 = wx.BoxSizer( wx.HORIZONTAL )
+
+        self.qr_button = wx.BitmapButton( self.m_panel5, wx.ID_ANY, wx.NullBitmap, wx.DefaultPosition, wx.DefaultSize, wx.BU_AUTODRAW|0|wx.BORDER_NONE )
+        bSizer36.Add( self.qr_button, 0, wx.TOP|wx.BOTTOM|wx.LEFT, 12 )
+
+        self.account_addr = wx.StaticText( self.m_panel5, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.Size( -1,-1 ), wx.ST_ELLIPSIZE_MIDDLE )
         self.account_addr.Wrap( -1 )
 
         self.account_addr.SetFont( wx.Font( 12, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, False, wx.EmptyString ) )
+        self.account_addr.SetMaxSize( wx.Size( 525,-1 ) )
 
-        bSizer6.Add( self.account_addr, 0, wx.TOP|wx.BOTTOM|wx.LEFT, 12 )
+        bSizer36.Add( self.account_addr, 0, wx.RIGHT|wx.LEFT|wx.ALIGN_CENTER_VERTICAL, 16 )
 
-        bSizer12 = wx.BoxSizer( wx.HORIZONTAL )
-
-
-        bSizer12.Add( ( 0, 0), 0, 0, 24 )
-
-        bSizer13 = wx.BoxSizer( wx.VERTICAL )
-
-        bSizer14 = wx.BoxSizer( wx.HORIZONTAL )
-
-        bSizer11 = wx.BoxSizer( wx.HORIZONTAL )
-
-        self.qr_button = wx.BitmapButton( self.m_panel1, wx.ID_ANY, wx.NullBitmap, wx.DefaultPosition, wx.DefaultSize, wx.BU_AUTODRAW|0|wx.BORDER_NONE )
-        bSizer11.Add( self.qr_button, 0, wx.LEFT, 12 )
+        self.copy_button = wx.BitmapButton( self.m_panel5, wx.ID_ANY, wx.NullBitmap, wx.DefaultPosition, wx.DefaultSize, wx.BU_AUTODRAW|wx.BORDER_NONE|wx.BORDER_NONE )
+        bSizer36.Add( self.copy_button, 0, wx.TOP|wx.BOTTOM|wx.RIGHT, 12 )
 
 
-        bSizer11.Add( ( 0, 0), 0, wx.LEFT, 24 )
+        self.m_panel5.SetSizer( bSizer36 )
+        self.m_panel5.Layout()
+        bSizer36.Fit( self.m_panel5 )
+        bSizer32.Add( self.m_panel5, 0, wx.LEFT, 36 )
 
-        self.copy_button = wx.BitmapButton( self.m_panel1, wx.ID_ANY, wx.NullBitmap, wx.DefaultPosition, wx.DefaultSize, wx.BU_AUTODRAW|wx.BORDER_NONE )
-        bSizer11.Add( self.copy_button, 0, wx.RIGHT, 12 )
+        bSizer34 = wx.BoxSizer( wx.HORIZONTAL )
 
-        self.btn_chkaddr = wx.BitmapButton( self.m_panel1, wx.ID_ANY, wx.NullBitmap, wx.DefaultPosition, wx.DefaultSize, wx.BU_AUTODRAW|0|wx.BORDER_NONE )
+        self.hist_button = wx.BitmapButton( self.m_panel4, wx.ID_ANY, wx.NullBitmap, wx.DefaultPosition, wx.DefaultSize, wx.BU_AUTODRAW|wx.BORDER_NONE|wx.BORDER_NONE )
+        bSizer34.Add( self.hist_button, 0, wx.ALIGN_CENTER_VERTICAL|wx.LEFT, 36 )
+
+        self.btn_chkaddr = wx.BitmapButton( self.m_panel4, wx.ID_ANY, wx.NullBitmap, wx.DefaultPosition, wx.Size( -1,-1 ), wx.BU_AUTODRAW|0|wx.BORDER_NONE )
         self.btn_chkaddr.Hide()
+        self.btn_chkaddr.SetMinSize( wx.Size( 100,-1 ) )
 
-        bSizer11.Add( self.btn_chkaddr, 0, wx.LEFT, 8 )
-
-
-        bSizer14.Add( bSizer11, 1, wx.EXPAND, 5 )
-
-        bSizer15 = wx.BoxSizer( wx.VERTICAL )
+        bSizer34.Add( self.btn_chkaddr, 0, wx.LEFT, 8 )
 
 
-        bSizer15.Add( ( 0, 0), 0, wx.TOP, 16 )
+        bSizer34.Add( ( 0, 0), 1, wx.RIGHT|wx.LEFT|wx.EXPAND, 5 )
 
-        self.wallopt_label = wx.StaticText( self.m_panel1, wx.ID_ANY, u"Wallet type", wx.DefaultPosition, wx.DefaultSize, 0 )
+        bSizer37 = wx.BoxSizer( wx.HORIZONTAL )
+
+        self.wallopt_label = wx.StaticText( self.m_panel4, wx.ID_ANY, u"Wallet type", wx.DefaultPosition, wx.DefaultSize, 0 )
         self.wallopt_label.Wrap( -1 )
 
-        bSizer15.Add( self.wallopt_label, 0, wx.ALIGN_CENTER_HORIZONTAL|wx.TOP|wx.RIGHT|wx.LEFT, 5 )
+        self.wallopt_label.SetFont( wx.Font( 11, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, False, wx.EmptyString ) )
+
+        bSizer37.Add( self.wallopt_label, 0, wx.ALIGN_CENTER_VERTICAL|wx.RIGHT|wx.LEFT, 5 )
 
         wallopt_choiceChoices = []
-        self.wallopt_choice = wx.Choice( self.m_panel1, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wallopt_choiceChoices, 0 )
+        self.wallopt_choice = wx.Choice( self.m_panel4, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wallopt_choiceChoices, 0 )
         self.wallopt_choice.SetSelection( 0 )
-        self.wallopt_choice.SetFont( wx.Font( 9, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, False, wx.EmptyString ) )
+        self.wallopt_choice.SetFont( wx.Font( 11, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, False, wx.EmptyString ) )
 
-        bSizer15.Add( self.wallopt_choice, 0, wx.ALL|wx.ALIGN_CENTER_HORIZONTAL, 5 )
-
-
-        bSizer14.Add( bSizer15, 1, wx.LEFT, 32 )
+        bSizer37.Add( self.wallopt_choice, 0, wx.ALIGN_CENTER_VERTICAL, 24 )
 
 
-        bSizer13.Add( bSizer14, 0, wx.EXPAND, 5 )
+        bSizer34.Add( bSizer37, 0, wx.RIGHT, 5 )
 
 
-        bSizer12.Add( bSizer13, 1, wx.EXPAND, 5 )
+        bSizer34.Add( ( 0, 0), 1, wx.EXPAND, 32 )
 
 
-        bSizer6.Add( bSizer12, 0, wx.EXPAND|wx.BOTTOM, 5 )
+        bSizer32.Add( bSizer34, 0, wx.TOP|wx.BOTTOM|wx.EXPAND, 16 )
 
 
-        bSizer6.Add( ( 0, 0), 0, wx.TOP, 8 )
+        self.m_panel4.SetSizer( bSizer32 )
+        self.m_panel4.Layout()
+        bSizer32.Fit( self.m_panel4 )
+        bSizer6.Add( self.m_panel4, 0, wx.EXPAND|wx.ALL, 6 )
+
+
+        bSizer6.Add( ( 0, 0), 0, wx.TOP, 12 )
+
+        self.btn_send = wx.BitmapButton( self.m_panel1, wx.ID_ANY, wx.NullBitmap, wx.DefaultPosition, wx.DefaultSize, wx.BU_AUTODRAW|wx.BORDER_NONE|wx.BORDER_NONE )
+        bSizer6.Add( self.btn_send, 0, wx.ALIGN_CENTER_HORIZONTAL, 48 )
 
 
         self.m_panel1.SetSizer( bSizer6 )
@@ -259,7 +273,7 @@ class DevicesPanel ( wx.Panel ):
 
         bSizer3 = wx.BoxSizer( wx.VERTICAL )
 
-        self.bmp_logo = wx.StaticBitmap( self, wx.ID_ANY, wx.NullBitmap, wx.DefaultPosition, wx.DefaultSize, 0 )
+        self.bmp_logo = wx.StaticBitmap( self, wx.ID_ANY, wx.NullBitmap, wx.DefaultPosition, wx.DefaultSize, wx.BORDER_NONE )
         bSizer3.Add( self.bmp_logo, 0, wx.ALIGN_CENTER_HORIZONTAL|wx.TOP|wx.BOTTOM, 32 )
 
         self.m_staticText1 = wx.StaticText( self, wx.ID_ANY, u"Select Device", wx.DefaultPosition, wx.DefaultSize, 0 )
@@ -273,19 +287,19 @@ class DevicesPanel ( wx.Panel ):
         fgSizer1.SetFlexibleDirection( wx.BOTH )
         fgSizer1.SetNonFlexibleGrowMode( wx.FLEX_GROWMODE_SPECIFIED )
 
-        self.d_btn01 = wx.BitmapButton( self, wx.ID_ANY, wx.NullBitmap, wx.DefaultPosition, wx.DefaultSize, wx.BU_AUTODRAW|wx.BORDER_NONE )
+        self.d_btn01 = wx.BitmapButton( self, wx.ID_ANY, wx.NullBitmap, wx.DefaultPosition, wx.DefaultSize, wx.BU_AUTODRAW|wx.BORDER_NONE|wx.BORDER_NONE )
         fgSizer1.Add( self.d_btn01, 0, wx.ALL, 5 )
 
-        self.d_btn02 = wx.BitmapButton( self, wx.ID_ANY, wx.NullBitmap, wx.DefaultPosition, wx.DefaultSize, wx.BU_AUTODRAW|wx.BORDER_NONE )
+        self.d_btn02 = wx.BitmapButton( self, wx.ID_ANY, wx.NullBitmap, wx.DefaultPosition, wx.DefaultSize, wx.BU_AUTODRAW|wx.BORDER_NONE|wx.BORDER_NONE )
         fgSizer1.Add( self.d_btn02, 0, wx.ALL, 5 )
 
-        self.d_btn03 = wx.BitmapButton( self, wx.ID_ANY, wx.NullBitmap, wx.DefaultPosition, wx.DefaultSize, wx.BU_AUTODRAW|wx.BORDER_NONE )
+        self.d_btn03 = wx.BitmapButton( self, wx.ID_ANY, wx.NullBitmap, wx.DefaultPosition, wx.DefaultSize, wx.BU_AUTODRAW|wx.BORDER_NONE|wx.BORDER_NONE )
         fgSizer1.Add( self.d_btn03, 0, wx.ALL, 5 )
 
-        self.d_btn04 = wx.BitmapButton( self, wx.ID_ANY, wx.NullBitmap, wx.DefaultPosition, wx.DefaultSize, wx.BU_AUTODRAW|wx.BORDER_NONE )
+        self.d_btn04 = wx.BitmapButton( self, wx.ID_ANY, wx.NullBitmap, wx.DefaultPosition, wx.DefaultSize, wx.BU_AUTODRAW|wx.BORDER_NONE|wx.BORDER_NONE )
         fgSizer1.Add( self.d_btn04, 0, wx.ALL, 5 )
 
-        self.d_btn05 = wx.BitmapButton( self, wx.ID_ANY, wx.NullBitmap, wx.DefaultPosition, wx.DefaultSize, wx.BU_AUTODRAW|wx.BORDER_NONE )
+        self.d_btn05 = wx.BitmapButton( self, wx.ID_ANY, wx.NullBitmap, wx.DefaultPosition, wx.DefaultSize, wx.BU_AUTODRAW|wx.BORDER_NONE|wx.BORDER_NONE )
         fgSizer1.Add( self.d_btn05, 0, wx.ALL, 5 )
 
 
@@ -348,7 +362,7 @@ class HDPanel ( wx.Panel ):
 
         bSizer15.Add( self.m_textwl, 0, wx.ALIGN_BOTTOM|wx.ALL, 5 )
 
-        self.m_bitmapHDwl = wx.StaticBitmap( self, wx.ID_ANY, wx.NullBitmap, wx.DefaultPosition, wx.DefaultSize, 0 )
+        self.m_bitmapHDwl = wx.StaticBitmap( self, wx.ID_ANY, wx.NullBitmap, wx.DefaultPosition, wx.DefaultSize, wx.BORDER_NONE )
         bSizer15.Add( self.m_bitmapHDwl, 0, wx.ALIGN_BOTTOM|wx.BOTTOM, 5 )
 
         self.m_textcs = wx.StaticText( self, wx.ID_ANY, u"Checksum", wx.DefaultPosition, wx.DefaultSize, wx.ST_NO_AUTORESIZE )
@@ -356,7 +370,7 @@ class HDPanel ( wx.Panel ):
 
         bSizer15.Add( self.m_textcs, 0, wx.ALL|wx.ALIGN_BOTTOM, 5 )
 
-        self.m_bitmapHDcs = wx.StaticBitmap( self, wx.ID_ANY, wx.NullBitmap, wx.DefaultPosition, wx.DefaultSize, 0 )
+        self.m_bitmapHDcs = wx.StaticBitmap( self, wx.ID_ANY, wx.NullBitmap, wx.DefaultPosition, wx.DefaultSize, wx.BORDER_NONE )
         bSizer15.Add( self.m_bitmapHDcs, 0, wx.ALIGN_BOTTOM|wx.BOTTOM, 5 )
 
 
@@ -427,15 +441,17 @@ class HDPanel ( wx.Panel ):
 
         bSizer12 = wx.BoxSizer( wx.HORIZONTAL )
 
-        self.m_butOK = wx.Button( self, wx.ID_ANY, u"OK", wx.DefaultPosition, wx.Size( -1,36 ), 0 )
-        self.m_butOK.SetFont( wx.Font( wx.NORMAL_FONT.GetPointSize(), wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_BOLD, False, wx.EmptyString ) )
+        self.m_butok = wx.BitmapButton( self, wx.ID_ANY, wx.NullBitmap, wx.DefaultPosition, wx.DefaultSize, wx.BU_AUTODRAW|0|wx.BORDER_NONE )
 
-        bSizer12.Add( self.m_butOK, 0, wx.ALL, 5 )
+        self.m_butok.SetBitmap( wx.NullBitmap )
+        bSizer12.Add( self.m_butok, 0, wx.ALL, 5 )
 
 
         bSizer12.Add( ( 0, 0), 1, wx.RIGHT, 25 )
 
-        self.m_butcancel = wx.Button( self, wx.ID_ANY, u"Cancel", wx.DefaultPosition, wx.Size( -1,36 ), 0 )
+        self.m_butcancel = wx.BitmapButton( self, wx.ID_ANY, wx.NullBitmap, wx.DefaultPosition, wx.DefaultSize, wx.BU_AUTODRAW|0|wx.BORDER_NONE )
+
+        self.m_butcancel.SetBitmap( wx.NullBitmap )
         bSizer12.Add( self.m_butcancel, 0, wx.ALL, 5 )
 
 
@@ -448,7 +464,7 @@ class HDPanel ( wx.Panel ):
 
         # Connect Events
         self.m_textCtrl_mnemo.Bind( wx.EVT_TEXT, self.hdmnemo_changed )
-        self.m_butOK.Bind( wx.EVT_BUTTON, self.hd_ok )
+        self.m_butok.Bind( wx.EVT_BUTTON, self.hd_ok )
         self.m_butcancel.Bind( wx.EVT_BUTTON, self.hd_cancel )
 
     def __del__( self ):
@@ -528,8 +544,8 @@ class SendPanel ( wx.Panel ):
 
         bSizer14.Add( ( 0, 0), 0, wx.RIGHT, 6 )
 
-        self.bmp_chk = wx.StaticBitmap( self, wx.ID_ANY, wx.NullBitmap, wx.DefaultPosition, wx.DefaultSize, 0 )
-        bSizer14.Add( self.bmp_chk, 0, wx.TOP, 5 )
+        self.bmp_chk = wx.StaticBitmap( self, wx.ID_ANY, wx.NullBitmap, wx.DefaultPosition, wx.DefaultSize, wx.BORDER_NONE )
+        bSizer14.Add( self.bmp_chk, 0, wx.ALIGN_CENTER_VERTICAL, 5 )
 
 
         bSizer23.Add( bSizer14, 0, wx.EXPAND, 5 )
@@ -624,18 +640,18 @@ class SendPanel ( wx.Panel ):
 
         bSizer19 = wx.BoxSizer( wx.HORIZONTAL )
 
-        self.cancel_btn = wx.Button( self, wx.ID_ANY, u"Cancel", wx.DefaultPosition, wx.Size( -1,40 ), 0 )
-        self.cancel_btn.SetFont( wx.Font( 10, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, False, wx.EmptyString ) )
+        self.ok_btn = wx.BitmapButton( self, wx.ID_ANY, wx.NullBitmap, wx.DefaultPosition, wx.DefaultSize, wx.BU_AUTODRAW|0|wx.BORDER_NONE )
 
-        bSizer19.Add( self.cancel_btn, 0, wx.ALL, 5 )
+        self.ok_btn.SetBitmap( wx.NullBitmap )
+        bSizer19.Add( self.ok_btn, 0, wx.ALL, 5 )
 
 
         bSizer19.Add( ( 0, 0), 0, wx.RIGHT, 32 )
 
-        self.ok_btn = wx.Button( self, wx.ID_ANY, u"Proceed", wx.DefaultPosition, wx.Size( -1,40 ), 0 )
-        self.ok_btn.SetFont( wx.Font( 11, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, False, wx.EmptyString ) )
+        self.cancel_btn = wx.BitmapButton( self, wx.ID_ANY, wx.NullBitmap, wx.DefaultPosition, wx.DefaultSize, wx.BU_AUTODRAW|0|wx.BORDER_NONE )
 
-        bSizer19.Add( self.ok_btn, 0, wx.ALL, 5 )
+        self.cancel_btn.SetBitmap( wx.NullBitmap )
+        bSizer19.Add( self.cancel_btn, 0, wx.ALL, 5 )
 
 
         bSizer23.Add( bSizer19, 0, wx.ALIGN_CENTER_HORIZONTAL|wx.TOP, 24 )
@@ -665,7 +681,7 @@ class SendPanel ( wx.Panel ):
 class OptionDialog ( wx.Dialog ):
 
     def __init__( self, parent ):
-        wx.Dialog.__init__ ( self, parent, id = wx.ID_ANY, title = wx.EmptyString, pos = wx.DefaultPosition, size = wx.Size( 455,375 ), style = wx.DEFAULT_DIALOG_STYLE )
+        wx.Dialog.__init__ ( self, parent, id = wx.ID_ANY, title = wx.EmptyString, pos = wx.DefaultPosition, size = wx.Size( 455,380 ), style = wx.DEFAULT_DIALOG_STYLE )
 
         self.SetSizeHints( wx.DefaultSize, wx.DefaultSize )
 
@@ -682,7 +698,7 @@ class OptionDialog ( wx.Dialog ):
 
 class OptionPanel ( wx.Panel ):
 
-    def __init__( self, parent, id = wx.ID_ANY, pos = wx.DefaultPosition, size = wx.Size( -1,-1 ), style = wx.TAB_TRAVERSAL, name = wx.EmptyString ):
+    def __init__( self, parent, id = wx.ID_ANY, pos = wx.DefaultPosition, size = wx.Size( 396,400 ), style = wx.TAB_TRAVERSAL, name = wx.EmptyString ):
         wx.Panel.__init__ ( self, parent, id = id, pos = pos, size = size, style = style, name = name )
 
         self.SetBackgroundColour( wx.Colour( 248, 250, 252 ) )
@@ -699,6 +715,16 @@ class OptionPanel ( wx.Panel ):
 
         bSizer18.Add( self.preset_text, 0, wx.ALL|wx.ALIGN_CENTER_HORIZONTAL, 5 )
 
+        bSizer31 = wx.BoxSizer( wx.HORIZONTAL )
+
+        self.search_preset = wx.SearchCtrl( self, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, wx.TE_PROCESS_ENTER )
+        self.search_preset.ShowSearchButton( True )
+        self.search_preset.ShowCancelButton( False )
+        bSizer31.Add( self.search_preset, 0, wx.TOP, 5 )
+
+
+        bSizer18.Add( bSizer31, 0, wx.ALIGN_CENTER_HORIZONTAL, 5 )
+
         known_choiceChoices = []
         self.known_choice = wx.Choice( self, wx.ID_ANY, wx.DefaultPosition, wx.Size( 360,-1 ), known_choiceChoices, 0 )
         self.known_choice.SetSelection( 0 )
@@ -709,7 +735,7 @@ class OptionPanel ( wx.Panel ):
         self.m_staticTextor = wx.StaticText( self, wx.ID_ANY, u"OR", wx.DefaultPosition, wx.DefaultSize, 0 )
         self.m_staticTextor.Wrap( -1 )
 
-        self.m_staticTextor.SetFont( wx.Font( 11, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, False, wx.EmptyString ) )
+        self.m_staticTextor.SetFont( wx.Font( 11, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, True, wx.EmptyString ) )
 
         bSizer18.Add( self.m_staticTextor, 0, wx.ALL|wx.ALIGN_CENTER_HORIZONTAL, 5 )
 
@@ -730,21 +756,21 @@ class OptionPanel ( wx.Panel ):
 
         bSizer19 = wx.BoxSizer( wx.HORIZONTAL )
 
-        self.m_but_cancel = wx.Button( self, wx.ID_ANY, u"Cancel", wx.DefaultPosition, wx.Size( -1,40 ), 0 )
-        self.m_but_cancel.SetFont( wx.Font( 11, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, False, wx.EmptyString ) )
+        self.m_but_ok = wx.BitmapButton( self, wx.ID_ANY, wx.NullBitmap, wx.DefaultPosition, wx.DefaultSize, wx.BU_AUTODRAW|0|wx.BORDER_NONE )
 
-        bSizer19.Add( self.m_but_cancel, 0, wx.ALL, 5 )
+        self.m_but_ok.SetBitmap( wx.Bitmap( u"gui/images/btns/ok.png", wx.BITMAP_TYPE_ANY ) )
+        bSizer19.Add( self.m_but_ok, 0, wx.BOTTOM|wx.RIGHT|wx.LEFT, 5 )
 
 
         bSizer19.Add( ( 0, 0), 1, wx.LEFT, 16 )
 
-        self.m_but_ok = wx.Button( self, wx.ID_ANY, u"OK", wx.DefaultPosition, wx.Size( -1,40 ), 0 )
-        self.m_but_ok.SetFont( wx.Font( 11, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_BOLD, False, wx.EmptyString ) )
+        self.m_but_cancel = wx.BitmapButton( self, wx.ID_ANY, wx.NullBitmap, wx.DefaultPosition, wx.DefaultSize, wx.BU_AUTODRAW|0|wx.BORDER_NONE )
 
-        bSizer19.Add( self.m_but_ok, 0, wx.ALL, 5 )
+        self.m_but_cancel.SetBitmap( wx.Bitmap( u"gui/images/btns/cancel.png", wx.BITMAP_TYPE_ANY ) )
+        bSizer19.Add( self.m_but_cancel, 0, wx.BOTTOM|wx.RIGHT|wx.LEFT, 5 )
 
 
-        bSizer18.Add( bSizer19, 0, wx.ALIGN_CENTER_HORIZONTAL|wx.TOP, 28 )
+        bSizer18.Add( bSizer19, 0, wx.ALIGN_CENTER_HORIZONTAL|wx.TOP, 20 )
 
 
         bSizer18.Add( ( 0, 0), 1, wx.EXPAND, 5 )
@@ -752,29 +778,40 @@ class OptionPanel ( wx.Panel ):
 
         self.SetSizer( bSizer18 )
         self.Layout()
-        bSizer18.Fit( self )
 
         # Connect Events
+        self.search_preset.Bind( wx.EVT_SEARCHCTRL_CANCEL_BTN, self.onEraseSearch )
+        self.search_preset.Bind( wx.EVT_SEARCHCTRL_SEARCH_BTN, self.onSearch )
+        self.search_preset.Bind( wx.EVT_TEXT, self.onSearch )
+        self.search_preset.Bind( wx.EVT_TEXT_ENTER, self.onSearch )
         self.m_but_paste.Bind( wx.EVT_BUTTON, self.pasteValue )
         self.new_choice.Bind( wx.EVT_TEXT_ENTER, self.valid_custom )
-        self.m_but_cancel.Bind( wx.EVT_BUTTON, self.cancelOption )
         self.m_but_ok.Bind( wx.EVT_BUTTON, self.okOption )
+        self.m_but_cancel.Bind( wx.EVT_BUTTON, self.cancelOption )
 
     def __del__( self ):
         pass
 
 
     # Virtual event handlers, overide them in your derived class
+    def onEraseSearch( self, event ):
+        event.Skip()
+
+    def onSearch( self, event ):
+        event.Skip()
+
+
+
     def pasteValue( self, event ):
         event.Skip()
 
     def valid_custom( self, event ):
         event.Skip()
 
-    def cancelOption( self, event ):
+    def okOption( self, event ):
         event.Skip()
 
-    def okOption( self, event ):
+    def cancelOption( self, event ):
         event.Skip()
 
 

@@ -537,6 +537,27 @@ def set_coin(coin, network, wallet_type):
         app.wallet.coin = "t" + app.wallet.coin
     app.gui_panel.scrolled_coins.Enable()
     app.gui_panel.txt_fiat.SetLabel("$ 0")
+
+    # Detect is token or wallet connect
+    if coin in [
+        "ETH",
+        "BSC",
+        "MATIC",
+        "FTM",
+        "OP",
+        "METIS",
+        "CELO",
+        "GLMR",
+        "ARB",
+        "AVAX",
+    ]:
+        if wallet_type == 1:
+            btn = app.token_started()
+            btn.Bind(wx.EVT_BUTTON, lambda x: process_coin_select(coin, network, 0))
+        if wallet_type == 2:
+            btn = app.wc_started()
+            btn.Bind(wx.EVT_BUTTON, lambda x: process_coin_select(coin, network, 0))
+
     app.gui_panel.fiat_panel.Hide()
     if hasattr(app.gui_panel, "fiat_price"):
         del app.gui_panel.fiat_price
