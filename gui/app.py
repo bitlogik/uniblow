@@ -46,6 +46,10 @@ def attach_tt(elt, txt):
     wx.CallLater(1200, lambda: ttc.SetTip(""))
 
 
+def isBitmapButton(elt):
+    return isinstance(elt, wx.BitmapButton)
+
+
 class InfoBox(gui.infodialog.InfoDialog):
     def __init__(self, message, title, style, parent, block_modal=False):
         super().__init__(parent)
@@ -388,7 +392,8 @@ class UniblowApp(wx.App):
     def load_coin(self, evt):
         """Called from the chain panel choice click."""
         sel_coinbtn = evt.GetEventObject()
-        coinsbtn = sel_coinbtn.GetParent().GetChildren()
+        siblings = sel_coinbtn.GetParent().GetChildren()
+        coinsbtn = list(filter(isBitmapButton, siblings))
         for pos in range(len(coinsbtn)):
             if coinsbtn[pos] is sel_coinbtn:
                 coin_name = self.coins_list[pos]
