@@ -199,12 +199,11 @@ class WalletPanel ( wx.Panel ):
 
         self.btn_chkaddr = wx.BitmapButton( self.m_panel4, wx.ID_ANY, wx.NullBitmap, wx.DefaultPosition, wx.Size( -1,-1 ), wx.BU_AUTODRAW|0|wx.BORDER_NONE )
         self.btn_chkaddr.Hide()
-        self.btn_chkaddr.SetMinSize( wx.Size( 100,-1 ) )
 
-        bSizer34.Add( self.btn_chkaddr, 0, wx.LEFT, 8 )
+        bSizer34.Add( self.btn_chkaddr, 0, wx.LEFT, 12 )
 
 
-        bSizer34.Add( ( 0, 0), 1, wx.RIGHT|wx.LEFT|wx.EXPAND, 5 )
+        bSizer34.Add( ( 0, 0), 1, wx.RIGHT|wx.LEFT|wx.EXPAND, 8 )
 
         bSizer37 = wx.BoxSizer( wx.HORIZONTAL )
 
@@ -368,7 +367,7 @@ class HDPanel ( wx.Panel ):
         bSizer15.Add( self.m_textwl, 0, wx.ALIGN_BOTTOM|wx.ALL, 5 )
 
         self.m_bitmapHDwl = wx.StaticBitmap( self, wx.ID_ANY, wx.NullBitmap, wx.DefaultPosition, wx.DefaultSize, wx.BORDER_NONE )
-        bSizer15.Add( self.m_bitmapHDwl, 0, wx.ALIGN_BOTTOM|wx.BOTTOM, 5 )
+        bSizer15.Add( self.m_bitmapHDwl, 0, wx.BOTTOM|wx.ALIGN_BOTTOM, 6 )
 
         self.m_textcs = wx.StaticText( self, wx.ID_ANY, u"Checksum", wx.DefaultPosition, wx.DefaultSize, wx.ST_NO_AUTORESIZE )
         self.m_textcs.Wrap( -1 )
@@ -376,7 +375,7 @@ class HDPanel ( wx.Panel ):
         bSizer15.Add( self.m_textcs, 0, wx.ALL|wx.ALIGN_BOTTOM, 5 )
 
         self.m_bitmapHDcs = wx.StaticBitmap( self, wx.ID_ANY, wx.NullBitmap, wx.DefaultPosition, wx.DefaultSize, wx.BORDER_NONE )
-        bSizer15.Add( self.m_bitmapHDcs, 0, wx.ALIGN_BOTTOM|wx.BOTTOM, 5 )
+        bSizer15.Add( self.m_bitmapHDcs, 0, wx.ALIGN_BOTTOM|wx.BOTTOM, 6 )
 
 
         bSizer15.Add( ( 0, 0), 1, wx.EXPAND|wx.RIGHT, 16 )

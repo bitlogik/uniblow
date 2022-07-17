@@ -1398,7 +1398,7 @@
                                                     </object>
                                                 </object>
                                                 <object class="sizeritem" expanded="0">
-                                                    <property name="border">8</property>
+                                                    <property name="border">12</property>
                                                     <property name="flag">wxLEFT</property>
                                                     <property name="proportion">0</property>
                                                     <object class="wxBitmapButton" expanded="0">
@@ -1442,7 +1442,7 @@
                                                         <property name="maximum_size"></property>
                                                         <property name="min_size"></property>
                                                         <property name="minimize_button">0</property>
-                                                        <property name="minimum_size">100,-1</property>
+                                                        <property name="minimum_size">-1,-1</property>
                                                         <property name="moveable">1</property>
                                                         <property name="name">btn_chkaddr</property>
                                                         <property name="pane_border">1</property>
@@ -1470,7 +1470,7 @@
                                                     </object>
                                                 </object>
                                                 <object class="sizeritem" expanded="1">
-                                                    <property name="border">5</property>
+                                                    <property name="border">8</property>
                                                     <property name="flag">wxRIGHT|wxLEFT|wxEXPAND</property>
                                                     <property name="proportion">1</property>
                                                     <object class="spacer" expanded="1">
@@ -2500,8 +2500,8 @@
                             </object>
                         </object>
                         <object class="sizeritem" expanded="1">
-                            <property name="border">5</property>
-                            <property name="flag">wxALIGN_BOTTOM|wxBOTTOM</property>
+                            <property name="border">6</property>
+                            <property name="flag">wxBOTTOM|wxALIGN_BOTTOM</property>
                             <property name="proportion">0</property>
                             <object class="wxStaticBitmap" expanded="1">
                                 <property name="BottomDockable">1</property>
@@ -2619,7 +2619,7 @@
                             </object>
                         </object>
                         <object class="sizeritem" expanded="1">
-                            <property name="border">5</property>
+                            <property name="border">6</property>
                             <property name="flag">wxALIGN_BOTTOM|wxBOTTOM</property>
                             <property name="proportion">0</property>
                             <object class="wxStaticBitmap" expanded="1">
