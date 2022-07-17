@@ -44,6 +44,7 @@ source unibenv/bin/activate
 #### Install uniblow dependencies
 ```
 python -m pip install pip==21.2.1
+python -m pip install swig
 python -m pip install wxPython==4.1.1
 python -m pip install -e .
 ```
