@@ -160,8 +160,6 @@ class MainPanel ( wx.Panel ):
         m_typechoiceChoices = [ u"BIP39", u"Electrum", u"Electrum old", u"SecuBoost" ]
         self.m_typechoice = wx.Choice( self, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, m_typechoiceChoices, 0 )
         self.m_typechoice.SetSelection( 0 )
-        self.m_typechoice.SetForegroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_WINDOWTEXT ) )
-
         bSizer4.Add( self.m_typechoice, 0, wx.LEFT|wx.RIGHT|wx.TOP, 4 )
 
 
