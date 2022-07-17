@@ -25,7 +25,8 @@ class InfoDialog ( wx.Dialog ):
 		bSizer1 = wx.BoxSizer( wx.VERTICAL )
 
 		self.m_textCtrl = wx.TextCtrl( self, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, wx.TE_MULTILINE|wx.TE_READONLY|wx.TE_WORDWRAP|wx.BORDER_NONE )
-		self.m_textCtrl.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_WINDOW ) )
+		self.m_textCtrl.SetForegroundColour( wx.Colour( 0, 0, 0 ) )
+		self.m_textCtrl.SetBackgroundColour( wx.Colour( 255, 255, 255 ) )
 
 		bSizer1.Add( self.m_textCtrl, 1, wx.ALL|wx.EXPAND, 24 )
 

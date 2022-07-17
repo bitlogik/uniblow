@@ -120,7 +120,7 @@
                                 <property name="dock_fixed">0</property>
                                 <property name="docking">Left</property>
                                 <property name="enabled">1</property>
-                                <property name="fg"></property>
+                                <property name="fg">0,0,0</property>
                                 <property name="floatable">1</property>
                                 <property name="font"></property>
                                 <property name="gripper">0</property>
@@ -278,7 +278,7 @@
                                                             <property name="dock_fixed">0</property>
                                                             <property name="docking">Left</property>
                                                             <property name="enabled">1</property>
-                                                            <property name="fg"></property>
+                                                            <property name="fg">0,0,0</property>
                                                             <property name="floatable">1</property>
                                                             <property name="font">,90,90,16,70,0</property>
                                                             <property name="gripper">0</property>
@@ -349,7 +349,7 @@
                                                             <property name="dock_fixed">0</property>
                                                             <property name="docking">Left</property>
                                                             <property name="enabled">1</property>
-                                                            <property name="fg"></property>
+                                                            <property name="fg">0,0,0</property>
                                                             <property name="floatable">1</property>
                                                             <property name="font">,90,90,10,70,0</property>
                                                             <property name="gripper">0</property>
@@ -410,7 +410,7 @@
                                                             <property name="dock_fixed">0</property>
                                                             <property name="docking">Left</property>
                                                             <property name="enabled">1</property>
-                                                            <property name="fg"></property>
+                                                            <property name="fg">0,0,0</property>
                                                             <property name="floatable">1</property>
                                                             <property name="font">,90,90,16,70,0</property>
                                                             <property name="gripper">0</property>
@@ -541,7 +541,7 @@
                                                                         <property name="dock_fixed">0</property>
                                                                         <property name="docking">Left</property>
                                                                         <property name="enabled">1</property>
-                                                                        <property name="fg">255,255,255</property>
+                                                                        <property name="fg">0,0,0</property>
                                                                         <property name="floatable">1</property>
                                                                         <property name="font">,90,90,10,70,0</property>
                                                                         <property name="gripper">0</property>
@@ -710,7 +710,7 @@
                                                     <property name="dock_fixed">0</property>
                                                     <property name="docking">Left</property>
                                                     <property name="enabled">1</property>
-                                                    <property name="fg"></property>
+                                                    <property name="fg">0,0,0</property>
                                                     <property name="floatable">1</property>
                                                     <property name="font"></property>
                                                     <property name="gripper">0</property>
@@ -772,7 +772,7 @@
                                                     <property name="dock_fixed">0</property>
                                                     <property name="docking">Left</property>
                                                     <property name="enabled">1</property>
-                                                    <property name="fg"></property>
+                                                    <property name="fg">0,0,0</property>
                                                     <property name="floatable">1</property>
                                                     <property name="font">,90,90,12,70,0</property>
                                                     <property name="gripper">0</property>
@@ -1206,7 +1206,7 @@
                                                             <property name="dock_fixed">0</property>
                                                             <property name="docking">Left</property>
                                                             <property name="enabled">1</property>
-                                                            <property name="fg"></property>
+                                                            <property name="fg">113,110,234</property>
                                                             <property name="floatable">1</property>
                                                             <property name="font">,90,90,12,70,0</property>
                                                             <property name="gripper">0</property>
@@ -1514,7 +1514,7 @@
                                                                 <property name="dock_fixed">0</property>
                                                                 <property name="docking">Left</property>
                                                                 <property name="enabled">1</property>
-                                                                <property name="fg"></property>
+                                                                <property name="fg">0,0,0</property>
                                                                 <property name="floatable">1</property>
                                                                 <property name="font">,90,90,11,70,0</property>
                                                                 <property name="gripper">0</property>
@@ -1889,7 +1889,7 @@
                         <property name="dock_fixed">0</property>
                         <property name="docking">Left</property>
                         <property name="enabled">1</property>
-                        <property name="fg"></property>
+                        <property name="fg">113,110,234</property>
                         <property name="floatable">1</property>
                         <property name="font">,90,90,16,70,0</property>
                         <property name="gripper">0</property>
@@ -2393,7 +2393,7 @@
                                 <property name="dock_fixed">0</property>
                                 <property name="docking">Left</property>
                                 <property name="enabled">1</property>
-                                <property name="fg"></property>
+                                <property name="fg">0,0,0</property>
                                 <property name="floatable">1</property>
                                 <property name="font">,90,90,14,70,0</property>
                                 <property name="gripper">0</property>
@@ -2464,7 +2464,7 @@
                                 <property name="dock_fixed">0</property>
                                 <property name="docking">Left</property>
                                 <property name="enabled">1</property>
-                                <property name="fg"></property>
+                                <property name="fg">0,0,0</property>
                                 <property name="floatable">1</property>
                                 <property name="font"></property>
                                 <property name="gripper">0</property>
@@ -2583,7 +2583,7 @@
                                 <property name="dock_fixed">0</property>
                                 <property name="docking">Left</property>
                                 <property name="enabled">1</property>
-                                <property name="fg"></property>
+                                <property name="fg">0,0,0</property>
                                 <property name="floatable">1</property>
                                 <property name="font"></property>
                                 <property name="gripper">0</property>
@@ -2702,7 +2702,7 @@
                         <property name="aui_position"></property>
                         <property name="aui_row"></property>
                         <property name="best_size"></property>
-                        <property name="bg"></property>
+                        <property name="bg">255,255,255</property>
                         <property name="caption"></property>
                         <property name="caption_visible">1</property>
                         <property name="center_pane">0</property>
@@ -2714,7 +2714,7 @@
                         <property name="dock_fixed">0</property>
                         <property name="docking">Left</property>
                         <property name="enabled">1</property>
-                        <property name="fg"></property>
+                        <property name="fg">0,0,0</property>
                         <property name="floatable">1</property>
                         <property name="font">,90,90,12,70,0</property>
                         <property name="gripper">0</property>
@@ -2798,7 +2798,7 @@
                                 <property name="dock_fixed">0</property>
                                 <property name="docking">Left</property>
                                 <property name="enabled">1</property>
-                                <property name="fg"></property>
+                                <property name="fg">0,0,0</property>
                                 <property name="floatable">1</property>
                                 <property name="font"></property>
                                 <property name="gripper">0</property>
@@ -2847,7 +2847,7 @@
                                 <property name="aui_position"></property>
                                 <property name="aui_row"></property>
                                 <property name="best_size"></property>
-                                <property name="bg"></property>
+                                <property name="bg">255,255,255</property>
                                 <property name="caption"></property>
                                 <property name="caption_visible">1</property>
                                 <property name="center_pane">0</property>
@@ -2859,7 +2859,7 @@
                                 <property name="dock_fixed">0</property>
                                 <property name="docking">Left</property>
                                 <property name="enabled">1</property>
-                                <property name="fg"></property>
+                                <property name="fg">0,0,0</property>
                                 <property name="floatable">1</property>
                                 <property name="font"></property>
                                 <property name="gripper">0</property>
@@ -2924,7 +2924,7 @@
                                 <property name="dock_fixed">0</property>
                                 <property name="docking">Left</property>
                                 <property name="enabled">1</property>
-                                <property name="fg"></property>
+                                <property name="fg">0,0,0</property>
                                 <property name="floatable">1</property>
                                 <property name="font"></property>
                                 <property name="gripper">0</property>
@@ -2998,7 +2998,7 @@
                                 <property name="dock_fixed">0</property>
                                 <property name="docking">Left</property>
                                 <property name="enabled">1</property>
-                                <property name="fg"></property>
+                                <property name="fg">0,0,0</property>
                                 <property name="floatable">1</property>
                                 <property name="font"></property>
                                 <property name="gripper">0</property>
@@ -3047,7 +3047,7 @@
                                 <property name="aui_position"></property>
                                 <property name="aui_row"></property>
                                 <property name="best_size"></property>
-                                <property name="bg"></property>
+                                <property name="bg">255,255,255</property>
                                 <property name="caption"></property>
                                 <property name="caption_visible">1</property>
                                 <property name="center_pane">0</property>
@@ -3059,7 +3059,7 @@
                                 <property name="dock_fixed">0</property>
                                 <property name="docking">Left</property>
                                 <property name="enabled">1</property>
-                                <property name="fg"></property>
+                                <property name="fg">0,0,0</property>
                                 <property name="floatable">1</property>
                                 <property name="font"></property>
                                 <property name="gripper">0</property>
@@ -3121,7 +3121,7 @@
                                 <property name="dock_fixed">0</property>
                                 <property name="docking">Left</property>
                                 <property name="enabled">1</property>
-                                <property name="fg"></property>
+                                <property name="fg">0,0,0</property>
                                 <property name="floatable">1</property>
                                 <property name="font"></property>
                                 <property name="gripper">0</property>
@@ -3170,7 +3170,7 @@
                                 <property name="aui_position"></property>
                                 <property name="aui_row"></property>
                                 <property name="best_size"></property>
-                                <property name="bg"></property>
+                                <property name="bg">255,255,255</property>
                                 <property name="caption"></property>
                                 <property name="caption_visible">1</property>
                                 <property name="center_pane">0</property>
@@ -3182,7 +3182,7 @@
                                 <property name="dock_fixed">0</property>
                                 <property name="docking">Left</property>
                                 <property name="enabled">1</property>
-                                <property name="fg"></property>
+                                <property name="fg">0,0,0</property>
                                 <property name="floatable">1</property>
                                 <property name="font"></property>
                                 <property name="gripper">0</property>
@@ -3247,7 +3247,7 @@
                         <property name="dock_fixed">0</property>
                         <property name="docking">Left</property>
                         <property name="enabled">1</property>
-                        <property name="fg"></property>
+                        <property name="fg">0,0,0</property>
                         <property name="floatable">1</property>
                         <property name="font"></property>
                         <property name="gripper">0</property>
@@ -3320,7 +3320,7 @@
                         <property name="dock_fixed">0</property>
                         <property name="docking">Left</property>
                         <property name="enabled">1</property>
-                        <property name="fg"></property>
+                        <property name="fg">0,0,0</property>
                         <property name="floatable">1</property>
                         <property name="font">,90,90,10,70,0</property>
                         <property name="gripper">0</property>
@@ -3642,7 +3642,7 @@
                                         <property name="dock_fixed">0</property>
                                         <property name="docking">Left</property>
                                         <property name="enabled">1</property>
-                                        <property name="fg"></property>
+                                        <property name="fg">0,0,0</property>
                                         <property name="floatable">1</property>
                                         <property name="font"></property>
                                         <property name="gripper">0</property>
@@ -3784,7 +3784,7 @@
                                         <property name="aui_position"></property>
                                         <property name="aui_row"></property>
                                         <property name="best_size"></property>
-                                        <property name="bg"></property>
+                                        <property name="bg">255,255,255</property>
                                         <property name="caption"></property>
                                         <property name="caption_visible">1</property>
                                         <property name="center_pane">0</property>
@@ -3796,7 +3796,7 @@
                                         <property name="dock_fixed">0</property>
                                         <property name="docking">Left</property>
                                         <property name="enabled">1</property>
-                                        <property name="fg"></property>
+                                        <property name="fg">0,0,0</property>
                                         <property name="floatable">1</property>
                                         <property name="font"></property>
                                         <property name="gripper">0</property>
@@ -3970,7 +3970,7 @@
                                                         <property name="dock_fixed">0</property>
                                                         <property name="docking">Left</property>
                                                         <property name="enabled">1</property>
-                                                        <property name="fg"></property>
+                                                        <property name="fg">0,0,0</property>
                                                         <property name="floatable">1</property>
                                                         <property name="font"></property>
                                                         <property name="gripper">0</property>
@@ -4091,7 +4091,7 @@
                                                         <property name="aui_position"></property>
                                                         <property name="aui_row"></property>
                                                         <property name="best_size"></property>
-                                                        <property name="bg"></property>
+                                                        <property name="bg">255,255,255</property>
                                                         <property name="caption"></property>
                                                         <property name="caption_visible">1</property>
                                                         <property name="center_pane">0</property>
@@ -4103,7 +4103,7 @@
                                                         <property name="dock_fixed">0</property>
                                                         <property name="docking">Left</property>
                                                         <property name="enabled">1</property>
-                                                        <property name="fg"></property>
+                                                        <property name="fg">0,0,0</property>
                                                         <property name="floatable">1</property>
                                                         <property name="font"></property>
                                                         <property name="gripper">0</property>
@@ -4231,7 +4231,7 @@
                                                 <property name="dock_fixed">0</property>
                                                 <property name="docking">Left</property>
                                                 <property name="enabled">1</property>
-                                                <property name="fg"></property>
+                                                <property name="fg">0,0,0</property>
                                                 <property name="floatable">1</property>
                                                 <property name="font"></property>
                                                 <property name="gripper">0</property>
@@ -4313,7 +4313,7 @@
                                                         <property name="dock_fixed">0</property>
                                                         <property name="docking">Left</property>
                                                         <property name="enabled">1</property>
-                                                        <property name="fg"></property>
+                                                        <property name="fg">0,0,0</property>
                                                         <property name="floatable">1</property>
                                                         <property name="font">,90,90,9,70,0</property>
                                                         <property name="gripper">0</property>
@@ -4374,7 +4374,7 @@
                                                         <property name="dock_fixed">0</property>
                                                         <property name="docking">Left</property>
                                                         <property name="enabled">1</property>
-                                                        <property name="fg"></property>
+                                                        <property name="fg">0,0,0</property>
                                                         <property name="floatable">1</property>
                                                         <property name="font">,90,90,9,70,0</property>
                                                         <property name="gripper">0</property>
@@ -4526,7 +4526,7 @@
                                                 <property name="dock_fixed">0</property>
                                                 <property name="docking">Left</property>
                                                 <property name="enabled">1</property>
-                                                <property name="fg"></property>
+                                                <property name="fg">0,0,0</property>
                                                 <property name="floatable">1</property>
                                                 <property name="font">,90,90,9,70,0</property>
                                                 <property name="gripper">0</property>
@@ -4844,7 +4844,7 @@
                         <property name="dock_fixed">0</property>
                         <property name="docking">Left</property>
                         <property name="enabled">1</property>
-                        <property name="fg"></property>
+                        <property name="fg">0,0,0</property>
                         <property name="floatable">1</property>
                         <property name="font">,90,90,11,70,0</property>
                         <property name="gripper">0</property>
@@ -4902,7 +4902,7 @@
                                 <property name="aui_position"></property>
                                 <property name="aui_row"></property>
                                 <property name="best_size"></property>
-                                <property name="bg"></property>
+                                <property name="bg">255,255,255</property>
                                 <property name="cancel_button">0</property>
                                 <property name="caption"></property>
                                 <property name="caption_visible">1</property>
@@ -4915,7 +4915,7 @@
                                 <property name="dock_fixed">0</property>
                                 <property name="docking">Left</property>
                                 <property name="enabled">1</property>
-                                <property name="fg"></property>
+                                <property name="fg">0,0,0</property>
                                 <property name="floatable">1</property>
                                 <property name="font"></property>
                                 <property name="gripper">0</property>
@@ -4986,7 +4986,7 @@
                         <property name="dock_fixed">0</property>
                         <property name="docking">Left</property>
                         <property name="enabled">1</property>
-                        <property name="fg"></property>
+                        <property name="fg">0,0,0</property>
                         <property name="floatable">1</property>
                         <property name="font">,90,90,11,70,0</property>
                         <property name="gripper">0</property>
@@ -5049,7 +5049,7 @@
                         <property name="dock_fixed">0</property>
                         <property name="docking">Left</property>
                         <property name="enabled">1</property>
-                        <property name="fg"></property>
+                        <property name="fg">0,0,0</property>
                         <property name="floatable">1</property>
                         <property name="font">,90,90,11,70,1</property>
                         <property name="gripper">0</property>
@@ -5110,7 +5110,7 @@
                         <property name="dock_fixed">0</property>
                         <property name="docking">Left</property>
                         <property name="enabled">1</property>
-                        <property name="fg"></property>
+                        <property name="fg">0,0,0</property>
                         <property name="floatable">1</property>
                         <property name="font">,90,90,11,70,0</property>
                         <property name="gripper">0</property>
@@ -5232,7 +5232,7 @@
                         <property name="aui_position"></property>
                         <property name="aui_row"></property>
                         <property name="best_size"></property>
-                        <property name="bg"></property>
+                        <property name="bg">255,255,255</property>
                         <property name="caption"></property>
                         <property name="caption_visible">1</property>
                         <property name="center_pane">0</property>
@@ -5244,7 +5244,7 @@
                         <property name="dock_fixed">0</property>
                         <property name="docking">Left</property>
                         <property name="enabled">1</property>
-                        <property name="fg"></property>
+                        <property name="fg">0,0,0</property>
                         <property name="floatable">1</property>
                         <property name="font">,90,90,11,70,0</property>
                         <property name="gripper">0</property>

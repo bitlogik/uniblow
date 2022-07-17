@@ -45,6 +45,8 @@ class WalletPanel ( wx.Panel ):
 
         self.scrolled_coins = wx.ScrolledWindow( sbSizer5.GetStaticBox(), wx.ID_ANY, wx.DefaultPosition, wx.Size( 82,370 ), wx.HSCROLL|wx.VSCROLL )
         self.scrolled_coins.SetScrollRate( 5, 5 )
+        self.scrolled_coins.SetForegroundColour( wx.Colour( 0, 0, 0 ) )
+
         sbSizer5.Add( self.scrolled_coins, 0, 0, 5 )
 
 
@@ -66,6 +68,7 @@ class WalletPanel ( wx.Panel ):
         self.balance_info.Wrap( -1 )
 
         self.balance_info.SetFont( wx.Font( 16, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, False, wx.EmptyString ) )
+        self.balance_info.SetForegroundColour( wx.Colour( 0, 0, 0 ) )
 
         bSizer28.Add( self.balance_info, 0, wx.TOP|wx.BOTTOM|wx.LEFT|wx.ALIGN_BOTTOM, 8 )
 
@@ -76,6 +79,7 @@ class WalletPanel ( wx.Panel ):
         self.balance_small.Wrap( -1 )
 
         self.balance_small.SetFont( wx.Font( 10, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, False, wx.EmptyString ) )
+        self.balance_small.SetForegroundColour( wx.Colour( 0, 0, 0 ) )
 
         bSizer28.Add( self.balance_small, 0, wx.TOP|wx.BOTTOM|wx.RIGHT|wx.ALIGN_BOTTOM, 10 )
 
@@ -83,6 +87,7 @@ class WalletPanel ( wx.Panel ):
         self.balance_unit.Wrap( -1 )
 
         self.balance_unit.SetFont( wx.Font( 16, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, False, wx.EmptyString ) )
+        self.balance_unit.SetForegroundColour( wx.Colour( 0, 0, 0 ) )
 
         bSizer28.Add( self.balance_unit, 0, wx.ALIGN_BOTTOM|wx.TOP|wx.BOTTOM|wx.RIGHT, 8 )
 
@@ -99,7 +104,7 @@ class WalletPanel ( wx.Panel ):
         self.txt_fiat.Wrap( -1 )
 
         self.txt_fiat.SetFont( wx.Font( 10, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, False, wx.EmptyString ) )
-        self.txt_fiat.SetForegroundColour( wx.Colour( 255, 255, 255 ) )
+        self.txt_fiat.SetForegroundColour( wx.Colour( 0, 0, 0 ) )
 
         bSizer31.Add( self.txt_fiat, 0, wx.ALL, 3 )
 
@@ -129,12 +134,15 @@ class WalletPanel ( wx.Panel ):
         self.m_staticText26 = wx.StaticText( self.m_panel1, wx.ID_ANY, u"Network", wx.DefaultPosition, wx.DefaultSize, 0 )
         self.m_staticText26.Wrap( -1 )
 
+        self.m_staticText26.SetForegroundColour( wx.Colour( 0, 0, 0 ) )
+
         bSizer5.Add( self.m_staticText26, 0, wx.ALIGN_CENTER_HORIZONTAL|wx.TOP|wx.BOTTOM|wx.RIGHT, 5 )
 
         network_choiceChoices = []
         self.network_choice = wx.Choice( self.m_panel1, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, network_choiceChoices, 0 )
         self.network_choice.SetSelection( 0 )
         self.network_choice.SetFont( wx.Font( 12, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, False, wx.EmptyString ) )
+        self.network_choice.SetForegroundColour( wx.Colour( 0, 0, 0 ) )
         self.network_choice.SetMinSize( wx.Size( 120,-1 ) )
 
         bSizer5.Add( self.network_choice, 0, wx.ALIGN_CENTER_HORIZONTAL|wx.RIGHT, 12 )
@@ -179,6 +187,7 @@ class WalletPanel ( wx.Panel ):
         self.account_addr.Wrap( -1 )
 
         self.account_addr.SetFont( wx.Font( 12, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, False, wx.EmptyString ) )
+        self.account_addr.SetForegroundColour( wx.Colour( 113, 110, 234 ) )
         self.account_addr.SetMaxSize( wx.Size( 525,-1 ) )
 
         bSizer36.Add( self.account_addr, 0, wx.RIGHT|wx.LEFT|wx.ALIGN_CENTER_VERTICAL, 16 )
@@ -211,6 +220,7 @@ class WalletPanel ( wx.Panel ):
         self.wallopt_label.Wrap( -1 )
 
         self.wallopt_label.SetFont( wx.Font( 11, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, False, wx.EmptyString ) )
+        self.wallopt_label.SetForegroundColour( wx.Colour( 0, 0, 0 ) )
 
         bSizer37.Add( self.wallopt_label, 0, wx.ALIGN_CENTER_VERTICAL|wx.RIGHT|wx.LEFT, 8 )
 
@@ -284,6 +294,7 @@ class DevicesPanel ( wx.Panel ):
         self.m_staticText1.Wrap( -1 )
 
         self.m_staticText1.SetFont( wx.Font( 16, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, False, wx.EmptyString ) )
+        self.m_staticText1.SetForegroundColour( wx.Colour( 113, 110, 234 ) )
 
         bSizer3.Add( self.m_staticText1, 0, wx.ALIGN_CENTER_HORIZONTAL|wx.BOTTOM|wx.RIGHT|wx.LEFT, 16 )
 
@@ -355,6 +366,7 @@ class HDPanel ( wx.Panel ):
         self.title_text.Wrap( -1 )
 
         self.title_text.SetFont( wx.Font( 14, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, False, wx.EmptyString ) )
+        self.title_text.SetForegroundColour( wx.Colour( 0, 0, 0 ) )
 
         bSizer15.Add( self.title_text, 0, wx.ALIGN_CENTER_HORIZONTAL|wx.ALIGN_CENTER_VERTICAL|wx.LEFT, 32 )
 
@@ -364,6 +376,8 @@ class HDPanel ( wx.Panel ):
         self.m_textwl = wx.StaticText( self, wx.ID_ANY, u"Words in list", wx.DefaultPosition, wx.DefaultSize, 0 )
         self.m_textwl.Wrap( -1 )
 
+        self.m_textwl.SetForegroundColour( wx.Colour( 0, 0, 0 ) )
+
         bSizer15.Add( self.m_textwl, 0, wx.ALIGN_BOTTOM|wx.ALL, 5 )
 
         self.m_bitmapHDwl = wx.StaticBitmap( self, wx.ID_ANY, wx.NullBitmap, wx.DefaultPosition, wx.DefaultSize, wx.BORDER_NONE )
@@ -371,6 +385,8 @@ class HDPanel ( wx.Panel ):
 
         self.m_textcs = wx.StaticText( self, wx.ID_ANY, u"Checksum", wx.DefaultPosition, wx.DefaultSize, wx.ST_NO_AUTORESIZE )
         self.m_textcs.Wrap( -1 )
+
+        self.m_textcs.SetForegroundColour( wx.Colour( 0, 0, 0 ) )
 
         bSizer15.Add( self.m_textcs, 0, wx.ALL|wx.ALIGN_BOTTOM, 5 )
 
@@ -385,6 +401,8 @@ class HDPanel ( wx.Panel ):
 
         self.m_textCtrl_mnemo = wx.TextCtrl( self, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, wx.TE_MULTILINE )
         self.m_textCtrl_mnemo.SetFont( wx.Font( 12, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, False, wx.EmptyString ) )
+        self.m_textCtrl_mnemo.SetForegroundColour( wx.Colour( 0, 0, 0 ) )
+        self.m_textCtrl_mnemo.SetBackgroundColour( wx.Colour( 255, 255, 255 ) )
 
         bSizer11.Add( self.m_textCtrl_mnemo, 1, wx.LEFT|wx.RIGHT|wx.EXPAND, 16 )
 
@@ -396,12 +414,18 @@ class HDPanel ( wx.Panel ):
         self.m_bwptxt = wx.StaticText( self, wx.ID_ANY, u"Deriv. password (opt.)", wx.DefaultPosition, wx.DefaultSize, 0 )
         self.m_bwptxt.Wrap( -1 )
 
+        self.m_bwptxt.SetForegroundColour( wx.Colour( 0, 0, 0 ) )
+
         bSizer13.Add( self.m_bwptxt, 0, wx.ALIGN_CENTER_VERTICAL, 4 )
 
         self.m_textCtrl_pwd = wx.TextCtrl( self, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.Size( 170,-1 ), 0 )
+        self.m_textCtrl_pwd.SetForegroundColour( wx.Colour( 0, 0, 0 ) )
+        self.m_textCtrl_pwd.SetBackgroundColour( wx.Colour( 255, 255, 255 ) )
+
         bSizer13.Add( self.m_textCtrl_pwd, 0, wx.ALL, 5 )
 
         self.m_checkBox_secboost = wx.CheckBox( self, wx.ID_ANY, u"SecuBoost", wx.DefaultPosition, wx.DefaultSize, 0 )
+        self.m_checkBox_secboost.SetForegroundColour( wx.Colour( 0, 0, 0 ) )
         self.m_checkBox_secboost.SetToolTip( u"Extra security boost for mnemonic.\nNot compatible with BIP39.\nRequires >1GB RAM free" )
 
         bSizer13.Add( self.m_checkBox_secboost, 0, wx.ALIGN_CENTER_VERTICAL|wx.LEFT, 22 )
@@ -414,23 +438,35 @@ class HDPanel ( wx.Panel ):
         self.m_accounttxt = wx.StaticText( self, wx.ID_ANY, u"Account #", wx.DefaultPosition, wx.DefaultSize, 0 )
         self.m_accounttxt.Wrap( -1 )
 
+        self.m_accounttxt.SetForegroundColour( wx.Colour( 0, 0, 0 ) )
+
         bSizer14.Add( self.m_accounttxt, 0, wx.ALIGN_CENTER_VERTICAL, 5 )
 
         self.m_spinCtrl_account = wx.SpinCtrl( self, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.Size( 75,-1 ), wx.SP_ARROW_KEYS, 0, 2147483647, 0 )
+        self.m_spinCtrl_account.SetForegroundColour( wx.Colour( 0, 0, 0 ) )
+        self.m_spinCtrl_account.SetBackgroundColour( wx.Colour( 255, 255, 255 ) )
+
         bSizer14.Add( self.m_spinCtrl_account, 0, wx.ALL|wx.ALIGN_CENTER_VERTICAL, 5 )
 
         self.m_indextxt = wx.StaticText( self, wx.ID_ANY, u"index", wx.DefaultPosition, wx.DefaultSize, 0 )
         self.m_indextxt.Wrap( -1 )
 
+        self.m_indextxt.SetForegroundColour( wx.Colour( 0, 0, 0 ) )
+
         bSizer14.Add( self.m_indextxt, 0, wx.LEFT|wx.ALIGN_CENTER_VERTICAL, 24 )
 
         self.m_spinCtrl_index = wx.SpinCtrl( self, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.Size( 75,-1 ), wx.SP_ARROW_KEYS, 0, 2147483647, 0 )
+        self.m_spinCtrl_index.SetForegroundColour( wx.Colour( 0, 0, 0 ) )
+        self.m_spinCtrl_index.SetBackgroundColour( wx.Colour( 255, 255, 255 ) )
+
         bSizer14.Add( self.m_spinCtrl_index, 0, wx.ALL|wx.ALIGN_CENTER_VERTICAL, 5 )
 
 
         bSizer11.Add( bSizer14, 1, wx.ALIGN_CENTER_HORIZONTAL|wx.TOP, 16 )
 
         self.m_altderiv = wx.CheckBox( self, wx.ID_ANY, u"Alt. derivation path (Not BIP44, for ETH / EVM)", wx.DefaultPosition, wx.DefaultSize, 0 )
+        self.m_altderiv.SetForegroundColour( wx.Colour( 0, 0, 0 ) )
+
         bSizer11.Add( self.m_altderiv, 0, wx.ALL|wx.ALIGN_CENTER_HORIZONTAL, 5 )
 
 
@@ -440,6 +476,7 @@ class HDPanel ( wx.Panel ):
         self.m_usertxt.Wrap( -1 )
 
         self.m_usertxt.SetFont( wx.Font( 10, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, False, wx.EmptyString ) )
+        self.m_usertxt.SetForegroundColour( wx.Colour( 0, 0, 0 ) )
 
         bSizer11.Add( self.m_usertxt, 0, wx.ALIGN_CENTER_HORIZONTAL|wx.LEFT|wx.RIGHT, 24 )
 
@@ -530,6 +567,8 @@ class SendPanel ( wx.Panel ):
         self.m_staticText7 = wx.StaticText( self, wx.ID_ANY, u"Destination Address", wx.DefaultPosition, wx.DefaultSize, 0 )
         self.m_staticText7.Wrap( -1 )
 
+        self.m_staticText7.SetForegroundColour( wx.Colour( 0, 0, 0 ) )
+
         bSizer201.Add( self.m_staticText7, 0, wx.TOP|wx.LEFT, 5 )
 
 
@@ -544,6 +583,9 @@ class SendPanel ( wx.Panel ):
         bSizer14 = wx.BoxSizer( wx.HORIZONTAL )
 
         self.text_dest = wx.TextCtrl( self, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, 0 )
+        self.text_dest.SetForegroundColour( wx.Colour( 0, 0, 0 ) )
+        self.text_dest.SetBackgroundColour( wx.Colour( 255, 255, 255 ) )
+
         bSizer14.Add( self.text_dest, 1, wx.RIGHT|wx.LEFT, 5 )
 
 
@@ -568,6 +610,8 @@ class SendPanel ( wx.Panel ):
         self.m_staticTextAvailLabel = wx.StaticText( sbSizer3.GetStaticBox(), wx.ID_ANY, u"Available : ", wx.DefaultPosition, wx.DefaultSize, 0 )
         self.m_staticTextAvailLabel.Wrap( -1 )
 
+        self.m_staticTextAvailLabel.SetForegroundColour( wx.Colour( 0, 0, 0 ) )
+
         bSizer18.Add( self.m_staticTextAvailLabel, 0, wx.RIGHT|wx.LEFT|wx.ALIGN_CENTER_HORIZONTAL, 5 )
 
         self.text_avail = wx.StaticText( sbSizer3.GetStaticBox(), wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.Size( -1,-1 ), 0 )
@@ -581,6 +625,8 @@ class SendPanel ( wx.Panel ):
         bSizer20 = wx.BoxSizer( wx.HORIZONTAL )
 
         self.text_amount = wx.TextCtrl( sbSizer3.GetStaticBox(), wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, 0 )
+        self.text_amount.SetForegroundColour( wx.Colour( 0, 0, 0 ) )
+        self.text_amount.SetBackgroundColour( wx.Colour( 255, 255, 255 ) )
         self.text_amount.SetMinSize( wx.Size( 150,-1 ) )
 
         bSizer20.Add( self.text_amount, 0, wx.BOTTOM|wx.RIGHT|wx.LEFT, 8 )
@@ -594,6 +640,8 @@ class SendPanel ( wx.Panel ):
         sbSizer3.Add( bSizer20, 0, 0, 5 )
 
         self.check_sendall = wx.CheckBox( sbSizer3.GetStaticBox(), wx.ID_ANY, u"Send all", wx.DefaultPosition, wx.DefaultSize, 0 )
+        self.check_sendall.SetForegroundColour( wx.Colour( 0, 0, 0 ) )
+
         sbSizer3.Add( self.check_sendall, 0, wx.LEFT, 32 )
 
 
@@ -605,6 +653,7 @@ class SendPanel ( wx.Panel ):
         self.fiat_label.Wrap( -1 )
 
         self.fiat_label.SetFont( wx.Font( 9, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, False, wx.EmptyString ) )
+        self.fiat_label.SetForegroundColour( wx.Colour( 0, 0, 0 ) )
 
         bSizer191.Add( self.fiat_label, 0, wx.ALL, 5 )
 
@@ -612,6 +661,7 @@ class SendPanel ( wx.Panel ):
         self.fiat_value.Wrap( -1 )
 
         self.fiat_value.SetFont( wx.Font( 9, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, False, wx.EmptyString ) )
+        self.fiat_value.SetForegroundColour( wx.Colour( 0, 0, 0 ) )
 
         bSizer191.Add( self.fiat_value, 0, wx.ALL, 5 )
 
@@ -634,6 +684,7 @@ class SendPanel ( wx.Panel ):
         self.text_fees.Wrap( -1 )
 
         self.text_fees.SetFont( wx.Font( 9, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, False, wx.EmptyString ) )
+        self.text_fees.SetForegroundColour( wx.Colour( 0, 0, 0 ) )
 
         sbSizer2.Add( self.text_fees, 0, wx.ALL|wx.ALIGN_CENTER_HORIZONTAL, 5 )
 
@@ -717,6 +768,7 @@ class OptionPanel ( wx.Panel ):
         self.preset_text.Wrap( -1 )
 
         self.preset_text.SetFont( wx.Font( 11, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, False, wx.EmptyString ) )
+        self.preset_text.SetForegroundColour( wx.Colour( 0, 0, 0 ) )
 
         bSizer18.Add( self.preset_text, 0, wx.ALL|wx.ALIGN_CENTER_HORIZONTAL, 5 )
 
@@ -725,6 +777,9 @@ class OptionPanel ( wx.Panel ):
         self.search_preset = wx.SearchCtrl( self, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, wx.TE_PROCESS_ENTER )
         self.search_preset.ShowSearchButton( True )
         self.search_preset.ShowCancelButton( False )
+        self.search_preset.SetForegroundColour( wx.Colour( 0, 0, 0 ) )
+        self.search_preset.SetBackgroundColour( wx.Colour( 255, 255, 255 ) )
+
         bSizer31.Add( self.search_preset, 0, wx.TOP, 5 )
 
 
@@ -734,6 +789,7 @@ class OptionPanel ( wx.Panel ):
         self.known_choice = wx.Choice( self, wx.ID_ANY, wx.DefaultPosition, wx.Size( 360,-1 ), known_choiceChoices, 0 )
         self.known_choice.SetSelection( 0 )
         self.known_choice.SetFont( wx.Font( 11, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, False, wx.EmptyString ) )
+        self.known_choice.SetForegroundColour( wx.Colour( 0, 0, 0 ) )
 
         bSizer18.Add( self.known_choice, 0, wx.ALL|wx.ALIGN_CENTER_HORIZONTAL, 5 )
 
@@ -741,6 +797,7 @@ class OptionPanel ( wx.Panel ):
         self.m_staticTextor.Wrap( -1 )
 
         self.m_staticTextor.SetFont( wx.Font( 11, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, True, wx.EmptyString ) )
+        self.m_staticTextor.SetForegroundColour( wx.Colour( 0, 0, 0 ) )
 
         bSizer18.Add( self.m_staticTextor, 0, wx.ALL|wx.ALIGN_CENTER_HORIZONTAL, 5 )
 
@@ -748,6 +805,7 @@ class OptionPanel ( wx.Panel ):
         self.custom_text.Wrap( -1 )
 
         self.custom_text.SetFont( wx.Font( 11, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, False, wx.EmptyString ) )
+        self.custom_text.SetForegroundColour( wx.Colour( 0, 0, 0 ) )
 
         bSizer18.Add( self.custom_text, 0, wx.ALL|wx.ALIGN_CENTER_HORIZONTAL, 5 )
 
@@ -756,6 +814,8 @@ class OptionPanel ( wx.Panel ):
 
         self.new_choice = wx.TextCtrl( self, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.Size( 375,-1 ), wx.TE_PROCESS_ENTER )
         self.new_choice.SetFont( wx.Font( 11, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, False, wx.EmptyString ) )
+        self.new_choice.SetForegroundColour( wx.Colour( 0, 0, 0 ) )
+        self.new_choice.SetBackgroundColour( wx.Colour( 255, 255, 255 ) )
 
         bSizer18.Add( self.new_choice, 0, wx.ALL|wx.ALIGN_CENTER_HORIZONTAL, 5 )
 
