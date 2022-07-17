@@ -402,6 +402,7 @@ class HDPanel ( wx.Panel ):
 
         self.m_textCtrl_mnemo = wx.TextCtrl( self, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, wx.TE_MULTILINE )
         self.m_textCtrl_mnemo.SetFont( wx.Font( 12, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, False, wx.EmptyString ) )
+        self.m_textCtrl_mnemo.SetForegroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_WINDOWTEXT ) )
         self.m_textCtrl_mnemo.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_WINDOW ) )
 
         bSizer11.Add( self.m_textCtrl_mnemo, 1, wx.LEFT|wx.RIGHT|wx.EXPAND, 16 )
