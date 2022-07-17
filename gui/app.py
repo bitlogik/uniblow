@@ -338,6 +338,11 @@ class UniblowApp(wx.App):
         self.gui_panel.network_choice.Disable()
         self.gui_panel.account_addr.SetLabel(BLANK_ADDR)
 
+    def is_sw_run(self):
+        if not hasattr(self, "frame_sw"):
+            return False
+        return not self.frame_sw.IsEmpty()
+
     def gowallet(self, sdevice):
         dev_info = self.dev_selected(sdevice)
         if isinstance(dev_info, list):
@@ -427,7 +432,10 @@ class UniblowApp(wx.App):
 
     def BringWindowToFront(self):
         try:
-            self.GetTopWindow().Raise()
+            if self.is_sw_run():
+                self.sw_frame.Raise()
+            else:
+                self.GetTopWindow().Raise()
         except Exception:
             pass
 
