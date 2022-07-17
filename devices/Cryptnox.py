@@ -53,6 +53,10 @@ class Cryptnox(BaseDevice):
         self.account = None
         self.aindex = None
 
+    def disconnect(self):
+        if self.card is not None:
+            del self.card
+
     def initialize_device(self, settings):
         self.account = settings["account"]
         self.aindex = settings["index"]

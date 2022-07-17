@@ -371,6 +371,10 @@ class UniblowApp(wx.App):
     def change_device(self, evt):
         if hasattr(self, "balance_timer"):
             self.balance_timer.Stop()
+        if hasattr(self, "device"):
+            if hasattr(self.device, "disconnect"):
+                self.device.disconnect()
+            del self.device
         self.gui_panel.Destroy()
         self.current_chain = ""
         del self.gui_panel
@@ -769,6 +773,8 @@ class UniblowApp(wx.App):
 
     def device_error(self, exc):
         self.current_chain = ""
+        if hasattr(self, "device"):
+            del self.device
         if hasattr(self, "gui_panel"):
             # Back to device panel
             self.gui_panel.Destroy()
