@@ -446,18 +446,18 @@ class HDPanel ( wx.Panel ):
 
         bSizer12 = wx.BoxSizer( wx.HORIZONTAL )
 
-        self.m_butok = wx.BitmapButton( self, wx.ID_ANY, wx.NullBitmap, wx.DefaultPosition, wx.DefaultSize, wx.BU_AUTODRAW|0|wx.BORDER_NONE )
+        self.m_butOK = wx.BitmapButton( self, wx.ID_ANY, wx.NullBitmap, wx.DefaultPosition, wx.DefaultSize, wx.BU_AUTODRAW|0|wx.BORDER_NONE )
 
-        self.m_butok.SetBitmap( wx.NullBitmap )
-        bSizer12.Add( self.m_butok, 0, wx.ALL, 5 )
+        self.m_butOK.SetBitmap( wx.NullBitmap )
+        bSizer12.Add( self.m_butOK, 0, wx.ALL, 5 )
 
 
         bSizer12.Add( ( 0, 0), 1, wx.RIGHT, 25 )
 
-        self.m_butcancel = wx.BitmapButton( self, wx.ID_ANY, wx.NullBitmap, wx.DefaultPosition, wx.DefaultSize, wx.BU_AUTODRAW|0|wx.BORDER_NONE )
+        self.m_butCancel = wx.BitmapButton( self, wx.ID_ANY, wx.NullBitmap, wx.DefaultPosition, wx.DefaultSize, wx.BU_AUTODRAW|0|wx.BORDER_NONE )
 
-        self.m_butcancel.SetBitmap( wx.NullBitmap )
-        bSizer12.Add( self.m_butcancel, 0, wx.ALL, 5 )
+        self.m_butCancel.SetBitmap( wx.NullBitmap )
+        bSizer12.Add( self.m_butCancel, 0, wx.ALL, 5 )
 
 
         bSizer11.Add( bSizer12, 0, wx.ALIGN_CENTER_HORIZONTAL|wx.ALL, 18 )
@@ -469,8 +469,8 @@ class HDPanel ( wx.Panel ):
 
         # Connect Events
         self.m_textCtrl_mnemo.Bind( wx.EVT_TEXT, self.hdmnemo_changed )
-        self.m_butok.Bind( wx.EVT_BUTTON, self.hd_ok )
-        self.m_butcancel.Bind( wx.EVT_BUTTON, self.hd_cancel )
+        self.m_butOK.Bind( wx.EVT_BUTTON, self.hd_ok )
+        self.m_butCancel.Bind( wx.EVT_BUTTON, self.hd_cancel )
 
     def __del__( self ):
         pass

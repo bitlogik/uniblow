@@ -99,9 +99,9 @@ class HDsetting_panel(gui.maingui.HDPanel):
         super().__init__(arg)
         HAND_CURSOR = wx.Cursor(wx.CURSOR_HAND)
         self.m_butOK.SetCursor(HAND_CURSOR)
-        self.m_butcancel.SetCursor(HAND_CURSOR)
-        self.m_butok.SetBitmap(wx.Bitmap(file_path("gui/images/btns/ok.png"), wx.BITMAP_TYPE_ANY))
-        self.m_butcancel.SetBitmap(
+        self.m_butCancel.SetCursor(HAND_CURSOR)
+        self.m_butOK.SetBitmap(wx.Bitmap(file_path("gui/images/btns/ok.png"), wx.BITMAP_TYPE_ANY))
+        self.m_butCancel.SetBitmap(
             wx.Bitmap(file_path("gui/images/btns/cancel.png"), wx.BITMAP_TYPE_ANY)
         )
 
@@ -660,7 +660,7 @@ class UniblowApp(wx.App):
             self.gui_hdpanel.m_usertxt.SetLabel("Choose account and index for the key to use.")
             self.gui_hdframe.SetSize(580, 360)
         self.gui_hdpanel.m_butOK.SetCursor(self.HAND_CURSOR)
-        self.gui_hdpanel.m_butcancel.SetCursor(self.HAND_CURSOR)
+        self.gui_hdpanel.m_butCancel.SetCursor(self.HAND_CURSOR)
         ret = self.gui_hdframe.ShowModal()
         if ret == wx.ID_OK:
             wallet_settings = self.gui_hdpanel.hd_wallet_settings
