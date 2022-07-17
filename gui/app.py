@@ -262,12 +262,12 @@ class UniblowApp(wx.App):
         self.dev_selected = None
         self.coin_selected = None
         self.current_chain = None
-        self.swrun = False
 
     def OnInit(self):
         self.HAND_CURSOR = wx.Cursor(wx.CURSOR_HAND)
         wicon = wx.IconBundle(icon_file)
         self.gui_frame = gui.maingui.UniblowFrame(None)
+        self.gui_frame.swrun = False
         self.gui_frame.Bind(wx.EVT_CLOSE, self.OnClose)
         self.gui_frame.SetIcons(wicon)
 
@@ -279,7 +279,7 @@ class UniblowApp(wx.App):
         return True
 
     def open_devices_panel(self):
-        self.swrun = False
+        self.gui_frame.swrun = False
         self.dev_panel = gui.maingui.DevicesPanel(self.gui_frame)
         logo = wx.Image(file_path(f"gui/images/logo.png"), wx.BITMAP_TYPE_PNG)
         logo.Rescale(64, 64)
@@ -434,7 +434,7 @@ class UniblowApp(wx.App):
 
     def BringWindowToFront(self):
         try:
-            if self.swrun:
+            if self.gui_frame.swrun:
                 self.sw_frame.Raise()
             else:
                 self.GetTopWindow().Raise()

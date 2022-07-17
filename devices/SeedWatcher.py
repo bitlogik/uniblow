@@ -143,7 +143,9 @@ class ContextOptionsMenu(Menu):
 class SeedWatcherFrame(gui.swgui.MainFrame):
     def closesw(self, event):
         event.Skip()
-        self.GetParent().Show()
+        gui_frm = self.GetParent()
+        gui_frm.swrun = False
+        gui_frm.Show()
 
 
 class SeedWatcherPanel(gui.swgui.MainPanel):
@@ -392,11 +394,11 @@ class SeedWatcherPanel(gui.swgui.MainPanel):
 
 def start_seedwatcher(app, cb_wallet):
     app.frame_sw = SeedWatcherFrame(app.gui_frame)
+    app.gui_frame.swrun = True
     app.frame_sw.SetIcons(IconBundle(file_path("gui/uniblow.ico")))
     HAND_CURSOR = Cursor(CURSOR_HAND)
     app.gui_frame.Hide()
     app.panel_sw = SeedWatcherPanel(app.frame_sw)
-    app.swrun = True
     app.panel_sw.m_textCtrl_mnemo.SetFocus()
     if sys.platform.startswith("darwin"):
         app.panel_sw.m_staticTextcopy.SetLabel(
