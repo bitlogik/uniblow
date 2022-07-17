@@ -773,8 +773,6 @@ class UniblowApp(wx.App):
         if hasattr(self, "wallet") and hasattr(self.wallet, "wc_timer"):
             # WalletConnect active
             self.disable_send("Use the connected dapp to transact")
-        self.gui_panel.Refresh()
-        self.gui_panel.Update()
         self.gui_panel.Layout()
 
     def device_error(self, exc):

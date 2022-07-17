@@ -582,8 +582,6 @@ def display_coin(account_addr):
     app.balance_timer.Start(12000)
     if hasattr(app.wallet, "wc_timer"):
         app.wallet.wc_timer.Start(2500, oneShot=wx.TIMER_CONTINUOUS)
-    app.gui_frame.Refresh()
-    app.gui_frame.Update()
     app.gui_frame.Layout()
 
 
