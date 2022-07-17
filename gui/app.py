@@ -104,9 +104,9 @@ class HDsetting_panel(gui.maingui.HDPanel):
         HAND_CURSOR = wx.Cursor(wx.CURSOR_HAND)
         self.m_butOK.SetCursor(HAND_CURSOR)
         self.m_butCancel.SetCursor(HAND_CURSOR)
-        self.m_butOK.SetBitmap(wx.Bitmap(file_path("gui/images/btns/ok.png"), wx.BITMAP_TYPE_ANY))
+        self.m_butOK.SetBitmap(wx.Bitmap(file_path("gui/images/btns/ok.png"), wx.BITMAP_TYPE_PNG))
         self.m_butCancel.SetBitmap(
-            wx.Bitmap(file_path("gui/images/btns/cancel.png"), wx.BITMAP_TYPE_ANY)
+            wx.Bitmap(file_path("gui/images/btns/cancel.png"), wx.BITMAP_TYPE_PNG)
         )
 
     def hdmnemo_changed(self, evt):
@@ -160,11 +160,11 @@ class app_option_panel(gui.maingui.OptionPanel):
         self.known_choice.SetCursor(HAND_CURSOR)
         self.m_but_paste.SetCursor(HAND_CURSOR)
         self.m_but_paste.SetBitmap(
-            wx.Bitmap(file_path("gui/images/btns/paste.png"), wx.BITMAP_TYPE_ANY)
+            wx.Bitmap(file_path("gui/images/btns/paste.png"), wx.BITMAP_TYPE_PNG)
         )
-        self.m_but_ok.SetBitmap(wx.Bitmap(file_path("gui/images/btns/ok.png"), wx.BITMAP_TYPE_ANY))
+        self.m_but_ok.SetBitmap(wx.Bitmap(file_path("gui/images/btns/ok.png"), wx.BITMAP_TYPE_PNG))
         self.m_but_cancel.SetBitmap(
-            wx.Bitmap(file_path("gui/images/btns/cancel.png"), wx.BITMAP_TYPE_ANY)
+            wx.Bitmap(file_path("gui/images/btns/cancel.png"), wx.BITMAP_TYPE_PNG)
         )
         self.m_but_ok.SetCursor(HAND_CURSOR)
         self.m_but_cancel.SetCursor(HAND_CURSOR)

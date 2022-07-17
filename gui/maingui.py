@@ -824,7 +824,7 @@ class OptionPanel ( wx.Panel ):
 
         self.m_but_ok = wx.BitmapButton( self, wx.ID_ANY, wx.NullBitmap, wx.DefaultPosition, wx.DefaultSize, wx.BU_AUTODRAW|0|wx.BORDER_NONE )
 
-        self.m_but_ok.SetBitmap( wx.Bitmap( u"gui/images/btns/ok.png", wx.BITMAP_TYPE_ANY ) )
+        self.m_but_ok.SetBitmap( wx.NullBitmap )
         bSizer19.Add( self.m_but_ok, 0, wx.BOTTOM|wx.RIGHT|wx.LEFT, 5 )
 
 
@@ -832,7 +832,7 @@ class OptionPanel ( wx.Panel ):
 
         self.m_but_cancel = wx.BitmapButton( self, wx.ID_ANY, wx.NullBitmap, wx.DefaultPosition, wx.DefaultSize, wx.BU_AUTODRAW|0|wx.BORDER_NONE )
 
-        self.m_but_cancel.SetBitmap( wx.Bitmap( u"gui/images/btns/cancel.png", wx.BITMAP_TYPE_ANY ) )
+        self.m_but_cancel.SetBitmap( wx.NullBitmap )
         bSizer19.Add( self.m_but_cancel, 0, wx.BOTTOM|wx.RIGHT|wx.LEFT, 5 )
 
 

@@ -853,7 +853,7 @@
                                             <property name="center_pane">0</property>
                                             <property name="close_button">1</property>
                                             <property name="context_help"></property>
-                                            <property name="context_menu">1</property>
+                                            <property name="context_menu">0</property>
                                             <property name="current"></property>
                                             <property name="default">0</property>
                                             <property name="default_pane">0</property>
@@ -925,7 +925,7 @@
                                             <property name="center_pane">0</property>
                                             <property name="close_button">1</property>
                                             <property name="context_help"></property>
-                                            <property name="context_menu">1</property>
+                                            <property name="context_menu">0</property>
                                             <property name="current"></property>
                                             <property name="default">0</property>
                                             <property name="default_pane">0</property>
@@ -5307,7 +5307,7 @@
                                 <property name="aui_row"></property>
                                 <property name="best_size"></property>
                                 <property name="bg"></property>
-                                <property name="bitmap">Load From File; gui\images\btns\ok.png</property>
+                                <property name="bitmap">Load From File; </property>
                                 <property name="caption"></property>
                                 <property name="caption_visible">1</property>
                                 <property name="center_pane">0</property>
@@ -5390,7 +5390,7 @@
                                 <property name="aui_row"></property>
                                 <property name="best_size"></property>
                                 <property name="bg"></property>
-                                <property name="bitmap">Load From File; gui\images\btns\cancel.png</property>
+                                <property name="bitmap">Load From File; </property>
                                 <property name="caption"></property>
                                 <property name="caption_visible">1</property>
                                 <property name="center_pane">0</property>

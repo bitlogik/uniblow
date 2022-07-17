@@ -33,13 +33,13 @@ class SendModal(SendDialog):
         self.panel.cancel_btn.SetCursor(handcurs)
         self.panel.ok_btn.SetCursor(handcurs)
         self.panel.paste_btn.SetBitmap(
-            wx.Bitmap(file_path("gui/images/btns/paste.png"), wx.BITMAP_TYPE_ANY)
+            wx.Bitmap(file_path("gui/images/btns/paste.png"), wx.BITMAP_TYPE_PNG)
         )
         self.panel.ok_btn.SetBitmap(
-            wx.Bitmap(file_path("gui/images/btns/ok.png"), wx.BITMAP_TYPE_ANY)
+            wx.Bitmap(file_path("gui/images/btns/ok.png"), wx.BITMAP_TYPE_PNG)
         )
         self.panel.cancel_btn.SetBitmap(
-            wx.Bitmap(file_path("gui/images/btns/cancel.png"), wx.BITMAP_TYPE_ANY)
+            wx.Bitmap(file_path("gui/images/btns/cancel.png"), wx.BITMAP_TYPE_PNG)
         )
         self.panel.paste_btn.SetCursor(handcurs)
         self.panel.fee_slider.Bind(wx.EVT_SCROLL, self.fee_changed)
