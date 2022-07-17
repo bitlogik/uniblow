@@ -780,6 +780,7 @@ class OptionPanel ( wx.Panel ):
         self.search_preset.ShowCancelButton( False )
         self.search_preset.SetForegroundColour( wx.Colour( 0, 0, 0 ) )
         self.search_preset.SetBackgroundColour( wx.Colour( 255, 255, 255 ) )
+        self.search_preset.SetMinSize( wx.Size( 180,-1 ) )
 
         bSizer31.Add( self.search_preset, 0, wx.TOP, 5 )
 
@@ -787,7 +788,7 @@ class OptionPanel ( wx.Panel ):
         bSizer18.Add( bSizer31, 0, wx.ALIGN_CENTER_HORIZONTAL, 5 )
 
         known_choiceChoices = []
-        self.known_choice = wx.Choice( self, wx.ID_ANY, wx.DefaultPosition, wx.Size( 360,-1 ), known_choiceChoices, 0 )
+        self.known_choice = wx.Choice( self, wx.ID_ANY, wx.DefaultPosition, wx.Size( 320,-1 ), known_choiceChoices, 0 )
         self.known_choice.SetSelection( 0 )
         self.known_choice.SetFont( wx.Font( 11, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, False, wx.EmptyString ) )
         self.known_choice.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_WINDOW ) )
@@ -813,7 +814,7 @@ class OptionPanel ( wx.Panel ):
         self.m_but_paste = wx.BitmapButton( self, wx.ID_ANY, wx.NullBitmap, wx.DefaultPosition, wx.DefaultSize, wx.BU_AUTODRAW|0|wx.BORDER_NONE )
         bSizer18.Add( self.m_but_paste, 0, wx.ALIGN_CENTER_HORIZONTAL|wx.TOP|wx.RIGHT|wx.LEFT, 5 )
 
-        self.new_choice = wx.TextCtrl( self, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.Size( 375,-1 ), wx.TE_PROCESS_ENTER )
+        self.new_choice = wx.TextCtrl( self, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.Size( 320,-1 ), wx.TE_PROCESS_ENTER )
         self.new_choice.SetFont( wx.Font( 11, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, False, wx.EmptyString ) )
         self.new_choice.SetForegroundColour( wx.Colour( 0, 0, 0 ) )
         self.new_choice.SetBackgroundColour( wx.Colour( 255, 255, 255 ) )
