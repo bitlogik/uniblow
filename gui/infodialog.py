@@ -25,8 +25,7 @@ class InfoDialog ( wx.Dialog ):
 		bSizer1 = wx.BoxSizer( wx.VERTICAL )
 
 		self.m_textCtrl = wx.TextCtrl( self, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, wx.TE_MULTILINE|wx.TE_READONLY|wx.TE_WORDWRAP|wx.BORDER_NONE )
-		self.m_textCtrl.SetForegroundColour( wx.Colour( 0, 0, 0 ) )
-		self.m_textCtrl.SetBackgroundColour( wx.Colour( 255, 255, 255 ) )
+		self.m_textCtrl.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_WINDOW ) )
 
 		bSizer1.Add( self.m_textCtrl, 1, wx.ALL|wx.EXPAND, 24 )
 
@@ -36,6 +35,7 @@ class InfoDialog ( wx.Dialog ):
 
 		self.m_button_ok.SetBitmap( wx.NullBitmap )
 		self.m_button_ok.SetFont( wx.Font( wx.NORMAL_FONT.GetPointSize(), wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_BOLD, False, wx.EmptyString ) )
+		self.m_button_ok.SetForegroundColour( wx.Colour( 0, 0, 0 ) )
 
 		bSizer2.Add( self.m_button_ok, 0, wx.ALL|wx.ALIGN_CENTER_VERTICAL, 5 )
 
@@ -43,6 +43,8 @@ class InfoDialog ( wx.Dialog ):
 		bSizer2.Add( ( 20, 0), 1, wx.EXPAND, 5 )
 
 		self.m_button_cpy = wx.Button( self, wx.ID_ANY, u"Copy Text", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.m_button_cpy.SetForegroundColour( wx.Colour( 0, 0, 0 ) )
+
 		bSizer2.Add( self.m_button_cpy, 0, wx.ALL|wx.ALIGN_CENTER_VERTICAL, 5 )
 
 

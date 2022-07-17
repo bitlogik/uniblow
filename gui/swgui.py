@@ -70,7 +70,7 @@ class MainPanel ( wx.Panel ):
         self.m_choice_nwords = wx.Choice( self, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, m_choice_nwordsChoices, 0 )
         self.m_choice_nwords.SetSelection( 0 )
         self.m_choice_nwords.SetFont( wx.Font( 11, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, False, wx.EmptyString ) )
-        self.m_choice_nwords.SetForegroundColour( wx.Colour( 0, 0, 0 ) )
+        self.m_choice_nwords.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_WINDOW ) )
 
         bSizer6.Add( self.m_choice_nwords, 0, wx.ALIGN_CENTER_VERTICAL|wx.ALIGN_CENTER_HORIZONTAL|wx.RIGHT|wx.LEFT, 10 )
 
