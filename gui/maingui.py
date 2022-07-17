@@ -142,7 +142,7 @@ class WalletPanel ( wx.Panel ):
         self.network_choice = wx.Choice( self.m_panel1, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, network_choiceChoices, 0 )
         self.network_choice.SetSelection( 0 )
         self.network_choice.SetFont( wx.Font( 12, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, False, wx.EmptyString ) )
-        self.network_choice.SetForegroundColour( wx.Colour( 0, 0, 0 ) )
+        self.network_choice.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_WINDOW ) )
         self.network_choice.SetMinSize( wx.Size( 120,-1 ) )
 
         bSizer5.Add( self.network_choice, 0, wx.ALIGN_CENTER_HORIZONTAL|wx.RIGHT, 12 )
@@ -228,6 +228,7 @@ class WalletPanel ( wx.Panel ):
         self.wallopt_choice = wx.Choice( self.m_panel4, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wallopt_choiceChoices, 0 )
         self.wallopt_choice.SetSelection( 0 )
         self.wallopt_choice.SetFont( wx.Font( 11, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, False, wx.EmptyString ) )
+        self.wallopt_choice.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_WINDOW ) )
 
         bSizer37.Add( self.wallopt_choice, 0, wx.ALIGN_CENTER_VERTICAL, 24 )
 
@@ -401,8 +402,7 @@ class HDPanel ( wx.Panel ):
 
         self.m_textCtrl_mnemo = wx.TextCtrl( self, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, wx.TE_MULTILINE )
         self.m_textCtrl_mnemo.SetFont( wx.Font( 12, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, False, wx.EmptyString ) )
-        self.m_textCtrl_mnemo.SetForegroundColour( wx.Colour( 0, 0, 0 ) )
-        self.m_textCtrl_mnemo.SetBackgroundColour( wx.Colour( 255, 255, 255 ) )
+        self.m_textCtrl_mnemo.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_WINDOW ) )
 
         bSizer11.Add( self.m_textCtrl_mnemo, 1, wx.LEFT|wx.RIGHT|wx.EXPAND, 16 )
 
@@ -789,7 +789,7 @@ class OptionPanel ( wx.Panel ):
         self.known_choice = wx.Choice( self, wx.ID_ANY, wx.DefaultPosition, wx.Size( 360,-1 ), known_choiceChoices, 0 )
         self.known_choice.SetSelection( 0 )
         self.known_choice.SetFont( wx.Font( 11, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, False, wx.EmptyString ) )
-        self.known_choice.SetForegroundColour( wx.Colour( 0, 0, 0 ) )
+        self.known_choice.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_WINDOW ) )
 
         bSizer18.Add( self.known_choice, 0, wx.ALL|wx.ALIGN_CENTER_HORIZONTAL, 5 )
 

@@ -160,6 +160,8 @@ class MainPanel ( wx.Panel ):
         m_typechoiceChoices = [ u"BIP39", u"Electrum", u"Electrum old", u"SecuBoost" ]
         self.m_typechoice = wx.Choice( self, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, m_typechoiceChoices, 0 )
         self.m_typechoice.SetSelection( 0 )
+        self.m_typechoice.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_WINDOW ) )
+
         bSizer4.Add( self.m_typechoice, 0, wx.LEFT|wx.RIGHT|wx.TOP, 4 )
 
 
@@ -219,8 +221,6 @@ class MainPanel ( wx.Panel ):
         bSizer11.Add( self.m_staticTextcopy, 0, wx.ALIGN_CENTER_HORIZONTAL|wx.TOP|wx.RIGHT|wx.LEFT, 5 )
 
         self.m_dataViewListCtrl1 = wx.dataview.DataViewListCtrl( self, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.dataview.DV_HORIZ_RULES|wx.dataview.DV_SINGLE|wx.dataview.DV_VERT_RULES )
-        self.m_dataViewListCtrl1.SetForegroundColour( wx.Colour( 0, 0, 0 ) )
-        self.m_dataViewListCtrl1.SetBackgroundColour( wx.Colour( 255, 255, 255 ) )
         self.m_dataViewListCtrl1.SetMinSize( wx.Size( -1,149 ) )
 
         bSizer11.Add( self.m_dataViewListCtrl1, 1, wx.ALIGN_LEFT|wx.EXPAND, 5 )
