@@ -279,6 +279,8 @@ class UniblowApp(wx.App):
         self.dev_panel = gui.maingui.DevicesPanel(self.gui_frame)
         logo = wx.Image(file_path(f"gui/images/logo.png"), wx.BITMAP_TYPE_PNG)
         logo.Rescale(64, 64)
+        self.gui_frame.SetSize((500, 450))
+        self.dev_panel.Layout()
         self.dev_panel.bmp_logo.SetBitmap(logo.ConvertToBitmap())
         for dev_idx, device in enumerate(self.devices, start=1):
             dbtn = getattr(self.dev_panel, f"d_btn{dev_idx:02d}")
@@ -291,7 +293,6 @@ class UniblowApp(wx.App):
             dbtn.SetCursor(self.HAND_CURSOR)
         self.dev_panel.Layout()
         self.gui_frame.Layout()
-        self.gui_frame.SetSize((500, 450))
 
     def start_wallet_panel(self):
         """Kill devices choice panel and start the wallet panel."""
@@ -339,6 +340,7 @@ class UniblowApp(wx.App):
         self.gui_panel.wallopt_choice.Disable()
         self.gui_panel.network_choice.Disable()
         self.gui_panel.account_addr.SetLabel(BLANK_ADDR)
+        self.gui_frame.Layout()
 
     def gowallet(self, sdevice):
         dev_info = self.dev_selected(sdevice)
