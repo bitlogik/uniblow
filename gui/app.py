@@ -270,10 +270,6 @@ class UniblowApp(wx.App):
         self.gui_frame.swrun = False
         self.gui_frame.Bind(wx.EVT_CLOSE, self.OnClose)
         self.gui_frame.SetIcons(wicon)
-
-        # if sys.platform.startswith("darwin"):
-        # self.gui_frame.SetSize((996, 418))
-
         self.open_devices_panel()
         self.SetTopWindow(self.gui_frame)
         return True
