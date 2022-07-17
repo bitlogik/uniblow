@@ -396,6 +396,7 @@ def start_seedwatcher(app, cb_wallet):
     HAND_CURSOR = Cursor(CURSOR_HAND)
     app.gui_frame.Hide()
     app.panel_sw = SeedWatcherPanel(app.frame_sw)
+    app.swrun = True
     app.panel_sw.m_textCtrl_mnemo.SetFocus()
     if sys.platform.startswith("darwin"):
         app.panel_sw.m_staticTextcopy.SetLabel(

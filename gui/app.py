@@ -262,6 +262,7 @@ class UniblowApp(wx.App):
         self.dev_selected = None
         self.coin_selected = None
         self.current_chain = None
+        self.swrun = False
 
     def OnInit(self):
         self.HAND_CURSOR = wx.Cursor(wx.CURSOR_HAND)
@@ -278,6 +279,7 @@ class UniblowApp(wx.App):
         return True
 
     def open_devices_panel(self):
+        self.swrun = False
         self.dev_panel = gui.maingui.DevicesPanel(self.gui_frame)
         logo = wx.Image(file_path(f"gui/images/logo.png"), wx.BITMAP_TYPE_PNG)
         logo.Rescale(64, 64)
@@ -341,11 +343,6 @@ class UniblowApp(wx.App):
         self.gui_panel.wallopt_choice.Disable()
         self.gui_panel.network_choice.Disable()
         self.gui_panel.account_addr.SetLabel(BLANK_ADDR)
-
-    def is_sw_run(self):
-        if not hasattr(self, "frame_sw"):
-            return False
-        return not self.frame_sw.IsEmpty()
 
     def gowallet(self, sdevice):
         dev_info = self.dev_selected(sdevice)
@@ -437,7 +434,7 @@ class UniblowApp(wx.App):
 
     def BringWindowToFront(self):
         try:
-            if self.is_sw_run():
+            if self.swrun:
                 self.sw_frame.Raise()
             else:
                 self.GetTopWindow().Raise()
