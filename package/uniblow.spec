@@ -64,7 +64,7 @@ datai = [
     ("../gui/images/btns/history.png", "gui/images/btns/"),
     ("../gui/images/btns/SeekAssets.png", "gui/images/btns/"),
     ("../gui/images/btns/send.png", "gui/images/btns/"),
-    ("../gui/images/btns/dev_sw.png", "gui/images/btns/"),
+    ("../gui/images/btns/dev_seedwatcher.png", "gui/images/btns/"),
     ("../gui/images/btns/dev_local.png", "gui/images/btns/"),
     ("../gui/images/btns/dev_ledger.png", "gui/images/btns/"),
     ("../gui/images/btns/dev_cryptnox.png", "gui/images/btns/"),
