@@ -399,8 +399,8 @@ class UniblowApp(wx.App):
                 coinsbtn[pos].SetBackgroundColour(wx.Colour(248, 250, 252))
 
     def deactivate_option_buttons(self):
-        self.gui_panel.but_evt1.SetBitmap(wx.NullBitmap)
-        self.gui_panel.but_evt2.SetBitmap(wx.NullBitmap)
+        self.gui_panel.but_evt1.Hide()
+        self.gui_panel.but_evt2.Hide()
         self.gui_panel.but_evt1.Unbind(wx.EVT_BUTTON)
         self.gui_panel.but_evt2.Unbind(wx.EVT_BUTTON)
         self.gui_panel.Layout()
@@ -412,6 +412,8 @@ class UniblowApp(wx.App):
         self.gui_panel.but_evt2.SetBitmap(
             wx.Bitmap(file_path("gui/images/btns/wc.png"), wx.BITMAP_TYPE_PNG)
         )
+        self.gui_panel.but_evt1.Show()
+        self.gui_panel.but_evt2.Show()
         self.gui_panel.but_evt1.SetCursor(self.HAND_CURSOR)
         self.gui_panel.but_evt2.SetCursor(self.HAND_CURSOR)
         self.gui_panel.Layout()
