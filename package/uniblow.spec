@@ -49,6 +49,7 @@ pkgs_remove = [
 datai = [
     (ICON, "gui/"),
     ("../cryptolib/wordslist/english.txt", "cryptolib/wordslist/"),
+    ("../gui/images/logo.png", "gui/images/"),
     ("../gui/images/good.png", "gui/images/"),
     ("../gui/images/bad.png", "gui/images/"),
     ("../gui/images/btns/GenSeed.png", "gui/images/btns/"),
@@ -174,6 +175,6 @@ if os_platform == "mac":
                 "LANG": "en_US.UTF-8",
                 "LC_CTYPE": "en_US.UTF-8",
             },
-            "NSHumanReadableCopyright": "Copyright (C) 2021 BitLogiK",
+            "NSHumanReadableCopyright": "Copyright (C) 2021-2022 BitLogiK",
         },
     )
