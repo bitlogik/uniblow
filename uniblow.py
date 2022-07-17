@@ -28,7 +28,6 @@ from copy import copy as ccopy
 from importlib import import_module
 from logging import basicConfig, DEBUG, getLogger
 from sys import argv
-from threading import Thread
 
 import wx
 import gui.app
@@ -97,16 +96,12 @@ def get_device_class(device_str):
     return device_class
 
 
-def run_async(target, args=(), kwargs={}):
-    Thread(target=target, args=args, kwargs=kwargs).start()
-
-
 class DisplayTimer(wx.Timer):
     def __init__(self):
         wx.Timer.__init__(self)
 
     def Notify(self):
-        run_async(app.display_balance)
+        wx.CallAfter(app.display_balance)
 
 
 def confirm_request(request_ui_message):
@@ -578,7 +573,7 @@ def display_coin(account_addr):
     if hasattr(app, "balance_timer"):
         app.balance_timer.Stop()
     app.balance_timer = DisplayTimer()
-    run_async(app.display_balance)
+    wx.CallAfter(app.display_balance)
     app.balance_timer.Start(12000)
     if hasattr(app.wallet, "wc_timer"):
         app.wallet.wc_timer.Start(2500, oneShot=wx.TIMER_CONTINUOUS)

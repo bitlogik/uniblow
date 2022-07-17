@@ -1,6 +1,7 @@
 from json import load
-from threading import Thread
 from urllib.request import urlopen
+
+from wx import CallAfter
 
 
 chain_names = {
@@ -50,7 +51,7 @@ class PriceAPI:
 
     def __init__(self, cb, token, chain=""):
         """Async query"""
-        Thread(target=self.get_price, args=(token, chain, cb)).start()
+        CallAfter(self.get_price, token, chain, cb)
 
     def get_price(self, token_id, chainid, cb):
         """Read token price in USD from CoinGecko"""
