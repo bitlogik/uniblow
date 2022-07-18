@@ -66,9 +66,11 @@ class InfoBox(gui.infodialog.InfoDialog):
         self.panel.m_textCtrl.SetValue(self.message)
         self.panel.m_textCtrl.SelectNone()
         if self.is_modal:
+            self.Layout()
             self.ShowModal()
         else:
             self.Show()
+            self.Layout()
 
     def copy_text_dialog(self, event):
         event.Skip()
