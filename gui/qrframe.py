@@ -2,7 +2,7 @@ from io import BytesIO
 import qrcode
 import wx
 
-from gui.utils import icon_file
+from gui.utils import icon_file, file_path
 
 
 class QRFrame(wx.Frame):
@@ -64,7 +64,7 @@ class QRFrame(wx.Frame):
             wx.DefaultSize,
             wx.BU_AUTODRAW | 0 | wx.BORDER_NONE,
         )
-        qrpanel.close_btn.SetBitmap(wx.Bitmap("gui/images/btns/close.png", wx.BITMAP_TYPE_PNG))
+        qrpanel.close_btn.SetBitmap(wx.Bitmap(file_path("gui/images/btns/close.png"), wx.BITMAP_TYPE_PNG))
 
         siz1.Add(qrpanel.close_btn, 0, wx.ALIGN_CENTER_HORIZONTAL | wx.TOP, 16)
         qrpanel.close_btn.Bind(wx.EVT_BUTTON, self.closing)
