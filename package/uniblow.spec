@@ -53,6 +53,7 @@ datai = [
     ("../gui/images/good.png", "gui/images/"),
     ("../gui/images/bad.png", "gui/images/"),
     ("../gui/images/btns/GenSeed.png", "gui/images/btns/"),
+    ("../gui/images/btns/blankopt.png", "gui/images/btns/"),
     ("../gui/images/btns/cancel.png", "gui/images/btns/"),
     ("../gui/images/btns/chdev.png", "gui/images/btns/"),
     ("../gui/images/btns/close.png", "gui/images/btns/"),

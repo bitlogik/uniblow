@@ -571,16 +571,17 @@ def display_coin(account_addr):
     app.gui_panel.copy_button.Enable()
     app.gui_panel.hist_button.Enable()
     app.gui_panel.balance_info.SetLabel(f"  ...  ")
+    app.gui_panel.account_addr.Layout()
     if hasattr(app, "balance_timer"):
         app.balance_timer.Stop()
     app.balance_timer = DisplayTimer()
-    wx.CallAfter(app.display_balance)
     app.balance_timer.Start(12000)
     if hasattr(app.wallet, "wc_timer"):
         app.wallet.wc_timer.Start(2500, oneShot=wx.TIMER_CONTINUOUS)
     app.gui_frame.Refresh()
     app.gui_frame.Update()
     app.gui_frame.Layout()
+    wx.CallAfter(app.display_balance)
 
 
 def process_coin_select(coin, sel_network, sel_wallettype):
