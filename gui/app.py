@@ -736,7 +736,26 @@ class UniblowApp(wx.App):
         try:
             balance = self.wallet.get_balance()
         except Exception as exc:
-            self.erase_info()
+            if hasattr(self, "balance_timer"):
+                self.balance_timer.Stop()
+            if hasattr(self, "wallet") and hasattr(self.wallet, "wc_timer"):
+                self.wallet.wc_client.close()
+                self.wallet.wc_timer.Stop()
+                delattr(self.wallet, "wc_timer")
+            self.gui_panel.hist_button.Disable()
+            self.disable_send()
+            self.deactivate_option_buttons()
+            self.gui_panel.wallopt_label.Disable()
+            self.gui_panel.wallopt_choice.Disable()
+            self.gui_panel.balance_info.SetLabel(" -  offline  -")
+            self.gui_panel.balance_small.SetLabel("")
+            self.gui_panel.balance_unit.SetLabel("")
+            self.gui_panel.txt_fiat.SetLabel("$ 0")
+            self.gui_panel.fiat_panel.Hide()
+            if hasattr(self.gui_panel, "fiat_price"):
+                del self.gui_panel.fiat_price
+            self.gui_frame.Refresh()
+            self.gui_frame.Layout()
             err_msg = (
                 f"Error when getting account balance.\nCheck your Internet connection.\n{str(exc)}"
             )
