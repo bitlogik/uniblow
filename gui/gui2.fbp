@@ -144,13 +144,13 @@
                                 <property name="scroll_rate_x">5</property>
                                 <property name="scroll_rate_y">5</property>
                                 <property name="show">1</property>
-                                <property name="size">82,370</property>
+                                <property name="size">85,378</property>
                                 <property name="subclass">; ; forward_declare</property>
                                 <property name="toolbar_pane">0</property>
                                 <property name="tooltip"></property>
                                 <property name="window_extra_style"></property>
                                 <property name="window_name"></property>
-                                <property name="window_style">wxHSCROLL|wxVSCROLL</property>
+                                <property name="window_style">wxBORDER_NONE|wxVSCROLL</property>
                             </object>
                         </object>
                     </object>

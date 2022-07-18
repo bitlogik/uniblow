@@ -43,7 +43,7 @@ class WalletPanel ( wx.Panel ):
 
         sbSizer5 = wx.StaticBoxSizer( wx.StaticBox( self, wx.ID_ANY, u"chains" ), wx.VERTICAL )
 
-        self.scrolled_coins = wx.ScrolledWindow( sbSizer5.GetStaticBox(), wx.ID_ANY, wx.DefaultPosition, wx.Size( 82,370 ), wx.HSCROLL|wx.VSCROLL )
+        self.scrolled_coins = wx.ScrolledWindow( sbSizer5.GetStaticBox(), wx.ID_ANY, wx.DefaultPosition, wx.Size( 85,378 ), wx.BORDER_NONE|wx.VSCROLL )
         self.scrolled_coins.SetScrollRate( 5, 5 )
         self.scrolled_coins.SetForegroundColour( wx.Colour( 0, 0, 0 ) )
         self.scrolled_coins.SetBackgroundColour( wx.Colour( 248, 250, 252 ) )
