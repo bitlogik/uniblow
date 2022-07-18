@@ -213,6 +213,7 @@ def cb_open_wallet(wallet_obj, pkey, waltype, sw_frame, pubkey_cpr):
     sizer.Add(coin_button, 0, wx.ALIGN_CENTER_HORIZONTAL | wx.BOTTOM | wx.TOP, 6)
     app.gui_panel.scrolled_coins.SetSizer(sizer)
     app.gui_panel.scrolled_coins.Layout()
+    app.gui_panel.Layout()
     app.gui_frame.Layout()
     display_coin(app.wallet.get_account())
 

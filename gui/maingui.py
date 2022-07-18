@@ -64,7 +64,7 @@ class WalletPanel ( wx.Panel ):
 
         bSizer28.Add( ( 0, 0), 0, wx.RIGHT, 24 )
 
-        self.balance_info = wx.StaticText( self.m_panel1, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.Size( -1,-1 ), 0 )
+        self.balance_info = wx.StaticText( self.m_panel1, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.Size( -1,-1 ), 0|wx.FULL_REPAINT_ON_RESIZE )
         self.balance_info.Wrap( -1 )
 
         self.balance_info.SetFont( wx.Font( 16, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, False, wx.EmptyString ) )
@@ -153,19 +153,19 @@ class WalletPanel ( wx.Panel ):
 
         bSizer6.Add( bSizer4, 0, wx.EXPAND, 16 )
 
-        bSizer9 = wx.BoxSizer( wx.HORIZONTAL )
+        optevt_sizer = wx.BoxSizer( wx.HORIZONTAL )
 
 
-        bSizer9.Add( ( 0, 0), 1, wx.EXPAND|wx.LEFT, 45 )
+        optevt_sizer.Add( ( 0, 0), 1, wx.EXPAND|wx.LEFT, 45 )
 
         self.but_evt1 = wx.BitmapButton( self.m_panel1, wx.ID_ANY, wx.NullBitmap, wx.DefaultPosition, wx.DefaultSize, wx.BU_AUTODRAW|wx.BORDER_NONE|wx.BORDER_NONE )
-        bSizer9.Add( self.but_evt1, 0, wx.ALIGN_CENTER_VERTICAL, 12 )
+        optevt_sizer.Add( self.but_evt1, 0, wx.ALIGN_CENTER_VERTICAL, 12 )
 
         self.but_evt2 = wx.BitmapButton( self.m_panel1, wx.ID_ANY, wx.NullBitmap, wx.DefaultPosition, wx.DefaultSize, wx.BU_AUTODRAW|wx.BORDER_NONE|wx.BORDER_NONE )
-        bSizer9.Add( self.but_evt2, 0, wx.RIGHT|wx.LEFT|wx.ALIGN_CENTER_VERTICAL, 36 )
+        optevt_sizer.Add( self.but_evt2, 0, wx.RIGHT|wx.LEFT|wx.ALIGN_CENTER_VERTICAL, 36 )
 
 
-        bSizer6.Add( bSizer9, 0, wx.BOTTOM, 16 )
+        bSizer6.Add( optevt_sizer, 0, wx.BOTTOM, 16 )
 
         self.m_panel4 = wx.Panel( self.m_panel1, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL )
         self.m_panel4.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_MENU ) )
@@ -291,7 +291,7 @@ class DevicesPanel ( wx.Panel ):
         self.bmp_logo = wx.StaticBitmap( self, wx.ID_ANY, wx.NullBitmap, wx.DefaultPosition, wx.DefaultSize, wx.BORDER_NONE )
         bSizer3.Add( self.bmp_logo, 0, wx.ALIGN_CENTER_HORIZONTAL|wx.TOP|wx.BOTTOM, 32 )
 
-        self.m_staticText1 = wx.StaticText( self, wx.ID_ANY, u"Select Device", wx.DefaultPosition, wx.DefaultSize, 0 )
+        self.m_staticText1 = wx.StaticText( self, wx.ID_ANY, u"Select Device", wx.DefaultPosition, wx.DefaultSize, 0|wx.FULL_REPAINT_ON_RESIZE )
         self.m_staticText1.Wrap( -1 )
 
         self.m_staticText1.SetFont( wx.Font( 16, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, False, wx.EmptyString ) )

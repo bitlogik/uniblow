@@ -309,7 +309,7 @@
                                                             <property name="tooltip"></property>
                                                             <property name="window_extra_style"></property>
                                                             <property name="window_name"></property>
-                                                            <property name="window_style"></property>
+                                                            <property name="window_style">wxFULL_REPAINT_ON_RESIZE</property>
                                                             <property name="wrap">-1</property>
                                                         </object>
                                                     </object>
@@ -819,7 +819,7 @@
                                 <property name="proportion">0</property>
                                 <object class="wxBoxSizer" expanded="1">
                                     <property name="minimum_size"></property>
-                                    <property name="name">bSizer9</property>
+                                    <property name="name">optevt_sizer</property>
                                     <property name="orient">wxHORIZONTAL</property>
                                     <property name="permission">none</property>
                                     <object class="sizeritem" expanded="0">
@@ -1920,7 +1920,7 @@
                         <property name="tooltip"></property>
                         <property name="window_extra_style"></property>
                         <property name="window_name"></property>
-                        <property name="window_style"></property>
+                        <property name="window_style">wxFULL_REPAINT_ON_RESIZE</property>
                         <property name="wrap">-1</property>
                     </object>
                 </object>
