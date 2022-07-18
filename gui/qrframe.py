@@ -54,6 +54,7 @@ class QRFrame(wx.Frame):
             0,
         )
         qrpanel.stxt.Wrap(-1)
+        qrpanel.stxt.SetForegroundColour(wx.Colour(0, 0, 0))
         siz1.Add(qrpanel.stxt, 0, wx.ALL | wx.ALIGN_CENTER_HORIZONTAL, 5)
 
         qrpanel.close_btn = wx.BitmapButton(
