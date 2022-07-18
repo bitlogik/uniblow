@@ -83,6 +83,8 @@ class Ledger(BaseDevice):
                     "Install and open the Ethereum app in the Ledger."
                 )
             raise Exception(f"Error {hex(exc.sw)} in Ledger.")
+        if len(eth_app_info) != 4:
+            raise Exception(f"Invalid response from the Ledger.")
         eth_version = f"{eth_app_info[1]}.{eth_app_info[2]}.{eth_app_info[3]}"
         logger.debug(f"Ledger ETH app version {eth_version}")
         if int.from_bytes(eth_app_info[1:4], "big") < MINIMUM_APP_VERSION:
