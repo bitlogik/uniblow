@@ -173,7 +173,7 @@ class WalletPanel ( wx.Panel ):
         bSizer6.Add( optevt_sizer, 0, wx.BOTTOM, 16 )
 
         self.m_panel4 = wx.Panel( self.m_panel1, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL )
-        self.m_panel4.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_MENU ) )
+        self.m_panel4.SetBackgroundColour( wx.Colour( 240, 240, 240 ) )
 
         bSizer32 = wx.BoxSizer( wx.VERTICAL )
 

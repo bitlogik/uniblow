@@ -992,7 +992,7 @@
                                     <property name="aui_position"></property>
                                     <property name="aui_row"></property>
                                     <property name="best_size"></property>
-                                    <property name="bg">wxSYS_COLOUR_MENU</property>
+                                    <property name="bg">240,240,240</property>
                                     <property name="caption"></property>
                                     <property name="caption_visible">1</property>
                                     <property name="center_pane">0</property>
