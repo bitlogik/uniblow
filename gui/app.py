@@ -56,12 +56,15 @@ class InfoBox(gui.infodialog.InfoDialog):
         self.is_modal = block_modal
         self.message = message
         self.SetTitle(title)
+        self.panel = gui.infodialog.InfoPanel(self)
         HAND_CURSOR = wx.Cursor(wx.CURSOR_HAND)
-        self.m_button_cpy.SetCursor(HAND_CURSOR)
-        self.m_button_ok.SetCursor(HAND_CURSOR)
-        self.m_textCtrl.SetBackgroundColour(self.GetBackgroundColour())
-        self.m_textCtrl.SetValue(self.message)
-        self.m_textCtrl.SelectNone()
+        self.panel.m_button_cpy.SetCursor(HAND_CURSOR)
+        self.panel.m_button_ok.SetCursor(HAND_CURSOR)
+        self.panel.m_button_ok.Bind(wx.EVT_BUTTON, self.close_info)
+        self.panel.m_button_cpy.Bind(wx.EVT_BUTTON, self.copy_text_dialog)
+        self.panel.m_textCtrl.SetBackgroundColour(self.GetBackgroundColour())
+        self.panel.m_textCtrl.SetValue(self.message)
+        self.panel.m_textCtrl.SelectNone()
         if self.is_modal:
             self.ShowModal()
         else:
