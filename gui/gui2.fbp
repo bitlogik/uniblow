@@ -846,7 +846,7 @@
                                             <property name="aui_position"></property>
                                             <property name="aui_row"></property>
                                             <property name="best_size"></property>
-                                            <property name="bg"></property>
+                                            <property name="bg">248,250,252</property>
                                             <property name="bitmap"></property>
                                             <property name="caption"></property>
                                             <property name="caption_visible">1</property>
@@ -980,7 +980,7 @@
                             </object>
                             <object class="sizeritem" expanded="1">
                                 <property name="border">6</property>
-                                <property name="flag">wxEXPAND|wxALL</property>
+                                <property name="flag">wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT</property>
                                 <property name="proportion">0</property>
                                 <object class="wxPanel" expanded="1">
                                     <property name="BottomDockable">1</property>
@@ -1039,7 +1039,7 @@
                                         <property name="orient">wxVERTICAL</property>
                                         <property name="permission">none</property>
                                         <object class="sizeritem" expanded="1">
-                                            <property name="border">18</property>
+                                            <property name="border">16</property>
                                             <property name="flag">wxTOP</property>
                                             <property name="proportion">0</property>
                                             <object class="spacer" expanded="1">

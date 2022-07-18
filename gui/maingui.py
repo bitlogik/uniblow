@@ -159,6 +159,8 @@ class WalletPanel ( wx.Panel ):
         optevt_sizer.Add( ( 0, 0), 1, wx.EXPAND|wx.LEFT, 45 )
 
         self.but_evt1 = wx.BitmapButton( self.m_panel1, wx.ID_ANY, wx.NullBitmap, wx.DefaultPosition, wx.DefaultSize, wx.BU_AUTODRAW|wx.BORDER_NONE|wx.BORDER_NONE )
+        self.but_evt1.SetBackgroundColour( wx.Colour( 248, 250, 252 ) )
+
         optevt_sizer.Add( self.but_evt1, 0, wx.ALIGN_CENTER_VERTICAL, 12 )
 
         self.but_evt2 = wx.BitmapButton( self.m_panel1, wx.ID_ANY, wx.NullBitmap, wx.DefaultPosition, wx.DefaultSize, wx.BU_AUTODRAW|wx.BORDER_NONE|wx.BORDER_NONE )
@@ -173,7 +175,7 @@ class WalletPanel ( wx.Panel ):
         bSizer32 = wx.BoxSizer( wx.VERTICAL )
 
 
-        bSizer32.Add( ( 0, 0), 0, wx.TOP, 18 )
+        bSizer32.Add( ( 0, 0), 0, wx.TOP, 16 )
 
         self.m_panel5 = wx.Panel( self.m_panel4, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL )
         self.m_panel5.SetBackgroundColour( wx.Colour( 255, 255, 255 ) )
@@ -245,7 +247,7 @@ class WalletPanel ( wx.Panel ):
         self.m_panel4.SetSizer( bSizer32 )
         self.m_panel4.Layout()
         bSizer32.Fit( self.m_panel4 )
-        bSizer6.Add( self.m_panel4, 0, wx.EXPAND|wx.ALL, 6 )
+        bSizer6.Add( self.m_panel4, 0, wx.EXPAND|wx.BOTTOM|wx.RIGHT|wx.LEFT, 6 )
 
 
         bSizer6.Add( ( 0, 0), 0, wx.TOP, 12 )

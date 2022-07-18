@@ -31,6 +31,7 @@ from sys import argv
 
 import wx
 import gui.app
+from gui.utils import file_path
 from devices.SeedWatcher import start_seedwatcher
 from devices.SingleKey import SKdevice
 from wallets.wallets_utils import InvalidOption, NotEnoughTokens
@@ -203,7 +204,7 @@ def cb_open_wallet(wallet_obj, pkey, waltype, sw_frame, pubkey_cpr):
         wx.DefaultSize,
         wx.BU_AUTODRAW | wx.BORDER_NONE,
     )
-    img = wx.Image(f"gui/images/icons/{app.wallet.coin.lower()}.png", wx.BITMAP_TYPE_PNG)
+    img = wx.Image(file_path(f"gui/images/icons/{app.wallet.coin.lower()}.png"), wx.BITMAP_TYPE_PNG)
     img.Rescale(48, 48, wx.IMAGE_QUALITY_BILINEAR)
     img.Resize(wx.Size(58, 56), wx.Point(5, 4), red=-1, green=-1, blue=-1)
     bmp = wx.Bitmap(img)
