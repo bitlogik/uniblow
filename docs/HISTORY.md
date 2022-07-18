@@ -1,6 +1,12 @@
-
 Uniblow versions history
 
+## 2.0.0 beta
+
+- Full redesign of the GUI
+
+- Add fiat prices
+
+- Improve Ledger
 
 ## 1.6.5
 
