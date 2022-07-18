@@ -321,6 +321,8 @@ If the card is locked, only half initialized, or in a fancy state, you can use
 the [CryptnoxPro](https://github.com/Cryptnox-Software/cryptnoxpro) or the [Cryptnox iOS app](https://apps.apple.com/app/id1583011693). Because Uniblow
 cannot perform advanced operations such as PIN unlock, nor card reset.
 
+For quick demo, the default PIN is setup to "1234".
+
 ### OpenPGP device
 
 Works with an OpenPGP v2/v3 device that accepts User Interaction confirmation
