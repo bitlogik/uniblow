@@ -302,9 +302,9 @@ class DevicesPanel ( wx.Panel ):
         self.m_staticText1.SetFont( wx.Font( 16, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, False, wx.EmptyString ) )
         self.m_staticText1.SetForegroundColour( wx.Colour( 113, 110, 234 ) )
 
-        bSizer3.Add( self.m_staticText1, 0, wx.ALIGN_CENTER_HORIZONTAL|wx.BOTTOM|wx.RIGHT|wx.LEFT, 16 )
+        bSizer3.Add( self.m_staticText1, 0, wx.ALIGN_CENTER_HORIZONTAL|wx.BOTTOM|wx.RIGHT|wx.LEFT, 18 )
 
-        fgSizer1 = wx.FlexGridSizer( 0, 2, 12, 36 )
+        fgSizer1 = wx.FlexGridSizer( 0, 2, 18, 36 )
         fgSizer1.SetFlexibleDirection( wx.BOTH )
         fgSizer1.SetNonFlexibleGrowMode( wx.FLEX_GROWMODE_SPECIFIED )
 
@@ -324,7 +324,7 @@ class DevicesPanel ( wx.Panel ):
         fgSizer1.Add( self.d_btn05, 0, wx.ALL, 5 )
 
 
-        bSizer3.Add( fgSizer1, 0, wx.ALIGN_CENTER_HORIZONTAL, 5 )
+        bSizer3.Add( fgSizer1, 0, wx.ALIGN_CENTER_HORIZONTAL|wx.TOP, 8 )
 
 
         self.SetSizer( bSizer3 )

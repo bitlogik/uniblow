@@ -1864,7 +1864,7 @@
                     </object>
                 </object>
                 <object class="sizeritem" expanded="1">
-                    <property name="border">16</property>
+                    <property name="border">18</property>
                     <property name="flag">wxALIGN_CENTER_HORIZONTAL|wxBOTTOM|wxRIGHT|wxLEFT</property>
                     <property name="proportion">0</property>
                     <object class="wxStaticText" expanded="1">
@@ -1925,8 +1925,8 @@
                     </object>
                 </object>
                 <object class="sizeritem" expanded="1">
-                    <property name="border">5</property>
-                    <property name="flag">wxALIGN_CENTER_HORIZONTAL</property>
+                    <property name="border">8</property>
+                    <property name="flag">wxALIGN_CENTER_HORIZONTAL|wxTOP</property>
                     <property name="proportion">0</property>
                     <object class="wxFlexGridSizer" expanded="1">
                         <property name="cols">2</property>
@@ -1939,7 +1939,7 @@
                         <property name="non_flexible_grow_mode">wxFLEX_GROWMODE_SPECIFIED</property>
                         <property name="permission">none</property>
                         <property name="rows">0</property>
-                        <property name="vgap">12</property>
+                        <property name="vgap">18</property>
                         <object class="sizeritem" expanded="1">
                             <property name="border">5</property>
                             <property name="flag">wxALL</property>
