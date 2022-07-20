@@ -1,12 +1,14 @@
 Uniblow versions history
 
-## 2.0.0 beta
+## 2.0.0
 
-- Full redesign of the GUI
-
-- Add fiat prices
-
-- Improve Ledger
+* Full redesign of the GUI
+* Allow offline mode, display address
+* Add fiat prices
+* Improve Ledger
+* Fix issue preventing start in some Windows
+* Eth testnets add Sepolia, remove Rinkeby and Ropsten
+* Tezos testnets add Jakarta remove Hangzhou
 
 ## 1.6.5
 
