@@ -24,17 +24,11 @@ A **uni**versal **blo**ckchain **w**allet for cryptos
 Official web site : https://uniblow.org  
 (also https://uniblow.app)
 
-
-
 ![Uniblow screenshot](screenshot.png)
-
-
 
 Don't expect to get advanced settings for the fees. This software provides an
 easy and basic wallet, focused on universality and ease in use, as it works on
 multiple blockchains and platforms.
-
-
 
 Compatible with the following blockchains :
 
@@ -241,8 +235,7 @@ The Local File device stores the wallet seed in a file on your disk, in your
 user data directory. The encryption is done with your password. LocalFile stores
 only the seed encrypted [with a random salt using libsodium XSalsa20/Poly1305](https://libsodium.gitbook.io/doc/secret-key_cryptography/secretbox#algorithm-details),
 using an encryption key derived from the user chosen password using [Argon2id
-(moderate
-settings)](https://raw.githubusercontent.com/P-H-C/phc-winner-argon2/master/argon2-specs.pdf).
+(moderate settings)](https://raw.githubusercontent.com/P-H-C/phc-winner-argon2/master/argon2-specs.pdf).
 One can choose to use a default password. To do so, just leave blank the
 password prompt input when asked the first time at device setting. Without a
 personalized password, the security of the key is what your hard-drive computer
@@ -261,7 +254,7 @@ wallet.
 The folder where the HDseed file is stored, sits in the user data directory.
 
 - Windows :  
-  C:\\Users\\<USER>\\AppData\\Local\\BitLogiK\\Uniblow\\keys\\
+  C:\\Users\\\<USER\>\\AppData\\Local\\BitLogiK\\Uniblow\\keys\\
 
 - Linux :  
   \~/.local/share/Uniblow/keys/  
