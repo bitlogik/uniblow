@@ -255,7 +255,7 @@ wallet.
 The folder where the HDseed file is stored, sits in the user data directory.
 
 - Windows :  
-  C:\\Users\\\\AppData\\Local\\BitLogiK\\Uniblow\\keys\\
+  C:\\Users\\<USER>\\AppData\\Local\\BitLogiK\\Uniblow\\keys\\
 
 - Linux :  
   \~/.local/share/Uniblow/keys/  
@@ -408,35 +408,16 @@ Development
 
 ### Run it from source
 
-- For the GUI, [install wxPython 4](https://wxpython.org/pages/downloads/)
-  with your system binaries wheels.
-  
-  - **Windows** : Install
-    [Python3](https://www.python.org/ftp/python/3.9.9/python-3.9.9-amd64.exe),
-    then run `pip3 install wxPython==4.1.1`
-  
-  - **MacOS** : Read the [MacDev document](docs/MacDev.md) for more details.
-  
-  - **Linux** : Read the [LinuxDev document](docs/LinuxDev.md) for more
-    details
+- **Windows** : Read the [WinDev document](docs/MacDev.md).
 
-- Install the uniblow package and its dependencies (or use venv)
-  
-  - `python3 setup.py install --user`
+- **MacOS** : Read the [MacDev document](docs/MacDev.md).
 
-- For ETH testnets, put your Infura key in ETHwallet. The binaries have an
-  Infura key embedded.
-
-- Run with `python3 uniblow.py -v`
-
-The '-v' argument enables the debug logging output for more verbose terminal
-output.
+- **Linux** : Read the [LinuxDev document](docs/LinuxDev.md)
 
 ### Build binaries
 
 There are specific instructions and scripts to build uniblow binaries for the
-Windows, Debian and MacOS platforms in a dedicated [build
-document](docs/Build.md).
+Windows, Debian and MacOS platforms in a dedicated [build document](docs/Build.md).
 
 License
 -------

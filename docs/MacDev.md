@@ -14,11 +14,9 @@ Windows, Debian and MacOS platforms in the [Build document](Build.md).
 
 You MacOS system needs :
 
--   [Python 3.9
-    pkg](https://www.python.org/ftp/python/3.9.9/python-3.9.9-macos11.pkg)
-    installed
+- [Python 3.9 pkg](https://www.python.org/ftp/python/3.9.9/python-3.9.9-macos11.pkg) installed
 
--   XCode and developer tools
+- XCode and developer tools
 
 #### Prepare system
 
@@ -30,18 +28,21 @@ cd /Applications/Python\ 3.9/
 ```
 
 #### Get the uniblow source
+
 ```
 git clone https://github.com/bitlogik/uniblow.git
 cd uniblow
 ```
 
 #### Create venv for uniblow
+
 ```
 python3 -m venv unibenv
 source unibenv/bin/activate
 ```
 
 #### Install uniblow dependencies
+
 ```
 python -m pip install pip==21.2.1
 python -m pip install swig
@@ -50,11 +51,16 @@ python -m pip install -e .
 ```
 
 #### Run uniblow
+
 ```
 python uniblow.py
 ```
 
+The '-v' argument added enables the debug logging output for more verbose terminal
+output.
+
 #### Quit the venv
+
 ```
 deactivate
 ```
@@ -62,6 +68,7 @@ deactivate
 #### Run uniblow next time
 
 Within a terminal, in the uniblow directory
+
 ```
 source unibenv/bin/activate
 python uniblow.py
