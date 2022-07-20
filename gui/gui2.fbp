@@ -1641,8 +1641,8 @@
                                 </object>
                             </object>
                             <object class="sizeritem" expanded="0">
-                                <property name="border">48</property>
-                                <property name="flag">wxALIGN_CENTER_HORIZONTAL</property>
+                                <property name="border">72</property>
+                                <property name="flag">wxRIGHT|wxALIGN_RIGHT</property>
                                 <property name="proportion">0</property>
                                 <object class="wxBitmapButton" expanded="0">
                                     <property name="BottomDockable">1</property>

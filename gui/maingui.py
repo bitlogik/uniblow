@@ -256,7 +256,7 @@ class WalletPanel ( wx.Panel ):
         bSizer6.Add( ( 0, 0), 0, wx.TOP, 12 )
 
         self.btn_send = wx.BitmapButton( self.m_panel1, wx.ID_ANY, wx.NullBitmap, wx.DefaultPosition, wx.DefaultSize, wx.BU_AUTODRAW|wx.BORDER_NONE|wx.BORDER_NONE )
-        bSizer6.Add( self.btn_send, 0, wx.ALIGN_CENTER_HORIZONTAL, 48 )
+        bSizer6.Add( self.btn_send, 0, wx.RIGHT|wx.ALIGN_RIGHT, 72 )
 
         self.alt_text = wx.StaticText( self.m_panel1, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, 0 )
         self.alt_text.Wrap( 120 )
