@@ -15,6 +15,7 @@
 
 
 from functools import partial
+from locale import setlocale, LC_ALL
 from logging import getLogger
 import sys
 import os.path
@@ -278,6 +279,10 @@ class UniblowApp(wx.App):
         self.open_devices_panel()
         self.SetTopWindow(self.gui_frame)
         return True
+
+    def InitLocale(self):
+        if sys.platform.startswith("win") and sys.version_info > (3, 8):
+            setlocale(LC_ALL, "C")
 
     def open_devices_panel(self):
         self.gui_frame.swrun = False
