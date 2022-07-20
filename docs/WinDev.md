@@ -8,11 +8,7 @@ ETHwallet.
 There are specific instructions and scripts to build uniblow binaries for the
 Windows, Debian and MacOS platforms in the [Build document](Build.md).
 
-
-
-In Windows, you can easily [run the binaries provided]([Get uniblow](https://uniblow.org/get)). These instructions are only to run Uniblow from the Python source code, for development purpose.
-
-
+In Windows, you can easily [run the binaries provided](https://uniblow.org/get). The following instructions here are only to run Uniblow from the Python source code, for development purpose.
 
 ### Install dependencies
 
@@ -22,11 +18,11 @@ In Windows, you can easily [run the binaries provided]([Get uniblow](https://uni
   
   - Then run `python -m pip install wxPython==4.1.1`
 
-- Download the Uniblow source
+- Download the Uniblow source code
   
   with git : `git clone https://github.com/bitlogik/uniblow.git`
   
-  Zip without git : [DL here](https://github.com/bitlogik/uniblow/archive/refs/heads/master.zip)
+  Zip without git : [Download here](https://github.com/bitlogik/uniblow/archive/refs/heads/master.zip)
 
 ### Install and run uniblow
 

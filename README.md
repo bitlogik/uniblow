@@ -24,11 +24,17 @@ A **uni**versal **blo**ckchain **w**allet for cryptos
 Official web site : https://uniblow.org  
 (also https://uniblow.app)
 
+
+
 ![Uniblow screenshot](screenshot.png)
+
+
 
 Don't expect to get advanced settings for the fees. This software provides an
 easy and basic wallet, focused on universality and ease in use, as it works on
 multiple blockchains and platforms.
+
+
 
 Compatible with the following blockchains :
 
@@ -408,7 +414,7 @@ Development
 
 ### Run it from source
 
-- **Windows** : Read the [WinDev document](docs/MacDev.md).
+- **Windows** : Read the [WinDev document](docs/WinDev.md).
 
 - **MacOS** : Read the [MacDev document](docs/MacDev.md).
 
