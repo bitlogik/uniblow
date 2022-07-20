@@ -288,10 +288,9 @@ class ETH_wallet:
 
     networks = [
         "Mainnet",
-        "Rinkeby",
-        "Ropsten",
         "Kovan",
         "Goerli",
+        "Sepolia",
     ]
 
     wtypes = ["Standard", "ERC20", "WalletConnect"]
@@ -341,22 +340,23 @@ class ETH_wallet:
         self.network = self.networks[network].lower()
         if self.network == "mainnet":
             self.chainID = 1
-        if self.network == "ropsten":
-            self.chainID = 3
-        if self.network == "rinkeby":
-            self.chainID = 4
         if self.network == "goerli":
             self.chainID = 5
         if self.network == "kovan":
             self.chainID = 42
+        if self.network == "sepolia":
+            self.chainID = 11155111
         INFURA_KEY = "xxx"  # Put your Infura key here
-        if INFURA_KEY == "xxx" and self.network != "mainnet":
+        if INFURA_KEY == "xxx" and self.network != "mainnet" and self.network != "sepolia":
             raise Exception(
-                "To use Uniblow from source with an Ethereum testnet, bring your own Infura key."
+                "To use Uniblow from source with Goerli or Kovan, bring your own Infura key."
             )
         if self.network == "mainnet":
             rpc_endpoint = "https://rpc.ankr.com/eth/"
             self.explorer = "https://etherscan.io/address/0x"
+        elif self.network == "sepolia":
+            rpc_endpoint = "https://rpc.sepolia.org"
+            self.explorer = "https://sepolia.etherscan.io/address/0x"
         else:
             rpc_endpoint = f"https://{self.network}.infura.io/v3/{INFURA_KEY}"
             self.explorer = f"https://{self.network}.etherscan.io/address/0x"
