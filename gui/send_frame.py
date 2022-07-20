@@ -1,5 +1,7 @@
 import wx
 
+from sys import platform
+
 from gui.utils import file_path
 from gui.maingui import SendDialog, SendPanel
 
@@ -47,6 +49,10 @@ class SendModal(SendDialog):
         self.panel.ok_btn.Bind(wx.EVT_BUTTON, self.click_ok)
         self.panel.paste_btn.Bind(wx.EVT_BUTTON, self.paste_addr)
         self.panel.bmp_chk.SetBitmap(self.BAD_BMP)
+        if platform.startswith("darwin"):
+            self.panel.fiat_label.SetFont(wx.Font(wx.FontInfo(14)))
+            self.panel.fiat_value.SetFont(wx.Font(wx.FontInfo(14)))
+            self.panel.text_fees.SetFont(wx.Font(wx.FontInfo(14)))
 
     def close(self, evt):
         self.cb("CLOSE", "", "0")

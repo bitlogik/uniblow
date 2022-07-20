@@ -38,6 +38,8 @@ from wx import (
     CURSOR_HAND,
     BITMAP_TYPE_PNG,
     TextDataObject,
+    Font,
+    FontInfo,
 )
 import gui.swgui
 from gui.app import file_path
@@ -416,5 +418,7 @@ def start_seedwatcher(app, cb_wallet):
     app.panel_sw.m_choice_nwords.SetCursor(HAND_CURSOR)
     app.panel_sw.m_typechoice.SetCursor(HAND_CURSOR)
     app.panel_sw.m_btnseek.SetCursor(HAND_CURSOR)
+    if sys.platform.startswith("darwin"):
+        app.panel_sw.m_textCtrl_mnemo.SetFont(Font(FontInfo(18)))
     app.panel_sw.initialize(cb_wallet)
     app.frame_sw.Show()

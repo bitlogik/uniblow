@@ -301,6 +301,8 @@ class UniblowApp(wx.App):
             )
             dbtn.Bind(wx.EVT_BUTTON, self.load_device)
             dbtn.SetCursor(self.HAND_CURSOR)
+        if sys.platform.startswith("darwin"):
+            self.dev_panel.m_staticText1.SetFont(wx.Font(wx.FontInfo(26)))
         self.dev_panel.Layout()
         self.gui_frame.Layout()
 
@@ -349,6 +351,12 @@ class UniblowApp(wx.App):
         self.gui_panel.wallopt_label.Disable()
         self.gui_panel.wallopt_choice.Disable()
         self.gui_panel.network_choice.Disable()
+        if sys.platform.startswith("darwin"):
+            self.gui_panel.balance_info.SetFont(wx.Font(wx.FontInfo(24)))
+            self.gui_panel.balance_small.SetFont(wx.Font(wx.FontInfo(15)))
+            self.gui_panel.balance_unit.SetFont(wx.Font(wx.FontInfo(24)))
+            self.gui_panel.txt_fiat.SetFont(wx.Font(wx.FontInfo(15)))
+            self.gui_panel.account_addr.SetFont(wx.Font(wx.FontInfo(18)))
         self.gui_panel.account_addr.SetLabel(BLANK_ADDR)
         self.gui_frame.Layout()
 
