@@ -62,6 +62,9 @@ class WalletPanel ( wx.Panel ):
 
         bSizer28 = wx.BoxSizer( wx.HORIZONTAL )
 
+        self.img_arrsel = wx.StaticBitmap( self.m_panel1, wx.ID_ANY, wx.NullBitmap, wx.DefaultPosition, wx.DefaultSize, 0 )
+        bSizer28.Add( self.img_arrsel, 0, wx.ALIGN_BOTTOM|wx.BOTTOM|wx.RIGHT|wx.LEFT, 20 )
+
 
         bSizer28.Add( ( 0, 0), 0, wx.RIGHT, 24 )
 

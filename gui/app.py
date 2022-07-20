@@ -498,7 +498,13 @@ class UniblowApp(wx.App):
         if hasattr(self.gui_panel, "fiat_price"):
             del self.gui_panel.fiat_price
         if first_time:
-            self.gui_panel.balance_info.SetLabel("👈  Select a chain")
+            self.gui_panel.img_arrsel.Show()
+            self.gui_panel.img_arrsel.SetBitmap(
+                wx.Bitmap(file_path("gui/images/arrsel.png"), wx.BITMAP_TYPE_PNG)
+            )
+            self.gui_panel.balance_info.SetLabel("Select a chain")
+        else:
+            self.gui_panel.img_arrsel.Hide()
         if reset:
             self.gui_panel.wallopt_choice.SetSelection(0)
         self.gui_panel.qr_button.Disable()
