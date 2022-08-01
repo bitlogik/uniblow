@@ -2383,7 +2383,7 @@
             <property name="size">600,480</property>
             <property name="style">wxCAPTION|wxCLOSE_BOX|wxDEFAULT_DIALOG_STYLE|wxSTAY_ON_TOP|wxSYSTEM_MENU</property>
             <property name="subclass">; ; forward_declare</property>
-            <property name="title">Local File wallet setup</property>
+            <property name="title">Wallet setup</property>
             <property name="tooltip"></property>
             <property name="window_extra_style"></property>
             <property name="window_name"></property>
@@ -2457,7 +2457,7 @@
                                 <property name="gripper">0</property>
                                 <property name="hidden">0</property>
                                 <property name="id">wxID_ANY</property>
-                                <property name="label">Local wallet mnemonic setup</property>
+                                <property name="label">Wallet mnemonic setup</property>
                                 <property name="markup">0</property>
                                 <property name="max_size"></property>
                                 <property name="maximize_button">0</property>
