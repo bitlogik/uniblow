@@ -42,7 +42,7 @@ from wx import (
     FontInfo,
 )
 import gui.swgui
-from gui.app import file_path
+from gui.app import file_path, scaleSize
 from cryptolib.HDwallet import (
     HD_Wallet,
     generate_mnemonic,
@@ -396,6 +396,7 @@ class SeedWatcherPanel(gui.swgui.MainPanel):
 
 def start_seedwatcher(app, cb_wallet):
     app.frame_sw = SeedWatcherFrame(app.gui_frame)
+    app.frame_sw.SetSize(scaleSize(app.frame_sw, (650, 700)))
     app.gui_frame.swrun = True
     app.frame_sw.SetIcons(IconBundle(file_path("gui/uniblow.ico")))
     HAND_CURSOR = Cursor(CURSOR_HAND)

@@ -51,6 +51,16 @@ def isBitmapButton(elt):
     return isinstance(elt, wx.BitmapButton)
 
 
+def scaleSize(frame, sz):
+    """Scale frame size demending of scaling factor."""
+    scal_fact = 1
+    if frame.GetDPIScaleFactor() > 1.25:
+        scal_fact = 1.1
+    if frame.GetDPIScaleFactor() > 1.5:
+        scal_fact = 1.25
+    return (int(sz[0] * scal_fact), int(sz[1] * scal_fact))
+
+
 class InfoBox(gui.infodialog.InfoDialog):
     def __init__(self, message, title, style, parent, block_modal=False):
         super().__init__(parent)
@@ -289,7 +299,6 @@ class UniblowApp(wx.App):
         self.dev_panel = gui.maingui.DevicesPanel(self.gui_frame)
         logo = wx.Image(file_path(f"gui/images/logo.png"), wx.BITMAP_TYPE_PNG)
         logo.Rescale(64, 64)
-        self.gui_frame.SetSize((500, 450))
         self.dev_panel.Layout()
         self.dev_panel.bmp_logo.SetBitmap(logo.ConvertToBitmap())
         for dev_idx, device in enumerate(self.devices, start=1):
@@ -304,12 +313,13 @@ class UniblowApp(wx.App):
         if sys.platform.startswith("darwin"):
             self.dev_panel.m_staticText1.SetFont(wx.Font(wx.FontInfo(26)))
         self.dev_panel.Layout()
+        self.gui_frame.SetSize(scaleSize(self.gui_frame, (500, 450)))
         self.gui_frame.Layout()
 
     def start_wallet_panel(self):
         """Kill devices choice panel and start the wallet panel."""
         self.dev_panel.Destroy()
-        self.gui_frame.SetSize((820, 460))
+        self.gui_frame.SetSize(scaleSize(self.gui_frame, (820, 460)))
         self.gui_frame.Layout()
         self.gui_panel = gui.maingui.WalletPanel(self.gui_frame)
         self.gui_panel.copy_button.SetBitmap(
@@ -597,6 +607,7 @@ class UniblowApp(wx.App):
         self.send_dialog = SendModal(
             self.gui_panel, self.wallet.coin, self.wallet.check_address, self.callback_send
         )
+        self.send_dialog.SetSize(scaleSize(self.send_dialog, (520, 420)))
         self.gui_panel.Disable()
         self.send_dialog.Show()
 
@@ -649,6 +660,7 @@ class UniblowApp(wx.App):
 
     def get_option(self, network_id, input_value, preset_values):
         option_dialog = gui.maingui.OptionDialog(self.gui_frame)
+        option_dialog.SetSize(scaleSize(option_dialog, (455, 380)))
         option_panel = app_option_panel(option_dialog)
         option_panel.SetTitle(f"Wallet settings : {input_value} selection")
         option_panel.SetPresetLabel(f"preset {input_value}")
@@ -695,7 +707,7 @@ class UniblowApp(wx.App):
             self.gui_hdpanel.m_textCtrl_pwd.Destroy()
             self.gui_hdpanel.m_checkBox_secboost.Destroy()
             self.gui_hdpanel.m_usertxt.SetLabel("Choose account and index for the key to use.")
-            self.gui_hdframe.SetSize(580, 360)
+            self.gui_hdframe.SetSize(scaleSize(self.gui_hdframe, (580, 360)))
         self.gui_hdpanel.m_butOK.SetCursor(self.HAND_CURSOR)
         self.gui_hdpanel.m_butCancel.SetCursor(self.HAND_CURSOR)
         ret = self.gui_hdframe.ShowModal()
