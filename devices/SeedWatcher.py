@@ -38,9 +38,11 @@ from wx import (
     CURSOR_HAND,
     BITMAP_TYPE_PNG,
     TextDataObject,
+    Font,
+    FontInfo,
 )
 import gui.swgui
-from gui.app import file_path
+from gui.app import file_path, scaleSize
 from cryptolib.HDwallet import (
     HD_Wallet,
     generate_mnemonic,
@@ -127,7 +129,7 @@ class ContextOptionsMenu(Menu):
         Menu.__init__(self)
         self.parent = parent
 
-        men1 = MenuItem(self, 1, "Copy Address")
+        men1 = MenuItem(self, 1, "Copy address")
         self.Append(men1)
         self.Bind(EVT_MENU, self.parent.copy_account, men1)
 
@@ -143,7 +145,9 @@ class ContextOptionsMenu(Menu):
 class SeedWatcherFrame(gui.swgui.MainFrame):
     def closesw(self, event):
         event.Skip()
-        self.GetParent().Show()
+        gui_frm = self.GetParent()
+        gui_frm.swrun = False
+        gui_frm.Show()
 
 
 class SeedWatcherPanel(gui.swgui.MainPanel):
@@ -172,8 +176,8 @@ class SeedWatcherPanel(gui.swgui.MainPanel):
         self.generate_mnemonic(selnw)
 
     def initialize(self, cb_wallet):
-        self.GOOD_BMP = Bitmap(file_path("gui/good.bmp"))
-        self.BAD_BMP = Bitmap(file_path("gui/bad.bmp"))
+        self.GOOD_BMP = Bitmap(file_path("gui/images/good.png"))
+        self.BAD_BMP = Bitmap(file_path("gui/images/bad.png"))
         self.m_choice_nwords.Set(WORDSLEN_LIST)
         self.m_choice_nwords.SetSelection(0)
         ctab = self.m_dataViewListCtrl1
@@ -348,7 +352,7 @@ class SeedWatcherPanel(gui.swgui.MainPanel):
             copied_modal = MessageDialog(
                 self,
                 f"Account address {addr}\nwas copied in the clipboard",
-                "Copied",
+                "Address copied",
                 STAY_ON_TOP | CENTER,
                 DefaultPosition,
             )
@@ -392,9 +396,10 @@ class SeedWatcherPanel(gui.swgui.MainPanel):
 
 def start_seedwatcher(app, cb_wallet):
     app.frame_sw = SeedWatcherFrame(app.gui_frame)
+    app.frame_sw.SetSize(scaleSize(app.frame_sw, (650, 700)))
+    app.gui_frame.swrun = True
     app.frame_sw.SetIcons(IconBundle(file_path("gui/uniblow.ico")))
     HAND_CURSOR = Cursor(CURSOR_HAND)
-    app.gui_panel.devices_choice.SetSelection(0)
     app.gui_frame.Hide()
     app.panel_sw = SeedWatcherPanel(app.frame_sw)
     app.panel_sw.m_textCtrl_mnemo.SetFocus()
@@ -403,18 +408,18 @@ def start_seedwatcher(app, cb_wallet):
             "Select asset line, then right click on it to open menu"
         )
 
-    app.panel_sw.m_button_gen.SetBitmap(Bitmap(file_path("gui/GenSeed.png"), BITMAP_TYPE_PNG))
-    app.panel_sw.m_button_gen.SetBitmapPressed(
-        Bitmap(file_path("gui/GenSeeddn.png"), BITMAP_TYPE_PNG)
+    app.panel_sw.m_button_gen.SetBitmap(
+        Bitmap(file_path("gui/images/btns/GenSeed.png"), BITMAP_TYPE_PNG)
     )
-    app.panel_sw.m_btnseek.SetBitmap(Bitmap(file_path("gui/SeekAssets.png"), BITMAP_TYPE_PNG))
-    app.panel_sw.m_btnseek.SetBitmapPressed(
-        Bitmap(file_path("gui/SeekAssetsdn.png"), BITMAP_TYPE_PNG)
+    app.panel_sw.m_btnseek.SetBitmap(
+        Bitmap(file_path("gui/images/btns/SeekAssets.png"), BITMAP_TYPE_PNG)
     )
 
     app.panel_sw.m_button_gen.SetCursor(HAND_CURSOR)
     app.panel_sw.m_choice_nwords.SetCursor(HAND_CURSOR)
     app.panel_sw.m_typechoice.SetCursor(HAND_CURSOR)
     app.panel_sw.m_btnseek.SetCursor(HAND_CURSOR)
+    if sys.platform.startswith("darwin"):
+        app.panel_sw.m_textCtrl_mnemo.SetFont(Font(FontInfo(18)))
     app.panel_sw.initialize(cb_wallet)
     app.frame_sw.Show()

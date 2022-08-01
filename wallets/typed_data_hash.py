@@ -108,7 +108,7 @@ def encode_value(vtype, value, go):
         if value >= 0:
             intval_bin = uint256(value)
         else:
-            intval_bin = uint256(2 ** 256 + value)
+            intval_bin = uint256(2**256 + value)
         return intval_bin
     if vtype in bytes_types:
         if not isinstance(value, str):

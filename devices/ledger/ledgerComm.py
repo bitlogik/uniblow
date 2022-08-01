@@ -174,11 +174,12 @@ class DongleSmartcard(Dongle):
             raise LedgerException("Ledger was disconnected.")
         logger.debug(" Sending => %s", apdu.hex())
         response, sw1, sw2 = self.device.transmit(toBytes(apdu.hex()))
+        resp = bytearray(response)
         sw = (sw1 << 8) | sw2
-        logger.debug(" Receiving <= %s%.2x", response.hex(), sw)
+        logger.debug(" Receiving <= %s%.2x", resp.hex(), sw)
         if sw != 0x9000:
             raise LedgerException("Invalid status %04x" % sw, sw)
-        return bytearray(response)
+        return resp
 
     def close(self):
         if self.opened:

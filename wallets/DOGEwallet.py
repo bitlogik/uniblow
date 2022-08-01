@@ -99,7 +99,7 @@ class sochain_api:
         return out
 
     def get_fee(self, priority):
-        return int(10 ** DOGE_units)
+        return int(10**DOGE_units)
 
 
 def testaddr(doge_addr, is_testnet):

@@ -1,1 +1,3 @@
-VERSION = "1.6.5"
+# Shall be x.y.z, with optional dash trailing "-textstr"
+
+VERSION = "2.0.0-rc1"

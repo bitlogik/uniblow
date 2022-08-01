@@ -31,7 +31,8 @@ def now_time_filetime():
 
 
 def ver_str_to_comma(verstr):
-    return ", ".join(verstr.split("."))
+    verstr_norm = verstr.split("-", 1)[0]
+    return ", ".join(verstr_norm.split("."))
 
 
 def fill_version_info(file_name, version_str, file_desc, comment):
