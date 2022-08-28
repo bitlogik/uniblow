@@ -23,7 +23,7 @@ import re
 import cryptolib.coins
 from cryptolib.bech32 import test_bech32
 from cryptolib.base58 import decode_base58
-from cryptolib.cryptography import compress_pubkey
+from cryptolib.cryptography import compress_pubkey, sha2
 from wallets.wallets_utils import balance_string, shift_10, NotEnoughTokens
 
 
@@ -343,9 +343,11 @@ class BTC_wallet:
         return BTC_EXPLORER_URL
 
     def raw_tx(self, amount, fee, to_account):
-        hashes_to_sign = self.btc.prepare(to_account, amount, fee)
+        msgs_to_sign = self.btc.prepare(to_account, amount, fee)
         tx_signatures = []
-        for msg in hashes_to_sign:
+        for msg in msgs_to_sign:
+            if not self.current_device.has_screen:
+                msg = sha2(msg)
             asig = self.current_device.sign(msg)
             tx_signatures.append(asig)
         return self.btc.send(tx_signatures)

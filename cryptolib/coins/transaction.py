@@ -20,7 +20,7 @@ import copy
 import re
 from functools import reduce
 
-from cryptolib.cryptography import Hash160, dbl_sha2
+from cryptolib.cryptography import Hash160, dbl_sha2, sha2
 from cryptolib.base58 import encode_base58_header, decode_base58
 
 
@@ -469,9 +469,9 @@ def txhash(tx, hashcode=None, wtxid=True):
     if not wtxid and is_segwit(tx):
         tx = serialize(deserialize(tx), include_witness=False)
     if hashcode:
-        return dbl_sha256(from_string_to_bytes(tx) + encode(int(hashcode), 256, 4)[::-1])
+        return sha2(from_string_to_bytes(tx) + encode(int(hashcode), 256, 4)[::-1])
     else:
-        return safe_hexlify(dbl_sha2(tx)[::-1])
+        return sha2(tx)
 
 
 def public_txhash(tx, hashcode=None):
@@ -479,7 +479,7 @@ def public_txhash(tx, hashcode=None):
 
 
 def bin_txhash(tx, hashcode=None):
-    return binascii.unhexlify(txhash(tx, hashcode))
+    return txhash(tx, hashcode)
 
 
 # Scripts
