@@ -170,9 +170,9 @@ class OpenPGP(BaseDevice):
             # Set UIF for sign : require a push button and OpenPGP v3
             self.PGPdevice.put_data("00D6", "0120")
         except OpenPGPpy.PGPCardException as exc:
-            if exc.sw_code != 0x6A88:  # card just doesnt support UIF ?
+            if exc.sw_code != 0x6A88:
                 raise
-            raise Exception("This device doesn't support physical confirmation button")
+            # This device just doesn't support physical confirmation button
         self.created = True
 
     def get_public_key(self):

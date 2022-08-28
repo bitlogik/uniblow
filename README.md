@@ -324,14 +324,15 @@ For quick demo, the default PIN is setup to "1234".
 
 ### OpenPGP device
 
-Works with an OpenPGP v2/v3 device that accepts User Interaction confirmation
-(button) and ECP 256K1 key pairs.
+Works with an OpenPGP v2/v3 device that accepts ECP 256K1 key pairs.
 
 This device type is very secure, because the signature is performed in the
 OpenPGP physical device, outside of the computer. Most of these devices are
 built with a secure element chip. The private key never escapes the hardware
 device boundary. Note that the drawback is that there is no easy backup of the
-keys, so one have to take care of not forgetting the PIN or losing the device.
+keys, so one have to take care of not forgetting the PIN or losing the device.  
+Still, you can upload your own keyin this device, but this importation feature
+is not supported by Uniblow.
 
 For the best experience, the OpenPGP device should be in its default reset state
 before using it with uniblow. Uniblow asks the user to choose the admin PIN
@@ -340,7 +341,8 @@ The device can also be already configured, with one EC256k1 key generated in the
 SIG key slot. Uniblow will ask for the user PIN1 and use this key.
 
 Without backup, if you forget the PIN, or lost the OpenPGP device, there would
-be no way to recover your coins.
+be no way to recover your coins. Except if you initialized the PGP device on your
+own and uploaded a key pair.
 
 The Yubico 5 is a recommended OpenPGP device.
 
