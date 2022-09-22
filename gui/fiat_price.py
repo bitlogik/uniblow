@@ -28,7 +28,7 @@ native_tokens = {
     "GMLR": "moonbeam",
     "EOS": "eos",
     "XTZ": "tezos",
-    "ARB": "ethereum",
+    "ARB/ETH": "ethereum",
     "BSC": "binancecoin",
     "SOL": "solana",
     "FTM": "fantom",
