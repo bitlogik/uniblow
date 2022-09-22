@@ -283,8 +283,8 @@ class XTZ_wallet:
 
     networks = [
         "Mainnet",
-        "IthacaNet",
-        "JakartaNet",
+        "Ghostnet",
+        "Kathmandunet",
     ]
 
     wtypes = [
