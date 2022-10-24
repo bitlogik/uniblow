@@ -76,6 +76,9 @@ jobs:
         INFURA_APIKEY: ${{ secrets.INFURA_APIKEY }}
       run: |
         sed -i '' 's/"xxx"  # Put your Infura key here/"'"$INFURA_APIKEY"'"/g' wallets/ETHwallet.py
+    - uses: actions/setup-python@v4
+      with:
+        python-version: '3.9'
     - name: Build bin package
       run: |
         ./package/Build-Mac.sh
