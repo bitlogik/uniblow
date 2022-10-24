@@ -1,5 +1,12 @@
 Uniblow versions history
 
+## 2.0.2
+
+* Tezos : Add Ghost and Kathmandu test networks
+* Fix Arbitrum wallet display
+* Simplify Bitcoin transactions
+* OpenPGP no more requires UIF
+
 ## 2.0.0
 
 * Full redesign of the GUI
