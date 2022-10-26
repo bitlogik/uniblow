@@ -17,7 +17,7 @@
 
 from devices.BaseDevice import BaseDevice
 from devices.cryptnox import CryptnoxCard, CryptnoxInvalidException
-from cryptolib.HDwallet import encode_bip39_string, mnemonic_to_seed, generate_mnemonic
+from cryptolib.HDwallet import encode_bip32_string, mnemonic_to_seed, generate_mnemonic
 
 
 class pwdException(Exception):
@@ -174,7 +174,7 @@ class Cryptnox(BaseDevice):
         self.key_type = key_type
         if key_type not in ["K1", "R1"]:
             raise Exception("Cryptnox supports only K1 and R1 derivations.")
-        self.card.derive(encode_bip39_string(path), key_type)
+        self.card.derive(encode_bip32_string(path), key_type)
 
     def get_public_key(self):
         if self.is_HD:

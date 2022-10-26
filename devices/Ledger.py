@@ -19,7 +19,7 @@ from logging import getLogger
 from devices.BaseDevice import BaseDevice
 from devices.ledger.ledgerComm import getDongle
 from devices.ledger.ledgerException import LedgerException
-from cryptolib.HDwallet import encode_bip39_string, BIP32node
+from cryptolib.HDwallet import encode_bip32_string, BIP32node
 
 logger = getLogger(__name__)
 
@@ -102,7 +102,7 @@ class Ledger(BaseDevice):
 
     def derive_key(self, path, key_type):
         # Check k1 ?
-        path_bin = encode_bip39_string(path)
+        path_bin = encode_bip32_string(path)
         self.bin_path = bytes([len(path_bin) >> 2]) + path_bin
 
     def get_public_key(self, showOnScreenCB=None):

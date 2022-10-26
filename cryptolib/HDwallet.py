@@ -33,7 +33,7 @@ from cryptolib.ElectrumLegacy import decode_old_mnemonic
 # BIP39 helpers
 
 
-def decode_bip39_path(path_string):
+def decode_bip32_path(path_string):
     """Decode a BIP39 string m/../.. into an integer list."""
     if path_string == "" or path_string == "m":
         return []
@@ -51,7 +51,7 @@ def decode_bip39_path(path_string):
     return int_list
 
 
-def encode_bip39_path(bip39_path_ints):
+def encode_bip32_path(bip39_path_ints):
     """Encode an integer list of a path into binary (x 32 bits)."""
     enc_out = b""
     for idx in bip39_path_ints:
@@ -59,8 +59,8 @@ def encode_bip39_path(bip39_path_ints):
     return enc_out
 
 
-def encode_bip39_string(bip39_path_string):
-    return encode_bip39_path(decode_bip39_path(bip39_path_string))
+def encode_bip32_string(bip32_path_string):
+    return encode_bip32_path(decode_bip32_path(bip32_path_string))
 
 
 # BIP39 : mnemonic <-> seed
@@ -222,7 +222,7 @@ class BIP32node:
     def derive_path_private(self, path_str):
         if self.depth > 0:
             raise Exception("Must be called only on a master node")
-        path_list = decode_bip39_path(path_str)
+        path_list = decode_bip32_path(path_str)
         if path_list == []:
             return self
         node = self
