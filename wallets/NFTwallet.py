@@ -1,4 +1,5 @@
 from io import BytesIO
+from logging import getLogger
 import urllib.request
 from json import load
 
@@ -11,12 +12,28 @@ IPFS_GATEWAY = "https://cloudflare-ipfs.com/ipfs/"
 WALLETOWNER_FUNCTION = "438b6300"
 # tokenURI(uint256)
 TOKENURI_FUNCTION = "c87b56dd"
+# tokenOfOwnerByIndex(address,uint256)
+TOKENSOWNER_FUNCTION = "2f745c59"
 
 
-def get_data(url):
-    url = url.replace("ipfs://", IPFS_GATEWAY)
-    rfile = urllib.request.urlopen(url)
-    return rfile
+logger = getLogger(__name__)
+
+
+def get_data(url, retry=0):
+    if retry == 0:
+        url = url.replace("ipfs://", IPFS_GATEWAY)
+    logger.debug("Reading %s", url)
+    try:
+        rfile = urllib.request.urlopen(url)
+        return rfile
+    except Exception as exc:
+        # Retry
+        if retry <= 4:
+            logger.error("Error %s", str(exc))
+            retry += 1
+            logger.debug("Retry #%i", retry)
+            return get_data(url, retry)
+        raise exc
 
 
 def get_image_file(url):
@@ -40,18 +57,24 @@ class NFTWallet:
 
         try:
             idsraw = self.wallet.eth.call(
-                WALLETOWNER_FUNCTION, f"000000000000000000000000{self.wallet.eth.address}"
+                WALLETOWNER_FUNCTION,
+                f"000000000000000000000000{self.wallet.eth.address}"
             )
             # table of indexes
             arr_idxs = read_int_array(idsraw)
         except Exception:
             pass
 
-        # tokenOfOwnerByIndex(address _owner, uint256 _index)
-        # tokenOfOwnerByIndex(address,uint256)
-        # tokID = "2f745c59"
-        # balraw = wallet.eth.api.call(contract, tokID)
-        # print(int(balraw[2:], 16))
+        if balance > 0 and len(arr_idxs) == 0:
+            for oidx in range(balance):
+                idxraw = self.wallet.eth.call(
+                    TOKENSOWNER_FUNCTION,
+                    f"000000000000000000000000{self.wallet.eth.address}"
+                    f"{uint256(oidx).hex()}"
+                )
+                idx = int(idxraw[2:], 16)
+                logger.debug("NFT #%i has id = %i", oidx, idx)
+                arr_idxs.append(idx)
 
         if len(arr_idxs) != balance:
             raise Exception("Unmatched NFT data.")
