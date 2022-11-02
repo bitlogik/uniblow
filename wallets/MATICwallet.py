@@ -55,5 +55,5 @@ class MATIC_wallet(ETH_wallet):
             self.chainID = 80001
             rpc_endpoint = "https://matic-mumbai.chainstacklabs.com/"
             self.explorer = "https://mumbai.polygonscan.com/address/0x"
-        self.load_base(rpc_endpoint, device, contract_addr, wc_uri, confirm_callback)
+        self.load_base(rpc_endpoint, device, contract_addr, wc_uri, confirm_callback, wtype != 3)
         self.ledger_tokens = ledger_tokens

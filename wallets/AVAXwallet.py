@@ -55,5 +55,5 @@ class AVAX_wallet(ETH_wallet):
             self.chainID = 43113
             rpc_endpoint = "https://api.avax-test.network/ext/bc/C/rpc"
             self.explorer = "https://testnet.snowtrace.io/address/0x"
-        self.load_base(rpc_endpoint, device, contract_addr, wc_uri, confirm_callback)
+        self.load_base(rpc_endpoint, device, contract_addr, wc_uri, confirm_callback, wtype != 3)
         self.ledger_tokens = ledger_tokens

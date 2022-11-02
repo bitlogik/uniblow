@@ -167,10 +167,15 @@ class WalletPanel ( wx.Panel ):
 
         optevt_sizer.Add( self.but_evt1, 0, wx.ALIGN_CENTER_VERTICAL, 12 )
 
+        self.but_evt1b = wx.BitmapButton( self.m_panel1, wx.ID_ANY, wx.NullBitmap, wx.DefaultPosition, wx.DefaultSize, wx.BU_AUTODRAW|wx.BORDER_NONE|wx.BORDER_NONE )
+        self.but_evt1b.SetBackgroundColour( wx.Colour( 248, 250, 252 ) )
+
+        optevt_sizer.Add( self.but_evt1b, 0, wx.LEFT, 24 )
+
         self.but_evt2 = wx.BitmapButton( self.m_panel1, wx.ID_ANY, wx.NullBitmap, wx.DefaultPosition, wx.DefaultSize, wx.BU_AUTODRAW|wx.BORDER_NONE|wx.BORDER_NONE )
         self.but_evt2.SetBackgroundColour( wx.Colour( 248, 250, 252 ) )
 
-        optevt_sizer.Add( self.but_evt2, 0, wx.RIGHT|wx.LEFT|wx.ALIGN_CENTER_VERTICAL, 36 )
+        optevt_sizer.Add( self.but_evt2, 0, wx.RIGHT|wx.LEFT|wx.ALIGN_CENTER_VERTICAL, 24 )
 
 
         bSizer6.Add( optevt_sizer, 0, wx.BOTTOM, 16 )

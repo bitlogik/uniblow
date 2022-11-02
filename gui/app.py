@@ -433,8 +433,10 @@ class UniblowApp(wx.App):
             wx.Bitmap(file_path("gui/images/btns/blankopt.png"), wx.BITMAP_TYPE_PNG)
         )
         self.gui_panel.but_evt1.SetCursor(wx.NullCursor)
+        self.gui_panel.but_evt1b.SetCursor(wx.NullCursor)
         self.gui_panel.but_evt2.Hide()
         self.gui_panel.but_evt1.Unbind(wx.EVT_BUTTON)
+        self.gui_panel.but_evt1b.Unbind(wx.EVT_BUTTON)
         self.gui_panel.but_evt2.Unbind(wx.EVT_BUTTON)
         self.gui_panel.Layout()
 
@@ -442,11 +444,16 @@ class UniblowApp(wx.App):
         self.gui_panel.but_evt1.SetBitmap(
             wx.Bitmap(file_path("gui/images/btns/tokens.png"), wx.BITMAP_TYPE_PNG)
         )
+        self.gui_panel.but_evt1b.SetBitmap(
+            wx.Bitmap(file_path("gui/images/btns/nfts.png"), wx.BITMAP_TYPE_PNG)
+        )
         self.gui_panel.but_evt2.SetBitmap(
             wx.Bitmap(file_path("gui/images/btns/wc.png"), wx.BITMAP_TYPE_PNG)
         )
+        self.gui_panel.but_evt1b.Show()
         self.gui_panel.but_evt2.Show()
         self.gui_panel.but_evt1.SetCursor(self.HAND_CURSOR)
+        self.gui_panel.but_evt1b.SetCursor(self.HAND_CURSOR)
         self.gui_panel.but_evt2.SetCursor(self.HAND_CURSOR)
         self.gui_panel.Layout()
 
@@ -676,7 +683,7 @@ class UniblowApp(wx.App):
     def add_wallet_types(self, wallets_types):
         self.gui_panel.wallopt_choice.Clear()
         for wtype in wallets_types:
-            if wtype not in ["ERC20", "WalletConnect"]:
+            if wtype not in ["ERC20", "WalletConnect", "NFT"]:
                 self.gui_panel.wallopt_choice.Append(wtype)
 
     def hd_setup(self, proposal):
@@ -826,10 +833,11 @@ class UniblowApp(wx.App):
             # Read the coin price
             # if not testnet
             if self.gui_panel.network_choice.GetSelection() == 0 or self.current_chain == "GLMR":
-                if hasattr(self.wallet, "eth") and self.wallet.eth.ERC20:
-                    PriceAPI(cb_fiat, self.wallet.eth.ERC20, self.current_chain)
-                else:
-                    PriceAPI(cb_fiat, self.wallet.coin)
+                if hasattr(self.wallet, "eth"):
+                    if self.wallet.eth.contract and self.wallet.eth.is_fungible:
+                        PriceAPI(cb_fiat, self.wallet.eth.contract, self.current_chain)
+                    if not self.wallet.eth.contract:
+                        PriceAPI(cb_fiat, self.wallet.coin)
         else:
             self.disable_send()
         if hasattr(self, "wallet") and hasattr(self.wallet, "wc_timer"):
@@ -875,16 +883,21 @@ class UniblowApp(wx.App):
 
     def token_started(self):
         self.gui_panel.but_evt1.Unbind(wx.EVT_BUTTON)
+        self.gui_panel.but_evt1b.Unbind(wx.EVT_BUTTON)
         self.gui_panel.but_evt1.SetBitmap(
             wx.Bitmap(file_path("gui/images/btns/quit.png"), wx.BITMAP_TYPE_PNG)
         )
+        self.gui_panel.but_evt1b.Disable()
         self.gui_panel.but_evt2.Disable()
         return self.gui_panel.but_evt1
 
     def wc_started(self):
         self.gui_panel.but_evt2.Unbind(wx.EVT_BUTTON)
+        self.gui_panel.but_evt1b.Unbind(wx.EVT_BUTTON)
         self.gui_panel.but_evt2.SetBitmap(
             wx.Bitmap(file_path("gui/images/btns/endwc.png"), wx.BITMAP_TYPE_PNG)
         )
         self.gui_panel.but_evt1.Disable()
+        self.gui_panel.but_evt1b.Disable()
+        self.gui_panel.but_evt1b.Hide()
         return self.gui_panel.but_evt2

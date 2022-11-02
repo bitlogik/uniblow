@@ -55,5 +55,5 @@ class FTM_wallet(ETH_wallet):
             self.chainID = 4002
             rpc_endpoint = "https://rpc.testnet.fantom.network/"
             self.explorer = "https://testnet.ftmscan.com//address/0x"
-        self.load_base(rpc_endpoint, device, contract_addr, wc_uri, confirm_callback)
+        self.load_base(rpc_endpoint, device, contract_addr, wc_uri, confirm_callback, wtype != 3)
         self.ledger_tokens = ledger_tokens

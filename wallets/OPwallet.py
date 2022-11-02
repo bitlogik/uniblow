@@ -55,5 +55,5 @@ class OP_wallet(ETH_wallet):
             self.chainID = 69
             rpc_endpoint = "https://kovan.optimism.io/"
             self.explorer = "https://kovan-optimistic.etherscan.io/address/0x"
-        self.load_base(rpc_endpoint, device, contract_addr, wc_uri, confirm_callback)
+        self.load_base(rpc_endpoint, device, contract_addr, wc_uri, confirm_callback, wtype != 3)
         self.ledger_tokens = {}

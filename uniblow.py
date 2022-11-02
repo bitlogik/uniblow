@@ -32,9 +32,11 @@ from sys import argv
 import wx
 import gui.app
 from gui.utils import file_path
+from gui.galleryapp import Gallery
 from devices.SeedWatcher import start_seedwatcher
 from devices.SingleKey import SKdevice
 from wallets.wallets_utils import InvalidOption, NotEnoughTokens
+from wallets.NFTwallet import NFTWallet
 from version import VERSION
 
 SUPPORTED_COINS = [
@@ -187,6 +189,9 @@ def cb_open_wallet(wallet_obj, pkey, waltype, sw_frame, pubkey_cpr):
         app.activate_option_buttons()
         app.gui_panel.but_evt1.Bind(
             wx.EVT_BUTTON, lambda x: process_coin_select(app.wallet.coin, 0, 1)
+        )
+        app.gui_panel.but_evt1b.Bind(
+            wx.EVT_BUTTON, lambda x: process_coin_select(app.wallet.coin, 0, 3)
         )
         app.gui_panel.but_evt2.Bind(
             wx.EVT_BUTTON, lambda x: process_coin_select(app.wallet.coin, 0, 2)
@@ -538,6 +543,7 @@ def set_coin(coin, network, wallet_type):
     app.gui_panel.txt_fiat.SetLabel("$ 0")
 
     app.gui_panel.but_evt1.Enable()
+    app.gui_panel.but_evt1b.Enable()
     app.gui_panel.but_evt2.Enable()
 
     # Detect is token or wallet connect
@@ -559,7 +565,14 @@ def set_coin(coin, network, wallet_type):
         if wallet_type == 2:
             btn = app.wc_started()
             btn.Bind(wx.EVT_BUTTON, lambda x: process_coin_select(coin, network, 0))
-
+        if wallet_type == 3:
+            # NFT
+            app.gui_panel.fiat_panel.Hide()
+            if hasattr(app.gui_panel, "fiat_price"):
+                del app.gui_panel.fiat_price
+            nft_wallet = NFTWallet(app.wallet)
+            Gallery(app.gui_frame, nft_wallet)
+            return
     app.gui_panel.fiat_panel.Hide()
     if hasattr(app.gui_panel, "fiat_price"):
         del app.gui_panel.fiat_price
@@ -610,6 +623,9 @@ def process_coin_select(coin, sel_network, sel_wallettype):
         app.activate_option_buttons()
         app.gui_panel.but_evt1.Bind(
             wx.EVT_BUTTON, lambda x: process_coin_select(coin, sel_network, 1)
+        )
+        app.gui_panel.but_evt1b.Bind(
+            wx.EVT_BUTTON, lambda x: process_coin_select(coin, sel_network, 3)
         )
         app.gui_panel.but_evt2.Bind(
             wx.EVT_BUTTON, lambda x: process_coin_select(coin, sel_network, 2)

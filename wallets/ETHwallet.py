@@ -110,44 +110,48 @@ def testaddr(eth_addr):
 
 
 class ETHwalletCore:
-    def __init__(self, pubkey, network, api, chainID, ERC20=None):
+    def __init__(self, pubkey, network, api, chainID, contract=None, is_fungible=True):
         self.pubkey = pubkey
+        self.is_fungible = is_fungible
         key_hash = sha3(self.pubkey[1:])
         self.address = format_checksum_address(key_hash.hex()[-40:])
-        self.ERC20 = ERC20
+        self.contract = contract
         self.api = api
         self.decimals = self.get_decimals()
         self.token_symbol = self.get_symbol()
         self.chainID = chainID
 
+    def call(self, method, data=""):
+        """eth_call to the current contract"""
+        return self.api.call(self.contract, method, data)
+
     def getbalance(self, native=True):
-        block_state = "latest"
         if native:
             # ETH native balance
-            return self.api.get_balance(f"0x{self.address}", block_state)
-        # ERC20 token balance
-        balraw = self.api.call(
-            self.ERC20,
-            BALANCEOF_FUNCTION,
-            f"000000000000000000000000{self.address}",
-            block_state,
-        )
+            return self.api.get_balance(f"0x{self.address}")
+        # Token balance
+        balraw = self.call(BALANCEOF_FUNCTION, f"000000000000000000000000{self.address}")
         if balraw == [] or balraw == "0x":
             return 0
         balance = int(balraw[2:], 16)
         return balance
 
     def get_decimals(self):
-        if self.ERC20:
-            balraw = self.api.call(self.ERC20, DECIMALS_FUNCTION)
-            if balraw == [] or balraw == "0x":
-                return 1
-            return int(balraw[2:], 16)
+        if self.contract:
+            if self.is_fungible:
+                # ERC20
+                balraw = self.call(DECIMALS_FUNCTION)
+                if balraw == [] or balraw == "0x":
+                    return 0
+                return int(balraw[2:], 16)
+            else:
+                # NFT
+                return 0
         return ETH_DECIMALS
 
     def get_symbol(self):
-        if self.ERC20:
-            balraw = self.api.call(self.ERC20, SYMBOL_FUNCTION)
+        if self.contract:
+            balraw = self.call(SYMBOL_FUNCTION)
             if balraw == [] or balraw == "0x":
                 return "---"
             return read_string(balraw)
@@ -161,7 +165,7 @@ class ETHwalletCore:
         toaddr in hex without 0x
         value in wei, gprice in Wei
         """
-        if self.ERC20:
+        if self.contract:
             maxspendable = self.getbalance(False)
             balance_eth = self.getbalance()
             if balance_eth < (gprice * glimit):
@@ -169,7 +173,7 @@ class ETHwalletCore:
         else:
             maxspendable = self.getbalance() - (gprice * glimit)
         if paymentvalue > maxspendable or paymentvalue < 0:
-            if self.ERC20:
+            if self.contract:
                 sym = self.token_symbol
             else:
                 sym = "native gas"
@@ -177,8 +181,8 @@ class ETHwalletCore:
         self.nonce = int2bytearray(self.getnonce())
         self.gasprice = int2bytearray(gprice)
         self.startgas = int2bytearray(glimit)
-        if self.ERC20:
-            self.to = bytearray.fromhex(self.ERC20[2:])
+        if self.contract:
+            self.to = bytearray.fromhex(self.contract[2:])
             self.value = int2bytearray(int(0))
             self.data = bytearray.fromhex(TRANSFERT_FUNCTION + "00" * 12 + toaddr) + uint256(
                 paymentvalue
@@ -293,7 +297,7 @@ class ETH_wallet:
         "Sepolia",
     ]
 
-    wtypes = ["Standard", "ERC20", "WalletConnect"]
+    wtypes = ["Standard", "ERC20", "WalletConnect", "NFT"]
 
     derive_paths = [
         # mainnet
@@ -316,7 +320,7 @@ class ETH_wallet:
     ]
 
     # ETH wallet type 1 and 2 have option
-    user_options = [1, 2]
+    user_options = [1, 2, 3]
     # self.__init__ ( option_name = "user input option" )
     options_data = [
         {
@@ -328,6 +332,10 @@ class ETH_wallet:
             "option_name": "wc_uri",
             "prompt": "WalletConnect URI link",
             "use_get_messages": True,
+        },
+        {
+            "option_name": "contract_addr",
+            "prompt": "ERC721 contract address",
         },
     ]
 
@@ -360,10 +368,10 @@ class ETH_wallet:
         else:
             rpc_endpoint = f"https://{self.network}.infura.io/v3/{INFURA_KEY}"
             self.explorer = f"https://{self.network}.etherscan.io/address/0x"
-        self.load_base(rpc_endpoint, device, contract_addr, wc_uri, confirm_callback)
+        self.load_base(rpc_endpoint, device, contract_addr, wc_uri, confirm_callback, wtype != 3)
         self.ledger_tokens = ledger_tokens
 
-    def load_base(self, rpc_endpoint, device, contract_addr, wc_uri, confirm_callback):
+    def load_base(self, rpc_endpoint, device, contract_addr, wc_uri, confirm_callback, fungible):
         """Finish initialization, second part common for all chains"""
         self.current_device = device
         self.confirm_callback = confirm_callback
@@ -386,6 +394,7 @@ class ETH_wallet:
             Web3Client(rpc_endpoint, "Uniblow/1"),
             self.chainID,
             contract_addr_str,
+            fungible,
         )
         if contract_addr_str is not None:
             self.coin = self.eth.token_symbol
@@ -513,7 +522,7 @@ class ETH_wallet:
     def get_balance(self):
         # Get balance in base integer unit and return string with unit
         return (
-            balance_string(self.eth.getbalance(not self.eth.ERC20), self.eth.decimals)[:20]
+            balance_string(self.eth.getbalance(not self.eth.contract), self.eth.decimals)[:20]
             + " "
             + self.coin
         )
@@ -525,7 +534,7 @@ class ETH_wallet:
     def history(self):
         # Get history page
         explorer_url = f"{self.explorer}{self.eth.address}"
-        if self.eth.ERC20:
+        if self.eth.contract:
             explorer_url += "#tokentxns"
         return explorer_url
 
@@ -537,15 +546,15 @@ class ETH_wallet:
             data = bytearray(b"")
         tx_bin, hash_to_sign = self.eth.prepare(account, amount, gazprice, ethgazlimit, data)
         if self.current_device.has_screen:
-            if self.eth.ERC20 and self.current_device.ledger_tokens_compat:
+            if self.eth.contract and self.current_device.ledger_tokens_compat:
                 # Token known by Ledger ?
-                ledger_info = self.ledger_tokens.get(self.eth.ERC20)
+                ledger_info = self.ledger_tokens.get(self.eth.contract)
                 if ledger_info:
                     # Known token : provide the trusted info to the device
                     name = ledger_info["ticker"]
                     data_sig = ledger_info["signature"]
                     self.current_device.register_token(
-                        name, self.eth.ERC20[2:], self.eth.decimals, self.chainID, data_sig
+                        name, self.eth.contract[2:], self.eth.decimals, self.chainID, data_sig
                     )
             vrs = self.current_device.sign(tx_bin)
             return self.eth.add_vrs(vrs)
@@ -654,7 +663,7 @@ class ETH_wallet:
 
     def transfer(self, amount, to_account, fee_priority):
         # Transfer x unit to an account, pay
-        if self.eth.ERC20:
+        if self.eth.contract:
             gazlimit = ETH_wallet.GAZ_LIMIT_ERC_20_TX
         else:
             gazlimit = ETH_wallet.GAZ_LIMIT_SIMPLE_TX
@@ -676,7 +685,7 @@ class ETH_wallet:
 
     def transfer_inclfee(self, amount, to_account, fee_priority):
         # Transfer the amount in base unit minus fee, like the receiver paying the fee
-        if self.eth.ERC20:
+        if self.eth.contract:
             gazlimit = ETH_wallet.GAZ_LIMIT_ERC_20_TX
         else:
             gazlimit = ETH_wallet.GAZ_LIMIT_SIMPLE_TX
@@ -691,7 +700,7 @@ class ETH_wallet:
             gaz_price = int(gaz_price * 1.6)
         else:
             Exception("fee_priority must be 0, 1 or 2 (slow, normal, fast)")
-        if self.eth.ERC20:
+        if self.eth.contract:
             fee = 0
         else:
             fee = int(gazlimit * gaz_price)
@@ -700,5 +709,5 @@ class ETH_wallet:
 
     def transfer_all(self, to_account, fee_priority):
         # Transfer all the wallet to an address (minus fee)
-        all_amount = self.eth.getbalance(not self.eth.ERC20)
+        all_amount = self.eth.getbalance(not self.eth.contract)
         return self.transfer_inclfee(all_amount, to_account, fee_priority)

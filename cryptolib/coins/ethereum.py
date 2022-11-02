@@ -71,3 +71,22 @@ def read_string(data_ans):
     str_len = read_uint256(data_bin, str_offset)
     str_offset += 32
     return data_bin[str_offset : str_offset + str_len].decode("utf8")
+
+
+def read_int_array(data_hex):
+    """Decode an int (uint256) array from ABI."""
+    data_bin = bytes.fromhex(data_hex[2:])
+    idx = 32
+    datasz = 32
+    if read_uint256(data_bin, 0) != datasz:
+        raise ValueError("Bad uint[] format.")
+    out = []
+    n_int = read_uint256(data_bin, idx)
+    if len(data_bin) != datasz * (n_int + 2):
+        raise ValueError("Bad ABI data.")
+    idx += datasz
+    while n_int > 0:
+        out.append(read_uint256(data_bin, idx))
+        n_int -= 1
+        idx += datasz
+    return out

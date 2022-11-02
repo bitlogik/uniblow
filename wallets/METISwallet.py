@@ -55,4 +55,4 @@ class METIS_wallet(ETH_wallet):
             self.chainID = 588
             rpc_endpoint = "https://stardust.metis.io/"
             self.explorer = "https://stardust-explorer.metis.io/address/0x"
-        self.load_base(rpc_endpoint, device, contract_addr, wc_uri, confirm_callback)
+        self.load_base(rpc_endpoint, device, contract_addr, wc_uri, confirm_callback, wtype != 3)
