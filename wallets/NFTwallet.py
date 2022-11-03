@@ -57,8 +57,7 @@ class NFTWallet:
 
         try:
             idsraw = self.wallet.eth.call(
-                WALLETOWNER_FUNCTION,
-                f"000000000000000000000000{self.wallet.eth.address}"
+                WALLETOWNER_FUNCTION, f"000000000000000000000000{self.wallet.eth.address}"
             )
             # table of indexes
             arr_idxs = read_int_array(idsraw)
@@ -69,8 +68,7 @@ class NFTWallet:
             for oidx in range(balance):
                 idxraw = self.wallet.eth.call(
                     TOKENSOWNER_FUNCTION,
-                    f"000000000000000000000000{self.wallet.eth.address}"
-                    f"{uint256(oidx).hex()}"
+                    f"000000000000000000000000{self.wallet.eth.address}" f"{uint256(oidx).hex()}",
                 )
                 idx = int(idxraw[2:], 16)
                 logger.debug("NFT #%i has id = %i", oidx, idx)

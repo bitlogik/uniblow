@@ -571,6 +571,7 @@ def set_coin(coin, network, wallet_type):
             if hasattr(app.gui_panel, "fiat_price"):
                 del app.gui_panel.fiat_price
             nft_wallet = NFTWallet(app.wallet)
+            app.gui_frame.Hide()
             Gallery(app.gui_frame, nft_wallet)
             return
     app.gui_panel.fiat_panel.Hide()
