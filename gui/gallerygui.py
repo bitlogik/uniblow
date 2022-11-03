@@ -37,6 +37,8 @@ class GalleryPanel ( wx.Panel ):
     def __init__( self, parent, id = wx.ID_ANY, pos = wx.DefaultPosition, size = wx.Size( 500,300 ), style = wx.TAB_TRAVERSAL, name = wx.EmptyString ):
         wx.Panel.__init__ ( self, parent, id = id, pos = pos, size = size, style = style, name = name )
 
+        self.SetBackgroundColour( wx.Colour( 248, 250, 252 ) )
+
         bSizer1 = wx.BoxSizer( wx.VERTICAL )
 
         self.collection_name = wx.StaticText( self, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, 0 )
