@@ -17,9 +17,10 @@ def opensea_url(chain_id, contract, id):
 
 
 class Gallery:
-    def __init__(self, parent_frame, wallet):
+    def __init__(self, parent_frame, wallet, cb_end):
         self.frame = GalleryFrame(parent_frame)
         self.panel = GalleryPanel(self.frame)
+        self.cb_end = cb_end
         top_sizer = self.panel.collection_name.GetParent().GetSizer()
         self.img_sizer = wx.FlexGridSizer(0, 4, 12, 12)
         top_sizer.Add(self.img_sizer, 0, wx.EXPAND | wx.TOP | wx.BOTTOM | wx.LEFT, 12)
@@ -32,6 +33,7 @@ class Gallery:
 
     def on_close(self, evt):
         self.frame.GetParent().Show()
+        self.cb_end(None)
         evt.Skip()
 
     def read_balance(self):
@@ -45,6 +47,8 @@ class Gallery:
         if self.bal > 0:
             id_list = self.nwallet.get_tokens_list(self.bal)
             wx.CallAfter(self.load_nft, id_list)
+        else:
+            self.panel.wait_text.SetLabel("")
 
     def load_image(self, nft_info, id_list):
         nft_info["image_data"] = get_image_file(nft_info["url"])

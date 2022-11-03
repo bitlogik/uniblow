@@ -559,12 +559,13 @@ def set_coin(coin, network, wallet_type):
         "ARB",
         "AVAX",
     ]:
+        call_return = lambda x: process_coin_select(coin, network, 0)
         if wallet_type == 1:
             btn = app.token_started()
-            btn.Bind(wx.EVT_BUTTON, lambda x: process_coin_select(coin, network, 0))
+            btn.Bind(wx.EVT_BUTTON, call_return)
         if wallet_type == 2:
             btn = app.wc_started()
-            btn.Bind(wx.EVT_BUTTON, lambda x: process_coin_select(coin, network, 0))
+            btn.Bind(wx.EVT_BUTTON, call_return)
         if wallet_type == 3:
             # NFT
             app.gui_panel.fiat_panel.Hide()
@@ -572,7 +573,7 @@ def set_coin(coin, network, wallet_type):
                 del app.gui_panel.fiat_price
             nft_wallet = NFTWallet(app.wallet)
             app.gui_frame.Hide()
-            Gallery(app.gui_frame, nft_wallet)
+            Gallery(app.gui_frame, nft_wallet, call_return)
             return
     app.gui_panel.fiat_panel.Hide()
     if hasattr(app.gui_panel, "fiat_price"):
