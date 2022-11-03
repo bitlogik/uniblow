@@ -1,9 +1,14 @@
+from logging import getLogger
 from threading import Thread
 import webbrowser
 import wx
 
+from wallets.ETHwallet import testaddr
 from wallets.NFTwallet import get_image_file
 from gui.gallerygui import GalleryFrame, GalleryPanel
+
+
+logger = getLogger(__name__)
 
 
 opensea_chains = {1: "ethereum", 137: "matic"}
@@ -93,7 +98,36 @@ class Gallery:
         webbrowser.open(url, 2)
 
     def send_nft(self, nft):
-        raise NotImplementedError()
+        # Ask the receiving address
+        dest_modal = wx.TextEntryDialog(
+            self.frame, "Input the destination address :", f"Send the NFT #{nft['id']}"
+        )
+        ret_mod = dest_modal.ShowModal()
+        if ret_mod != wx.ID_OK:
+            dest_modal.Destroy()
+            return
+        dest_addr = dest_modal.GetValue()
+        dest_modal.Destroy()
+        # Check address
+        if not testaddr(dest_addr):
+            wx.MessageDialog(self.frame, "Bad address format provided.").ShowModal()
+            return
+
+        # Confirm
+        conf_modal = wx.MessageDialog(
+            self.frame,
+            f"Confirm sending NFT #{nft['id']} to {dest_addr} ?",
+            style=wx.OK | wx.CENTRE | wx.CANCEL,
+        )
+        ret_conf = conf_modal.ShowModal()
+        dest_modal.Destroy()
+        if ret_conf != wx.ID_OK:
+            logger.debug("Cancelled by user")
+            return
+
+        # Transfer
+        txid = self.nwallet.wallet.transfer_nft(nft["id"], dest_addr)
+        wx.MessageDialog(self.frame, f"Transaction performed : {txid}").ShowModal()
 
     def add_image(self, nft_data):
         szr = wx.BoxSizer(wx.VERTICAL)

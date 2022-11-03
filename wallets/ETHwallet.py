@@ -49,7 +49,9 @@ DECIMALS_FUNCTION = "313ce567"
 #   symbol()
 SYMBOL_FUNCTION = "95d89b41"
 #   transfer(address,uint256)
-TRANSFERT_FUNCTION = "a9059cbb"
+TRANSFER_FUNCTION = "a9059cbb"
+#   safeTransferFrom(address,address,uint256)
+SAFETRANSFER_FUNCTION = "42842e0e"
 
 
 MESSAGE_HEADER = b"\x19Ethereum Signed Message:\n"
@@ -164,29 +166,45 @@ class ETHwalletCore:
         """Build a transaction to be signed.
         toaddr in hex without 0x
         value in wei, gprice in Wei
+        If NFT : paymentvalue is id
         """
         if self.contract:
             maxspendable = self.getbalance(False)
             balance_eth = self.getbalance()
             if balance_eth < (gprice * glimit):
-                raise NotEnoughTokens("Not enough native gas for the tx fee")
+                raise NotEnoughTokens("Not enough native gas for the tx fee.")
         else:
             maxspendable = self.getbalance() - (gprice * glimit)
-        if paymentvalue > maxspendable or paymentvalue < 0:
-            if self.contract:
-                sym = self.token_symbol
-            else:
-                sym = "native gas"
-            raise NotEnoughTokens(f"Not enough {sym} tokens for the tx")
+        if self.is_fungible:
+            if paymentvalue > maxspendable or paymentvalue < 0:
+                if self.contract:
+                    sym = self.token_symbol
+                else:
+                    sym = "native gas"
+                raise NotEnoughTokens(f"Not enough {sym} tokens for the tx.")
+        else:
+            # NFT
+            # For now, dont test whether the exact id is owned
+            if maxspendable < 1:
+                raise NotEnoughTokens(f"You have no NFT for the tx.")
         self.nonce = int2bytearray(self.getnonce())
         self.gasprice = int2bytearray(gprice)
         self.startgas = int2bytearray(glimit)
         if self.contract:
             self.to = bytearray.fromhex(self.contract[2:])
             self.value = int2bytearray(int(0))
-            self.data = bytearray.fromhex(TRANSFERT_FUNCTION + "00" * 12 + toaddr) + uint256(
-                paymentvalue
-            )
+            if self.is_fungible:
+                # ERC20
+                self.data = bytearray.fromhex(TRANSFER_FUNCTION + "00" * 12 + toaddr) + uint256(
+                    paymentvalue
+                )
+            else:
+                # NFT
+                self.data = (
+                    bytearray.fromhex(SAFETRANSFER_FUNCTION + "00" * 12 + self.address)
+                    + bytearray.fromhex("00" * 12 + toaddr)
+                    + uint256(paymentvalue)
+                )
         else:
             self.to = bytearray.fromhex(toaddr)
             self.value = int2bytearray(int(paymentvalue))
@@ -540,7 +558,8 @@ class ETH_wallet:
 
     def build_tx(self, amount, gazprice, ethgazlimit, account, data=None):
         """Build and sign a transaction.
-        Used to transfer tokens native or ERC20 with the given parameters.
+        Used to transfer tokens with the given parameters.
+        amount is id when NFT.
         """
         if data is None:
             data = bytearray(b"")
@@ -682,6 +701,16 @@ class ETH_wallet:
             shift_10(amount, self.eth.decimals), gaz_price, gazlimit, to_account
         )
         return "\nDONE, txID : " + self.broadcast_tx(tx_data)
+
+    def transfer_nft(self, id, to_account):
+        # SafeTransfer NFT id to an account
+        gazlimit = ETH_wallet.GAZ_LIMIT_ERC_20_TX * 2
+        if to_account.startswith("0x"):
+            to_account = to_account[2:]
+        gaz_price = self.eth.api.get_gasprice()  # wei per gaz unit
+        gaz_price = int(gaz_price * 1.2)
+        tx_data = self.build_tx(id, gaz_price, gazlimit, to_account)
+        return self.broadcast_tx(tx_data)
 
     def transfer_inclfee(self, amount, to_account, fee_priority):
         # Transfer the amount in base unit minus fee, like the receiver paying the fee
