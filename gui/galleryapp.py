@@ -38,6 +38,9 @@ def opensea_url(chain_id, contract, id):
 
 
 class Gallery:
+
+    img_width = 150
+
     def __init__(self, parent_frame, wallet, cb_end):
         self.frame = GalleryFrame(parent_frame)
         self.panel = GalleryPanel(self.frame)
@@ -72,7 +75,10 @@ class Gallery:
             self.panel.wait_text.SetLabel("")
 
     def load_image(self, nft_info, id_list):
-        nft_info["image_data"] = get_image_file(nft_info["url"])
+        try:
+            nft_info["image_data"] = get_image_file(nft_info["url"])
+        except Exception:
+            nft_info["image_data"] = None
         if self.panel:
             self.add_image(nft_info)
             wx.CallLater(80, self.load_nft, id_list)
@@ -80,7 +86,10 @@ class Gallery:
     def load_nft(self, id_list):
         if len(id_list) > 0:
             id = id_list.pop()
-            img_url = self.get_nft_image(id)
+            try:
+                img_url = self.get_nft_image(id)
+            except Exception:
+                img_url = None
             nft_info = {
                 "id": id,
                 "url": img_url,
@@ -88,7 +97,7 @@ class Gallery:
                 "contract": self.nwallet.wallet.eth.contract,
             }
             self.panel.wait_text.SetLabel(
-                "Loading data... Please wait... " f"{self.bal-len(id_list)}/{self.bal}"
+                f"Loading data... {self.bal-len(id_list)}/{self.bal} Please wait..."
             )
             Thread(target=self.load_image, args=(nft_info, id_list)).run()
         else:
@@ -150,17 +159,23 @@ class Gallery:
         if nft_data["image_data"] is not None:
             try:
                 img = wx.Image(nft_data["image_data"], type=wx.BITMAP_TYPE_ANY, index=-1)
+                imgh = img.GetHeight()
+                imgw = img.GetWidth()
+                scale_h = Gallery.img_width / imgh
+                scale_w = Gallery.img_width / imgw
+                scale = min(scale_h, scale_w)
                 if img.IsOk():
-                    img.Rescale(128, 128, wx.IMAGE_QUALITY_HIGH)
+                    img.Rescale(int(scale * imgw), int(scale * imgh), wx.IMAGE_QUALITY_HIGH)
                 else:
-                    img = wx.Image(1, 1)
+                    img = wx.Image(Gallery.img_width, Gallery.img_width)
             except Exception:
-                img = wx.Image(1, 1)
-
-            m_bitmap2 = wx.StaticBitmap(
-                self.panel, wx.ID_ANY, img.ConvertToBitmap(), wx.DefaultPosition, wx.DefaultSize, 0
-            )
-            szr.Add(m_bitmap2, 0, wx.ALL | wx.ALIGN_CENTER_HORIZONTAL, 5)
+                img = wx.Image(Gallery.img_width, Gallery.img_width)
+        else:
+            img = wx.Image(Gallery.img_width, Gallery.img_width)
+        m_bitmap2 = wx.StaticBitmap(
+            self.panel, wx.ID_ANY, img.ConvertToBitmap(), wx.DefaultPosition, wx.DefaultSize, 0
+        )
+        szr.Add(m_bitmap2, 0, wx.ALL | wx.ALIGN_CENTER_HORIZONTAL, 5)
 
         m_button4 = wx.Button(
             self.panel, wx.ID_ANY, "Details", wx.DefaultPosition, wx.DefaultSize, 0
