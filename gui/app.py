@@ -434,6 +434,7 @@ class UniblowApp(wx.App):
         )
         self.gui_panel.but_evt1.SetCursor(wx.NullCursor)
         self.gui_panel.but_evt1b.SetCursor(wx.NullCursor)
+        self.gui_panel.but_evt1b.Hide()
         self.gui_panel.but_evt2.Hide()
         self.gui_panel.but_evt1.Unbind(wx.EVT_BUTTON)
         self.gui_panel.but_evt1b.Unbind(wx.EVT_BUTTON)
