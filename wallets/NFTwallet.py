@@ -22,7 +22,9 @@ from json import load
 from cryptolib.coins.ethereum import read_int_array, read_string, uint256
 
 
-IPFS_GATEWAY = "https://cloudflare-ipfs.com/ipfs/"
+IPFS_GATEWAY = "https://dweb.link/ipfs/"
+USER_AGENT = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/99.0.4844.84 Safari/537.36"
+
 
 # walletOfOwner(address)
 WALLETOWNER_FUNCTION = "438b6300"
@@ -40,7 +42,8 @@ def get_data(url, retry=0):
         url = url.replace("ipfs://", IPFS_GATEWAY)
     logger.debug("Reading %s", url)
     try:
-        rfile = urllib.request.urlopen(url)
+        req = urllib.request.Request(url, headers={"User-Agent": USER_AGENT})
+        rfile = urllib.request.urlopen(req)
         return rfile
     except Exception as exc:
         # Retry
