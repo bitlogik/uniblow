@@ -30,7 +30,7 @@ from wallets.wallets_utils import (
     InvalidOption,
     NotEnoughTokens,
 )
-from wallets.ETHtokens import tokens_values, ledger_tokens
+from wallets.ETHtokens import tokens_values, nfts_values, ledger_tokens
 from wallets.typed_data_hash import typed_sign_hash, print_text_query
 
 
@@ -354,6 +354,7 @@ class ETH_wallet:
         {
             "option_name": "contract_addr",
             "prompt": "ERC721 contract address",
+            "preset": nfts_values,
         },
     ]
 
