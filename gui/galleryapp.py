@@ -47,8 +47,9 @@ class Gallery:
         self.cb_end = cb_end
         top_sizer = self.panel.collection_name.GetParent().GetSizer()
         self.img_sizer = wx.FlexGridSizer(0, 4, 12, 12)
+        self.symb = wallet.get_symbol()
         top_sizer.Add(self.img_sizer, 0, wx.EXPAND | wx.TOP | wx.BOTTOM | wx.LEFT, 12)
-        wx.CallAfter(self.panel.collection_name.SetLabel, f"{wallet.get_symbol()} NFT")
+        wx.CallAfter(self.panel.collection_name.SetLabel, f"{self.symb} NFT")
         self.nwallet = wallet
         self.panel.wait_text.SetLabel("Loading data... Please wait... ")
         self.frame.Show()
@@ -125,7 +126,7 @@ class Gallery:
     def send_nft(self, nft):
         # Ask the receiving address
         dest_modal = wx.TextEntryDialog(
-            self.frame, "Input the destination address :", f"Send the NFT #{nft['id']}"
+            self.frame, "Input the destination address :", f"Send the {self.symb} #{nft['id']}"
         )
         ret_mod = dest_modal.ShowModal()
         if ret_mod != wx.ID_OK:
@@ -141,7 +142,7 @@ class Gallery:
         # Confirm
         conf_modal = wx.MessageDialog(
             self.frame,
-            f"Confirm sending NFT #{nft['id']} to {dest_addr} ?",
+            f"Confirm sending {self.symb} NFT #{nft['id']} to {dest_addr} ?",
             style=wx.OK | wx.CENTRE | wx.CANCEL,
         )
         ret_conf = conf_modal.ShowModal()
