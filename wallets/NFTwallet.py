@@ -18,6 +18,7 @@ from io import BytesIO
 from logging import getLogger
 import urllib.request
 from json import load
+from time import sleep
 
 from cryptolib.coins.ethereum import read_int_array, read_string, uint256
 
@@ -50,6 +51,7 @@ def get_data(url, retry=0):
         if retry <= 4:
             logger.error("Error %s", str(exc))
             retry += 1
+            sleep(0.2)
             logger.debug("Retry #%i", retry)
             return get_data(url, retry)
         raise exc
