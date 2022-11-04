@@ -104,9 +104,13 @@ tokens_values = [
         "DENT (DENT)": "0x3597bfd533a99c9aa083587b074434e61eb0a258",
         "Gemini dollar (GUSD)": "0x056fd409e1d7a124bd7017459dfea2f387b6d5cd",
     },
-    # Rinkeby
+    # Kovan
     {},
-    # Ropsten
+    # Goerli
+    {},
+    # Sepolia
+    {},
+]
     {
         "Tether USD (USDT)": "0x0736d0c130b2ead47476cc262dbed90d7c4eeabd",
         "USDCircle (USDC)": "0x07865c6e87b9f70255377e024ace6630c1eaa37f",
@@ -115,6 +119,8 @@ tokens_values = [
     # Kovan
     {},
     # Goerli
+    {},
+    # Sepolia
     {},
 ]
 
