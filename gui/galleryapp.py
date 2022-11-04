@@ -27,7 +27,13 @@ from gui.gallerygui import GalleryFrame, GalleryPanel
 logger = getLogger(__name__)
 
 
-opensea_chains = {1: "ethereum", 137: "matic"}
+opensea_chains = {
+    1: "ethereum",
+    137: "matic",
+    42161: "arbitrum",
+    43114: "avalanche",
+    10: "optimism",
+}
 
 
 def opensea_url(chain_id, contract, id):
