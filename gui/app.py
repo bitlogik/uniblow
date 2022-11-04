@@ -673,7 +673,7 @@ class UniblowApp(wx.App):
         option_panel.SetTitle(f"Wallet settings : {input_value} selection")
         option_panel.SetPresetLabel(f"preset {input_value}")
         option_panel.SetCustomLabel(f"Input a {input_value}")
-        if preset_values:
+        if preset_values and len(preset_values[network_id]) > 0:
             option_panel.SetPresetValues(preset_values[network_id])
         else:
             option_panel.HidePreset()
