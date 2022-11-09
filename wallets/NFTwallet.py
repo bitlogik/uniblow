@@ -48,7 +48,7 @@ def get_data(url, retry=0):
         return rfile
     except Exception as exc:
         # Retry
-        if retry <= 4:
+        if retry <= 3:
             logger.error("Error %s", str(exc))
             retry += 1
             sleep(0.2)
