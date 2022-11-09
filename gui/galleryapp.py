@@ -46,15 +46,20 @@ def opensea_url(chain_id, contract, id):
 class Gallery:
 
     img_width = 150
+    img_border = 16
+    n_cols = 4
+    min_height = 280
+    max_height = 920
 
     def __init__(self, parent_frame, wallet, cb_end):
         self.frame = GalleryFrame(parent_frame)
         self.panel = GalleryPanel(self.frame)
         self.cb_end = cb_end
-        top_sizer = self.panel.collection_name.GetParent().GetSizer()
-        self.img_sizer = wx.FlexGridSizer(0, 4, 12, 12)
         self.symb = wallet.get_symbol()
-        top_sizer.Add(self.img_sizer, 0, wx.EXPAND | wx.TOP | wx.BOTTOM | wx.LEFT, 12)
+        self.img_sizer = wx.FlexGridSizer(0, Gallery.n_cols, Gallery.img_border, Gallery.img_border)
+        self.img_sizer.SetFlexibleDirection(wx.BOTH)
+        self.img_sizer.SetNonFlexibleGrowMode(wx.FLEX_GROWMODE_SPECIFIED)
+        self.panel.scrwin.SetSizer(self.img_sizer, False)
         wx.CallAfter(self.panel.collection_name.SetLabel, f"{self.symb} NFT")
         self.nwallet = wallet
         self.panel.wait_text.SetLabel("Loading data... Please wait... ")
@@ -69,7 +74,7 @@ class Gallery:
 
     def read_balance(self):
         self.bal = self.nwallet.get_balance()
-        self.update_balance(self.bal)
+        self.update_balance()
         self.panel.Layout()
         self.panel.Refresh()
         wx.CallLater(100, self.load_nft_list)
@@ -111,8 +116,8 @@ class Gallery:
             self.panel.wait_text.SetLabel("")
             wx.CallLater(500, self.resize_window)
 
-    def update_balance(self, bal):
-        self.panel.balance_text.SetLabel(f"You have {bal} item{'s' if bal >= 2 else ''}")
+    def update_balance(self):
+        self.panel.balance_text.SetLabel(f"You have {self.bal} item{'s' if self.bal >= 2 else ''}")
 
     def get_nft_image(self, id):
         metadata = self.nwallet.get_metadata(id)
@@ -122,9 +127,24 @@ class Gallery:
         return image_url
 
     def resize_window(self):
-        top_sizer = self.panel.collection_name.GetParent().GetSizer()
-        top_sizer.Fit(self.frame)
+        wn = self.bal
+        if wn < 2:
+            wn = 2
+        if wn > Gallery.n_cols:
+            wn = Gallery.n_cols
+        hn = self.bal // Gallery.n_cols + 1
+        wunit = Gallery.img_width + 2 * Gallery.img_border
+        wsz = wunit * wn + wx.SYS_VSCROLL_X
+        hsz = wunit * hn + 220
+        if hsz < Gallery.min_height:
+            hsz = Gallery.min_height
+        if hsz > Gallery.max_height:
+            hsz = Gallery.max_height
+        self.frame.SetSize(wsz, hsz)
+        self.panel.scrwin.Layout()
         self.panel.Layout()
+        self.panel.Refresh()
+        self.frame.Refresh()
 
     def open_url(self, url):
         webbrowser.open(url, 2)
@@ -179,25 +199,32 @@ class Gallery:
                 img = wx.Image(Gallery.img_width, Gallery.img_width)
         else:
             img = wx.Image(Gallery.img_width, Gallery.img_width)
-        m_bitmap2 = wx.StaticBitmap(
-            self.panel, wx.ID_ANY, img.ConvertToBitmap(), wx.DefaultPosition, wx.DefaultSize, 0
+        bmp = wx.StaticBitmap(
+            self.panel.scrwin,
+            wx.ID_ANY,
+            img.ConvertToBitmap(),
+            wx.DefaultPosition,
+            wx.DefaultSize,
+            0,
         )
-        szr.Add(m_bitmap2, 0, wx.ALL | wx.ALIGN_CENTER_HORIZONTAL, 5)
+        szr.Add(bmp, 0, wx.ALL | wx.ALIGN_CENTER_HORIZONTAL, 5)
 
-        m_button4 = wx.Button(
-            self.panel, wx.ID_ANY, "Details", wx.DefaultPosition, wx.DefaultSize, 0
+        info_btn = wx.Button(
+            self.panel.scrwin, wx.ID_ANY, "Details", wx.DefaultPosition, wx.DefaultSize, 0
         )
-        m_button4.SetCursor(wx.Cursor(wx.CURSOR_HAND))
-        szr.Add(m_button4, 0, wx.ALL | wx.ALIGN_CENTER_HORIZONTAL, 5)
+        info_btn.SetCursor(wx.Cursor(wx.CURSOR_HAND))
+        szr.Add(info_btn, 0, wx.ALL | wx.ALIGN_CENTER_HORIZONTAL, 5)
         url_osea = opensea_url(nft_data["chain"], nft_data["contract"], nft_data["id"])
         if url_osea:
-            m_button4.Bind(wx.EVT_BUTTON, lambda x: self.open_url(url_osea))
+            info_btn.Bind(wx.EVT_BUTTON, lambda x: self.open_url(url_osea))
         else:
-            m_button4.Disable()
-        m_button1 = wx.Button(self.panel, wx.ID_ANY, "Send", wx.DefaultPosition, wx.DefaultSize, 0)
-        m_button1.SetCursor(wx.Cursor(wx.CURSOR_HAND))
-        szr.Add(m_button1, 0, wx.ALL | wx.ALIGN_CENTER_HORIZONTAL, 5)
-        m_button1.Bind(wx.EVT_BUTTON, lambda x: self.send_nft(nft_data))
+            info_btn.Disable()
+        send_btn = wx.Button(
+            self.panel.scrwin, wx.ID_ANY, "Send", wx.DefaultPosition, wx.DefaultSize, 0
+        )
+        send_btn.SetCursor(wx.Cursor(wx.CURSOR_HAND))
+        szr.Add(send_btn, 0, wx.ALL | wx.ALIGN_CENTER_HORIZONTAL, 5)
+        send_btn.Bind(wx.EVT_BUTTON, lambda x: self.send_nft(nft_data))
 
         if self.panel:
             self.img_sizer.Add(szr, 1, wx.EXPAND, 5)

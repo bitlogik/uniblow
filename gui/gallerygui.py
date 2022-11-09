@@ -62,6 +62,10 @@ class GalleryPanel ( wx.Panel ):
 
         bSizer1.Add( self.wait_text, 0, wx.ALIGN_CENTER_HORIZONTAL, 5 )
 
+        self.scrwin = wx.ScrolledWindow( self, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.HSCROLL|wx.VSCROLL )
+        self.scrwin.SetScrollRate( 5, 5 )
+        bSizer1.Add( self.scrwin, 1, wx.EXPAND |wx.ALL, 5 )
+
 
         self.SetSizer( bSizer1 )
         self.Layout()
