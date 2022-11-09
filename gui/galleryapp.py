@@ -73,6 +73,7 @@ class Gallery:
         evt.Skip()
 
     def read_balance(self):
+        """Start filling the Gallery content."""
         self.bal = self.nwallet.get_balance()
         self.update_balance()
         self.panel.Layout()
@@ -87,6 +88,7 @@ class Gallery:
             self.panel.wait_text.SetLabel("")
 
     def load_image(self, nft_info, id_list):
+        """Get image of a NFT."""
         try:
             nft_info["image_data"] = get_image_file(nft_info["url"])
         except Exception:
@@ -96,6 +98,7 @@ class Gallery:
             wx.CallLater(80, self.load_nft, id_list)
 
     def load_nft(self, id_list):
+        """Load the NFT list info."""
         if len(id_list) > 0:
             id = id_list.pop()
             try:
@@ -117,9 +120,11 @@ class Gallery:
             wx.CallLater(500, self.resize_window)
 
     def update_balance(self):
+        """Display the balance in UI."""
         self.panel.balance_text.SetLabel(f"You have {self.bal} item{'s' if self.bal >= 2 else ''}")
 
     def get_nft_image(self, id):
+        """Get metadata and the image URL of a NFT."""
         metadata = self.nwallet.get_metadata(id)
         image_url = ""
         if metadata is not None:
@@ -182,6 +187,7 @@ class Gallery:
         wx.MessageDialog(self.frame, f"Transaction performed : {txid}").ShowModal()
 
     def add_image(self, nft_data):
+        """Add a NFT in the gallery UI."""
         szr = wx.BoxSizer(wx.VERTICAL)
         if nft_data["image_data"] is not None:
             try:

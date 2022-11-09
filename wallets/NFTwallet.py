@@ -62,11 +62,13 @@ def get_image_file(url):
 
 
 class NFTWallet:
+    """Wallet for ERC721."""
+
     def __init__(self, wallet):
         self.wallet = wallet
 
     def get_balance(self):
-        """balanceOf"""
+        """Call balanceOf( address )"""
         return self.wallet.eth.getbalance(False)
 
     def get_symbol(self):
@@ -100,7 +102,7 @@ class NFTWallet:
         return arr_idxs
 
     def get_metadata(self, id):
-        # tokenURI( TokenID )
+        """Call tokenURI( TokenID )"""
         balraw = self.wallet.eth.call(TOKENURI_FUNCTION, uint256(id).hex())
         metadata_url = read_string(balraw)
         metadata = {}
