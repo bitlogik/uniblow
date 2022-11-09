@@ -21,6 +21,7 @@ import wx
 
 from wallets.ETHwallet import testaddr
 from wallets.NFTwallet import get_image_file
+from gui.utils import icon_file
 from gui.gallerygui import GalleryFrame, GalleryPanel
 
 
@@ -53,6 +54,8 @@ class Gallery:
 
     def __init__(self, parent_frame, wallet, cb_end):
         self.frame = GalleryFrame(parent_frame)
+        wicon = wx.IconBundle(icon_file)
+        self.frame.SetIcons(wicon)
         self.panel = GalleryPanel(self.frame)
         self.cb_end = cb_end
         self.symb = wallet.get_symbol()
