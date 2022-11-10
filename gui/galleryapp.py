@@ -21,7 +21,7 @@ import wx
 
 from wallets.ETHwallet import testaddr
 from wallets.NFTwallet import get_image_file
-from gui.utils import icon_file
+from gui.utils import icon_file, file_path
 from gui.gallerygui import GalleryFrame, GalleryPanel
 
 
@@ -46,11 +46,11 @@ def opensea_url(chain_id, contract, id):
 
 class Gallery:
 
-    img_width = 150
-    img_border = 16
+    img_width = 178
+    img_border = 20
     n_cols = 4
-    min_height = 280
-    max_height = 920
+    min_height = 310
+    max_height = 950
 
     def __init__(self, parent_frame, wallet, cb_end):
         self.frame = GalleryFrame(parent_frame)
@@ -143,7 +143,7 @@ class Gallery:
         hn = self.bal // Gallery.n_cols + 1
         wunit = Gallery.img_width + 2 * Gallery.img_border
         wsz = wunit * wn + wx.SYS_VSCROLL_X
-        hsz = wunit * hn + 220
+        hsz = wunit * hn + 250
         if hsz < Gallery.min_height:
             hsz = Gallery.min_height
         if hsz > Gallery.max_height:
@@ -203,11 +203,11 @@ class Gallery:
                 if img.IsOk():
                     img.Rescale(int(scale * imgw), int(scale * imgh), wx.IMAGE_QUALITY_HIGH)
                 else:
-                    img = wx.Image(Gallery.img_width, Gallery.img_width)
+                    img = wx.Image(file_path(f"gui/images/nonft.png"))
             except Exception:
-                img = wx.Image(Gallery.img_width, Gallery.img_width)
+                img = wx.Image(file_path(f"gui/images/nonft.png"))
         else:
-            img = wx.Image(Gallery.img_width, Gallery.img_width)
+            img = wx.Image(file_path(f"gui/images/nonft.png"))
         bmp = wx.StaticBitmap(
             self.panel.scrwin,
             wx.ID_ANY,
@@ -217,22 +217,37 @@ class Gallery:
             0,
         )
         szr.Add(bmp, 0, wx.ALL | wx.ALIGN_CENTER_HORIZONTAL, 5)
-
-        info_btn = wx.Button(
-            self.panel.scrwin, wx.ID_ANY, "Details", wx.DefaultPosition, wx.DefaultSize, 0
+        szr_btn = wx.BoxSizer(wx.HORIZONTAL)
+        img = wx.Image(file_path(f"gui/images/btns/nftinfo.png"), wx.BITMAP_TYPE_PNG)
+        info_btn = wx.BitmapButton(
+            self.panel.scrwin,
+            wx.ID_ANY,
+            img.ConvertToBitmap(),
+            wx.DefaultPosition,
+            wx.DefaultSize,
+            wx.BU_AUTODRAW | wx.BORDER_NONE,
         )
+        info_btn.SetBackgroundColour(wx.Colour(248, 250, 252))
         info_btn.SetCursor(wx.Cursor(wx.CURSOR_HAND))
-        szr.Add(info_btn, 0, wx.ALL | wx.ALIGN_CENTER_HORIZONTAL, 5)
+        szr_btn.Add(info_btn, 0, wx.TOP | wx.BOTTOM, 12)
         url_osea = opensea_url(nft_data["chain"], nft_data["contract"], nft_data["id"])
         if url_osea:
             info_btn.Bind(wx.EVT_BUTTON, lambda x: self.open_url(url_osea))
         else:
             info_btn.Disable()
-        send_btn = wx.Button(
-            self.panel.scrwin, wx.ID_ANY, "Send", wx.DefaultPosition, wx.DefaultSize, 0
+        img = wx.Image(file_path(f"gui/images/btns/sendnft.png"), wx.BITMAP_TYPE_PNG)
+        send_btn = wx.BitmapButton(
+            self.panel.scrwin,
+            wx.ID_ANY,
+            img.ConvertToBitmap(),
+            wx.DefaultPosition,
+            wx.DefaultSize,
+            wx.BU_AUTODRAW | wx.BORDER_NONE,
         )
+        send_btn.SetBackgroundColour(wx.Colour(248, 250, 252))
         send_btn.SetCursor(wx.Cursor(wx.CURSOR_HAND))
-        szr.Add(send_btn, 0, wx.ALL | wx.ALIGN_CENTER_HORIZONTAL, 5)
+        szr_btn.Add(send_btn, 0, wx.TOP | wx.BOTTOM, 12)
+        szr.Add(szr_btn, 0, wx.ALL | wx.ALIGN_CENTER_HORIZONTAL, 0)
         send_btn.Bind(wx.EVT_BUTTON, lambda x: self.send_nft(nft_data))
 
         if self.panel:
