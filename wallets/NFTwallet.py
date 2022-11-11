@@ -58,7 +58,10 @@ def get_data(url, retry=0):
 
 
 def get_image_file(url):
-    return BytesIO(get_data(url).read())
+    data = get_data(url).read()
+    if len(data) == 0:
+        return None
+    return BytesIO(data)
 
 
 class NFTWallet:
