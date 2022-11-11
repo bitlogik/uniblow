@@ -145,7 +145,7 @@ class Gallery:
         wsz = wunit * wn
         if wn > Gallery.n_cols:
             wsz += wx.SYS_VSCROLL_X
-        hsz = wunit * hn + 250
+        hsz = wunit * hn + 280
         if hsz < Gallery.min_height:
             hsz = Gallery.min_height
         if hsz > Gallery.max_height:
