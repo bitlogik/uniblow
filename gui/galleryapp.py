@@ -232,7 +232,7 @@ class Gallery:
         szr_btn.Add(info_btn, 0, wx.TOP | wx.BOTTOM, 12)
         url_osea = opensea_url(nft_data["chain"], nft_data["contract"], nft_data["id"])
         if url_osea:
-            info_btn.Bind(wx.EVT_BUTTON, lambda x: self.open_url(url_osea))
+            info_btn.Bind(wx.EVT_BUTTON, lambda _: self.open_url(url_osea))
         else:
             info_btn.Disable()
         img = wx.Image(file_path(f"gui/images/btns/sendnft.png"), wx.BITMAP_TYPE_PNG)
@@ -248,7 +248,7 @@ class Gallery:
         send_btn.SetCursor(wx.Cursor(wx.CURSOR_HAND))
         szr_btn.Add(send_btn, 0, wx.TOP | wx.BOTTOM, 12)
         szr.Add(szr_btn, 0, wx.ALL | wx.ALIGN_CENTER_HORIZONTAL, 0)
-        send_btn.Bind(wx.EVT_BUTTON, lambda x: self.send_nft(nft_data))
+        send_btn.Bind(wx.EVT_BUTTON, lambda _: self.send_nft(nft_data))
 
         if self.panel:
             self.img_sizer.Add(szr, 1, wx.EXPAND, 5)
