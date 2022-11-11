@@ -231,6 +231,7 @@ class Gallery:
         )
         info_btn.SetBackgroundColour(wx.Colour(248, 250, 252))
         info_btn.SetCursor(wx.Cursor(wx.CURSOR_HAND))
+        info_btn.SetToolTip(f"About the {self.symb} #{nft_data['id']}")
         szr_btn.Add(info_btn, 0, wx.TOP | wx.BOTTOM, 12)
         url_osea = opensea_url(nft_data["chain"], nft_data["contract"], nft_data["id"])
         if url_osea:
