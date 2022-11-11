@@ -41,19 +41,33 @@ class GalleryPanel ( wx.Panel ):
 
         bSizer1 = wx.BoxSizer( wx.VERTICAL )
 
+        bSizer2 = wx.BoxSizer( wx.HORIZONTAL )
+
+
+        bSizer2.Add( ( 0, 0), 0, wx.LEFT, 24 )
+
         self.collection_name = wx.StaticText( self, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, 0 )
         self.collection_name.Wrap( -1 )
 
-        self.collection_name.SetFont( wx.Font( 14, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, False, wx.EmptyString ) )
+        self.collection_name.SetFont( wx.Font( 14, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_BOLD, False, wx.EmptyString ) )
 
-        bSizer1.Add( self.collection_name, 0, wx.ALIGN_CENTER_HORIZONTAL|wx.TOP|wx.BOTTOM, 12 )
+        bSizer2.Add( self.collection_name, 0, wx.ALIGN_BOTTOM|wx.TOP, 12 )
+
+
+        bSizer2.Add( ( 0, 0), 1, wx.EXPAND, 8 )
 
         self.balance_text = wx.StaticText( self, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, 0 )
         self.balance_text.Wrap( -1 )
 
         self.balance_text.SetFont( wx.Font( 11, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, False, wx.EmptyString ) )
 
-        bSizer1.Add( self.balance_text, 0, wx.ALL|wx.ALIGN_CENTER_HORIZONTAL, 5 )
+        bSizer2.Add( self.balance_text, 0, wx.ALIGN_BOTTOM|wx.TOP|wx.RIGHT|wx.LEFT, 5 )
+
+
+        bSizer2.Add( ( 0, 0), 0, wx.LEFT, 32 )
+
+
+        bSizer1.Add( bSizer2, 0, wx.ALL|wx.EXPAND, 24 )
 
         self.wait_text = wx.StaticText( self, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, 0 )
         self.wait_text.Wrap( -1 )

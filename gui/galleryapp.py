@@ -142,7 +142,9 @@ class Gallery:
             wn = Gallery.n_cols
         hn = self.bal // Gallery.n_cols + 1
         wunit = Gallery.img_width + 2 * Gallery.img_border
-        wsz = wunit * wn + wx.SYS_VSCROLL_X
+        wsz = wunit * wn
+        if wn > Gallery.n_cols:
+            wsz += wx.SYS_VSCROLL_X
         hsz = wunit * hn + 250
         if hsz < Gallery.min_height:
             hsz = Gallery.min_height
