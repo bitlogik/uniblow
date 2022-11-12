@@ -616,6 +616,7 @@ def process_coin_select(coin, sel_network, sel_wallettype):
             wx.EVT_BUTTON, lambda x: process_coin_select(coin, sel_network, 2)
         )
         app.gui_panel.wallopt_choice.Disable()
+        app.gui_panel.m_panel1.Layout()
     app.gui_panel.network_choice.Bind(wx.EVT_CHOICE, lambda x: net_selected(coin, x.GetInt()))
     app.gui_panel.wallopt_choice.Bind(wx.EVT_CHOICE, lambda x: wtype_selected(coin, x))
     set_coin(coin, sel_network, sel_wallettype)
