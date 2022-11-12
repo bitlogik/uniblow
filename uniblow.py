@@ -193,6 +193,8 @@ def cb_open_wallet(wallet_obj, pkey, waltype, sw_frame, pubkey_cpr):
     app.add_wallet_types(acc_types)
     app.gui_panel.network_choice.SetSelection(0)
     app.gui_panel.wallopt_choice.SetSelection(waltype)
+    if hasattr(app, "balance_timer"):
+        app.balance_timer.Stop()
     app.deactivate_option_buttons()
     app.current_chain = app.wallet.coin
     if app.wallet.coin in EVM_LIST:
@@ -536,6 +538,8 @@ def set_coin(coin, network, wallet_type):
         else:
             wallet_error(exc)
         return
+    if hasattr(app, "balance_timer"):
+        app.balance_timer.Stop()
     if not app.check_coin_consistency(network_num=network):
         return
     if app.gui_panel.network_choice.GetSelection() > 0 and app.current_chain != "GLMR":
@@ -581,8 +585,6 @@ def display_coin(account_addr):
     app.gui_panel.hist_button.Enable()
     app.gui_panel.balance_info.SetLabel(f"  ...  ")
     app.gui_panel.account_addr.Layout()
-    if hasattr(app, "balance_timer"):
-        app.balance_timer.Stop()
     app.balance_timer = DisplayTimer()
     app.balance_timer.Start(12000)
     if hasattr(app.wallet, "wc_timer"):
