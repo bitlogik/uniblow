@@ -63,5 +63,5 @@ class CELO_wallet(ETH_wallet):
             self.chainID = 62320
             rpc_endpoint = "https://baklava-forno.celo-testnet.org/"
             self.explorer = "https://baklava-blockscout.celo-testnet.org/address/0x"
-        self.load_base(rpc_endpoint, device, contract_addr, wc_uri, confirm_callback)
+        self.load_base(rpc_endpoint, device, contract_addr, wc_uri, confirm_callback, wtype != 3)
         self.ledger_tokens = ledger_tokens

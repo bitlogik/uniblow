@@ -124,6 +124,15 @@ tokens_values = [
     },
 ]
 
+
+nfts_values = [
+    # Mainnet
+    {},
+    # Testnet
+    {},
+]
+
+
 # From Ledger trusted tokens data
 # extracted on 2022-01-18
 # from https://github.com/LedgerHQ/ledgerjs/raw/master/packages/cryptoassets/data/polygon-erc20.js

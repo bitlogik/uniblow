@@ -65,4 +65,4 @@ class GLMR_wallet(ETH_wallet):
             self.chainID = 1287
             rpc_endpoint = "https://rpc.api.moonbase.moonbeam.network/"
             self.explorer = "https://moonbase.moonscan.io/address/0x"
-        self.load_base(rpc_endpoint, device, contract_addr, wc_uri, confirm_callback)
+        self.load_base(rpc_endpoint, device, contract_addr, wc_uri, confirm_callback, wtype != 3)

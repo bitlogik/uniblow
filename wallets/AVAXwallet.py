@@ -17,7 +17,7 @@
 
 from copy import deepcopy
 from wallets.ETHwallet import ETH_wallet
-from wallets.AVAXtokens import tokens_values, ledger_tokens
+from wallets.AVAXtokens import tokens_values, nfts_values, ledger_tokens
 
 
 class AVAX_wallet(ETH_wallet):
@@ -42,6 +42,7 @@ class AVAX_wallet(ETH_wallet):
 
     options_data = deepcopy(ETH_wallet.options_data)
     options_data[0]["preset"] = tokens_values
+    options_data[2]["preset"] = nfts_values
 
     def __init__(
         self, network, wtype, device, contract_addr=None, wc_uri=None, confirm_callback=None
@@ -55,5 +56,5 @@ class AVAX_wallet(ETH_wallet):
             self.chainID = 43113
             rpc_endpoint = "https://api.avax-test.network/ext/bc/C/rpc"
             self.explorer = "https://testnet.snowtrace.io/address/0x"
-        self.load_base(rpc_endpoint, device, contract_addr, wc_uri, confirm_callback)
+        self.load_base(rpc_endpoint, device, contract_addr, wc_uri, confirm_callback, wtype != 3)
         self.ledger_tokens = ledger_tokens

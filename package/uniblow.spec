@@ -74,6 +74,7 @@ datai = [
     ("../gui/images/btns/dev_openpgp.png", "gui/images/btns/"),
     ("../gui/images/btns/addrchk.png", "gui/images/btns/"),
     ("../gui/images/btns/tokens.png", "gui/images/btns/"),
+    ("../gui/images/btns/nfts.png", "gui/images/btns/"),
     ("../gui/images/btns/wc.png", "gui/images/btns/"),
     ("../gui/images/btns/endwc.png", "gui/images/btns/"),
 ]

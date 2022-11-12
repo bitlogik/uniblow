@@ -32,9 +32,11 @@ from sys import argv
 import wx
 import gui.app
 from gui.utils import file_path
+from gui.galleryapp import Gallery
 from devices.SeedWatcher import start_seedwatcher
 from devices.SingleKey import SKdevice
 from wallets.wallets_utils import InvalidOption, NotEnoughTokens
+from wallets.NFTwallet import NFTWallet
 from version import VERSION
 
 SUPPORTED_COINS = [
@@ -54,6 +56,27 @@ SUPPORTED_COINS = [
     "EOS",
     "XTZ",
     "SOL",
+]
+
+EVM_LIST = [
+    "ETH",
+    "BSC",
+    "MATIC",
+    "FTM",
+    "OP",
+    "METIS",
+    "CELO",
+    "GLMR",
+    "ARB",
+    "AVAX",
+]
+
+NFT_LIST = [
+    "ETH",
+    "MATIC",
+    "OP",
+    "ARB",
+    "AVAX",
 ]
 
 DEVICES_LIST = [
@@ -170,25 +193,22 @@ def cb_open_wallet(wallet_obj, pkey, waltype, sw_frame, pubkey_cpr):
     app.add_wallet_types(acc_types)
     app.gui_panel.network_choice.SetSelection(0)
     app.gui_panel.wallopt_choice.SetSelection(waltype)
+    if hasattr(app, "balance_timer"):
+        app.balance_timer.Stop()
     app.deactivate_option_buttons()
     app.current_chain = app.wallet.coin
-    if app.wallet.coin in [
-        "ETH",
-        "BSC",
-        "MATIC",
-        "FTM",
-        "OP",
-        "METIS",
-        "CELO",
-        "GLMR",
-        "ARB/ETH",
-        "AVAX",
-    ]:
+    if app.wallet.coin in EVM_LIST:
         app.activate_option_buttons()
-        app.gui_panel.but_evt1.Bind(
+        app.gui_panel.but_opt_tok.Bind(
             wx.EVT_BUTTON, lambda x: process_coin_select(app.wallet.coin, 0, 1)
         )
-        app.gui_panel.but_evt2.Bind(
+        if app.wallet.coin in NFT_LIST:
+            app.gui_panel.but_opt_nft.Bind(
+                wx.EVT_BUTTON, lambda x: process_coin_select(app.wallet.coin, 0, 3)
+            )
+        else:
+            app.gui_panel.but_opt_nft.Hide()
+        app.gui_panel.but_opt_wc.Bind(
             wx.EVT_BUTTON, lambda x: process_coin_select(app.wallet.coin, 0, 2)
         )
     app.gui_panel.network_choice.Bind(
@@ -225,18 +245,7 @@ def device_selected(sel_device):
     device_sel_name = DEVICES_LIST[sel_device]
     coins_list = ccopy(SUPPORTED_COINS)
     if device_sel_name == "Ledger":
-        coins_list = [
-            "ETH",
-            "BSC",
-            "MATIC",
-            "FTM",
-            "OP",
-            "METIS",
-            "CELO",
-            "GLMR",
-            "ARB",
-            "AVAX",
-        ]
+        coins_list = EVM_LIST
     if device_sel_name == "OpenPGP":
         coins_list.remove("SOL")
     if device_sel_name == "Cryptnox":
@@ -529,6 +538,8 @@ def set_coin(coin, network, wallet_type):
         else:
             wallet_error(exc)
         return
+    if hasattr(app, "balance_timer"):
+        app.balance_timer.Stop()
     if not app.check_coin_consistency(network_num=network):
         return
     if app.gui_panel.network_choice.GetSelection() > 0 and app.current_chain != "GLMR":
@@ -537,29 +548,28 @@ def set_coin(coin, network, wallet_type):
     app.gui_panel.scrolled_coins.Enable()
     app.gui_panel.txt_fiat.SetLabel("$ 0")
 
-    app.gui_panel.but_evt1.Enable()
-    app.gui_panel.but_evt2.Enable()
+    app.gui_panel.but_opt_tok.Enable()
+    app.gui_panel.but_opt_nft.Enable()
+    app.gui_panel.but_opt_wc.Enable()
 
     # Detect is token or wallet connect
-    if coin in [
-        "ETH",
-        "BSC",
-        "MATIC",
-        "FTM",
-        "OP",
-        "METIS",
-        "CELO",
-        "GLMR",
-        "ARB",
-        "AVAX",
-    ]:
+    if coin in EVM_LIST:
+        call_return = lambda x: process_coin_select(coin, network, 0)
         if wallet_type == 1:
             btn = app.token_started()
-            btn.Bind(wx.EVT_BUTTON, lambda x: process_coin_select(coin, network, 0))
+            btn.Bind(wx.EVT_BUTTON, call_return)
         if wallet_type == 2:
             btn = app.wc_started()
-            btn.Bind(wx.EVT_BUTTON, lambda x: process_coin_select(coin, network, 0))
-
+            btn.Bind(wx.EVT_BUTTON, call_return)
+        if wallet_type == 3:
+            # NFT
+            app.gui_panel.fiat_panel.Hide()
+            if hasattr(app.gui_panel, "fiat_price"):
+                del app.gui_panel.fiat_price
+            nft_wallet = NFTWallet(app.wallet)
+            app.gui_frame.Hide()
+            Gallery(app.gui_frame, nft_wallet, call_return)
+            return
     app.gui_panel.fiat_panel.Hide()
     if hasattr(app.gui_panel, "fiat_price"):
         del app.gui_panel.fiat_price
@@ -575,8 +585,6 @@ def display_coin(account_addr):
     app.gui_panel.hist_button.Enable()
     app.gui_panel.balance_info.SetLabel(f"  ...  ")
     app.gui_panel.account_addr.Layout()
-    if hasattr(app, "balance_timer"):
-        app.balance_timer.Stop()
     app.balance_timer = DisplayTimer()
     app.balance_timer.Start(12000)
     if hasattr(app.wallet, "wc_timer"):
@@ -595,26 +603,22 @@ def process_coin_select(coin, sel_network, sel_wallettype):
         app.gui_panel.wallopt_label.Enable()
     app.deactivate_option_buttons()
     app.gui_panel.btn_chkaddr.Disable()
-    if coin in [
-        "ETH",
-        "BSC",
-        "MATIC",
-        "FTM",
-        "OP",
-        "METIS",
-        "CELO",
-        "GLMR",
-        "ARB",
-        "AVAX",
-    ]:
+    if coin in EVM_LIST:
         app.activate_option_buttons()
-        app.gui_panel.but_evt1.Bind(
+        app.gui_panel.but_opt_tok.Bind(
             wx.EVT_BUTTON, lambda x: process_coin_select(coin, sel_network, 1)
         )
-        app.gui_panel.but_evt2.Bind(
+        if coin in NFT_LIST:
+            app.gui_panel.but_opt_nft.Bind(
+                wx.EVT_BUTTON, lambda x: process_coin_select(coin, sel_network, 3)
+            )
+        else:
+            app.gui_panel.but_opt_nft.Hide()
+        app.gui_panel.but_opt_wc.Bind(
             wx.EVT_BUTTON, lambda x: process_coin_select(coin, sel_network, 2)
         )
         app.gui_panel.wallopt_choice.Disable()
+        app.gui_panel.m_panel1.Layout()
     app.gui_panel.network_choice.Bind(wx.EVT_CHOICE, lambda x: net_selected(coin, x.GetInt()))
     app.gui_panel.wallopt_choice.Bind(wx.EVT_CHOICE, lambda x: wtype_selected(coin, x))
     set_coin(coin, sel_network, sel_wallettype)

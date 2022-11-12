@@ -55,5 +55,5 @@ class BSC_wallet(ETH_wallet):
             self.chainID = 97
             rpc_endpoint = "https://data-seed-prebsc-2-s2.binance.org:8545/"
             self.explorer = "https://testnet.bscscan.com/address/0x"
-        self.load_base(rpc_endpoint, device, contract_addr, wc_uri, confirm_callback)
+        self.load_base(rpc_endpoint, device, contract_addr, wc_uri, confirm_callback, wtype != 3)
         self.ledger_tokens = ledger_tokens

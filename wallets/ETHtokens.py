@@ -104,19 +104,76 @@ tokens_values = [
         "DENT (DENT)": "0x3597bfd533a99c9aa083587b074434e61eb0a258",
         "Gemini dollar (GUSD)": "0x056fd409e1d7a124bd7017459dfea2f387b6d5cd",
     },
-    # Rinkeby
+    # Kovan
     {},
-    # Ropsten
+    # Goerli
+    {},
+    # Sepolia
+    {},
+]
+
+
+nfts_values = [
+    # Mainnet
     {
-        "Tether USD (USDT)": "0x0736d0c130b2ead47476cc262dbed90d7c4eeabd",
-        "USDCircle (USDC)": "0x07865c6e87b9f70255377e024ace6630c1eaa37f",
-        "Dai Stablecoin (DAI)": "0xad6d458402f60fd3bd25163575031acdce07538d",
+        "CryptoPunks": "0xb47e3cd837ddf8e4c57f05d70ab865de6e193bbb",
+        "BoredApeYachtClub": "0xbc4ca0eda7647a8ab7c2061c2e118a18a936f13d",
+        "Zora": "0xabefbc9fd2f806065b4f3c237d4b59d9a97bcac7",
+        "OpenSea Shared Storefront": "0x495f947276749ce646f68ac8c248420045cb7b5e",
+        "Rarible": "0x60f80121c31a0d46b5279700f9df786054aa5ee5",
+        "MutantApeYachtClub": "0x60e4d786628fea6478f785a6d7e704777c86a7c6",
+        "Otherdeed": "0x34d85c9cdeb23fa97cb08333b511ac86e1c4e258",
+        "KnownOriginDigitalAsset": "0xfbeef911dc5821886e1dda71586d90ed28174b7d",
+        "Art Blocks": "0xa7d8d9ef8d8ce8992df33d8b8cf4aebabd5bd270",
+        "Uniswap V3 Positions NFT-V1": "0xc36442b4a4522e871399cd717abdd847ab11fe88",
+        "CloneX": "0x49cf6f5d44e70224e2e23fdcdd2c053f30ada28b",
+        "The Sandbox": "0x5cc5b05a8a13e3fbdb0bb9fccd98d38e50f90c38",
+        "Art Blocks": "0x059edd72cd353df5106d2b9cc5ab83a52287ac3a",
+        "Decentraland LAND": "0xf87e31492faf9a91b02ee0deaad50d51d56d5d4d",
+        "Azuki": "0xed5af388653567af2f388e6224dc7c4b3241c544",
+        "RTFKT - CloneX Mintvial": "0x348fc118bcc65a92dc033a951af153d14d945312",
+        "Estate": "0x959e104e1a4db6317fa58f8295f586e1a978c297",
+        "Moonbirds": "0x23581767a106ae21c074b2276d25e5c3e136a68b",
+        "Doodles": "0x8a90cab2b38dba80c64b7734e58ee1db38b8992e",
+        "Meebits": "0x7bd29408f11d2bfc23c34f18275bbf23bb716bc7",
+        "VeeFriends": "0xa3aee8bce55beea1951ef834b99f3ac60d1abeeb",
+        "Sweet Rubber Duck": "0x04c120dbaad6ae00bee7103d54c7d1878a152c36",
+        "BoredApeKennelClub": "0xba30e5f9bb24caa003e9f2f0497ad287fdf95623",
+        "Rarible": "0xd07dc4262bcdbf85190c01c996b4c06a461d2430",
+        "Space Doodles": "0x620b70123fb810f6c653da7644b5dd0b6312e4d8",
+        "PROOF Collective": "0x08d7c0242953446436f34b4c78fe9da38c73668d",
+        "Foundation": "0x3b3ee1931dc30c1957379fac9aba94d1c48a5405",
+        "MakersPlace": "0x2a46f2ffd99e19a89476e2f62270e0a35bbf0756",
+        "CryptoNinja Partners": "0x845a007d9f283614f403a24e3eb3455f720559ca",
+        "Cool Cats": "0x1a92f7381b9f03921564a437210bb9396471050c",
+        "RENGA Black Box": "0x64ad353bc90a04361c4810ae7b3701f3beb48d7e",
+        "Legendary Dancing Seahorse": "0x92342459caca0dadf2da27772b4945bd3e46c33d",
+        "Nouns": "0x9c8ff314c9bc7f6e59a9d9225fb22946427edc03",
+        "VeeFriends Series 2": "0x9378368ba6b85c1fba5b131b530f5f5bedf21a18",
+        "PudgyPenguins": "0xbd3531da5cf5857e7cfaa92426877b022e612cf8",
+        "CryptoKitties": "0x06012c8cf97bead5deae237070f9587f8e7a266d",
+        "DigiDaigaku": "0xd1258db6ac08eb0e625b75b371c023da478e94a9",
+        "FLUF": "0xccc441ac31f02cd96c153db6fd5fe0a2f4e6a68d",
+        "World Of Women": "0xe785e82358879f061bc3dcac6f0444462d4b5330",
+        "Art Gobblers": "0x60bb1e2aa1c9acafb4d34f71585d7e959f387769",
+        "Neo Tokyo Citizen": "0xb668beb1fa440f6cf2da0399f8c28cab993bdd65",
+        "Exosama - Expect Chaos": "0xac5c7493036de60e63eb81c5e9a440b42f47ebf5",
+        "Beanz": "0x306b1ea3ecdf94ab739f1910bbda052ed4a9f949",
+        "Wolf Game": "0x7f36182dee28c45de6072a34d29855bae76dbe2f",
+        "Murakami.Flowers": "0x7d8820fa92eb1584636f4f5b8515b5476b75171a",
+        "CyberKongz": "0x57a204aa1042f6e66dd7730813f4024114d74f37",
+        "Meta Bounty Hunters": "0xfc2068c3d47b575a60f6a4a7bf60dea0ac368e01",
+        "Wolf Game - Genesis Land": "0x2c88aa0956bc9813505d73575f653f69ada60923",
+        "Terraforms": "0x4e1f41613c9084fdb9e34e11fae9412427480e56",
     },
     # Kovan
     {},
     # Goerli
     {},
+    # Sepolia
+    {},
 ]
+
 
 # From Ledger trusted tokens data
 # extracted on 2022-01-18

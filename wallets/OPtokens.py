@@ -22,3 +22,11 @@ tokens_values = [
     # Testnet
     {},
 ]
+
+
+nfts_values = [
+    # Mainnet
+    {},
+    # Testnet
+    {},
+]

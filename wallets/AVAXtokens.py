@@ -96,4 +96,13 @@ tokens_values = [
     {},
 ]
 
+
+nfts_values = [
+    # Mainnet
+    {},
+    # Testnet
+    {},
+]
+
+
 ledger_tokens = {}
