@@ -33,6 +33,8 @@ WALLETOWNER_FUNCTION = "438b6300"
 TOKENURI_FUNCTION = "c87b56dd"
 # tokenOfOwnerByIndex(address,uint256)
 TOKENSOWNER_FUNCTION = "2f745c59"
+# tokenIdOf(address)
+TOKENID_FUNCTION = "773c02d4"
 
 
 logger = getLogger(__name__)
@@ -84,6 +86,14 @@ class NFTWallet:
         )
         return read_int_array(idsraw)
 
+    def get_id(self):
+        """Call tokenIdOf(address). Return the id."""
+        idxraw = self.wallet.eth.call(
+            TOKENID_FUNCTION,
+            f"000000000000000000000000{self.wallet.eth.address}",
+        )
+        return int(idxraw[2:], 16)
+
     def get_id_by_index(self, idx):
         """Call tokenOfOwnerByIndex(address,uint256). Return the id."""
         idxraw = self.wallet.eth.call(
@@ -101,7 +111,14 @@ class NFTWallet:
             arr_idxs = self.get_ids()
         except Exception:
             pass
-        
+
+        if balance == 1 and len(arr_idxs) == 0:
+            try:
+                # SBT one id per wallet
+                arr_idxs = [self.get_id()]
+            except Exception:
+                pass
+
         if balance > 0 and len(arr_idxs) == 0:
             # Enumerate wallet tokens index
             for oidx in range(balance):
