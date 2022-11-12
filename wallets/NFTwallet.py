@@ -44,14 +44,14 @@ def get_data(url, retry=0):
     logger.debug("Reading %s", url)
     try:
         req = urllib.request.Request(url, headers={"User-Agent": USER_AGENT})
-        rfile = urllib.request.urlopen(req)
+        rfile = urllib.request.urlopen(req, None, 18)
         return rfile
     except Exception as exc:
         # Retry
         if retry <= 3:
             logger.error("Error %s", str(exc))
             retry += 1
-            sleep(0.2)
+            sleep(0.5)
             logger.debug("Retry #%i", retry)
             return get_data(url, retry)
         raise exc
