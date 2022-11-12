@@ -58,22 +58,48 @@ class Gallery:
         self.frame.SetIcons(wicon)
         self.panel = GalleryPanel(self.frame)
         self.cb_end = cb_end
-        self.symb = wallet.get_symbol()
         self.img_sizer = wx.FlexGridSizer(0, Gallery.n_cols, Gallery.img_border, Gallery.img_border)
         self.img_sizer.SetFlexibleDirection(wx.BOTH)
         self.img_sizer.SetNonFlexibleGrowMode(wx.FLEX_GROWMODE_SPECIFIED)
         self.panel.scrwin.SetSizer(self.img_sizer, False)
-        wx.CallAfter(self.panel.collection_name.SetLabel, f"{self.symb} NFT")
-        self.nwallet = wallet
-        self.panel.wait_text.SetLabel("Loading data... Please wait... ")
-        self.frame.Show()
+        self.symb = wallet.get_symbol()
+        if self.symb == "---":
+            self.panel.wait_text.SetLabel("Bad blockchain, or incompatible contract.")
+            self.add_close_btn()
+        else:
+            wx.CallAfter(self.panel.collection_name.SetLabel, f"{self.symb} NFT")
+            self.nwallet = wallet
+            self.panel.wait_text.SetLabel("Loading data... Please wait... ")
+            wx.CallLater(500, Thread(target=self.read_balance).run)
         self.frame.Bind(wx.EVT_CLOSE, self.on_close)
-        wx.CallLater(500, Thread(target=self.read_balance).run)
+        self.frame.Show()
+
+    def close_frombtn(self, evt=None):
+        """Close the window, from close button"""
+        self.on_close(None)
+        self.frame.Close()
 
     def on_close(self, evt):
         self.frame.GetParent().Show()
         self.cb_end(None)
-        evt.Skip()
+        if evt is not None:
+            evt.Skip()
+
+    def add_close_btn(self):
+        """Add a close button in the frame."""
+        close_btn = wx.BitmapButton(
+            self.panel,
+            wx.ID_ANY,
+            wx.NullBitmap,
+            wx.DefaultPosition,
+            wx.DefaultSize,
+            wx.BU_AUTODRAW | 0 | wx.BORDER_NONE,
+        )
+        close_btn.SetBitmap(wx.Bitmap(file_path("gui/images/btns/close.png"), wx.BITMAP_TYPE_PNG))
+        self.panel.GetSizer().Add(close_btn, 0, wx.ALIGN_CENTER_HORIZONTAL | wx.BOTTOM, 32)
+        close_btn.SetCursor(wx.Cursor(wx.CURSOR_HAND))
+        close_btn.Bind(wx.EVT_BUTTON, self.close_frombtn)
+        self.panel.Layout()
 
     def read_balance(self):
         """Start filling the Gallery content."""
@@ -88,7 +114,10 @@ class Gallery:
             id_list = self.nwallet.get_tokens_list(self.bal)
             wx.CallAfter(self.load_nft, id_list)
         else:
-            self.panel.wait_text.SetLabel("")
+            self.panel.wait_text.SetLabel(
+                "No such NFT in this wallet.\nReceive NFT using the\nwallet address."
+            )
+            self.add_close_btn()
 
     def load_image(self, nft_info, id_list):
         """Get image of a NFT."""
