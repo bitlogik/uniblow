@@ -429,33 +429,33 @@ class UniblowApp(wx.App):
                 coinsbtn[pos].SetBackgroundColour(wx.Colour(248, 250, 252))
 
     def deactivate_option_buttons(self):
-        self.gui_panel.but_evt1.SetBitmap(
+        self.gui_panel.but_opt_tok.SetBitmap(
             wx.Bitmap(file_path("gui/images/btns/blankopt.png"), wx.BITMAP_TYPE_PNG)
         )
-        self.gui_panel.but_evt1.SetCursor(wx.NullCursor)
-        self.gui_panel.but_evt1b.SetCursor(wx.NullCursor)
-        self.gui_panel.but_evt1b.Hide()
-        self.gui_panel.but_evt2.Hide()
-        self.gui_panel.but_evt1.Unbind(wx.EVT_BUTTON)
-        self.gui_panel.but_evt1b.Unbind(wx.EVT_BUTTON)
-        self.gui_panel.but_evt2.Unbind(wx.EVT_BUTTON)
+        self.gui_panel.but_opt_tok.SetCursor(wx.NullCursor)
+        self.gui_panel.but_opt_nft.SetCursor(wx.NullCursor)
+        self.gui_panel.but_opt_nft.Hide()
+        self.gui_panel.but_opt_wc.Hide()
+        self.gui_panel.but_opt_tok.Unbind(wx.EVT_BUTTON)
+        self.gui_panel.but_opt_nft.Unbind(wx.EVT_BUTTON)
+        self.gui_panel.but_opt_wc.Unbind(wx.EVT_BUTTON)
         self.gui_panel.Layout()
 
     def activate_option_buttons(self):
-        self.gui_panel.but_evt1.SetBitmap(
+        self.gui_panel.but_opt_tok.SetBitmap(
             wx.Bitmap(file_path("gui/images/btns/tokens.png"), wx.BITMAP_TYPE_PNG)
         )
-        self.gui_panel.but_evt1b.SetBitmap(
+        self.gui_panel.but_opt_nft.SetBitmap(
             wx.Bitmap(file_path("gui/images/btns/nfts.png"), wx.BITMAP_TYPE_PNG)
         )
-        self.gui_panel.but_evt2.SetBitmap(
+        self.gui_panel.but_opt_wc.SetBitmap(
             wx.Bitmap(file_path("gui/images/btns/wc.png"), wx.BITMAP_TYPE_PNG)
         )
-        self.gui_panel.but_evt1b.Show()
-        self.gui_panel.but_evt2.Show()
-        self.gui_panel.but_evt1.SetCursor(self.HAND_CURSOR)
-        self.gui_panel.but_evt1b.SetCursor(self.HAND_CURSOR)
-        self.gui_panel.but_evt2.SetCursor(self.HAND_CURSOR)
+        self.gui_panel.but_opt_nft.Show()
+        self.gui_panel.but_opt_wc.Show()
+        self.gui_panel.but_opt_tok.SetCursor(self.HAND_CURSOR)
+        self.gui_panel.but_opt_nft.SetCursor(self.HAND_CURSOR)
+        self.gui_panel.but_opt_wc.SetCursor(self.HAND_CURSOR)
         self.gui_panel.Layout()
 
     def disable_send(self, msg=""):
@@ -883,22 +883,22 @@ class UniblowApp(wx.App):
         return True
 
     def token_started(self):
-        self.gui_panel.but_evt1.Unbind(wx.EVT_BUTTON)
-        self.gui_panel.but_evt1b.Unbind(wx.EVT_BUTTON)
-        self.gui_panel.but_evt1.SetBitmap(
+        self.gui_panel.but_opt_tok.Unbind(wx.EVT_BUTTON)
+        self.gui_panel.but_opt_nft.Unbind(wx.EVT_BUTTON)
+        self.gui_panel.but_opt_tok.SetBitmap(
             wx.Bitmap(file_path("gui/images/btns/quit.png"), wx.BITMAP_TYPE_PNG)
         )
-        self.gui_panel.but_evt1b.Disable()
-        self.gui_panel.but_evt2.Disable()
-        return self.gui_panel.but_evt1
+        self.gui_panel.but_opt_nft.Disable()
+        self.gui_panel.but_opt_wc.Disable()
+        return self.gui_panel.but_opt_tok
 
     def wc_started(self):
-        self.gui_panel.but_evt2.Unbind(wx.EVT_BUTTON)
-        self.gui_panel.but_evt1b.Unbind(wx.EVT_BUTTON)
-        self.gui_panel.but_evt2.SetBitmap(
+        self.gui_panel.but_opt_wc.Unbind(wx.EVT_BUTTON)
+        self.gui_panel.but_opt_nft.Unbind(wx.EVT_BUTTON)
+        self.gui_panel.but_opt_wc.SetBitmap(
             wx.Bitmap(file_path("gui/images/btns/endwc.png"), wx.BITMAP_TYPE_PNG)
         )
-        self.gui_panel.but_evt1.Disable()
-        self.gui_panel.but_evt1b.Disable()
-        self.gui_panel.but_evt1b.Hide()
-        return self.gui_panel.but_evt2
+        self.gui_panel.but_opt_tok.Disable()
+        self.gui_panel.but_opt_nft.Disable()
+        self.gui_panel.but_opt_nft.Hide()
+        return self.gui_panel.but_opt_wc

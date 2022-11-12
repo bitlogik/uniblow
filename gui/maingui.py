@@ -162,20 +162,20 @@ class WalletPanel ( wx.Panel ):
 
         optevt_sizer.Add( ( 0, 0), 1, wx.EXPAND|wx.LEFT, 45 )
 
-        self.but_evt1 = wx.BitmapButton( self.m_panel1, wx.ID_ANY, wx.NullBitmap, wx.DefaultPosition, wx.DefaultSize, wx.BU_AUTODRAW|wx.BORDER_NONE|wx.BORDER_NONE )
-        self.but_evt1.SetBackgroundColour( wx.Colour( 248, 250, 252 ) )
+        self.but_opt_tok = wx.BitmapButton( self.m_panel1, wx.ID_ANY, wx.NullBitmap, wx.DefaultPosition, wx.DefaultSize, wx.BU_AUTODRAW|wx.BORDER_NONE|wx.BORDER_NONE )
+        self.but_opt_tok.SetBackgroundColour( wx.Colour( 248, 250, 252 ) )
 
-        optevt_sizer.Add( self.but_evt1, 0, wx.ALIGN_CENTER_VERTICAL, 12 )
+        optevt_sizer.Add( self.but_opt_tok, 0, wx.ALIGN_CENTER_VERTICAL, 12 )
 
-        self.but_evt1b = wx.BitmapButton( self.m_panel1, wx.ID_ANY, wx.NullBitmap, wx.DefaultPosition, wx.DefaultSize, wx.BU_AUTODRAW|wx.BORDER_NONE|wx.BORDER_NONE )
-        self.but_evt1b.SetBackgroundColour( wx.Colour( 248, 250, 252 ) )
+        self.but_opt_nft = wx.BitmapButton( self.m_panel1, wx.ID_ANY, wx.NullBitmap, wx.DefaultPosition, wx.DefaultSize, wx.BU_AUTODRAW|wx.BORDER_NONE|wx.BORDER_NONE )
+        self.but_opt_nft.SetBackgroundColour( wx.Colour( 248, 250, 252 ) )
 
-        optevt_sizer.Add( self.but_evt1b, 0, wx.LEFT, 24 )
+        optevt_sizer.Add( self.but_opt_nft, 0, wx.LEFT, 24 )
 
-        self.but_evt2 = wx.BitmapButton( self.m_panel1, wx.ID_ANY, wx.NullBitmap, wx.DefaultPosition, wx.DefaultSize, wx.BU_AUTODRAW|wx.BORDER_NONE|wx.BORDER_NONE )
-        self.but_evt2.SetBackgroundColour( wx.Colour( 248, 250, 252 ) )
+        self.but_opt_wc = wx.BitmapButton( self.m_panel1, wx.ID_ANY, wx.NullBitmap, wx.DefaultPosition, wx.DefaultSize, wx.BU_AUTODRAW|wx.BORDER_NONE|wx.BORDER_NONE )
+        self.but_opt_wc.SetBackgroundColour( wx.Colour( 248, 250, 252 ) )
 
-        optevt_sizer.Add( self.but_evt2, 0, wx.RIGHT|wx.LEFT|wx.ALIGN_CENTER_VERTICAL, 24 )
+        optevt_sizer.Add( self.but_opt_wc, 0, wx.RIGHT|wx.LEFT|wx.ALIGN_CENTER_VERTICAL, 24 )
 
 
         bSizer6.Add( optevt_sizer, 0, wx.BOTTOM, 16 )

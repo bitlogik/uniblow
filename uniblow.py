@@ -197,16 +197,16 @@ def cb_open_wallet(wallet_obj, pkey, waltype, sw_frame, pubkey_cpr):
     app.current_chain = app.wallet.coin
     if app.wallet.coin in EVM_LIST:
         app.activate_option_buttons()
-        app.gui_panel.but_evt1.Bind(
+        app.gui_panel.but_opt_tok.Bind(
             wx.EVT_BUTTON, lambda x: process_coin_select(app.wallet.coin, 0, 1)
         )
         if app.wallet.coin in NFT_LIST:
-            app.gui_panel.but_evt1b.Bind(
+            app.gui_panel.but_opt_nft.Bind(
                 wx.EVT_BUTTON, lambda x: process_coin_select(app.wallet.coin, 0, 3)
             )
         else:
-            app.gui_panel.but_evt1b.Hide()
-        app.gui_panel.but_evt2.Bind(
+            app.gui_panel.but_opt_nft.Hide()
+        app.gui_panel.but_opt_wc.Bind(
             wx.EVT_BUTTON, lambda x: process_coin_select(app.wallet.coin, 0, 2)
         )
     app.gui_panel.network_choice.Bind(
@@ -544,9 +544,9 @@ def set_coin(coin, network, wallet_type):
     app.gui_panel.scrolled_coins.Enable()
     app.gui_panel.txt_fiat.SetLabel("$ 0")
 
-    app.gui_panel.but_evt1.Enable()
-    app.gui_panel.but_evt1b.Enable()
-    app.gui_panel.but_evt2.Enable()
+    app.gui_panel.but_opt_tok.Enable()
+    app.gui_panel.but_opt_nft.Enable()
+    app.gui_panel.but_opt_wc.Enable()
 
     # Detect is token or wallet connect
     if coin in EVM_LIST:
@@ -603,16 +603,16 @@ def process_coin_select(coin, sel_network, sel_wallettype):
     app.gui_panel.btn_chkaddr.Disable()
     if coin in EVM_LIST:
         app.activate_option_buttons()
-        app.gui_panel.but_evt1.Bind(
+        app.gui_panel.but_opt_tok.Bind(
             wx.EVT_BUTTON, lambda x: process_coin_select(coin, sel_network, 1)
         )
         if coin in NFT_LIST:
-            app.gui_panel.but_evt1b.Bind(
+            app.gui_panel.but_opt_nft.Bind(
                 wx.EVT_BUTTON, lambda x: process_coin_select(coin, sel_network, 3)
             )
         else:
-            app.gui_panel.but_evt1b.Hide()
-        app.gui_panel.but_evt2.Bind(
+            app.gui_panel.but_opt_nft.Hide()
+        app.gui_panel.but_opt_wc.Bind(
             wx.EVT_BUTTON, lambda x: process_coin_select(coin, sel_network, 2)
         )
         app.gui_panel.wallopt_choice.Disable()
