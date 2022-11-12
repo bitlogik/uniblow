@@ -64,7 +64,7 @@ class Gallery:
         self.panel.scrwin.SetSizer(self.img_sizer, False)
         self.symb = wallet.get_symbol()
         if self.symb == "---":
-            self.panel.wait_text.SetLabel("Bad blockchain, or incompatible contract.")
+            self.panel.wait_text.SetLabel("Wrong blockchain, or incompatible contract.")
             self.add_close_btn()
         else:
             wx.CallAfter(self.panel.collection_name.SetLabel, f"{self.symb} NFT")
