@@ -77,26 +77,35 @@ class NFTWallet:
     def get_symbol(self):
         return self.wallet.coin
 
+    def get_ids(self):
+        """Call walletOfOwner(address). Return id list."""
+        idsraw = self.wallet.eth.call(
+            WALLETOWNER_FUNCTION, f"000000000000000000000000{self.wallet.eth.address}"
+        )
+        return read_int_array(idsraw)
+
+    def get_id_by_index(self, idx):
+        """Call tokenOfOwnerByIndex(address,uint256). Return the id."""
+        idxraw = self.wallet.eth.call(
+            TOKENSOWNER_FUNCTION,
+            f"000000000000000000000000{self.wallet.eth.address}{uint256(idx).hex()}",
+        )
+        return int(idxraw[2:], 16)
+
     def get_tokens_list(self, balance):
 
         arr_idxs = []
 
         try:
-            idsraw = self.wallet.eth.call(
-                WALLETOWNER_FUNCTION, f"000000000000000000000000{self.wallet.eth.address}"
-            )
-            # table of indexes
-            arr_idxs = read_int_array(idsraw)
+            # Table of indexes
+            arr_idxs = self.get_ids()
         except Exception:
             pass
-
+        
         if balance > 0 and len(arr_idxs) == 0:
+            # Enumerate wallet tokens index
             for oidx in range(balance):
-                idxraw = self.wallet.eth.call(
-                    TOKENSOWNER_FUNCTION,
-                    f"000000000000000000000000{self.wallet.eth.address}" f"{uint256(oidx).hex()}",
-                )
-                idx = int(idxraw[2:], 16)
+                idx = self.get_id_by_index(oidx)
                 logger.debug("NFT #%i has id = %i", oidx, idx)
                 arr_idxs.append(idx)
 
