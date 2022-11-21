@@ -5,6 +5,7 @@ Uniblow versions history
 * Fix NFT text color for dark
 * RPC identifier to v2
 * Improve token contract address check
+* Catch errors during NFT transactions
 * Add missing images links
 * Update doc
 
