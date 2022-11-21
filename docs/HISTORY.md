@@ -1,5 +1,12 @@
 Uniblow versions history
 
+## 2.2.0
+
+* Add NFT ERC721 and SBT BAB
+* Update OP testnet
+* Improve balance thread management
+* Change internal derivation method BIP name
+
 ## 2.0.2
 
 * Tezos : Add Ghost and Kathmandu test networks

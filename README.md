@@ -48,7 +48,7 @@ Compatible with the following blockchains :
   
   - mainnet, Rinkeby, Ropsten, Kovan and Goerli networks
   
-  - ERC20 tokens
+  - ERC20 tokens, NFTs and SBTs
   
   - WalletConnect Dapps
 
@@ -64,7 +64,7 @@ Compatible with the following blockchains :
   
   - Mainnet and Mumbai networks
   
-  - ERC20 tokens
+  - ERC20 tokens, NFTs and SBTs
   
   - WalletConnect Dapps
 
@@ -80,7 +80,7 @@ Compatible with the following blockchains :
   
   - Mainnet and Testnet networks
   
-  - ERC20 tokens
+  - ERC20 tokens, NFTs and SBTs
   
   - WalletConnect Dapps
 
@@ -112,7 +112,7 @@ Compatible with the following blockchains :
   
   - Arbitrum mainnet
   
-  - ERC20 tokens
+  - ERC20 tokens, NFTs and SBTs
   
   - WalletConnect Dapps
 
@@ -120,7 +120,7 @@ Compatible with the following blockchains :
   
   - Mainnet and Fuji testnet networks
   
-  - ERC20 tokens
+  - ERC20 tokens, NFTs and SBTs
   
   - WalletConnect Dapps
 
@@ -351,9 +351,12 @@ Special wallet options
 
 ### ERC20
 
-In ETH, BSC, MATIC, FTM, OP, METIS, CELO, GLMR, MOVR, AVAX or ARB, you can choose the ERC20
-wallet account type option. Select a known preset token, or input an ERC20
+In ETH, BSC, MATIC, FTM, OP, METIS, CELO, GLMR, MOVR, AVAX or ARB, you can choose the ERC20 wallet account type option. Select a known preset token, or input an ERC20
 custom token address.
+
+### NFT
+
+Uniblow can display the NFT or SBT from the collection contract address. NFT ERC721 and SBT BAB are compatible on the networks : ETH, MATIC, OP, AVAX and ARB. You can select a known preset token, or input an NFT custom address.
 
 ### WalletConnect
 
