@@ -13,6 +13,8 @@ A **uni**versal **blo**ckchain **w**allet for cryptos
 
 - Tokens ERC20/BEP20
 
+- NFT ERC721 and BAB
+
 - WalletConnect
 
 - Multiple networks (testnets,...)
