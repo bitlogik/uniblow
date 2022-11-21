@@ -410,7 +410,7 @@ class ETH_wallet:
         self.eth = ETHwalletCore(
             pubkey,
             self.network,
-            Web3Client(rpc_endpoint, "Uniblow/1"),
+            Web3Client(rpc_endpoint, "Uniblow/2"),
             self.chainID,
             contract_addr_str,
             fungible,
