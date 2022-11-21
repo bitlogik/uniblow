@@ -75,6 +75,9 @@ datai = [
     ("../gui/images/btns/addrchk.png", "gui/images/btns/"),
     ("../gui/images/btns/tokens.png", "gui/images/btns/"),
     ("../gui/images/btns/nfts.png", "gui/images/btns/"),
+    ("../gui/images/btns/nftinfo.png", "gui/images/btns/"),
+    ("../gui/images/btns/sendnft.png", "gui/images/btns/"),
+    ("../gui/images/nonft.png", "gui/images/"),
     ("../gui/images/btns/wc.png", "gui/images/btns/"),
     ("../gui/images/btns/endwc.png", "gui/images/btns/"),
 ]
