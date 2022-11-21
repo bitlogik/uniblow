@@ -217,7 +217,11 @@ class Gallery:
             return
 
         # Transfer
-        txid = self.nwallet.wallet.transfer_nft(nft["id"], dest_addr)
+        try:
+            txid = self.nwallet.wallet.transfer_nft(nft["id"], dest_addr)
+        except Exception as exc:
+            wx.MessageDialog(self.frame, f"Error during NFT transaction : {str(exc)}").ShowModal()
+            return
         wx.MessageDialog(self.frame, f"Transaction performed : {txid}").ShowModal()
 
     def add_image(self, nft_data):
