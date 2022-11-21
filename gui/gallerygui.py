@@ -50,6 +50,7 @@ class GalleryPanel ( wx.Panel ):
         self.collection_name.Wrap( -1 )
 
         self.collection_name.SetFont( wx.Font( 14, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_BOLD, False, wx.EmptyString ) )
+        self.collection_name.SetForegroundColour( wx.Colour( 0, 0, 0 ) )
 
         bSizer2.Add( self.collection_name, 0, wx.ALIGN_BOTTOM|wx.TOP, 12 )
 
@@ -60,6 +61,7 @@ class GalleryPanel ( wx.Panel ):
         self.balance_text.Wrap( -1 )
 
         self.balance_text.SetFont( wx.Font( 11, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, False, wx.EmptyString ) )
+        self.balance_text.SetForegroundColour( wx.Colour( 0, 0, 0 ) )
 
         bSizer2.Add( self.balance_text, 0, wx.ALIGN_BOTTOM|wx.TOP|wx.RIGHT|wx.LEFT, 5 )
 
@@ -73,6 +75,7 @@ class GalleryPanel ( wx.Panel ):
         self.wait_text.Wrap( -1 )
 
         self.wait_text.SetFont( wx.Font( 12, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, False, wx.EmptyString ) )
+        self.wait_text.SetForegroundColour( wx.Colour( 0, 0, 0 ) )
 
         bSizer1.Add( self.wait_text, 0, wx.ALIGN_CENTER_HORIZONTAL, 5 )
 
