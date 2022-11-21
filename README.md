@@ -11,9 +11,9 @@ A **uni**versal **blo**ckchain **w**allet for cryptos
 
 - Multiple cryptos blockchains
 
-- Tokens ERC20/BEP20
+- Tokens ERC20
 
-- NFT ERC721 and BAB
+- NFT ERC721 and BAB SBT
 
 - WalletConnect
 
@@ -48,7 +48,7 @@ Compatible with the following blockchains :
 
 - ETH
   
-  - mainnet, Rinkeby, Ropsten, Kovan and Goerli networks
+  - mainnet, Kovan, Goerli and Sepolia networks
   
   - ERC20 tokens, NFTs and SBTs
   
@@ -136,7 +136,7 @@ Compatible with the following blockchains :
   
   - tz2 wallet
   
-  - Main Tezos, testnet Granada and Hangzhou networks
+  - Main Tezos, testnet Ghost and Kathmandu networks
 
 - LTC
   
@@ -353,7 +353,7 @@ Special wallet options
 
 ### ERC20
 
-In ETH, BSC, MATIC, FTM, OP, METIS, CELO, GLMR, MOVR, AVAX or ARB, you can choose the ERC20 wallet account type option. Select a known preset token, or input an ERC20
+In ETH, BSC, MATIC, FTM, OP, METIS, CELO, GLMR, MOVR, AVAX or ARB, you can enable the Tokens option. Select a known preset token, or input an ERC20
 custom token address.
 
 ### NFT
@@ -363,7 +363,7 @@ Uniblow can display the NFT or SBT from the collection contract address. NFT ERC
 ### WalletConnect
 
 In ETH, BSC, MATIC, FTM, OP, METIS, CELO, GLMR, MOVR, AVAX or ARB, Uniblow can connect to a Dapp
-using the WalletConnect system. Select WalletConnect in the wallet account type,
+using the WalletConnect system. Click on the WalletConnect option,
 input the wc URI and it will connect to the web3 app using WalletConnect.  
 Note that in this mode, Uniblow disables sending any transaction from the GUI.
 All the sending transactions have to be performed from the connected web app,

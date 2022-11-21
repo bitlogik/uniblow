@@ -1,5 +1,13 @@
 Uniblow versions history
 
+## 2.2.1
+
+* Fix NFT text color for dark
+* RPC identifier to v2
+* Improve token contract address check
+* Add missing images links
+* Update doc
+
 ## 2.2.0
 
 * Add NFT ERC721 and SBT BAB
