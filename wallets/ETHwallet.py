@@ -397,14 +397,13 @@ class ETH_wallet:
         pubkey = self.current_device.get_public_key()
 
         if contract_addr is not None:
-            if len(contract_addr) == 42 and "0x" == contract_addr[:2]:
-                contract_addr_str = contract_addr.lower()
-            elif len(contract_addr) == 40:
-                contract_addr_str = "0x" + contract_addr.lower()
-            else:
+            if not testaddr(contract_addr):
                 raise InvalidOption(
                     "Invalid contract address format :\nshould be 0x/40hex/ or /40hex/"
                 )
+            contract_addr_str = contract_addr.lower()
+            if len(contract_addr_str) == 40:
+                contract_addr_str = "0x" + contract_addr_str
         else:
             contract_addr_str = None
         self.eth = ETHwalletCore(
