@@ -24,7 +24,7 @@ A **uni**versal **blo**ckchain **w**allet for cryptos
 - Open source GPLv3
 
 Official web site : https://uniblow.org  
-(also https://uniblow.app)
+
 
 ![Uniblow screenshot](screenshot.png)
 
