@@ -840,6 +840,7 @@ class UniblowApp(wx.App):
                     if not self.wallet.eth.contract:
                         PriceAPI(cb_fiat, self.wallet.coin)
         else:
+            self.gui_panel.fiat_panel.Hide()
             self.disable_send()
         if hasattr(self, "wallet") and hasattr(self.wallet, "wc_timer"):
             # WalletConnect active
