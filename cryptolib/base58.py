@@ -22,10 +22,6 @@ BASE58 = 58
 b58chars = "123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz"
 
 
-# def hex_to_base58(hex_data):
-# return bin_to_base58(bytes.fromhex(int_data))
-
-
 def bin_to_base58(bin_data):
     base58 = ""
     int_data = int.from_bytes(bin_data, "big")
