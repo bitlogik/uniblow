@@ -85,6 +85,9 @@ class Gallery:
         if evt is not None:
             evt.Skip()
 
+    def show_message(self, err):
+        wx.MessageDialog(self.frame, err).ShowModal()
+
     def add_close_btn(self):
         """Add a close button in the frame."""
         close_btn = wx.BitmapButton(
@@ -103,7 +106,14 @@ class Gallery:
 
     def read_balance(self):
         """Start filling the Gallery content."""
-        self.bal = self.nwallet.get_balance()
+        try:
+            self.bal = self.nwallet.get_balance()
+        except Exception:
+            self.show_message(
+                "Error when reading the NFT balance.\nInternet connectivity issue, or incompatible contract type."
+            )
+            self.close_frombtn()
+            return
         self.update_balance()
         self.panel.Layout()
         self.panel.Refresh()
@@ -111,7 +121,14 @@ class Gallery:
 
     def load_nft_list(self):
         if self.bal > 0:
-            id_list = self.nwallet.get_tokens_list(self.bal)
+            try:
+                id_list = self.nwallet.get_tokens_list(self.bal)
+            except Exception:
+                self.show_message(
+                    "Error when reading the NFT list.\nInternet connectivity issue, or incompatible contract type."
+                )
+                self.close_frombtn()
+                return
             wx.CallAfter(self.load_nft, id_list)
         else:
             self.panel.wait_text.SetLabel(
@@ -201,7 +218,7 @@ class Gallery:
         dest_modal.Destroy()
         # Check address
         if not testaddr(dest_addr):
-            wx.MessageDialog(self.frame, "Bad address format provided.").ShowModal()
+            self.show_message("Bad address format provided.")
             return
 
         # Confirm
@@ -220,9 +237,9 @@ class Gallery:
         try:
             txid = self.nwallet.wallet.transfer_nft(nft["id"], dest_addr)
         except Exception as exc:
-            wx.MessageDialog(self.frame, f"Error during NFT transaction : {str(exc)}").ShowModal()
+            self.show_message(f"Error during NFT transaction : {str(exc)}")
             return
-        wx.MessageDialog(self.frame, f"Transaction performed : {txid}").ShowModal()
+        self.show_message(f"Transaction performed : {txid}")
 
     def add_image(self, nft_data):
         """Add a NFT in the gallery UI."""
