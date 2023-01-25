@@ -238,9 +238,9 @@ class Gallery:
         try:
             txid = self.nwallet.wallet.transfer_nft(nft["id"], dest_addr)
         except Exception as exc:
-            self.show_message(f"Error during NFT transaction : {str(exc)}")
+            self.show_message(f"Error during NFT transaction :\n{str(exc)}")
             return
-        self.show_message(f"Transaction performed : {txid}")
+        self.show_message(f"Transaction performed :\n{txid}")
 
     def add_image(self, nft_data):
         """Add a NFT in the gallery UI."""
