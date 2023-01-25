@@ -198,24 +198,26 @@ def cb_open_wallet(wallet_obj, pkey, waltype, sw_frame, pubkey_cpr):
         app.balance_timer.Stop()
     app.deactivate_option_buttons()
     app.current_chain = app.wallet.coin
-    if app.wallet.coin in EVM_LIST:
+    print(app.wallet.coin)
+    wallet_coin = "ARB" if app.wallet.coin == "ARB/ETH" else app.wallet.coin
+    if wallet_coin in EVM_LIST:
         app.activate_option_buttons()
         app.gui_panel.but_opt_tok.Bind(
-            wx.EVT_BUTTON, lambda x: process_coin_select(app.wallet.coin, 0, 1)
+            wx.EVT_BUTTON, lambda x: process_coin_select(wallet_coin, 0, 1)
         )
-        if app.wallet.coin in NFT_LIST:
+        if wallet_coin in NFT_LIST:
             app.gui_panel.but_opt_nft.Bind(
-                wx.EVT_BUTTON, lambda x: process_coin_select(app.wallet.coin, 0, 3)
+                wx.EVT_BUTTON, lambda x: process_coin_select(wallet_coin, 0, 3)
             )
         else:
             app.gui_panel.but_opt_nft.Hide()
         app.gui_panel.but_opt_wc.Bind(
-            wx.EVT_BUTTON, lambda x: process_coin_select(app.wallet.coin, 0, 2)
+            wx.EVT_BUTTON, lambda x: process_coin_select(wallet_coin, 0, 2)
         )
     app.gui_panel.network_choice.Bind(
-        wx.EVT_CHOICE, lambda x: net_selected(app.wallet.coin, x.GetInt())
+        wx.EVT_CHOICE, lambda x: net_selected(wallet_coin, x.GetInt())
     )
-    app.gui_panel.wallopt_choice.Bind(wx.EVT_CHOICE, lambda x: wtype_selected(app.wallet.coin, x))
+    app.gui_panel.wallopt_choice.Bind(wx.EVT_CHOICE, lambda x: wtype_selected(wallet_coin, x))
 
     coin_button = wx.BitmapButton(
         app.gui_panel.scrolled_coins,
@@ -225,7 +227,7 @@ def cb_open_wallet(wallet_obj, pkey, waltype, sw_frame, pubkey_cpr):
         wx.DefaultSize,
         wx.BU_AUTODRAW | wx.BORDER_NONE,
     )
-    chain_img = "arb" if app.wallet.coin == "ARB/ETH" else app.wallet.coin.lower()
+    chain_img = wallet_coin.lower()
     img = wx.Image(file_path(f"gui/images/icons/{chain_img}.png"), wx.BITMAP_TYPE_PNG)
     img.Rescale(48, 48, wx.IMAGE_QUALITY_BILINEAR)
     img.Resize(wx.Size(58, 56), wx.Point(5, 4), red=-1, green=-1, blue=-1)
