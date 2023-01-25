@@ -19,6 +19,7 @@ import json
 import urllib.parse
 import urllib.request
 import re
+import logging
 
 import cryptolib.coins
 from cryptolib.base58 import decode_base58
@@ -27,9 +28,12 @@ from cryptolib.cryptography import compress_pubkey
 from wallets.wallets_utils import balance_string, shift_10, NotEnoughTokens
 
 
-class sochain_api:
+logger = logging.getLogger(__name__)
+
+
+class blockcypher_api:
     def __init__(self, network):
-        self.url = "https://sochain.com/api/v2/"
+        self.url = "https://api.blockcypher.com/v1/ltc/main/"
         if network == "mainnet":
             self.coin = "LTC"
         elif network == "testnet":
@@ -41,9 +45,12 @@ class sochain_api:
     def getData(self, command, param, paramsurl={}, data=None):
         parameters = {key: value for key, value in paramsurl.items()}
         params_enc = urllib.parse.urlencode(parameters)
+        url = f"{self.url}{command}/{param}"
+        if params_enc:
+            url += f"?{params_enc}"
         try:
             req = urllib.request.Request(
-                f"{self.url}{command}/{self.coin}/{param}?{params_enc}",
+                url,
                 headers={"User-Agent": "Mozilla/5.0"},
                 data=data,
             )
@@ -58,36 +65,32 @@ class sochain_api:
         except urllib.error.URLError as e:
             raise IOError(e)
         except Exception:
-            raise IOError(
-                "Error while processing request:\n"
-                f"{self.url}{command}/{self.coin}/{param}?{params_enc}"
-            )
+            raise IOError("Error while processing request:\n" f"{url}")
 
     def checkapiresp(self):
-        if ("status" not in self.jsres) or self.jsres["status"] != "success":
-            print(" !! ERROR :")
+        if "errors" in self.jsres:
+            logger.error(" !! ERROR : %s", self.jsres["errors"])
             raise Exception("Error decoding the API endpoint")
 
     def getutxos(self, addr, nconf):  # nconf 0 or 1
-        # limited to 100 utxos
-        self.getData("get_tx_unspent", addr)
+        self.getData("addrs", addr, {"unspentOnly": "true", "confirmations": nconf, "limit": 2000})
         self.checkapiresp()
-        addrutxos = self.getKey("data/txs")
+        addrutxos = self.getKey("txrefs")
         selutxos = []
-        # translate inputs from sochain to pylitecoinlib
+        # translate inputs from blockcypher to pylitecoinlib
         for utxo in addrutxos:
             selutxos.append(
                 {
-                    "value": shift_10(utxo["value"], LTC_units),
-                    "output": utxo["txid"] + ":" + str(utxo["output_no"]),
+                    "value": utxo["value"],
+                    "output": utxo["tx_hash"] + ":" + str(utxo["tx_output_n"]),
                 }
             )
         return selutxos
 
     def pushtx(self, txhex):
-        self.getData("send_tx", "", data=b"tx_hex=" + txhex.encode("ascii"))
+        self.getData("txs", "push", data=f'{{"tx": "{txhex}"}}'.encode("ascii"))
         self.checkapiresp()
-        return self.getKey("data/txid")
+        return self.getKey("tx/hash")
 
     def getKey(self, keychar):
         out = self.jsres
@@ -97,12 +100,12 @@ class sochain_api:
                 key = int(key)
             try:
                 out = out[key]
-            except Exception:
+            except KeyError:
                 out = []
         return out
 
     def get_fee(self, priority):
-        return 1
+        return priority + 1
 
 
 def testaddr(ltc_addr, is_testnet):
@@ -291,7 +294,7 @@ class LTC_wallet:
         self.current_device = device
         pubkey = self.current_device.get_public_key()
         network_name = self.networks[network]
-        self.ltc = LTCwalletCore(pubkey, network_name, wtype, sochain_api(network_name))
+        self.ltc = LTCwalletCore(pubkey, network_name, wtype, blockcypher_api(network_name))
 
     @classmethod
     def get_networks(cls):
