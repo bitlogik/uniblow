@@ -15,7 +15,7 @@ A **uni**versal **blo**ckchain **w**allet for cryptos
 
 - NFT ERC721 and BAB SBT
 
-- WalletConnect
+- WalletConnect v1 and v2
 
 - Multiple networks (testnets,...)
 
@@ -58,7 +58,7 @@ Compatible with the following blockchains :
   
   - mainnet and testnet networks
   
-  - BEP20 tokens
+  - BEP20 tokens, NFTs and SBTs
   
   - WalletConnect Dapps
 
@@ -148,7 +148,7 @@ Compatible with the following blockchains :
 
 - DOGE
   
-  - mainnet and testnet networks
+  - mainnet networks
 
 - EOS
   
@@ -358,7 +358,7 @@ custom token address.
 
 ### NFT
 
-Uniblow can display the NFT or SBT from the collection contract address. NFT ERC721 and SBT BAB are compatible on the networks : ETH, MATIC, OP, AVAX and ARB. You can select a known preset token, or input an NFT custom address.
+Uniblow can display the NFT or SBT from the collection contract address. NFT ERC721 and SBT BAB are compatible on the networks : ETH, BSC, MATIC, OP, AVAX and ARB. You can select a known preset token, or input an NFT custom address.
 
 ### WalletConnect
 
