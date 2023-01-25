@@ -16,7 +16,7 @@ In Windows, you can easily [run the binaries provided](https://uniblow.org/get).
   
   - Install [Python3.9](https://www.python.org/ftp/python/3.9.13/python-3.9.13-amd64.exe),
   
-  - Then run `python -m pip install wxPython==4.1.1`
+  - Then run `python -m pip install wxPython==4.2.0`
 
 - Download the Uniblow source code
   

@@ -28,7 +28,7 @@ echo Preparing environment and dependencies
 %python_bin% -m venv unibenv
 %python_env% -m pip install -U pip
 %python_env% -m pip install wheel
-%python_env% -m pip install wxPython==4.1.1
+%python_env% -m pip install wxPython==4.2.0
 %python_env% setup.py install
 
 echo Getting PyInstaller source

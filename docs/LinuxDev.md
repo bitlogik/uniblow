@@ -30,7 +30,7 @@ sudo apt install -y git libnotify4 libgtk-3-0 libpcsclite1 libsdl2-2.0-0 python3
 #### Install required packages 
 ```
 python3 -m pip install -U pip < /dev/null
-python3 -m pip install https://extras.wxpython.org/wxPython4/extras/linux/gtk3/debian-10/wxPython-4.1.1-cp37-cp37m-linux_x86_64.whl < /dev/null
+python3 -m pip install https://extras.wxpython.org/wxPython4/extras/linux/gtk3/debian-10/wxPython-4.2.0-cp37-cp37m-linux_x86_64.whl < /dev/null
 python3 -m pip install -U pip setuptools-rust < /dev/null
 ```
 
@@ -86,20 +86,22 @@ sudo apt install -y git python3-venv python3-pip < /dev/null
 ```
 sudo apt install -y libsdl2-dev < /dev/null
 python3 -m pip install -U pip < /dev/null
-sudo pip3 install https://extras.wxpython.org/wxPython4/extras/linux/gtk3/ubuntu-20.04/wxPython-4.1.1-cp38-cp38-linux_x86_64.whl < /dev/null
+sudo pip3 install https://extras.wxpython.org/wxPython4/extras/linux/gtk3/ubuntu-20.04/wxPython-4.2.0-cp38-cp38-linux_x86_64.whl < /dev/null
 sudo apt install -y python3-pyscard < /dev/null
 ```
 
 
-The wxPython link has to be changed for the good one that fits your ditro. Check [here in the list](https://extras.wxpython.org/wxPython4/extras/linux/gtk3/) for your distro. Also some modern Ubuntu based distros can work with the *whl* in [the ubuntu-18.04 directory](https://extras.wxpython.org/wxPython4/extras/linux/gtk3/ubuntu-18.04/). Because there's no *cp39* package in ubuntu-20.04, but there is one in ubuntu-18.04.
+The wxPython link has to be changed for the good one that fits your ditro. Check [here in the list](https://extras.wxpython.org/wxPython4/extras/linux/gtk3/) for your distro.
 
-In practice, for Ubuntu from version 21.04 and later, [this whl for 18.04-cp39](https://extras.wxpython.org/wxPython4/extras/linux/gtk3/ubuntu-18.04/wxPython-4.1.1-cp39-cp39-linux_x86_64.whl) can be used instead of the 20.04 whl. The systemd package might be required to be installed for libsdl2.
+For 18.04 systems, [the whl for 18.04-cp36](https://extras.wxpython.org/wxPython4/extras/linux/gtk3/ubuntu-18.04/wxPython-4.1.1-cp36-cp36m-linux_x86_64.whl) has to be used.
 
-For 18.04 systems, [the whl for 18.04-cp36](https://extras.wxpython.org/wxPython4/extras/linux/gtk3/ubuntu-18.04/wxPython-4.1.1-cp36-cp36m-linux_x86_64.whl) has to be used instead of the 20.04 one for the wxPython wheel.
+For Ubuntu from version 20.04 and 21.04 [this whl for cp38](https://extras.wxpython.org/wxPython4/extras/linux/gtk3/ubuntu-20.04/wxPython-4.2.0-cp38-cp38-linux_x86_64.whl) can be used. The systemd package might be required to be installed for libsdl2. 3.9 for 21.04?
+
+For Ubuntu from version 22.04 [this whl for cp310](https://extras.wxpython.org/wxPython4/extras/linux/gtk3/ubuntu-22.04/wxPython-4.2.0-cp310-cp310-linux_x86_64.whl) can be used. The systemd package might be required to be installed for libsdl2.
 
 All the wxPython wheel binaries are provided for the AMD64 architecture. To run on any others CPU architecture, the wxPython has to be compiled from sources.
 
-In such cases, calling *pip3 install wxPython==4.1.1* will download the source archive and will attempt to build it for you. If you have the required compiler and dependent libraries installed, then this will be a feasible approach, although it can take some time to do the build. The end result will be the same as if there was a binary wheel available. Pip can also be told to just build the wheel and not do the install. This way you can reuse the wheel file for different Python environments or on other similar machines, without needing to rebuild for each one. [This web page](https://wxpython.org/blog/2017-08-17-builds-for-linux-with-pip/index.html) can help you in such process.
+In such cases, calling *pip3 install wxPython==4.2.0* will download the source archive and will attempt to build it for you. If you have the required compiler and dependent libraries installed, then this will be a feasible approach, although it can take some time to do the build. The end result will be the same as if there was a binary wheel available. Pip can also be told to just build the wheel and not do the install. This way you can reuse the wheel file for different Python environments or on other similar machines, without needing to rebuild for each one. [This web page](https://wxpython.org/blog/2017-08-17-builds-for-linux-with-pip/index.html) can help you in such process.
 
 #### Get the uniblow source
 ```
