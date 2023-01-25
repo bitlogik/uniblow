@@ -35,8 +35,6 @@ class blockcypher_api:
         self.url = "https://api.blockcypher.com/v1/doge/main/"
         if network == "mainnet":
             self.coin = "DOGE"
-        elif network == "testnet":
-            self.coin = "DOGETEST"
         else:
             raise Exception("Unknown DOGE network name")
         self.jsres = []
@@ -219,7 +217,6 @@ class DOGE_wallet:
 
     networks = [
         "mainnet",
-        "testnet",
     ]
 
     wtypes = [
