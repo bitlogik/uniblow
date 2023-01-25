@@ -74,6 +74,7 @@ EVM_LIST = [
 NFT_LIST = [
     "ETH",
     "MATIC",
+    "BSC",
     "OP",
     "ARB",
     "AVAX",

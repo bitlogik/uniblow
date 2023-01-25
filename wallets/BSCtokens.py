@@ -2037,3 +2037,10 @@ ledger_tokens = {
         "signature": "30450221009fb3b099e37b3d56ce14c7960aef5b216d5f72a7fdc1ab4210cc829cc4f102cd02204c078ad1029af9affbd64afb6f847f0bc7be48e6f9fe9cf18421225f9dd0eaf9",
     },
 }
+
+nfts_values = [
+    # Mainnet
+    {},
+    # Testnet
+    {},
+]

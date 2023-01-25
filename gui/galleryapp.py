@@ -34,6 +34,7 @@ opensea_chains = {
     42161: "arbitrum",
     43114: "avalanche",
     10: "optimism",
+    56: "bsc",
 }
 
 
