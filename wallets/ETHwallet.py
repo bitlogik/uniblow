@@ -419,6 +419,7 @@ class ETH_wallet:
         if wc_uri is not None:
             WCClient.set_wallet_metadata(WALLET_DESCR)
             WCClient.set_project_id(WALLETCONNECT_PROJID)
+            WCClient.set_origin("https://uniblow.org")
             try:
                 self.wc_client = WCClient.from_wc_uri(wc_uri)
                 req_id, req_chain_id, request_info = self.wc_client.open_session()
@@ -484,8 +485,8 @@ class ETH_wallet:
             logger.debug(
                 "WC request id: %s, method: %s, params: %s", id_request, method, parameters
             )
-            if method == "wc_sessionPayload":
-                # Read if WCv2 and extract to v1
+            if method == "wc_sessionRequest" or method == "wc_sessionPayload":
+                # Read if WCv2 and extract to v1 format
                 logger.debug("WCv2 request")
                 if parameters.get("request"):
                     logger.debug("request decoding")
@@ -500,6 +501,10 @@ class ETH_wallet:
                     raise Exception(
                         "Disconnected by the web app service.\n"
                         f"Reason : {parameters['reason']['message']}"
+                    )
+                if parameters.get("message"):
+                    raise Exception(
+                        "Disconnected by the web app service.\n" f"Reason : {parameters['message']}"
                     )
             elif method == "personal_sign" and len(parameters) > 1:
                 if compare_eth_addresses(parameters[1], self.get_account()):
