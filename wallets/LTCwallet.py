@@ -36,8 +36,6 @@ class blockcypher_api:
         self.url = "https://api.blockcypher.com/v1/ltc/main/"
         if network == "mainnet":
             self.coin = "LTC"
-        elif network == "testnet":
-            self.coin = "LTCTEST"
         else:
             raise Exception("Unknown LTC network name")
         self.jsres = []
@@ -268,7 +266,6 @@ class LTC_wallet:
 
     networks = [
         "mainnet",
-        "testnet",
     ]
 
     wtypes = [
