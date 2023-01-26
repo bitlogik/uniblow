@@ -75,12 +75,12 @@ class blockcypher_api:
         self.checkapiresp()
         addrutxos = self.getKey("txrefs")
         selutxos = []
-        # translate inputs from blockcypher to pylitecoinlib
+        # translate inputs from blockcypher to pybitcoinlib
         for utxo in addrutxos:
             selutxos.append(
                 {
                     "value": utxo["value"],
-                    "output": utxo["tx_hash"] + ":" + str(utxo["tx_output_n"]),
+                    "output": f'{utxo["tx_hash"]}:{utxo["tx_output_n"]}',
                 }
             )
         return selutxos
