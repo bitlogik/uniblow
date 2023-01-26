@@ -273,11 +273,7 @@ class DOGE_wallet:
 
     def history(self):
         # Get history page
-        if self.doge.testnet:
-            DOGE_EXPLORER_URL = f"https://sochain.com/address/DOGETEST/{self.doge.address}"
-        else:
-            DOGE_EXPLORER_URL = f"https://sochain.com/address/DOGE/{self.doge.address}"
-        return DOGE_EXPLORER_URL
+        return f"https://blockchair.com/dogecoin/address/{self.doge.address}"
 
     def raw_tx(self, amount, fee, to_account):
         hashes_to_sign = self.doge.prepare(to_account, amount, fee)

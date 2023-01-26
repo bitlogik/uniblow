@@ -326,11 +326,7 @@ class LTC_wallet:
 
     def history(self):
         # Get history page
-        if self.ltc.testnet:
-            LTC_EXPLORER_URL = f"https://sochain.com/address/LTCTEST/{self.ltc.address}"
-        else:
-            LTC_EXPLORER_URL = f"https://sochain.com/address/LTC/{self.ltc.address}"
-        return LTC_EXPLORER_URL
+        return f"https://blockchair.com/litecoin/address/{self.ltc.address}"
 
     def raw_tx(self, amount, fee, to_account):
         hashes_to_sign = self.ltc.prepare(to_account, amount, fee)
