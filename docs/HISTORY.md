@@ -1,5 +1,17 @@
 Uniblow versions history
 
+# 2.3.0
+
+* Enable WalletConnect v2 IRN
+* Add NFT for BSC
+* Remove DOGE and LTC testnet
+* Various fixes for ARB
+* Fix fiat balance not displayed back to 0
+* Change IPFS gateway
+* Improve NFT UX
+* Update wxPython to 4.2.0
+* Use BlockCypher API instead of SoChain for DOGE & LTC
+
 ## 2.2.1
 
 * Fix NFT text color for dark

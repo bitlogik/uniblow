@@ -140,7 +140,7 @@ Compatible with the following blockchains :
 
 - LTC
   
-  - mainnet and testnet networks
+  - mainnet network
   
   - Standard wallet (P2PKH)
   
