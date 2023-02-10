@@ -60,7 +60,7 @@ class RPC_api:
                 data = json.dumps(params).encode("utf-8")
             req = urllib.request.Request(
                 full_url,
-                headers={"User-Agent": "Uniblow/1", "Content-Type": "application/json"},
+                headers={"User-Agent": "Uniblow/2", "Content-Type": "application/json"},
                 data=data,
             )
             webrsp = urllib.request.urlopen(req, timeout=6)

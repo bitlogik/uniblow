@@ -99,7 +99,7 @@ class sol_api:
         try:
             req = urllib.request.Request(
                 self.url,
-                headers={"User-Agent": "Uniblow/1", "Content-Type": "application/json"},
+                headers={"User-Agent": "Uniblow/2", "Content-Type": "application/json"},
                 data=json.dumps(data).encode("utf-8"),
             )
             self.webrsc = urllib.request.urlopen(req)
