@@ -48,7 +48,7 @@ Compatible with the following blockchains :
 
 - ETH
   
-  - mainnet, Kovan, Goerli and Sepolia networks
+  - mainnet, Goerli and Sepolia networks
   
   - ERC20 tokens, NFTs and SBTs
   

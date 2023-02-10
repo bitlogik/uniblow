@@ -310,7 +310,6 @@ class ETH_wallet:
 
     networks = [
         "Mainnet",
-        "Kovan",
         "Goerli",
         "Sepolia",
     ]
@@ -323,12 +322,6 @@ class ETH_wallet:
             "m/44'/60'/{}'/0/{}",
         ],
         # testnets
-        [
-            "m/44'/1'/{}'/0/{}",
-        ],
-        [
-            "m/44'/1'/{}'/0/{}",
-        ],
         [
             "m/44'/1'/{}'/0/{}",
         ],
@@ -369,14 +362,12 @@ class ETH_wallet:
             self.chainID = 1
         if self.network == "goerli":
             self.chainID = 5
-        if self.network == "kovan":
-            self.chainID = 42
         if self.network == "sepolia":
             self.chainID = 11155111
         INFURA_KEY = "xxx"  # Put your Infura key here
         if INFURA_KEY == "xxx" and self.network != "mainnet" and self.network != "sepolia":
             raise Exception(
-                "To use Uniblow from source with Goerli or Kovan, bring your own Infura key."
+                "To use Uniblow from source with Goerli, bring your own Infura key."
             )
         if self.network == "mainnet":
             rpc_endpoint = "https://rpc.ankr.com/eth/"

@@ -104,8 +104,6 @@ tokens_values = [
         "DENT (DENT)": "0x3597bfd533a99c9aa083587b074434e61eb0a258",
         "Gemini dollar (GUSD)": "0x056fd409e1d7a124bd7017459dfea2f387b6d5cd",
     },
-    # Kovan
-    {},
     # Goerli
     {},
     # Sepolia
@@ -166,8 +164,6 @@ nfts_values = [
         "Wolf Game - Genesis Land": "0x2c88aa0956bc9813505d73575f653f69ada60923",
         "Terraforms": "0x4e1f41613c9084fdb9e34e11fae9412427480e56",
     },
-    # Kovan
-    {},
     # Goerli
     {},
     # Sepolia
