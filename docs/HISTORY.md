@@ -1,5 +1,12 @@
 Uniblow versions history
 
+# 2.3.1
+
+* Fix WCv2 : update pyWalletConnect dependency
+* Faster WC action modals
+* Clean EVM testnets
+* Report to SOL and XTZ API UA Uniblow2
+
 # 2.3.0
 
 * Enable WalletConnect v2 IRN
