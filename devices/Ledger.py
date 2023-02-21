@@ -36,6 +36,7 @@ INSTRUCTION_SIGNMESSAGE = 0x08
 INSTRUCTION_SIGN712 = 0x0C
 INSTRUCTION_SENDTOKENDATA = 0x0A
 MINIMUM_APP_VERSION = 0x010500
+MAX_DATA_SZ = 0xFF
 
 
 def unpack_vrs(vrsbin):
@@ -46,6 +47,16 @@ def unpack_vrs(vrsbin):
     r = int.from_bytes(vrsbin[1:33], "big")
     s = int.from_bytes(vrsbin[33:65], "big")
     return v, r, s
+
+
+def split_data(data):
+    """Helper to split data in frame chunks."""
+    # Also add length header - Lc
+    frames = []
+    for i in range(0, len(data), MAX_DATA_SZ):
+        frame_data = data[i : i + MAX_DATA_SZ]
+        frames.append(bytes([len(frame_data)]) + frame_data)
+    return frames
 
 
 class Ledger(BaseDevice):
@@ -174,11 +185,17 @@ class Ledger(BaseDevice):
         self.ledger_device.exchange(bytearray(apdu))
 
     def sign(self, transaction):
-        apdu = [LEDGER_CLASS, INSTRUCTION_SIGN, 0x00, 0x00, len(self.bin_path) + len(transaction)]
-        apdu.extend(self.bin_path)
-        apdu.extend(transaction)
+        data_frames = split_data(self.bin_path + transaction)
+        is_subsequent = False
         try:
-            vrs_bin = self.ledger_device.exchange(bytearray(apdu))
+            while len(data_frames) > 0:
+                apdu = bytearray([LEDGER_CLASS, INSTRUCTION_SIGN, 0x00, 0x00])
+                if is_subsequent:
+                    # Set P1 = 0x80 for subsequent message
+                    apdu[2] = 0x80
+                apdu.extend(data_frames.pop(0))
+                vrs_bin = self.ledger_device.exchange(bytearray(apdu))
+                is_subsequent = True
         except LedgerException as exc:
             if exc.sw == 0x6A80:
                 raise Exception(
@@ -191,14 +208,18 @@ class Ledger(BaseDevice):
 
     def sign_message(self, message):
         """Sign a personnal message, used when has_screen"""
-        msg_sz = len(message)
-        assert msg_sz < 225
-        apdu = [LEDGER_CLASS, INSTRUCTION_SIGNMESSAGE, 0x00, 0x00, len(self.bin_path) + msg_sz + 4]
-        apdu.extend(self.bin_path)
-        apdu.extend(BIP32node.ser32(msg_sz))
-        apdu.extend(message)
+        msg_sz = BIP32node.ser32(len(message))
+        data_frames = split_data(self.bin_path + msg_sz + message)
+        is_subsequent = False
         try:
-            vrs_bin = self.ledger_device.exchange(bytearray(apdu))
+            while len(data_frames) > 0:
+                apdu = bytearray([LEDGER_CLASS, INSTRUCTION_SIGNMESSAGE, 0x00, 0x00])
+                if is_subsequent:
+                    # Set P1 = 0x80 for subsequent message
+                    apdu[2] = 0x80
+                apdu.extend(data_frames.pop(0))
+                vrs_bin = self.ledger_device.exchange(apdu)
+                is_subsequent = True
         except LedgerException as exc:
             if exc.sw == 0x6985:
                 raise Exception("You rejected the message signature.")
