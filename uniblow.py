@@ -483,6 +483,7 @@ def wallet_error(exc, level="hard"):
     logger.error("Error in the wallet : %s", str(exc), exc_info=exc, stack_info=True)
     if level == "fromwatch":
         exc = str(exc) + "\nYou can reconnect by selecting the network option."
+        app.gui_panel.btn_chkaddr.Disable()
         app.deactivate_option_buttons()
     app.gui_panel.scrolled_coins.Enable()
     app.warn_modal(str(exc))
