@@ -679,6 +679,7 @@ def perform_transfer(to, amnt, fees, status_modal):
             stack_info=True,
         )
         if str(exc).endswith("disconnected."):
+            app.balance_timer.Stop()
             app.device_error(exc)
         elif str(exc) == "Error status : 0x6600":
             app.warn_modal("User button on PGP device timeout")
