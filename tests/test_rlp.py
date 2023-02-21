@@ -47,6 +47,59 @@ def test_rlp_list():
     assert check_rlp([0] * 1024) == "f90400" + 1024 * "80"
 
 
+def test_practical_encoding():
+    # Not EIP155 but good practical RLP test
+    tx1 = [
+        487,
+        0x2E90EDD000,
+        0x030D40,
+        bytearray.fromhex("bd064928CdD4FD67fb99917c880e6560978D7Ca1"),
+        0x0DE0B6B3A7640000,
+        bytearray(),
+    ]
+    assert (
+        check_rlp(tx1)
+        == "ec8201e7852e90edd00083030d4094bd064928cdd4fd67fb99917c880e6560978d7ca1880de0b6b3a764000080"
+    )
+
+    # Now signed
+    tx1[6:] = [
+        37,
+        0x7E833413EAD52B8C538001B12AB5A85BAC88DB0B34B61251BB0FC81573CA093F,
+        0x49634F1E439E3760265888434A2F9782928362412030DB1429458DDC9DCEE995,
+    ]
+    assert (
+        check_rlp(tx1)
+        == "f86f8201e7852e90edd00083030d4094bd064928cdd4fd67fb99917c880e6560978d7ca1880de0b6b3a76400008025a07e833413ead52b8c538001b12ab5a85bac88db0b34b61251bb0fc81573ca093fa049634f1e439e3760265888434a2f9782928362412030db1429458ddc9dcee995"
+    )
+
+    # Consider an EIP155 transaction with nonce = 9, gasprice = 20 * 10**9 = 04a817c800, startgas = 21000 = 5208, to = 0x3535353535353535353535353535353535353535, value = 10**18 = , data='', chain id = 1
+    tx2 = [
+        9,
+        20 * 10**9,
+        21000,
+        0x3535353535353535353535353535353535353535,
+        10**18,
+        0,
+        1,
+        0,
+        0,
+    ]
+    assert (
+        check_rlp(tx2)
+        == "ec098504a817c800825208943535353535353535353535353535353535353535880de0b6b3a764000080018080"
+    )
+
+    # Now signed
+    tx2[6] = 37
+    tx2[7] = 18515461264373351373200002665853028612451056578545711640558177340181847433846
+    tx2[8] = 46948507304638947509940763649030358759909902576025900602547168820602576006531
+    assert (
+        check_rlp(tx2)
+        == "f86c098504a817c800825208943535353535353535353535353535353535353535880de0b6b3a76400008025a028ef61340bd939bc2195fe537567866003e1a15d3c71ff63e1590620aa636276a067cbe9d8997f761aecb703304b3800ccf555c9f3dc64214b297fb1966a3b6d83"
+    )
+
+
 def test_rlp_invalid():
     with pytest.raises(ValueError):
         check_rlp(-1)
