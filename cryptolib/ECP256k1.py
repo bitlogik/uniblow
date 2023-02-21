@@ -59,9 +59,7 @@ class ECPoint:
             raise ValueError("Factor can't be negative")
         e3 = 3 * e
         negative_self = ECPoint(self.__x, -self.__y)
-        i = 0x100000000000000000000000000000000000000000000000000000000000000000
-        while i > e3:
-            i >>= 1
+        i = 1 << (e3.bit_length() - 1)
         result = self
         while i > 2:
             i >>= 1
