@@ -187,7 +187,8 @@ class BaseCoin(object):
         """
         if not self.segwit_supported:
             raise Exception("Segwit not supported for this coin")
-        assert len(pub) in [33, 66]  # Check pubkey is compressed
+        if len(pub) not in [33, 66]:  # Check pubkey is compressed
+            raise ValueError("Incorrect pubkey data.")
         return self.scripttoaddr(mk_p2wpkh_script(pub))
 
     def privtop2w(self, priv):

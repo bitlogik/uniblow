@@ -31,7 +31,8 @@ int_types = (int, float)
 def pubkey_to_hash(pubkey):
     if len(pubkey) in [66, 130]:
         return Hash160(bytes.fromhex(pubkey))
-    assert len(pubkey) in [33, 65]
+    if len(pubkey) not in [33, 65]:
+        raise ValueError("Incorrect pubkey format.")
     return Hash160(pubkey)
 
 
@@ -430,7 +431,6 @@ def is_bip66(sig):
     sig = bytearray.fromhex(sig) if re.match("^[0-9a-fA-F]*$", sig) else bytearray(sig)
     if (sig[0] == 0x30) and (sig[1] == len(sig) - 2):  # check if sighash is missing
         sig.extend(b"\1")  # add SIGHASH_ALL for testing
-    # assert (sig[-1] & 124 == 0) and (not not sig[-1]), "Bad SIGHASH value"
 
     if len(sig) < 9 or len(sig) > 73:
         return False

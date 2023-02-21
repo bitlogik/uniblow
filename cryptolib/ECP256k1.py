@@ -55,6 +55,8 @@ class ECPoint:
             return INFINITY
         if self == INFINITY:
             return INFINITY
+        if e <= 0:
+            raise ValueError("Factor can't be negative")
         e3 = 3 * e
         negative_self = ECPoint(self.__x, -self.__y)
         i = 0x100000000000000000000000000000000000000000000000000000000000000000
@@ -97,8 +99,8 @@ class ECPoint:
             return INFINITY
         if k1 == 0:
             return INFINITY
-        assert k2 > 0
-        assert k1 > 0
+        if k2 <= 0 or k1 <= 0:
+            raise ValueError("Factors can't be negative")
         e3, k3 = 3 * k2, 3 * k1
         negative_self = self.negate()
         i = 0x100000000000000000000000000000000000000000000000000000000000000000

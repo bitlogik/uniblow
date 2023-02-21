@@ -208,7 +208,8 @@ class CryptnoxCard:
         while len(mnft_cert_resp) < (certlen + 2):
             idx_page += 1
             mnft_cert_resp = mnft_cert_resp + self.send_apdu([0x80, 0xF7, 0x00, idx_page, 0x00])
-        assert len(mnft_cert_resp) == (certlen + 2)
+        if len(mnft_cert_resp) != certlen + 2:
+            raise CryptnoxInvalidException("Invalid certificate size.")
         cert = mnft_cert_resp[2:]
         return bytes(cert)
 
@@ -216,7 +217,8 @@ class CryptnoxCard:
         """Read the card dynamic certificate"""
         # nonce is a 64 bits integer
         # card cert is : 'C' + ..
-        assert len(nonce) == 8
+        if len(nonce) != 8:
+            raise CryptnoxInvalidException("Invalid nonce size.")
         res = self.send_apdu([0x80, 0xF8, 0x00, 0x00] + [8] + list(nonce))
         return bytes(res)
 
@@ -705,7 +707,8 @@ class CryptnoxCard:
         #  counter must be prepended if FIDO signature
         # 0x6985 means challenge was reset (e.g. card power cycle)
         bytes_result = self.send_enc_apdu([0x80, 0xD6, 0x02, 0x00], bytes([idx]) + sig)
-        assert len(bytes_result) == 1
+        if len(bytes_result) != 1:
+            raise CryptnoxInvalidException("Invalid response size.")
         return bytes_result[0]
 
     def del_auth(self, idx, PUK):

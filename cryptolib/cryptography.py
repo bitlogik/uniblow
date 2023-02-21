@@ -40,6 +40,11 @@ CURVES_ORDER = {
 }
 
 
+class GenRandomException(Exception):
+    def __init__(self):
+        super().__init__("Bad data during random generation")
+
+
 def decompress_pubkey(pubkey_compr):
     """From a public key X962 compressed to uncompressed"""
     # Key already decompressed ?
@@ -174,7 +179,8 @@ def random_generator():
     """Generate 256 bits highly random"""
     # Read 3072 bits of TRNG
     random_raw = urandom(384)
-    assert len(random_raw) == 384
+    if len(random_raw) != 384:
+        raise GenRandomException()
     rnd_list = []
     # Split 384 bytes into 12 * 32 bytes
     for i in range(12):
@@ -183,8 +189,11 @@ def random_generator():
     rnd_out = []
     for xval in range(12, 4, -1):
         rnd_out.append(rnd_list.pop(randbelow(xval)))
-    assert len(rnd_out) == 8
-    assert len(rnd_list) == 4
+    if len(rnd_out) != 8:
+        raise GenRandomException()
+    if len(rnd_list) != 4:
+        # 12 with 8 popped = 4 remaining
+        raise GenRandomException()
     # Reduce to 256 bits from 2048 random-source bits with sha2
     return sha2(b"".join(rnd_out))
 
