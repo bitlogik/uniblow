@@ -21,11 +21,6 @@ jobs:
       with:
         python-version: '3.9'
         architecture: 'x64'
-    - name: Insert Infura key
-      env:
-        INFURA_APIKEY: ${{ secrets.INFURA_APIKEY }}
-      run: |
-        (Get-Content wallets\ETHwallet.py) -Replace '"xxx"  # Put your Infura key here', ('"' + $Env:INFURA_APIKEY +'"') | Set-Content wallets\ETHwallet.py
     - name: Build bin package
       run: |
         cd package
@@ -49,11 +44,6 @@ jobs:
         sudo apt update
         sudo apt install -y xvfb curl libnotify4 libgtk-3-0 libsdl2-2.0-0 libpcsclite-dev
         sudo apt install -y python3-venv python3-pip
-    - name: Insert Infura key
-      env:
-        INFURA_APIKEY: ${{ secrets.INFURA_APIKEY }}
-      run: |
-        sed -i 's/"xxx"  # Put your Infura key here/"'"$INFURA_APIKEY"'"/g' wallets/ETHwallet.py
     - name: Build bin package
       run: |
         xvfb-run --server-args='-screen 0, 1024x768x24' bash package/Build-Linux.sh
@@ -71,11 +61,6 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
-    - name: Insert Infura key
-      env:
-        INFURA_APIKEY: ${{ secrets.INFURA_APIKEY }}
-      run: |
-        sed -i '' 's/"xxx"  # Put your Infura key here/"'"$INFURA_APIKEY"'"/g' wallets/ETHwallet.py
     - uses: actions/setup-python@v4
       with:
         python-version: '3.9'

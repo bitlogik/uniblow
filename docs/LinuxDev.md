@@ -7,8 +7,6 @@ The following instructions commands are given to run uniblow **from the source**
 
 Additionally, there are specific instructions and scripts to build uniblow binaries for the Windows, Debian/Ubuntu and MacOS platforms in the [Build document](Build.md).
 
-When running from the source files, for ETH testnets, you can put your Infura key in ETHwallet.
-
 ## Run on Linux
 
 This document presents instructions how to run uniblow from source on the following Linux flavors :

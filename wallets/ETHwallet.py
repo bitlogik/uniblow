@@ -360,22 +360,18 @@ class ETH_wallet:
         self.network = self.networks[network].lower()
         if self.network == "mainnet":
             self.chainID = 1
-        if self.network == "goerli":
-            self.chainID = 5
-        if self.network == "sepolia":
-            self.chainID = 11155111
-        INFURA_KEY = "xxx"  # Put your Infura key here
-        if INFURA_KEY == "xxx" and self.network != "mainnet" and self.network != "sepolia":
-            raise Exception("To use Uniblow from source with Goerli, bring your own Infura key.")
-        if self.network == "mainnet":
             rpc_endpoint = "https://rpc.ankr.com/eth/"
             self.explorer = "https://etherscan.io/address/0x"
+        elif self.network == "goerli":
+            self.chainID = 5
+            rpc_endpoint = "https://rpc.ankr.com/eth_goerli"
+            self.explorer = f"https://{self.network}.etherscan.io/address/0x"
         elif self.network == "sepolia":
+            self.chainID = 11155111
             rpc_endpoint = "https://rpc.sepolia.org"
             self.explorer = "https://sepolia.etherscan.io/address/0x"
         else:
-            rpc_endpoint = f"https://{self.network}.infura.io/v3/{INFURA_KEY}"
-            self.explorer = f"https://{self.network}.etherscan.io/address/0x"
+            raise InvalidOption("Invalid network name.")
         self.load_base(rpc_endpoint, device, contract_addr, wc_uri, confirm_callback, wtype != 3)
         self.ledger_tokens = ledger_tokens
 
