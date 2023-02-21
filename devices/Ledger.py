@@ -40,6 +40,8 @@ MINIMUM_APP_VERSION = 0x010500
 
 def unpack_vrs(vrsbin):
     """Provide serialized vrs as 3 integers."""
+    if len(vrsbin) != 65:
+        raise ValueError("Bad signature data format.")
     v = int.from_bytes(vrsbin[:1], "big")
     r = int.from_bytes(vrsbin[1:33], "big")
     s = int.from_bytes(vrsbin[33:65], "big")
@@ -205,8 +207,8 @@ class Ledger(BaseDevice):
 
     def sign_eip712(self, domain_hash, message_hash):
         """Sign an EIP712 typed hash request, used when has_screen"""
-        assert len(domain_hash) == 32
-        assert len(message_hash) == 32
+        if len(domain_hash) != 32 or len(message_hash) != 32:
+            raise ValueError("Incorrect data format to sign.")
         apdu = [LEDGER_CLASS, INSTRUCTION_SIGN712, 0x00, 0x00, len(self.bin_path) + 64]
         apdu.extend(self.bin_path)
         apdu.extend(domain_hash)
