@@ -366,9 +366,7 @@ class ETH_wallet:
             self.chainID = 11155111
         INFURA_KEY = "xxx"  # Put your Infura key here
         if INFURA_KEY == "xxx" and self.network != "mainnet" and self.network != "sepolia":
-            raise Exception(
-                "To use Uniblow from source with Goerli, bring your own Infura key."
-            )
+            raise Exception("To use Uniblow from source with Goerli, bring your own Infura key.")
         if self.network == "mainnet":
             rpc_endpoint = "https://rpc.ankr.com/eth/"
             self.explorer = "https://etherscan.io/address/0x"
