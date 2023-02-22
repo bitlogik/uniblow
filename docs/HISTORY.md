@@ -1,5 +1,13 @@
 Uniblow versions history
 
+# 2.3.2
+
+* Allow long message sign with Ledger
+* Always perform checks : remove assert
+* Use Ankr RPC for Goerli, totally remove Infura
+* Disable LedgerCheck button when WC error/disconnect
+* Stop balance check when hw wallet disconnected for tx
+
 # 2.3.1
 
 * Fix WCv2 : update pyWalletConnect dependency

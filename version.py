@@ -1,3 +1,3 @@
 # Shall be x.y.z, with optional dash trailing "-textstr"
 
-VERSION = "2.3.1"
+VERSION = "2.3.2"
