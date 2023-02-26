@@ -89,7 +89,7 @@ sudo apt install -y python3-pyscard < /dev/null
 ```
 
 
-The wxPython link has to be changed for the good one that fits your ditro. Check [here in the list](https://extras.wxpython.org/wxPython4/extras/linux/gtk3/) for your distro.
+The wxPython link has to be changed for the good one that fits your distro. Check [here in the list](https://extras.wxpython.org/wxPython4/extras/linux/gtk3/) for your distro.
 
 For 18.04 systems, [the whl for 18.04-cp36](https://extras.wxpython.org/wxPython4/extras/linux/gtk3/ubuntu-18.04/wxPython-4.1.1-cp36-cp36m-linux_x86_64.whl) has to be used.
 
