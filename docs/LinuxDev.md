@@ -19,17 +19,31 @@ This document presents instructions how to run uniblow from source on the follow
 
 For Debian 10-11
 
-#### Install system packages
+On **AMD64** systems
+
+#### Install packages for x86 / AMD64
 ```
 sudo apt update
 sudo apt install -y git libnotify4 libgtk-3-0 libpcsclite1 libsdl2-2.0-0 python3-venv python3-pip python3-pyscard
-```
-
-#### Install required packages 
-```
 python3 -m pip install -U pip < /dev/null
 python3 -m pip install https://extras.wxpython.org/wxPython4/extras/linux/gtk3/debian-10/wxPython-4.2.0-cp37-cp37m-linux_x86_64.whl < /dev/null
 python3 -m pip install -U pip setuptools-rust < /dev/null
+```
+
+On **aarch64 / ARM-64** systems
+For Debian 11 Bullseye with python3.9
+
+#### Install packages for aarch64 / ARM-64
+```
+sudo apt update
+sudo apt install -y git libnotify4 libgtk-3-0 libsdl2-2.0-0  python3-wxgtk4.0 libpcsclite1 python3-venv python3-pip python3-pyscard pcscd
+python3 -m pip install -U pip
+python3 -m pip install -U setuptools-rust
+```
+
+If pip complains about writing rights issues, execute the following:  
+```
+sudo chown $USER -R /home/$USER/.local/lib/python3.9/site-packages
 ```
 
 #### Get the uniblow source
