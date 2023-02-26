@@ -53,6 +53,8 @@ def isBitmapButton(elt):
 
 def scaleSize(frame, sz):
     """Scale frame size depending of scaling factor."""
+    if not hasattr(frame, "GetDPIScaleFactor"):
+        return sz
     scal_fact = 1
     if frame.GetDPIScaleFactor() > 1.25:
         scal_fact = 1.1
