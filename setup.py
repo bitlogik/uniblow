@@ -31,9 +31,9 @@ setup(
         "qrcode==6.1",
         "PyNaCl==1.5.0",
         "pyweb3==0.1.7",
-        "OpenPGPpy==1.0",
+        "OpenPGPpy==1.1",
         "hidapi==0.11.0.post2",
-        "pyWalletConnect==1.3.2",
+        "pyWalletConnect==1.3.3",
     ],
     include_package_data=False,
     classifiers=[
