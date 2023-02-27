@@ -85,6 +85,7 @@ deactivate
 
 ## Ubuntu / Mint
 
+Requires Python >= 3.7
 
 #### Install system packages
 

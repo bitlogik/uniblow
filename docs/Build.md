@@ -17,6 +17,8 @@ This document provides specific instructions and scripts to build uniblow binari
 
 ## Linux (Ubuntu 18.04)
 
+Requires Python >=3.7
+
 * Install required packages
 ```
 sudo add-apt-repository universe
