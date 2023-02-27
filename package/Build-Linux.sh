@@ -14,7 +14,7 @@ function is_installed {
     fi
 }
 
-softs_req=('libnotify4' 'libgtk-3-0' 'libpcsclite-dev' 'libsdl2-2.0-0' 'python3-venv' 'python3-pip')
+softs_req=('libnotify4' 'libgtk-3-0' 'libpcsclite-dev' 'libsdl2-dev' 'python3-venv' 'python3-pip')
 
 for softr in "${softs_req[@]}"; do
   if [ "$(is_installed $softr)" == 'not' ]; then
@@ -35,7 +35,7 @@ python -m pip install -U pip
 echo Installing pip dependencies ...
 
 python -m pip install https://extras.wxpython.org/wxPython4/extras/linux/gtk3/ubuntu-20.04/wxPython-4.2.0-cp38-cp38-linux_x86_64.whl
-python -m pip install -U pip setuptools-rust
+python -m pip install -U pip
 
 python setup.py install
 python -m pip install pyinstaller==4.10
