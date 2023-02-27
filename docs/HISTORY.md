@@ -3,6 +3,7 @@ Uniblow versions history
 # 2.3.3
 
 * Now requires Python 3.7+
+* Compiled for Ubuntu 20.04, Tails 5
 * Ease run on embedded Linux
 
 # 2.3.2
