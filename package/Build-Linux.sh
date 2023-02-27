@@ -34,7 +34,7 @@ python -m pip install -U pip
 
 echo Installing pip dependencies ...
 
-python -m pip install https://extras.wxpython.org/wxPython4/extras/linux/gtk3/ubuntu-18.04/wxPython-4.1.1-cp36-cp36m-linux_x86_64.whl
+python -m pip install https://extras.wxpython.org/wxPython4/extras/linux/gtk3/ubuntu-20.04/wxPython-4.2.0-cp38-cp38-linux_x86_64.whl
 python -m pip install -U pip setuptools-rust
 
 python setup.py install
