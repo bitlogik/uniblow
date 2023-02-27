@@ -106,8 +106,6 @@ sudo apt install -y python3-pyscard < /dev/null
 
 The wxPython link has to be changed for the good one that fits your distro. Check [here in the list](https://extras.wxpython.org/wxPython4/extras/linux/gtk3/) for your distro.
 
-For 18.04 systems, [the whl for 18.04-cp36](https://extras.wxpython.org/wxPython4/extras/linux/gtk3/ubuntu-18.04/wxPython-4.1.1-cp36-cp36m-linux_x86_64.whl) has to be used.
-
 For Ubuntu from version 20.04 and 21.04 [this whl for cp38](https://extras.wxpython.org/wxPython4/extras/linux/gtk3/ubuntu-20.04/wxPython-4.2.0-cp38-cp38-linux_x86_64.whl) can be used. The systemd package might be required to be installed for libsdl2. 3.9 for 21.04?
 
 For Ubuntu from version 22.04 [this whl for cp310](https://extras.wxpython.org/wxPython4/extras/linux/gtk3/ubuntu-22.04/wxPython-4.2.0-cp310-cp310-linux_x86_64.whl) can be used. The systemd package might be required to be installed for libsdl2.

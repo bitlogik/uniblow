@@ -42,8 +42,8 @@ jobs:
     - name: Prepare Linux system
       run: |
         sudo apt update
-        sudo apt install -y xvfb curl libnotify4 libgtk-3-0 libsdl2-2.0-0 libpcsclite-dev
-        sudo apt install -y python3-venv python3-pip
+        sudo apt install -y xvfb curl libnotify4 libgtk-3-0 libsdl2-2.0-0 libsdl2-dev libpcsclite-dev
+        sudo apt install -y python3-venv python3-pip python3-pyscard
     - name: Build bin package
       run: |
         xvfb-run --server-args='-screen 0, 1024x768x24' bash package/Build-Linux.sh
