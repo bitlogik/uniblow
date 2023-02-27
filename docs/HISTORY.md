@@ -1,5 +1,9 @@
 Uniblow versions history
 
+# 2.3.3
+
+* Ease run on embedded Linux
+
 # 2.3.2
 
 * Allow long message sign with Ledger
