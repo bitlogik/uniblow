@@ -72,8 +72,8 @@ class eos_api:
         self.network = network
         if self.network == "EOSio":
             self.url = "https://eos.greymass.com"
-        elif self.network == "Jungle3":
-            self.url = "https://api.jungle3.alohaeos.com"
+        elif self.network == "Jungle4":
+            self.url = "https://api.jungle4.alohaeos.com"
         else:
             raise Exception("Not valid EOS network")
 
@@ -296,7 +296,7 @@ class EOS_wallet:
 
     networks = [
         "EOSio",
-        "Jungle3",
+        "Jungle4",
     ]
 
     wtypes = [
@@ -357,12 +357,10 @@ class EOS_wallet:
         # Get history page
         if self.eos.account:
             if self.network == "EOSio":
-                EOS_EXPLORER_URL = f"https://bloks.io/account/{self.eos.account}"
+                net = "eos"
             else:
-                EOS_EXPLORER_URL = (
-                    f"https://{self.network.lower()}.bloks.io/account/{self.eos.account}"
-                )
-            return EOS_EXPLORER_URL
+                net = self.network.lower()
+            return f"https://{net}.eosq.eosnation.io/account/{self.eos.account}"
         return None
 
     def transfer(self, amount, to_account, priority_fee, is_all=False):
