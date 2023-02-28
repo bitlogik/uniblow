@@ -77,8 +77,8 @@ class SendModal(SendDialog):
         if wx.TheClipboard.Open():
             success = wx.TheClipboard.GetData(text_data)
             wx.TheClipboard.Close()
-        if success:
-            self.panel.text_dest.SetValue(text_data.GetText())
+            if success:
+                self.panel.text_dest.SetValue(text_data.GetText())
 
     def check_addr(self, evt):
         if self.check_addr_method(evt.GetString()):
