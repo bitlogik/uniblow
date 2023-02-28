@@ -73,7 +73,9 @@ def test_practical_encoding():
         == "f86f8201e7852e90edd00083030d4094bd064928cdd4fd67fb99917c880e6560978d7ca1880de0b6b3a76400008025a07e833413ead52b8c538001b12ab5a85bac88db0b34b61251bb0fc81573ca093fa049634f1e439e3760265888434a2f9782928362412030db1429458ddc9dcee995"
     )
 
-    # Consider an EIP155 transaction with nonce = 9, gasprice = 20 * 10**9 = 04a817c800, startgas = 21000 = 5208, to = 0x3535353535353535353535353535353535353535, value = 10**18 = , data='', chain id = 1
+    # Consider an EIP155 transaction with
+    # nonce = 9, gasprice = 20 * 10**9 = 04a817c800, startgas = 21000 = 5208,
+    # to = 0x3535353535353535353535353535353535353535, value = 10**18 = , data='', chain id = 1
     tx2 = [
         9,
         20 * 10**9,
