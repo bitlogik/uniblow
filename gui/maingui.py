@@ -596,7 +596,7 @@ class SendPanel ( wx.Panel ):
 
         bSizer14 = wx.BoxSizer( wx.HORIZONTAL )
 
-        self.text_dest = wx.TextCtrl( self, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, 0 )
+        self.text_dest = wx.TextCtrl( self, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, wx.TE_PROCESS_ENTER )
         self.text_dest.SetForegroundColour( wx.Colour( 0, 0, 0 ) )
         self.text_dest.SetBackgroundColour( wx.Colour( 255, 255, 255 ) )
 
@@ -638,7 +638,7 @@ class SendPanel ( wx.Panel ):
 
         bSizer20 = wx.BoxSizer( wx.HORIZONTAL )
 
-        self.text_amount = wx.TextCtrl( sbSizer3.GetStaticBox(), wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, 0 )
+        self.text_amount = wx.TextCtrl( sbSizer3.GetStaticBox(), wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, wx.TE_PROCESS_ENTER )
         self.text_amount.SetForegroundColour( wx.Colour( 0, 0, 0 ) )
         self.text_amount.SetBackgroundColour( wx.Colour( 255, 255, 255 ) )
         self.text_amount.SetMinSize( wx.Size( 150,-1 ) )

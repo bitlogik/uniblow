@@ -47,12 +47,15 @@ class SendModal(SendDialog):
         self.panel.fee_slider.Bind(wx.EVT_SCROLL, self.fee_changed)
         self.panel.cancel_btn.Bind(wx.EVT_BUTTON, self.click_cancel)
         self.panel.ok_btn.Bind(wx.EVT_BUTTON, self.click_ok)
+        self.panel.text_dest.Bind(wx.EVT_TEXT_ENTER, self.click_ok)
+        self.panel.text_amount.Bind(wx.EVT_TEXT_ENTER, self.click_ok)
         self.panel.paste_btn.Bind(wx.EVT_BUTTON, self.paste_addr)
         self.panel.bmp_chk.SetBitmap(self.BAD_BMP)
         if platform.startswith("darwin"):
             self.panel.fiat_label.SetFont(wx.Font(wx.FontInfo(14)))
             self.panel.fiat_value.SetFont(wx.Font(wx.FontInfo(14)))
             self.panel.text_fees.SetFont(wx.Font(wx.FontInfo(14)))
+        self.panel.text_dest.SetFocus()
 
     def close(self, evt):
         self.cb("CLOSE", "", "0")
