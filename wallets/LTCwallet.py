@@ -25,6 +25,7 @@ import cryptolib.coins
 from cryptolib.base58 import decode_base58
 from cryptolib.bech32 import test_bech32
 from cryptolib.cryptography import compress_pubkey
+from wallets.name_service import resolve
 from wallets.wallets_utils import balance_string, shift_10, NotEnoughTokens
 
 
@@ -126,7 +127,8 @@ def testaddr(ltc_addr, is_testnet):
         checked = re.match("^[23MQ][a-km-zA-HJ-NP-Z1-9]{25,34}$", ltc_addr) is not None
     elif ltc_addr.startswith(segwit_head):
         checked = re.match("^(ltc|tltc)[01][ac-hj-np-z02-9]{8,87}$", ltc_addr) is not None
-        return checked and test_bech32(ltc_addr)
+        if checked and test_bech32(ltc_addr):
+            return ltc_addr
     else:
         return False
     try:
@@ -134,7 +136,9 @@ def testaddr(ltc_addr, is_testnet):
             decode_base58(ltc_addr)
     except ValueError:
         return False
-    return checked
+    if checked:
+        return ltc_addr
+    return False
 
 
 class LTCwalletCore:
@@ -321,7 +325,10 @@ class LTC_wallet:
         return f"{balance_string(self.ltc.getbalance(), LTC_units)} {self.coin}"
 
     def check_address(self, addr_str):
-        # Check if address is valid
+        # Check if address or domain is valid
+        resolved = resolve(addr_str, LTC_wallet.coin)
+        if resolved:
+            addr_str = resolved
         return testaddr(addr_str, self.ltc.testnet)
 
     def history(self):

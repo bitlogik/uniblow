@@ -129,7 +129,7 @@ def testaddr(eos_account):
         return False
     if account_pattern.match(eos_account) is None:
         return False
-    return True
+    return eos_account
 
 
 account_pattern = re.compile(r"^[a-z1-5\.]{11}[a-z1-5]$")

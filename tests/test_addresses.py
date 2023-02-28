@@ -303,31 +303,49 @@ XTZ_ADDR_TEST_DATA = [
 
 def test_btc_addresses():
     for btc_addr_test in BTC_ADDR_TEST_DATA:
-        assert BTCtestaddr(btc_addr_test[0], btc_addr_test[1]) == btc_addr_test[2]
+        res = btc_addr_test[2]
+        if res:
+            res = btc_addr_test[0]
+        assert BTCtestaddr(btc_addr_test[0], btc_addr_test[1]) == res
 
 
 def test_eth_addresses():
     for eth_addr_test in ETH_ADDR_TEST_DATA:
-        assert ETHtestaddr(eth_addr_test[0]) == eth_addr_test[1]
+        res = eth_addr_test[1]
+        if res:
+            res = eth_addr_test[0]
+        assert ETHtestaddr(eth_addr_test[0]) == res
         # and also "0x" removed
-        assert ETHtestaddr(eth_addr_test[0][2:]) == eth_addr_test[1]
+        assert ETHtestaddr(eth_addr_test[0][2:]) == res
 
 
 def test_ltc_addresses():
     for ltc_addr_test in LTC_ADDR_TEST_DATA:
-        assert LTCtestaddr(ltc_addr_test[0], ltc_addr_test[1]) == ltc_addr_test[2]
+        res = ltc_addr_test[2]
+        if res:
+            res = ltc_addr_test[0]
+        assert LTCtestaddr(ltc_addr_test[0], ltc_addr_test[1]) == res
 
 
 def test_doge_addresses():
     for doge_addr_test in DOGE_ADDR_TEST_DATA:
-        assert DOGEtestaddr(doge_addr_test[0], doge_addr_test[1]) == doge_addr_test[2]
+        res = doge_addr_test[2]
+        if res:
+            res = doge_addr_test[0]
+        assert DOGEtestaddr(doge_addr_test[0], doge_addr_test[1]) == res
 
 
 def test_eos_accounts():
     for eos_addr_test in EOS_ADDR_TEST_DATA:
-        assert EOStestaddr(eos_addr_test[0]) == eos_addr_test[1]
+        res = eos_addr_test[1]
+        if res:
+            res = eos_addr_test[0]
+        assert EOStestaddr(eos_addr_test[0]) == res
 
 
 def test_xtz_addresses():
     for xtz_addr_test in XTZ_ADDR_TEST_DATA:
-        assert XTZtestaddr(xtz_addr_test[0]) == xtz_addr_test[1]
+        res = xtz_addr_test[1]
+        if res:
+            res = xtz_addr_test[0]
+        assert XTZtestaddr(xtz_addr_test[0]) == res

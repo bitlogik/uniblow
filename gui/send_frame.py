@@ -51,6 +51,7 @@ class SendModal(SendDialog):
         self.panel.text_amount.Bind(wx.EVT_TEXT_ENTER, self.click_ok)
         self.panel.paste_btn.Bind(wx.EVT_BUTTON, self.paste_addr)
         self.panel.bmp_chk.SetBitmap(self.BAD_BMP)
+        self.dest_addr = ""
         if platform.startswith("darwin"):
             self.panel.fiat_label.SetFont(wx.Font(wx.FontInfo(14)))
             self.panel.fiat_value.SetFont(wx.Font(wx.FontInfo(14)))
@@ -81,8 +82,11 @@ class SendModal(SendDialog):
                 self.panel.text_dest.SetValue(text_data.GetText())
 
     def check_addr(self, evt):
-        if self.check_addr_method(evt.GetString()):
+        self.dest_addr = ""
+        dest = self.check_addr_method(evt.GetString())
+        if dest:
             self.panel.bmp_chk.SetBitmap(self.GOOD_BMP)
+            self.dest_addr = dest
         else:
             self.panel.bmp_chk.SetBitmap(self.BAD_BMP)
 
@@ -114,5 +118,10 @@ class SendModal(SendDialog):
     def click_ok(self, event):
         amount = self.panel.text_amount.GetValue()
         dest = self.panel.text_dest.GetValue()
+        if "." in dest:
+            domain = dest
+            dest = self.dest_addr
+        else:
+            domain = ""
         fee_level = self.panel.fee_slider.GetValue()
-        self.cb("OK", dest, amount, fee_level)
+        self.cb("OK", dest, amount, fee_level, domain)

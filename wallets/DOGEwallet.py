@@ -24,6 +24,7 @@ import re
 import cryptolib.coins
 from cryptolib.base58 import decode_base58
 from cryptolib.cryptography import compress_pubkey
+from wallets.name_service import resolve
 from wallets.wallets_utils import balance_string, shift_10, NotEnoughTokens
 
 
@@ -128,7 +129,9 @@ def testaddr(doge_addr, is_testnet):
             decode_base58(doge_addr)
     except ValueError:
         return False
-    return checked
+    if checked:
+        return doge_addr
+    return False
 
 
 class DOGEwalletCore:
@@ -268,7 +271,10 @@ class DOGE_wallet:
         return f"{balance_string(self.doge.getbalance(), DOGE_units)} {self.coin}"
 
     def check_address(self, addr_str):
-        # Check if address is valid
+        # Check if address or domain is valid
+        resolved = resolve(addr_str, DOGE_wallet.coin)
+        if resolved:
+            addr_str = resolved
         return testaddr(addr_str, self.doge.testnet)
 
     def history(self):

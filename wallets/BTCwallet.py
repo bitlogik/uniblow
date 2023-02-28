@@ -24,6 +24,7 @@ import cryptolib.coins
 from cryptolib.bech32 import test_bech32
 from cryptolib.base58 import decode_base58
 from cryptolib.cryptography import compress_pubkey, sha2
+from wallets.name_service import resolve
 from wallets.wallets_utils import balance_string, shift_10, NotEnoughTokens
 
 
@@ -133,7 +134,8 @@ def testaddr(btc_addr, is_testnet):
         checked = re.match("^[23][a-km-zA-HJ-NP-Z1-9]{25,34}$", btc_addr) is not None
     elif btc_addr.lower().startswith(segwit_head):
         checked = re.match("^(bc|tb)[01][ac-hj-np-z02-9]{8,87}$", btc_addr.lower()) is not None
-        return checked and test_bech32(btc_addr)
+        if checked and test_bech32(btc_addr):
+            return btc_addr
     else:
         return False
     try:
@@ -141,7 +143,9 @@ def testaddr(btc_addr, is_testnet):
             decode_base58(btc_addr)
     except ValueError:
         return False
-    return checked
+    if checked:
+        return btc_addr
+    return False
 
 
 class BTCwalletCore:
@@ -331,7 +335,10 @@ class BTC_wallet:
         return f"{balance_string(self.btc.getbalance(), BTC_units)} {self.coin}"
 
     def check_address(self, addr_str):
-        # Check if address is valid
+        # Check if address or domain is valid
+        resolved = resolve(addr_str, BTC_wallet.coin)
+        if resolved:
+            addr_str = resolved
         return testaddr(addr_str, self.btc.testnet)
 
     def history(self):

@@ -19,8 +19,9 @@ from threading import Thread
 import webbrowser
 import wx
 
-from wallets.ETHwallet import testaddr
+from wallets.ETHwallet import testaddr, ETH_wallet
 from wallets.NFTwallet import get_image_file
+from wallets.name_service import resolve
 from gui.utils import icon_file, file_path
 from gui.gallerygui import GalleryFrame, GalleryPanel
 
@@ -211,23 +212,35 @@ class Gallery:
     def send_nft(self, nft):
         # Ask the receiving address
         dest_modal = wx.TextEntryDialog(
-            self.frame, "Input the destination address :", f"Send the {self.symb} #{nft['id']}"
+            self.frame,
+            "Input the destination address or domain",
+            f"Send the {self.symb} #{nft['id']}",
         )
         ret_mod = dest_modal.ShowModal()
         if ret_mod != wx.ID_OK:
             dest_modal.Destroy()
             return
-        dest_addr = dest_modal.GetValue()
+        dest_str = dest_modal.GetValue()
         dest_modal.Destroy()
+        # Resolve domain
+        resolved = resolve(dest_str, ETH_wallet.coin)
+        if resolved:
+            dest_addr = resolved
+        else:
+            dest_addr = dest_str
         # Check address
-        if not testaddr(dest_addr):
-            self.show_message("Bad address format provided.")
+        dest_addr = testaddr(dest_addr)
+        if not dest_addr:
+            self.show_message("Wrong address or domain provided.")
             return
 
         # Confirm
+        disp_dest = dest_addr
+        if "." in dest_str:
+            disp_dest += f" ({dest_str})"
         conf_modal = wx.MessageDialog(
             self.frame,
-            f"Confirm sending {self.symb} NFT #{nft['id']} to {dest_addr} ?",
+            f"Confirm sending {self.symb} NFT #{nft['id']}\n" f"to {disp_dest} ?",
             style=wx.OK | wx.CENTRE | wx.CANCEL,
         )
         ret_conf = conf_modal.ShowModal()

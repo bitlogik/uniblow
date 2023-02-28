@@ -19,6 +19,7 @@ import json
 import urllib.parse
 import urllib.request
 
+from wallets.name_service import resolve
 from wallets.wallets_utils import balance_string, shift_10, NotEnoughTokens
 from cryptolib.base58 import base58_to_bin, bin_to_base58
 from cryptolib.uintEncode import uint8, uint32, uint64, encode_varuint
@@ -155,7 +156,8 @@ def testaddr(sol_addr):
         return False
     try:
         dec_b58 = base58_to_bin(sol_addr)
-        return len(dec_b58) == 32
+        if len(dec_b58) == 32:
+            return sol_addr
     except ValueError:
         return False
     return False
@@ -264,7 +266,10 @@ class SOL_wallet:
         return f"{balance_string(self.sol.getbalance(), self.sol.decimals)} {self.coin}"
 
     def check_address(self, addr_str):
-        # Check if address is valid
+        # Check if address or domain is valid
+        resolved = resolve(addr_str, SOL_wallet.coin)
+        if resolved:
+            addr_str = resolved
         return testaddr(addr_str)
 
     def history(self):

@@ -23,6 +23,7 @@ from pywalletconnect import WCClient, WCClientInvalidOption, WCClientException
 
 from cryptolib.cryptography import public_key_recover, sha2, sha3
 from cryptolib.coins.ethereum import rlp_encode, int2bytearray, uint256, read_string
+from wallets.name_service import resolve
 from wallets.wallets_utils import (
     shift_10,
     balance_string,
@@ -106,9 +107,9 @@ def testaddr(eth_addr):
         int(eth_addr, 16)
     except Exception:
         return False
-    if has_checksum(eth_addr):
-        return checksum_address(eth_addr)
-    return True
+    if has_checksum(eth_addr) and not checksum_address(eth_addr):
+        return False
+    return f"0x{eth_addr}"
 
 
 class ETHwalletCore:
@@ -536,7 +537,10 @@ class ETH_wallet:
         )
 
     def check_address(self, addr_str):
-        # Check if address is valid
+        # Check if address or domain is valid
+        resolved = resolve(addr_str, ETH_wallet.coin)
+        if resolved:
+            addr_str = resolved
         return testaddr(addr_str)
 
     def history(self):

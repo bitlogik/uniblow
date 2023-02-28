@@ -578,18 +578,18 @@ class SendPanel ( wx.Panel ):
 
         bSizer201 = wx.BoxSizer( wx.HORIZONTAL )
 
-        self.m_staticText7 = wx.StaticText( self, wx.ID_ANY, u"Destination Address", wx.DefaultPosition, wx.DefaultSize, 0 )
+        self.paste_btn = wx.BitmapButton( self, wx.ID_ANY, wx.NullBitmap, wx.DefaultPosition, wx.DefaultSize, wx.BU_AUTODRAW|0|wx.BORDER_NONE )
+        bSizer201.Add( self.paste_btn, 0, wx.BOTTOM|wx.LEFT, 8 )
+
+
+        bSizer201.Add( ( 0, 0), 0, wx.LEFT, 20 )
+
+        self.m_staticText7 = wx.StaticText( self, wx.ID_ANY, u"Destination Address or Domain", wx.DefaultPosition, wx.DefaultSize, 0 )
         self.m_staticText7.Wrap( -1 )
 
         self.m_staticText7.SetForegroundColour( wx.Colour( 0, 0, 0 ) )
 
         bSizer201.Add( self.m_staticText7, 0, wx.TOP|wx.LEFT, 5 )
-
-
-        bSizer201.Add( ( 0, 0), 0, wx.LEFT, 20 )
-
-        self.paste_btn = wx.BitmapButton( self, wx.ID_ANY, wx.NullBitmap, wx.DefaultPosition, wx.DefaultSize, wx.BU_AUTODRAW|0|wx.BORDER_NONE )
-        bSizer201.Add( self.paste_btn, 0, wx.BOTTOM, 8 )
 
 
         bSizer23.Add( bSizer201, 0, 0, 5 )
