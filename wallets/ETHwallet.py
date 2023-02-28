@@ -186,7 +186,7 @@ class ETHwalletCore:
             # NFT
             # For now, dont test whether the exact id is owned
             if maxspendable < 1:
-                raise NotEnoughTokens(f"You have no NFT for the tx.")
+                raise NotEnoughTokens("You have no NFT for the tx.")
         self.nonce = int2bytearray(self.getnonce())
         self.gasprice = int2bytearray(gprice)
         self.startgas = int2bytearray(glimit)

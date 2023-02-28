@@ -111,7 +111,8 @@ class Gallery:
             self.bal = self.nwallet.get_balance()
         except Exception:
             self.show_message(
-                "Error when reading the NFT balance.\nInternet connectivity issue, or incompatible contract type."
+                "Error when reading the NFT balance.\n"
+                "Internet connectivity issue, or incompatible contract type."
             )
             self.close_frombtn()
             return
@@ -126,7 +127,8 @@ class Gallery:
                 id_list = self.nwallet.get_tokens_list(self.bal)
             except Exception:
                 self.show_message(
-                    "Error when reading the NFT list.\nInternet connectivity issue, or incompatible contract type."
+                    "Error when reading the NFT list.\n"
+                    "Internet connectivity issue, or incompatible contract type."
                 )
                 self.close_frombtn()
                 return
@@ -256,11 +258,11 @@ class Gallery:
                 if img.IsOk():
                     img.Rescale(int(scale * imgw), int(scale * imgh), wx.IMAGE_QUALITY_HIGH)
                 else:
-                    img = wx.Image(file_path(f"gui/images/nonft.png"))
+                    img = wx.Image(file_path("gui/images/nonft.png"))
             except Exception:
-                img = wx.Image(file_path(f"gui/images/nonft.png"))
+                img = wx.Image(file_path("gui/images/nonft.png"))
         else:
-            img = wx.Image(file_path(f"gui/images/nonft.png"))
+            img = wx.Image(file_path("gui/images/nonft.png"))
         bmp = wx.StaticBitmap(
             self.panel.scrwin,
             wx.ID_ANY,
@@ -271,7 +273,7 @@ class Gallery:
         )
         szr.Add(bmp, 0, wx.ALL | wx.ALIGN_CENTER_HORIZONTAL, 5)
         szr_btn = wx.BoxSizer(wx.HORIZONTAL)
-        img = wx.Image(file_path(f"gui/images/btns/nftinfo.png"), wx.BITMAP_TYPE_PNG)
+        img = wx.Image(file_path("gui/images/btns/nftinfo.png"), wx.BITMAP_TYPE_PNG)
         info_btn = wx.BitmapButton(
             self.panel.scrwin,
             wx.ID_ANY,
@@ -289,7 +291,7 @@ class Gallery:
             info_btn.Bind(wx.EVT_BUTTON, lambda _: self.open_url(url_osea))
         else:
             info_btn.Disable()
-        img = wx.Image(file_path(f"gui/images/btns/sendnft.png"), wx.BITMAP_TYPE_PNG)
+        img = wx.Image(file_path("gui/images/btns/sendnft.png"), wx.BITMAP_TYPE_PNG)
         send_btn = wx.BitmapButton(
             self.panel.scrwin,
             wx.ID_ANY,
