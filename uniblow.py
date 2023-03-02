@@ -198,7 +198,6 @@ def cb_open_wallet(wallet_obj, pkey, waltype, sw_frame, pubkey_cpr):
         app.balance_timer.Stop()
     app.deactivate_option_buttons()
     app.current_chain = app.wallet.coin
-    print(app.wallet.coin)
     wallet_coin = "ARB" if app.wallet.coin == "ARB/ETH" else app.wallet.coin
     if wallet_coin in EVM_LIST:
         app.activate_option_buttons()
