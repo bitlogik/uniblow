@@ -65,10 +65,17 @@ class PriceAPI:
             )
         else:
             token_id = native_tokens.get(token_id)
-            if token_id is not None:
-                call_url = f"{PriceAPI.BASE_URL}simple/price?ids={token_id}" "&vs_currencies=usd"
+            call_url = f"{PriceAPI.BASE_URL}simple/price?ids={token_id}" "&vs_currencies=usd"
+        if token_id is None:
+            return
         if call_url:
-            rsp = urlopen(call_url)
-            value_json = load(rsp)
-            value = value_json[token_id.lower()]["usd"]
+            try:
+                rsp = urlopen(call_url)
+                value_json = load(rsp)
+            except Exception:
+                return
+            try:
+                value = value_json[token_id.lower()]["usd"]
+            except KeyError:
+                return
             cb(value)
