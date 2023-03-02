@@ -561,7 +561,7 @@ class ETH_wallet:
         if self.current_device.has_screen:
             if self.eth.contract and self.current_device.ledger_tokens_compat:
                 # Token known by Ledger ?
-                ledger_info = self.ledger_tokens.get(self.eth.contract)
+                ledger_info = self.ledger_tokens.get(self.eth.contract.lower())
                 if ledger_info:
                     # Known token : provide the trusted info to the device
                     name = ledger_info["ticker"]
