@@ -1,5 +1,6 @@
 import wx
 
+from decimal import Decimal
 from sys import platform
 
 from gui.utils import file_path
@@ -11,6 +12,10 @@ FEES_PRORITY_TEXT = [
     "Normal fee",
     "Faster fee",
 ]
+
+BAD_AMNT_INPUT = "Input an amount value to transfer."
+BAD_ADDR_INPUT = "Input an destination address/domain."
+LOW_BALANCE = "Not enough balance for this transfer."
 
 
 class SendModal(SendDialog):
@@ -60,6 +65,15 @@ class SendModal(SendDialog):
 
     def close(self, evt):
         self.cb("CLOSE", "", "0")
+
+    def show_message(self, message, title, icon=wx.ICON_INFORMATION):
+        wx.MessageDialog(
+            self,
+            message,
+            caption=title,
+            style=wx.OK | wx.CENTRE | icon,
+            pos=wx.DefaultPosition,
+        ).ShowModal()
 
     def check_all(self, evt):
         if evt.IsChecked():
@@ -116,8 +130,29 @@ class SendModal(SendDialog):
         self.cb("CANCEL", "", "0")
 
     def click_ok(self, event):
-        amount = self.panel.text_amount.GetValue()
         dest = self.panel.text_dest.GetValue()
+        if len(dest) <= 0:
+            self.show_message(BAD_ADDR_INPUT, "Invalid destination")
+            return
+        amount = self.panel.text_amount.GetValue()
+        if len(amount) <= 0:
+            self.show_message(BAD_AMNT_INPUT, "Invalid amount")
+            return
+        if amount != "ALL":
+            try:
+                float(amount)
+            except ValueError:
+                self.show_message("Unvalid amount input.", "Invalid amount")
+                return
+            bal_txt = self.GetParent().balance_info.GetLabel()
+            bal_txt += self.GetParent().balance_small.GetLabel()
+            if amount != "ALL" and Decimal(amount) > Decimal(bal_txt):
+                self.show_message(
+                    LOW_BALANCE,
+                    "Amount too high",
+                    wx.ICON_WARNING,
+                )
+                return
         if "." in dest:
             domain = dest
             dest = self.dest_addr
