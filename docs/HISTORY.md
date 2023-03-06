@@ -1,5 +1,15 @@
 Uniblow versions history
 
+# 2.4.0
+
+* Improve Send
+* Add domains ENS and UD as destination
+* Update tokens preset
+* Improve fiat price
+* Update Tezos testnet to Lima
+* Update EOS testnet to Jungle4
+* Add VSCode configuration in source
+
 # 2.3.3
 
 * Now requires Python 3.7+
