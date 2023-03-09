@@ -11,7 +11,7 @@ ZILresolver = "9611c53BE6d1b32058b2747bdeCECed7e1216793"
 
 
 ENS_TLDS = ["eth"]
-UD_TLDS = ["crypto", "nft", "blockchain", "bitcoin", "wallet", "888", "dao", "x", "lever", "hi"]
+UD_TLDS = ["crypto", "nft", "blockchain", "bitcoin", "wallet", "888", "dao", "x", "klever", "hi"]
 ZIL_TLDS = ["zil"]
 
 
