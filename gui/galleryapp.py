@@ -217,11 +217,10 @@ class Gallery:
             f"Send the {self.symb} #{nft['id']}",
         )
         ret_mod = dest_modal.ShowModal()
-        if ret_mod != wx.ID_OK:
-            dest_modal.Destroy()
-            return
         dest_str = dest_modal.GetValue()
         dest_modal.Destroy()
+        if ret_mod != wx.ID_OK:
+            return
         # Resolve domain
         resolved = resolve(dest_str, ETH_wallet.coin)
         if resolved:
@@ -244,7 +243,7 @@ class Gallery:
             style=wx.OK | wx.CENTRE | wx.CANCEL,
         )
         ret_conf = conf_modal.ShowModal()
-        dest_modal.Destroy()
+        conf_modal.Destroy()
         if ret_conf != wx.ID_OK:
             logger.debug("Cancelled by user")
             return
