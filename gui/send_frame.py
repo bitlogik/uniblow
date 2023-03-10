@@ -146,7 +146,7 @@ class SendModal(SendDialog):
                 return
             bal_txt = self.GetParent().balance_info.GetLabel()
             bal_txt += self.GetParent().balance_small.GetLabel()
-            if amount != "ALL" and Decimal(amount) > Decimal(bal_txt):
+            if Decimal(amount) > Decimal(bal_txt):
                 self.show_message(
                     LOW_BALANCE,
                     "Amount too high",
