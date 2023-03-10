@@ -22,7 +22,7 @@ from wallets.OPtokens import tokens_values, nfts_values
 
 class OP_wallet(ETH_wallet):
 
-    coin = "OP"
+    coin = "OP/ETH"
 
     networks = [
         "Mainnet",

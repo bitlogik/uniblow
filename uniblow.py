@@ -103,6 +103,8 @@ def get_coin_class(coin_name):
     cname = coin_name
     if coin_name == "ARB/ETH":
         cname = "ARB"
+    if coin_name == "OP/ETH":
+        cname = "OP"
     return getattr(wallets[f"{cname}wallet"], f"{cname}_wallet")
 
 
@@ -198,7 +200,11 @@ def cb_open_wallet(wallet_obj, pkey, waltype, sw_frame, pubkey_cpr):
         app.balance_timer.Stop()
     app.deactivate_option_buttons()
     app.current_chain = app.wallet.coin
-    wallet_coin = "ARB" if app.wallet.coin == "ARB/ETH" else app.wallet.coin
+    wallet_coin = app.wallet.coin
+    if app.wallet.coin == "ARB/ETH":
+        wallet_coin = "ARB"
+    if app.wallet.coin == "OP/ETH":
+        wallet_coin = "OP"
     if wallet_coin in EVM_LIST:
         app.activate_option_buttons()
         app.gui_panel.but_opt_tok.Bind(

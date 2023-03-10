@@ -41,7 +41,7 @@ native_tokens = {
     "AVAX": "avalanche-2",
     "METIS": "metis-token",
     "ETH": "ethereum",
-    "OP": "optimism",
+    "OP/ETH": "ethereum",
 }
 
 
