@@ -34,7 +34,7 @@ class OP_wallet(ETH_wallet):
         [
             "m/44'/60'/{}'/0/{}",
         ],
-        # Testnet Koval
+        # Testnet Goerli
         [
             "m/44'/1'/{}'/0/{}",
         ],
@@ -52,9 +52,11 @@ class OP_wallet(ETH_wallet):
             self.chainID = 10
             rpc_endpoint = "https://mainnet.optimism.io/"
             self.explorer = "https://optimistic.etherscan.io/address/0x"
-        if self.network == "testnet":
-            self.chainID = 69
+        elif self.network == "testnet":
+            self.chainID = 420
             rpc_endpoint = "https://goerli.optimism.io/"
-            self.explorer = "https://goerli-optimistic.etherscan.io/address/0x"
+            self.explorer = "https://goerli-optimism.etherscan.io/address/0x"
+        else:
+            raise ValueError("Wrong OP network.")
         self.load_base(rpc_endpoint, device, contract_addr, wc_uri, confirm_callback, wtype != 3)
         self.ledger_tokens = {}
