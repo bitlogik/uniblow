@@ -39,6 +39,9 @@ def test_resolve_ud():
     assert resolveUD("udtestdev-test.crypto", "BTC")
     assert resolveUD("ryan.crypto", "ETH")
     assert resolveUD("ryan.crypto", "BTC") is None
+    assert (
+        resolveUD("jim-unstoppable.klever", "ETH") == "0x57A82545be709963F0182B69F6E9B6f00B977592"
+    )
 
 
 def test_resolve_zil():
@@ -56,8 +59,30 @@ def test_resolve_zil():
     assert resolveZIL("johnnyjumper.zil", "BTC") is None
     assert resolveZIL("unregistered.zil", "ETH") is None
     assert resolveZIL("paulalcock.zil", "ETH") is None
+    assert resolve("jim-unstoppable.zil", "ETH") == "0x57A82545be709963F0182B69F6E9B6f00B977592"
+    assert resolve("jim-unstoppable.zil", "BTC") == "bc1q4h40jge84c2stj8hya80hf7dqy77wuzqvd79ac"
+    assert resolve("jim-unstoppable.zil", "MATIC") == "0x621bf2A4720DbFF5E0AC4A94f539ef7c4555Cf22"
 
 
 def test_resolve():
     assert resolve("brad.zil", "BTC") == "1EVt92qQnaLDcmVFtHivRJaunG2mf2C3mB"
     assert resolve("vitalik.eth", "ETH") == "0xd8da6bf26964af9d7eed9e03e53415d37aa96045"
+    assert resolve("jim-unstoppable.klever", "ETH") == "0x57A82545be709963F0182B69F6E9B6f00B977592"
+    assert resolve("jim-unstoppable.crypto", "ETH") == "0x57A82545be709963F0182B69F6E9B6f00B977592"
+    assert resolve("jim-unstoppable.crypto", "BTC") == "bc1q4h40jge84c2stj8hya80hf7dqy77wuzqvd79ac"
+    assert (
+        resolve("jim-unstoppable.crypto", "MATIC") == "0x621bf2A4720DbFF5E0AC4A94f539ef7c4555Cf22"
+    )
+    # assert (
+    #     resolve("jim-unstoppable.zil", "USDC", True, "MATIC")
+    #     == "0x89f7D2F14Be6d283d69f6D2879637aF4AA3eEb93"
+    # )
+    # assert resolve("jim-unstoppable.zil", "USDC") == "0x89f7D2F14Be6d283d69f6D2879637aF4AA3eEb93"
+    assert (
+        resolve("jim-unstoppable.crypto", "USDT", True, "MATIC")
+        == "0x89f7D2F14Be6d283d69f6D2879637aF4AA3eEb93"
+    )
+    assert (
+        resolve("jim-unstoppable.zil", "USDT", True, "MATIC")
+        == "0x89f7D2F14Be6d283d69f6D2879637aF4AA3eEb93"
+    )

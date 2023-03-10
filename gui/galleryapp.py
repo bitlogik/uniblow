@@ -222,7 +222,9 @@ class Gallery:
         if ret_mod != wx.ID_OK:
             return
         # Resolve domain
-        resolved = resolve(dest_str, ETH_wallet.coin)
+        resolved = resolve(dest_str, self.nwallet.wallet.__class__.coin)
+        if not resolved:
+            resolved = resolve(dest_str, ETH_wallet.coin)
         if resolved:
             dest_addr = resolved
         else:

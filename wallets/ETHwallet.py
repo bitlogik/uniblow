@@ -538,7 +538,9 @@ class ETH_wallet:
 
     def check_address(self, addr_str):
         # Check if address or domain is valid
-        resolved = resolve(addr_str, ETH_wallet.coin)
+        resolved = resolve(addr_str, self.coin, self.eth.contract, self.__class__.coin)
+        if not resolved:
+            resolved = resolve(addr_str, ETH_wallet.coin)
         if resolved:
             addr_str = resolved
         return testaddr(addr_str)

@@ -49,11 +49,18 @@ def get_domain(api, contract, id, crypto_str):
     # call : getData([string],uint256)
     # hashID packing with string=["crypto.<crypto>.address"]
     crhex = crypto_str.encode("utf-8").hex()
+    nhex_around = 15
+    crlen = (len(crhex) // 2) + nhex_around
+    if crlen > 255:
+        raise ValueError("crypto_str is too large.")
+    crlenhex = "%0.2X" % crlen
     data = (
-        "0000000000000000000000000000000000000000000000000000000000000040"
-        f"{id}0000000000000000000000000000000000000000000000000000000000000012"
-        f"63727970746f2e{crhex}2e616464726573730000000000000000000000000000"
+        f"0000000000000000000000000000000000000000000000000000000000000040{id}"
+        f"00000000000000000000000000000000000000000000000000000000000000{crlenhex}"
+        f"63727970746f2e{crhex}2e61646472657373"
     )
+    if crlen < 32:
+        data += "00" * (32 - crlen)
     res = api.call(contract, "1be5e7ed", data)
     if not check_res(res):
         return None
@@ -69,7 +76,6 @@ def get_zil_domain(api, contract, id):
     if id:
         q.append(id)
     res = api.jsonrpc.request("GetSmartContractSubState", [contract, "records", q])
-    # print(res)
     if res is not None and res.get("records"):
         return res["records"]
     return None
@@ -112,24 +118,28 @@ def resolveZIL(name, crypto):
     # Call the registry to get the resolver for this node id
     res = get_zil_domain(api, ZILresolver, name_id)
     if res is None:
-        return None
-    if name_id not in res:
-        return None
-    if "arguments" not in res[name_id]:
-        return None
-    if isinstance(res[name_id]["arguments"], list):
+        pass
+    elif name_id not in res:
+        pass
+    elif "arguments" not in res[name_id]:
+        pass
+    elif isinstance(res[name_id]["arguments"], list):
         if len(res[name_id]["arguments"]) >= 2:
             resolver = res[name_id]["arguments"][1]
             # Resolve at the resolver
             if check_res(resolver):
                 res = get_zil_domain(api, resolver.replace("0x", ""), "")
-                if res is None or res == "":
-                    return None
-                return res.get(f"crypto.{crypto}.address")
-    return None
+                if res:
+                    res = res.get(f"crypto.{crypto}.address")
+                    if res:
+                        return res
+    # Try on the Polygon blockchain
+    api = Web3Client("https://rpc.ankr.com/polygon", "Uniblow/2")
+    name_id = name_hash(name)
+    return get_domain(api, resolver_polygon, name_id, crypto)
 
 
-def resolve(domain, crypto):
+def resolve(domain, crypto, is_token=False, chain="XXX"):
     """Generic name resolution for the wallets."""
     dom_split = domain.split(".")
     if not dom_split or len(dom_split) < 2:
@@ -137,6 +147,19 @@ def resolve(domain, crypto):
     tld = dom_split[-1]
     if crypto == "ETH" and tld in ENS_TLDS:
         return resolveENS(domain)
+    if is_token is False:
+        if crypto == "MATIC":
+            crypto = "MATIC.version.MATIC"
+        if crypto == "FTM":
+            crypto = "FTM.version.OPERA"
+    else:
+        if chain == "BSC":
+            chn = "BEP20"
+        else:
+            chn = "ERC20"
+            if chain == "FTM":
+                chain = "FANTOM"
+        crypto = f"{crypto}.version.{chn}"
     if tld in UD_TLDS:
         return resolveUD(domain, crypto)
     if tld in ZIL_TLDS:
