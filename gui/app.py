@@ -616,8 +616,13 @@ class UniblowApp(wx.App):
         self.send_dialog.Enable()
 
     def open_send(self, evt):
+        cansend_all = not getattr(self.wallet, "sendall_notallowed", False)
         self.send_dialog = SendModal(
-            self.gui_panel, self.wallet.coin, self.wallet.check_address, self.callback_send
+            self.gui_panel,
+            self.wallet.coin,
+            self.wallet.check_address,
+            cansend_all,
+            self.callback_send,
         )
         self.send_dialog.SetSize(scaleSize(self.send_dialog, (520, 420)))
         self.gui_panel.Disable()

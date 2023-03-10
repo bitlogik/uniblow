@@ -19,7 +19,7 @@ LOW_BALANCE = "Not enough balance for this transfer."
 
 
 class SendModal(SendDialog):
-    def __init__(self, parent, coin, check, callback):
+    def __init__(self, parent, coin, check, cansend_all, callback):
         bal_txt = parent.balance_info.GetLabel()
         bal_txt += parent.balance_small.GetLabel()
         super().__init__(parent)
@@ -36,7 +36,10 @@ class SendModal(SendDialog):
         self.Bind(wx.EVT_CLOSE, self.close)
         self.panel.text_dest.Bind(wx.EVT_TEXT, self.check_addr)
         self.panel.text_amount.Bind(wx.EVT_TEXT, self.compute_value)
-        self.panel.check_sendall.Bind(wx.EVT_CHECKBOX, self.check_all)
+        if cansend_all:
+            self.panel.check_sendall.Bind(wx.EVT_CHECKBOX, self.check_all)
+        else:
+            self.panel.check_sendall.Hide()
         self.panel.cancel_btn.SetCursor(handcurs)
         self.panel.ok_btn.SetCursor(handcurs)
         self.panel.paste_btn.SetBitmap(
