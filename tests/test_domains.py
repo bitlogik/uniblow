@@ -51,7 +51,8 @@ def test_resolve_zil():
     assert resolveZIL("brad.zil", "LTC") == "LetmswTW3b7dgJ46mXuiXMUY17XbK29UmL"
     assert (
         resolveZIL("brad.zil", "XMR")
-        == "447d7TVFkoQ57k3jm3wGKoEAkfEym59mK96Xw5yWamDNFGaLKW5wL2qK5RMTDKGSvYfQYVN7dLSrLdkwtKH3hwbSCQCu26d"
+        == "447d7TVFkoQ57k3jm3wGKoEAkfEym59mK96Xw5yWamDNFGaLKW5wL2qK5RMTDKGS"
+        "vYfQYVN7dLSrLdkwtKH3hwbSCQCu26d"
     )
     assert resolveZIL("brad.zil", "ZEC") == "t1h7ttmQvWCSH1wfrcmvT4mZJfGw2DgCSqV"
     assert resolveZIL("brad.zil", "ZIL") == "zil1yu5u4hegy9v3xgluweg4en54zm8f8auwxu0xxj"
@@ -84,5 +85,14 @@ def test_resolve():
     )
     assert (
         resolve("jim-unstoppable.zil", "USDT", True, "MATIC")
+        == "0x89f7D2F14Be6d283d69f6D2879637aF4AA3eEb93"
+    )
+    assert resolve("jim-unstoppable.crypto", "FTM") == "0x621bf2A4720DbFF5E0AC4A94f539ef7c4555Cf22"
+    assert (
+        resolve("jim-unstoppable.crypto", "UNI", True, "FTM")
+        == "0x89f7D2F14Be6d283d69f6D2879637aF4AA3eEb93"
+    )
+    assert (
+        resolve("jim-unstoppable.crypto", "UNI", True, "OP")
         == "0x89f7D2F14Be6d283d69f6D2879637aF4AA3eEb93"
     )
