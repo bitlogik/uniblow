@@ -1,5 +1,13 @@
 Uniblow versions history
 
+# 2.4.1
+
+* Improve NFT sending modal
+* Better domain name resolution
+* Display OP-ETH
+* OP testnet setup to Goerli
+* Change Polygon testnet RPC
+
 # 2.4.0
 
 * Improve Send
