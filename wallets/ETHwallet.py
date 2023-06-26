@@ -698,7 +698,7 @@ class ETH_wallet:
         elif fee_priority == 2:
             gaz_price = int(gaz_price * 1.6)
         else:
-            Exception("fee_priority must be 0, 1 or 2 (slow, normal, fast)")
+            raise Exception("fee_priority must be 0, 1 or 2 (slow, normal, fast)")
         tx_data = self.build_tx(
             shift_10(amount, self.eth.decimals), gaz_price, gazlimit, to_account
         )
@@ -736,7 +736,7 @@ class ETH_wallet:
         elif fee_priority == 2:
             gaz_price = int(gaz_price * 1.6)
         else:
-            Exception("fee_priority must be 0, 1 or 2 (slow, normal, fast)")
+            raise Exception("fee_priority must be 0, 1 or 2 (slow, normal, fast)")
         if self.eth.contract:
             fee = 0
         else:

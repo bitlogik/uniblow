@@ -218,7 +218,7 @@ def encode_der_s(int_r, int_s, curve_param):
     # Enforce low S
     n_limit = CURVES_ORDER.get(curve_param)
     if n_limit is None:
-        Exception("Encode DER signature to low S is only supported for K1 or R1.")
+        raise Exception("Encode DER signature to low S is only supported for K1 or R1.")
     if int_s > (n_limit >> 1):
         s_data = (n_limit - int_s).to_bytes(32, byteorder="big")
         array_s = encode_int_der(s_data)
