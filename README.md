@@ -25,7 +25,6 @@ A **uni**versal **blo**ckchain **w**allet for cryptos
 
 Official web site : https://uniblow.org  
 
-
 ![Uniblow screenshot](screenshot.png)
 
 Don't expect to get advanced settings for the fees. This software provides an
@@ -69,6 +68,12 @@ Compatible with the following blockchains :
   - ERC20 tokens, NFTs and SBTs
   
   - WalletConnect Dapps
+
+- TRON
+  
+  - Mainnet, Shasta and Nile networks
+  
+  - TRC20 tokens
 
 - FTM
   
@@ -351,10 +356,10 @@ The Yubico 5 is a recommended OpenPGP device.
 Special wallet options
 ----------------------
 
-### ERC20
+### Tokens / ERC20
 
-In ETH, BSC, MATIC, FTM, OP, METIS, CELO, GLMR, MOVR, AVAX or ARB, you can enable the Tokens option. Select a known preset token, or input an ERC20
-custom token address.
+In ETH, BSC, MATIC, TRX, FTM, OP, METIS, CELO, GLMR, MOVR, AVAX or ARB, you can enable the Tokens option. Select a known preset token, or input an ERC20
+custom token address. It is TRC20 base58 address for Tron.
 
 ### NFT
 
@@ -394,9 +399,8 @@ specific.
 
 Technically, the [HMAC](https://en.wikipedia.org/wiki/HMAC)(SHA512 x 2048) is
 replaced with
-[Scrypt](http://passwords12.project.ifi.uio.no/Colin_Percival_scrypt/Colin_Percival_scrypt_Passwords12.pdf)(8
-x Sensitive, spaces removed). A high-end [GPU
-hash-box](https://www.shellntel.com/blog/2017/2/8/how-to-build-a-8-gpu-password-cracker)
+[Scrypt](http://passwords12.project.ifi.uio.no/Colin_Percival_scrypt/Colin_Percival_scrypt_Passwords12.pdf)(8x Sensitive, spaces removed).
+A high-end [GPU hash-box](https://www.shellntel.com/blog/2017/2/8/how-to-build-a-8-gpu-password-cracker)
 can perform 1 million BIP39 derivations per second. With SecuBoost, it is
 approximately only 10 per second. The SecuBoost derivation is 100'000 times
 slower and additionally it takes 1GB RAM per try, so it is also very robust
@@ -428,7 +432,7 @@ Windows, Debian and MacOS platforms in a dedicated [build document](docs/Build.m
 License
 -------
 
-Copyright (C) 2021-2022 BitLogiK SAS
+Copyright (C) 2021-2023 BitLogiK SAS
 
 This program is free software: you can redistribute it and/or modify it under
 the terms of the GNU General Public License as published by the Free Software
