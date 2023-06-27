@@ -44,6 +44,7 @@ SUPPORTED_COINS = [
     "ETH",
     "BSC",
     "MATIC",
+    "TRX",
     "FTM",
     "OP",
     "METIS",

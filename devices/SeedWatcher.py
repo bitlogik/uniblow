@@ -2,7 +2,7 @@
 # -*- coding: utf8 -*-
 
 # UNIBLOW Seed Watcher keys device
-# Copyright (C) 2021-2022 BitLogiK
+# Copyright (C) 2021-2023 BitLogiK
 
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -55,6 +55,7 @@ from wallets.BTCwallet import BTC_wallet
 from wallets.ETHwallet import ETH_wallet
 from wallets.BSCwallet import BSC_wallet
 from wallets.MATICwallet import MATIC_wallet
+from wallets.TRXwallet import TRX_wallet
 from wallets.FTMwallet import FTM_wallet
 from wallets.OPwallet import OP_wallet
 from wallets.METISwallet import METIS_wallet
@@ -77,6 +78,8 @@ coins_list = [
     {"name": "Eth (alt. deriv2)", "path": "m/44'/60'/{0}/{2}", "wallet_lib": ETH_wallet},
     {"name": "BSC", "path": "m/44'/60'/{}'/{}/{}", "wallet_lib": BSC_wallet},
     {"name": "MATIC", "path": "m/44'/60'/{}'/{}/{}", "wallet_lib": MATIC_wallet},
+    {"name": "TRON", "path": "m/44'/195'/{}'/{}/{}", "wallet_lib": TRX_wallet},
+    {"name": "TRON (alt. deriv)", "path": "m/44'/195'/{2}'", "wallet_lib": TRX_wallet},
     {"name": "FTM", "path": "m/44'/60'/{}'/{}/{}", "wallet_lib": FTM_wallet},
     {"name": "OP", "path": "m/44'/60'/{}'/{}/{}", "wallet_lib": OP_wallet},
     {"name": "METIS", "path": "m/44'/60'/{}'/{}/{}", "wallet_lib": METIS_wallet},
