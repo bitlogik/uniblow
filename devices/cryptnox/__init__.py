@@ -92,11 +92,12 @@ class CryptnoxCard:
         if len(readers_list) > 0:
             logger.debug("Available smartcard readers : %s", readers_list)
             for r in readers_list:
-                if not str(r).startswith("Yubico"):
+                if not str(r).startswith("Yubico") and "hello" not in str(r).lower():
                     try:
                         logger.debug("Trying with reader : %s", r)
                         self.connection = r.createConnection()
                         self.connection.connect(CardConnection.T1_protocol)
+                        self.select()
                         reader_detected = hasattr(self, "connection")
                     except Exception:
                         logger.debug("Fail with this reader")
@@ -104,9 +105,7 @@ class CryptnoxCard:
                 if reader_detected:
                     logger.debug("A Cryptnox detected, using %s", r)
                     break
-        if reader_detected:
-            self.select()
-        else:
+        if not reader_detected:
             raise Exception("Can't find any Cryptnox connected.")
         self.sec_chan = None
         self.SNID = None  # will be set by get_manufacturer_cert (cert ID)
