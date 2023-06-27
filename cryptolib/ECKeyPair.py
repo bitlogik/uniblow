@@ -1,7 +1,7 @@
 # -*- coding: utf8 -*-
 
 # UNIBLOW  -  Elliptic Key Pair
-# Copyright (C) 2021-2022 BitLogiK
+# Copyright (C) 2021-2023 BitLogiK
 
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -29,6 +29,7 @@ from cryptolib.cryptography import random_generator, makeup_sig
 
 K1_CURVE = ec.SECP256K1()
 R1_CURVE = ec.SECP256R1()
+R384_CURVE = ec.SECP384R1()
 
 
 class EC_key_pair:
@@ -120,12 +121,20 @@ class ECpubkey:
             curveobj = K1_CURVE
         elif curve == "R1":
             curveobj = R1_CURVE
+        elif curve == "R384":
+            curveobj = R384_CURVE
         else:
-            raise ValueError("ECpubkey must be K1 or R1")
+            raise ValueError("ECpubkey must be K1, R1 or R384")
         self.pubkey_obj = ec.EllipticCurvePublicKey.from_encoded_point(curveobj, pubkey_data)
 
     def check_signature(self, msg, signature):
         """Check an ECDSA signature.
         Throws except InvalidSignature if not OK.
         """
-        self.pubkey_obj.verify(signature, msg, ec.ECDSA(hashes.SHA256()))
+        if self.pubkey_obj.key_size == 256:
+            h = hashes.SHA256()
+        elif self.pubkey_obj.key_size == 384:
+            h = hashes.SHA384()
+        else:
+            raise Exception("Invalid public key length.")
+        self.pubkey_obj.verify(signature, msg, ec.ECDSA(h))
