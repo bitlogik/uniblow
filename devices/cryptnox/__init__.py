@@ -2,7 +2,7 @@
 # -*- coding: utf8 -*-
 
 # Cryptnox smartcard applet commands
-# Copyright (C) 2019-2022  BitLogiK & Cryptnox
+# Copyright (C) 2019-2023  BitLogiK & Cryptnox
 
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -225,12 +225,6 @@ class CryptnoxCard:
         """Check card authenticity and prepare secure channel."""
         # The secure channels keys are in the authenticated from Cryptnox.
         # So we are sure it communicates with a genuine Cryptnox card.
-        PubKey_Mnft_data = bytes.fromhex(
-            "04"
-            "d9e6b0fb5fbdb835cadd4703748555f55c65a12a79f7b3ca02a2c7048912ad34"
-            "6080df7e09e73952adfa9f176219f5772c43826ae69642e31251d9b9ff9955d3"
-        )
-        pubkey_manufacturer = ECpubkey(PubKey_Mnft_data, "R1")
         mnft_cert_data = self.get_manufacturer_cert()
         logger.debug("Mft cert")
         logger.debug(mnft_cert_data.hex())
@@ -243,11 +237,46 @@ class CryptnoxCard:
             card_pubkey = ECpubkey(public_bytes(manufacturer_cert.public_key()), "R1")
         except Exception:
             raise CryptnoxInvalidException("Bad key format for card certificate public key.")
-        try:
-            pubkey_manufacturer.check_signature(
-                manufacturer_cert.tbs_certificate_bytes, manufacturer_cert.signature
-            )
-        except InvalidSignature:
+
+        def check_cert(pubkey_hex):
+            # Check the certificate signature with a parent public key
+            try:
+                PubKey_Mnft_data = bytes.fromhex(pubkey_hex)
+                key_type = "R1" if len(PubKey_Mnft_data) == 65 else "R384"
+                pubkey_manufacturer = ECpubkey(PubKey_Mnft_data, key_type)
+            except Exception:
+                return False
+            try:
+                pubkey_manufacturer.check_signature(
+                    manufacturer_cert.tbs_certificate_bytes, manufacturer_cert.signature
+                )
+                return True
+            except InvalidSignature:
+                return False
+
+        pubkeys = [
+            # Cryptnox CA 01
+            "04"
+            "d9e6b0fb5fbdb835cadd4703748555f55c65a12a79f7b3ca02a2c7048912ad34"
+            "6080df7e09e73952adfa9f176219f5772c43826ae69642e31251d9b9ff9955d3",
+            # Cryptnox DLT Cards CA
+            "04"
+            "647a112c2acf5a49b52b321cbdcf5a9ea307fc4ccd33aa78b9b8055dd84d03ae"
+            "dab02cc720a780cb1ff280af50774a6cdc157efa235ea25311a42b4cf57d8861",
+            # Cryptnox INTERMEDIATE CA 1
+            "04"
+            "685c8a4b916203646a4d293bc5e03d6c06f516572d07aa404bca1df0a7dfb81a"
+            "47953dae1a785bc2536df53db7c085803d03c4d5c4244f4a18d9cb02d2fbd3c8"
+            "421dea3a4b9a1ece7183167f49f346ceedb7520d81d2e5bce410a3cb36e6a658",
+            # Cryptnox INTERMEDIATE CA 2
+            "04"
+            "11f94389eba50d95bad74a69a2e2f7212cad2d6a1415b2a5d374990ee8f31e9b"
+            "3f9916d1d951829f7f39bce1f3118fb82e9075692f2e858c2b3ade442c9b4ca4"
+            "cd4cd0920ac2bd9276d392bf7880cf2d32019ab6e6277ad5a9f9eac559fc53fc",
+        ]
+
+        checks = list(map(check_cert, pubkeys))
+        if checks.count(True) != 1:
             raise CryptnoxInvalidException("Bad Cryptnox signature in card certificate.")
         # Extract card SN ID from cert
         self.SNID = manufacturer_cert.serial_number
