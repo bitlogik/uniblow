@@ -1,5 +1,13 @@
 Uniblow versions history
 
+# 2.5.0
+
+* Add Tron
+* Update for WalletConnect v2
+* Add newest Cryptnox genuine keys
+* Improve code
+* Internal auto detect options
+
 # 2.4.1
 
 * Improve NFT sending modal
