@@ -2,7 +2,7 @@
 # -*- coding: utf8 -*-
 
 # Uniblow DMG builder
-# Copyright (C) 2021-2022 BitLogiK
+# Copyright (C) 2021-2023 BitLogiK
 
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -15,7 +15,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 
-import biplist
+import plistlib
 import os.path
 
 exec(open("version.py", encoding="utf8").read())
@@ -28,7 +28,8 @@ appname = os.path.basename(application)
 
 def icon_from_app(app_path):
     plist_path = os.path.join(app_path, "Contents", "Info.plist")
-    plist = biplist.readPlist(plist_path)
+    with open(plist_path, "rb") as plistf:
+        plist = plistlib.load(plistf)
     icon_name = plist["CFBundleIconFile"]
     icon_root, icon_ext = os.path.splitext(icon_name)
     if not icon_ext:
