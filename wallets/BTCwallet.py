@@ -272,7 +272,6 @@ BTC_units = 8
 
 
 class BTC_wallet:
-
     coin = "BTC"
 
     networks = [

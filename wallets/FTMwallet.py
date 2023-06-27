@@ -21,7 +21,6 @@ from wallets.FTMtokens import tokens_values, ledger_tokens
 
 
 class FTM_wallet(ETH_wallet):
-
     coin = "FTM"
 
     networks = [

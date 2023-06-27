@@ -22,7 +22,6 @@ def test_eip712_simple():
 
 
 def test_eip712_A():
-
     # Official test vector from EIP712
     # https://eips.ethereum.org/EIPS/eip-712#test-cases
     # https://github.com/ethereum/EIPs/blob/master/assets/eip-712/Example.js#L129
@@ -85,7 +84,6 @@ def test_eip712_A():
 
 
 def test_eip712_B():
-
     # Test vectors from the npm package ethers-eip712
     # https://github.com/0xsequence/ethers-eip712/blob/master/tests/typed-data.test.ts
 

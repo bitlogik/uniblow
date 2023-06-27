@@ -106,7 +106,6 @@ class NFTWallet:
         return int(idxraw[2:], 16)
 
     def get_tokens_list(self, balance):
-
         arr_idxs = []
 
         try:

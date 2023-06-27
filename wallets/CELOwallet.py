@@ -21,7 +21,6 @@ from wallets.CELOtokens import tokens_values, ledger_tokens
 
 
 class CELO_wallet(ETH_wallet):
-
     coin = "CELO"
 
     networks = [

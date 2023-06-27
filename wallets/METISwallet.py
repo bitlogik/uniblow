@@ -21,7 +21,6 @@ from wallets.METIStokens import tokens_values
 
 
 class METIS_wallet(ETH_wallet):
-
     coin = "METIS"
 
     networks = [

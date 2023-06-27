@@ -722,7 +722,6 @@ def start_main_app():
 
 
 if __name__ == "__main__":
-
     app = gui.app.UniblowApp(DEVICES_LIST, get_coin_class)
     app.dev_selected = device_selected
     app.coin_selected = coin_selected

@@ -7,7 +7,6 @@ from gui.utils import icon_file, file_path
 
 class QRFrame(wx.Frame):
     def __init__(self, parent, coin, address, btn):
-
         super().__init__(
             parent,
             id=wx.ID_ANY,

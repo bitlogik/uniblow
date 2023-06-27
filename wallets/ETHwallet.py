@@ -306,7 +306,6 @@ class ETHwalletCore:
 
 
 class ETH_wallet:
-
     coin = "ETH"
 
     networks = [

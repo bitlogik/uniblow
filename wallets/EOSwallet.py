@@ -291,7 +291,6 @@ class EOSwalletCore:
 
 # Only local key for now
 class EOS_wallet:
-
     coin = "EOS"
 
     networks = [

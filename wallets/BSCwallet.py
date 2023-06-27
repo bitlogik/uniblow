@@ -21,7 +21,6 @@ from wallets.BSCtokens import tokens_values, ledger_tokens, nfts_values
 
 
 class BSC_wallet(ETH_wallet):
-
     coin = "BSC"
 
     networks = [

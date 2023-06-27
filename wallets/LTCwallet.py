@@ -265,7 +265,6 @@ LTC_units = 8
 
 
 class LTC_wallet:
-
     coin = "LTC"
 
     networks = [

@@ -46,7 +46,6 @@ native_tokens = {
 
 
 class PriceAPI:
-
     BASE_URL = "https://api.coingecko.com/api/v3/"
 
     def __init__(self, cb, token, chain=""):

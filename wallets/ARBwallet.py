@@ -21,7 +21,6 @@ from wallets.ARBtokens import tokens_values, nfts_values, ledger_tokens
 
 
 class ARB_wallet(ETH_wallet):
-
     coin = "ARB/ETH"
 
     networks = [

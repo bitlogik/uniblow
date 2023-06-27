@@ -21,7 +21,6 @@ from wallets.GLMRtokens import tokens_values
 
 
 class GLMR_wallet(ETH_wallet):
-
     coin = "GLMR"
 
     networks = [

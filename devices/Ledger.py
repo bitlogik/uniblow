@@ -60,7 +60,6 @@ def split_data(data):
 
 
 class Ledger(BaseDevice):
-
     is_HD = True
     has_screen = True
     ledger_tokens_compat = True

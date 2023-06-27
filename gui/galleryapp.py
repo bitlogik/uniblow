@@ -47,7 +47,6 @@ def opensea_url(chain_id, contract, id):
 
 
 class Gallery:
-
     img_width = 178
     img_border = 20
     n_cols = 4

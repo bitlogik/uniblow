@@ -29,7 +29,6 @@ class NotinitException(Exception):
 
 
 class Cryptnox(BaseDevice):
-
     has_password = True
     has_admin_password = True
     password_name = "PIN"

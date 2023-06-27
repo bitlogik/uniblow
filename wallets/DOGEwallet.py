@@ -215,7 +215,6 @@ DOGE_units = 8
 
 
 class DOGE_wallet:
-
     coin = "DOGE"
 
     networks = [

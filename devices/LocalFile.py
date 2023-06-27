@@ -45,7 +45,6 @@ class NotinitException(Exception):
 
 # Previously called HDdevice
 class LocalFile(BaseDevice):
-
     has_password = True
     password_retries_inf = True
     is_HD = True

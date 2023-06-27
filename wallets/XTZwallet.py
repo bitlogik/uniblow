@@ -44,7 +44,6 @@ def blake2b(data, output_sz=32):
 
 
 class RPC_api:
-
     BASE_BLOCK_URL = "/chains/main/blocks/head"
 
     def __init__(self, network):
@@ -134,7 +133,6 @@ def testaddr(xtz_addr):
 
 
 class XTZwalletCore:
-
     key_types = [
         "K1",
         "ED",
@@ -279,7 +277,6 @@ XTZ_units = 6
 
 
 class XTZ_wallet:
-
     coin = "XTZ"
 
     networks = [

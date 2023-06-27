@@ -176,7 +176,6 @@ def generate_mnemonic(nwords):
 
 
 class BIP32node:
-
     HARDENED_LIMIT = 2**31
 
     def __init__(self, i, depth, pvkey, chaincode, curve, parent_fingerprint):

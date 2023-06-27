@@ -21,7 +21,6 @@ from wallets.AVAXtokens import tokens_values, nfts_values, ledger_tokens
 
 
 class AVAX_wallet(ETH_wallet):
-
     coin = "AVAX"
 
     networks = [

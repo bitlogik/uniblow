@@ -202,7 +202,6 @@ class SOLwalletCore:
 
 
 class SOL_wallet:
-
     coin = "SOL"
 
     networks = [

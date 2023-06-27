@@ -27,7 +27,6 @@ EC_BYTES_SIZE = 32
 
 
 class SKdevice(BaseDevice):
-
     has_password = True
 
     def __init__(self):
