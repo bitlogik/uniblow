@@ -41,10 +41,16 @@ BLANK_ADDR = " " * 65
 
 
 def attach_tt(elt, txt):
-    ttc = wx.ToolTip(txt)
-    ttc.SetDelay(0)
-    elt.SetToolTip(ttc)
-    wx.CallLater(1200, lambda: ttc.SetTip(""))
+    if elt.GetToolTip() is None:
+        ttc = wx.ToolTip(txt)
+        ttc.SetDelay(0)
+        elt.SetToolTip(ttc)
+
+        def remove_tt():
+            ttc.SetTip("")
+            elt.UnsetToolTip()
+
+        wx.CallLater(1200, remove_tt)
 
 
 def isBitmapButton(elt):
