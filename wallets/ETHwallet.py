@@ -17,6 +17,7 @@
 
 import json
 from logging import getLogger
+from textwrap import fill
 
 from pyweb3 import Web3Client
 from pywalletconnect import WCClient, WCClientInvalidOption, WCClientException
@@ -587,11 +588,11 @@ class ETH_wallet:
         sign_request = (
             "WalletConnect signature request :\n\n"
             f"- Data to sign (hex) :\n"
-            f"- {data_hex}\n"
+            f"- {fill(data_hex)}\n"
             f"\n Data to sign (ASCII/UTF8) :\n"
         )
         try:
-            sign_request += f" {data_bin.decode('utf8')}\n"
+            sign_request += f" {fill(data_bin.decode('utf8'))}\n"
         except UnicodeDecodeError:
             sign_request += " <can't decode sign data to text>"
         if self.current_device.has_screen:
