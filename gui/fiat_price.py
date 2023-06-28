@@ -5,7 +5,7 @@ from wx import CallAfter
 
 
 chain_names = {
-    "GMLR": "moonbeam",
+    "GLMR": "moonbeam",
     "EOS": "eos",
     "XTZ": "tezos",
     "ARB": "arbitrum-one",
@@ -25,7 +25,7 @@ chain_names = {
 }
 
 native_tokens = {
-    "GMLR": "moonbeam",
+    "GLMR": "moonbeam",
     "EOS": "eos",
     "XTZ": "tezos",
     "ARB/ETH": "ethereum",

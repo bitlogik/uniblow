@@ -277,7 +277,7 @@ Uniblow version before 1.5 and transfer your fund.
 ### Ledger
 
 A Ledger hardware device such as Nano X and Nano S, can be used with Uniblow but
-only for Ethereum/EVM chains (ETH, BSC, MATIC, FTM, OP, METIS, CELO, GMLR, MOVR, AVAX and ARB).
+only for Ethereum/EVM chains (ETH, BSC, MATIC, FTM, OP, METIS, CELO, GLMR, MOVR, AVAX and ARB).
 
 The Ledger needs to be unlocked and run the Ethereum app. The address displayed
 in the wallet can be checked on the Ledger screen by clicking a dedicated UI

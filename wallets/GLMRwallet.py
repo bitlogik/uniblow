@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 # -*- coding: utf8 -*-
 
-# UNIBLOW GMLR wallet with with with RPC API REST
+# UNIBLOW GLMR wallet with with with RPC API REST
 # Copyright (C) 2021-2022 BitLogiK
 
 # This program is free software: you can redistribute it and/or modify
