@@ -299,7 +299,7 @@ class UniblowApp(wx.App):
     def open_devices_panel(self):
         self.gui_frame.swrun = False
         self.dev_panel = gui.maingui.DevicesPanel(self.gui_frame)
-        logo = wx.Image(file_path(f"gui/images/logo.png"), wx.BITMAP_TYPE_PNG)
+        logo = wx.Image(file_path("gui/images/logo.png"), wx.BITMAP_TYPE_PNG)
         logo.Rescale(64, 64)
         self.dev_panel.Layout()
         self.dev_panel.bmp_logo.SetBitmap(logo.ConvertToBitmap())
