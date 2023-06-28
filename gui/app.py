@@ -843,12 +843,16 @@ class UniblowApp(wx.App):
             cb_fiat = partial(self.display_fiat, coinw, wall_net, float(balance_num))
             # Read the coin price
             # if not testnet
-            if self.gui_panel.network_choice.GetSelection() == 0 or self.current_chain == "GLMR":
+            if self.gui_panel.network_choice.GetSelection() == 0 or self.wallet.coin == "MOVR":
                 if hasattr(self.wallet, "eth"):
                     if self.wallet.eth.contract and self.wallet.eth.is_fungible:
                         PriceAPI(cb_fiat, self.wallet.eth.contract, self.current_chain)
                     if not self.wallet.eth.contract:
                         PriceAPI(cb_fiat, self.wallet.coin)
+                elif self.current_chain == "TRX" and self.wallet.contract:
+                    PriceAPI(cb_fiat, self.wallet.contract, self.current_chain)
+                else:
+                    PriceAPI(cb_fiat, self.wallet.coin)
         else:
             self.gui_panel.fiat_panel.Hide()
             self.disable_send()

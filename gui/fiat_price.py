@@ -14,6 +14,7 @@ chain_names = {
     "FTM": "fantom",
     "CELO": "celo",
     "MATIC": "polygon-pos",
+    "TRX": "tron",
     "MOVR": "moonriver",
     "CRO": "cronos",
     "BOBA": "boba",
@@ -25,6 +26,10 @@ chain_names = {
 }
 
 native_tokens = {
+    "BTC": "bitcoin",
+    "DOGE": "dogecoin",
+    "LTC": "litecoin",
+    "TRX": "tron",
     "GLMR": "moonbeam",
     "EOS": "eos",
     "XTZ": "tezos",
@@ -54,27 +59,31 @@ class PriceAPI:
 
     def get_price(self, token_id, chainid, cb):
         """Read token price in USD from CoinGecko"""
-        call_url = ""
+        if chainid and chainid != "TRX":
+            token_id = token_id.lower()
         if chainid:
+            chain = chain_names.get(chainid)
+            if chain is None:
+                return
             call_url = (
                 f"{PriceAPI.BASE_URL}simple/token_price/"
-                f"{chain_names.get(chainid)}?"
-                f"contract_addresses={token_id.lower()}"
+                f"{chain}?"
+                f"contract_addresses={token_id}"
                 "&vs_currencies=usd"
             )
         else:
             token_id = native_tokens.get(token_id)
-            call_url = f"{PriceAPI.BASE_URL}simple/price?ids={token_id}" "&vs_currencies=usd"
-        if token_id is None:
+            if token_id is None:
+                return
+            call_url = f"{PriceAPI.BASE_URL}simple/price?ids={token_id}&vs_currencies=usd"
+
+        try:
+            rsp = urlopen(call_url)
+            value_json = load(rsp)
+        except Exception:
             return
-        if call_url:
-            try:
-                rsp = urlopen(call_url)
-                value_json = load(rsp)
-            except Exception:
-                return
-            try:
-                value = value_json[token_id.lower()]["usd"]
-            except KeyError:
-                return
-            cb(value)
+        try:
+            value = value_json[token_id]["usd"]
+        except KeyError:
+            return
+        cb(value)
