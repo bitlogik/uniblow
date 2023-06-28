@@ -37,6 +37,7 @@ class WalletPanel ( wx.Panel ):
     def __init__( self, parent, id = wx.ID_ANY, pos = wx.DefaultPosition, size = wx.Size( -1,-1 ), style = wx.TAB_TRAVERSAL, name = wx.EmptyString ):
         wx.Panel.__init__ ( self, parent, id = id, pos = pos, size = size, style = style, name = name )
 
+        self.SetForegroundColour( wx.Colour( 0, 0, 0 ) )
         self.SetBackgroundColour( wx.Colour( 248, 250, 252 ) )
 
         bSizer1 = wx.BoxSizer( wx.HORIZONTAL )
@@ -54,6 +55,8 @@ class WalletPanel ( wx.Panel ):
         bSizer1.Add( sbSizer5, 0, wx.EXPAND, 5 )
 
         self.m_panel1 = wx.Panel( self, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL )
+        self.m_panel1.SetForegroundColour( wx.Colour( 0, 0, 0 ) )
+
         bSizer6 = wx.BoxSizer( wx.VERTICAL )
 
         bSizer4 = wx.BoxSizer( wx.HORIZONTAL )
@@ -96,6 +99,7 @@ class WalletPanel ( wx.Panel ):
         bSizer28.Add( self.balance_unit, 0, wx.ALIGN_BOTTOM|wx.TOP|wx.BOTTOM|wx.RIGHT, 8 )
 
         self.fiat_panel = wx.Panel( self.m_panel1, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.BORDER_SUNKEN|wx.TAB_TRAVERSAL )
+        self.fiat_panel.SetForegroundColour( wx.Colour( 0, 0, 0 ) )
         self.fiat_panel.SetBackgroundColour( wx.Colour( 100, 116, 139 ) )
         self.fiat_panel.Hide()
 
@@ -181,6 +185,7 @@ class WalletPanel ( wx.Panel ):
         bSizer6.Add( optevt_sizer, 0, wx.BOTTOM, 16 )
 
         self.m_panel4 = wx.Panel( self.m_panel1, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL )
+        self.m_panel4.SetForegroundColour( wx.Colour( 0, 0, 0 ) )
         self.m_panel4.SetBackgroundColour( wx.Colour( 240, 240, 240 ) )
 
         bSizer32 = wx.BoxSizer( wx.VERTICAL )
@@ -189,6 +194,7 @@ class WalletPanel ( wx.Panel ):
         bSizer32.Add( ( 0, 0), 0, wx.TOP, 16 )
 
         self.m_panel5 = wx.Panel( self.m_panel4, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL )
+        self.m_panel5.SetForegroundColour( wx.Colour( 0, 0, 0 ) )
         self.m_panel5.SetBackgroundColour( wx.Colour( 255, 255, 255 ) )
 
         bSizer36 = wx.BoxSizer( wx.HORIZONTAL )
@@ -270,6 +276,7 @@ class WalletPanel ( wx.Panel ):
         self.alt_text.Wrap( 120 )
 
         self.alt_text.SetFont( wx.Font( 11, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, False, wx.EmptyString ) )
+        self.alt_text.SetForegroundColour( wx.Colour( 0, 0, 0 ) )
 
         bSizer6.Add( self.alt_text, 0, wx.ALIGN_CENTER_HORIZONTAL, 5 )
 
@@ -370,6 +377,7 @@ class HDPanel ( wx.Panel ):
     def __init__( self, parent, id = wx.ID_ANY, pos = wx.DefaultPosition, size = wx.Size( -1,-1 ), style = wx.TAB_TRAVERSAL, name = wx.EmptyString ):
         wx.Panel.__init__ ( self, parent, id = id, pos = pos, size = size, style = style, name = name )
 
+        self.SetForegroundColour( wx.Colour( 0, 0, 0 ) )
         self.SetBackgroundColour( wx.Colour( 248, 250, 252 ) )
 
         bSizer11 = wx.BoxSizer( wx.VERTICAL )
@@ -564,6 +572,7 @@ class SendPanel ( wx.Panel ):
     def __init__( self, parent, id = wx.ID_ANY, pos = wx.DefaultPosition, size = wx.Size( -1,-1 ), style = wx.TAB_TRAVERSAL, name = wx.EmptyString ):
         wx.Panel.__init__ ( self, parent, id = id, pos = pos, size = size, style = style, name = name )
 
+        self.SetForegroundColour( wx.Colour( 0, 0, 0 ) )
         self.SetBackgroundColour( wx.Colour( 248, 250, 252 ) )
 
         bSizer13 = wx.BoxSizer( wx.HORIZONTAL )
@@ -631,6 +640,8 @@ class SendPanel ( wx.Panel ):
         self.text_avail = wx.StaticText( sbSizer3.GetStaticBox(), wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.Size( -1,-1 ), 0 )
         self.text_avail.Wrap( -1 )
 
+        self.text_avail.SetForegroundColour( wx.Colour( 0, 0, 0 ) )
+
         bSizer18.Add( self.text_avail, 0, wx.BOTTOM|wx.RIGHT|wx.LEFT, 5 )
 
 
@@ -647,6 +658,8 @@ class SendPanel ( wx.Panel ):
 
         self.text_coin = wx.StaticText( sbSizer3.GetStaticBox(), wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, 0 )
         self.text_coin.Wrap( -1 )
+
+        self.text_coin.SetForegroundColour( wx.Colour( 0, 0, 0 ) )
 
         bSizer20.Add( self.text_coin, 0, wx.TOP|wx.BOTTOM|wx.RIGHT, 5 )
 
@@ -771,6 +784,7 @@ class OptionPanel ( wx.Panel ):
     def __init__( self, parent, id = wx.ID_ANY, pos = wx.DefaultPosition, size = wx.Size( 396,400 ), style = wx.TAB_TRAVERSAL, name = wx.EmptyString ):
         wx.Panel.__init__ ( self, parent, id = id, pos = pos, size = size, style = style, name = name )
 
+        self.SetForegroundColour( wx.Colour( 0, 0, 0 ) )
         self.SetBackgroundColour( wx.Colour( 248, 250, 252 ) )
 
         bSizer18 = wx.BoxSizer( wx.VERTICAL )
