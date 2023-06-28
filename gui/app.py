@@ -87,7 +87,7 @@ class InfoBox(gui.infodialog.InfoDialog):
 
     def copy_text_dialog(self, event):
         event.Skip()
-        if wx.TheClipboard.Open():
+        if wx.TheClipboard.IsOpened() or wx.TheClipboard.Open():
             wx.TheClipboard.Clear()
             wx.TheClipboard.SetData(wx.TextDataObject(self.message))
             wx.TheClipboard.Flush()
@@ -230,7 +230,7 @@ class app_option_panel(gui.maingui.OptionPanel):
         """Paste the clipboard value in new_choice input field."""
         event.Skip()
         text_data = wx.TextDataObject()
-        if wx.TheClipboard.Open():
+        if wx.TheClipboard.IsOpened() or wx.TheClipboard.Open():
             success = wx.TheClipboard.GetData(text_data)
             wx.TheClipboard.Close()
         if success:

@@ -92,7 +92,7 @@ class SendModal(SendDialog):
     def paste_addr(self, evt):
         evt.Skip()
         text_data = wx.TextDataObject()
-        if wx.TheClipboard.Open():
+        if wx.TheClipboard.IsOpened() or wx.TheClipboard.Open():
             success = wx.TheClipboard.GetData(text_data)
             wx.TheClipboard.Close()
             if success:
