@@ -279,7 +279,7 @@ class UniblowApp(wx.App):
         self.coin_classes = coinclasses
         self.dev_selected = None
         self.coin_selected = None
-        self.current_chain = None
+        self.current_chain = ""
 
     def OnInit(self):
         self.HAND_CURSOR = wx.Cursor(wx.CURSOR_HAND)
