@@ -141,7 +141,7 @@ Compatible with the following blockchains :
   
   - tz2 wallet
   
-  - Main Tezos, testnet Ghost and Kathmandu networks
+  - Main Tezos and testnet Ghost networks
 
 - LTC
   

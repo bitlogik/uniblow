@@ -282,7 +282,6 @@ class XTZ_wallet:
     networks = [
         "Mainnet",
         "Ghostnet",
-        "Limanet",
     ]
 
     wtypes = [
@@ -297,10 +296,6 @@ class XTZ_wallet:
             "m/44'/1729'/{}'/{}",
         ],
         # testnet
-        [
-            "m/44'/1'/{}'/0/{}",
-            "m/44'/1'/{}'/{}",
-        ],
         [
             "m/44'/1'/{}'/0/{}",
             "m/44'/1'/{}'/{}",
