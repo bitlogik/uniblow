@@ -24,7 +24,7 @@ import logging
 import cryptolib.coins
 from cryptolib.base58 import decode_base58
 from cryptolib.bech32 import test_bech32
-from cryptolib.cryptography import compress_pubkey
+from cryptolib.cryptography import compress_pubkey, sha2
 from wallets.name_service import resolve
 from wallets.wallets_utils import balance_string, shift_10, NotEnoughTokens
 
@@ -335,9 +335,11 @@ class LTC_wallet:
         return f"https://blockchair.com/litecoin/address/{self.ltc.address}"
 
     def raw_tx(self, amount, fee, to_account):
-        hashes_to_sign = self.ltc.prepare(to_account, amount, fee)
+        msgs_to_sign = self.ltc.prepare(to_account, amount, fee)
         tx_signatures = []
-        for msg in hashes_to_sign:
+        for msg in msgs_to_sign:
+            if not self.current_device.has_screen:
+                msg = sha2(msg)
             asig = self.current_device.sign(msg)
             tx_signatures.append(asig)
         return self.ltc.send(tx_signatures)
