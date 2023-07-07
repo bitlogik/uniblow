@@ -179,7 +179,6 @@ class BIP32node:
     HARDENED_LIMIT = 2**31
 
     def __init__(self, i, depth, pvkey, chaincode, curve, parent_fingerprint):
-        # self.vpub_bytes = bytes.fromhex("0488B21E")  # testnet 0x043587CF
         self.curve = curve.upper()
         self.pv_key = EC_key_pair(pvkey, self.curve)
         self.chain_code = chaincode
