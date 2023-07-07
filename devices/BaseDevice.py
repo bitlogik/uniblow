@@ -78,15 +78,17 @@ class BaseDevice(ABC):
     def get_public_key(self, cb=None):
         """Provide the public key in bytes X962 format.
         Uncompressed format.
-        May have a callback argument if device has screen (to check on screen)
-        For EdDSA provide the "raw" 32 bytes public key in hex.
+        May have a callback argument if device has screen (to check on screen).
+        For EdDSA it provides the "raw" 32 bytes public key.
         """
         pass
 
     @abstractmethod
     def sign(self, hashed_msg):
-        """Sign a hash and return with ASN DER encoding.
-        For EdDSA it returns the "raw" 64 bytes RS signature in hex.
-        And in case has_screen : return v,r,s for EVM transactions.
+        """Sign a hash and return with ASN1 DER encoding.
+        In case has_screen :
+            hashed_msg is the message, hash is perfomed on device.
+            For EVM, return v,r,s.
+        For EdDSA it returns the "raw" 64 bytes RS signature.
         """
         pass
