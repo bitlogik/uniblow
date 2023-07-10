@@ -1,5 +1,15 @@
 Uniblow versions history
 
+# 2.5.2
+
+* Display prices for all blockchains
+* Improve GUI for dark theme
+* Display WC sign query on multiple lines
+* Improve clipboard mechanism reliability
+* Fix a crash when multiple clicks on copy address
+* Remove XTZ Limanet
+* Fix issues with Moonbeam
+
 # 2.5.0
 
 * Add Tron

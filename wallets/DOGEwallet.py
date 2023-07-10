@@ -23,7 +23,7 @@ import re
 
 import cryptolib.coins
 from cryptolib.base58 import decode_base58
-from cryptolib.cryptography import compress_pubkey
+from cryptolib.cryptography import compress_pubkey, sha2
 from wallets.name_service import resolve
 from wallets.wallets_utils import balance_string, shift_10, NotEnoughTokens
 
@@ -289,14 +289,14 @@ class DOGE_wallet:
         return f"https://blockchair.com/dogecoin/address/{self.doge.address}"
 
     def raw_tx(self, amount, fee, to_account):
-        hashes_to_sign = self.doge.prepare(to_account, amount, fee)
+        msgs_to_sign = self.doge.prepare(to_account, amount, fee)
         tx_signatures = []
-        for msg in hashes_to_sign:
-            # debug satochip
-            logger.debug(f"msg before hash: {msg.hex()}") # debug satochip
-            msg = sha2(msg)
+        for msg in msgs_to_sign:
+            if self.current_device.device_name == "Satochip":
+                msg = sha2(msg)
+            elif not self.current_device.has_screen:
+                msg = sha2(msg)
             logger.debug(f"msg after hash: {msg.hex()}") # debug satochip
-            # endbug
             asig = self.current_device.sign(msg)
             tx_signatures.append(asig)
             logger.debug(f"tx_signatures (in bytes): {tx_signatures}") # debug satochip
