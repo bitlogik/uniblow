@@ -19,6 +19,7 @@ from abc import ABC, abstractmethod
 
 class BaseDevice(ABC):
     # Default values - Override if different
+    device_name = "BaseDevice"
     created = False
     has_password = False
     password_name = "local user password"

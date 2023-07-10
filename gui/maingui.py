@@ -338,6 +338,9 @@ class DevicesPanel ( wx.Panel ):
         self.d_btn05 = wx.BitmapButton( self, wx.ID_ANY, wx.NullBitmap, wx.DefaultPosition, wx.DefaultSize, wx.BU_AUTODRAW|wx.BORDER_NONE|wx.BORDER_NONE )
         fgSizer1.Add( self.d_btn05, 0, wx.ALL, 5 )
 
+        self.d_btn06 = wx.BitmapButton( self, wx.ID_ANY, wx.NullBitmap, wx.DefaultPosition, wx.DefaultSize, wx.BU_AUTODRAW|wx.BORDER_NONE|wx.BORDER_NONE )
+        fgSizer1.Add( self.d_btn06, 0, wx.ALL, 5 )
+
 
         bSizer3.Add( fgSizer1, 0, wx.ALIGN_CENTER_HORIZONTAL|wx.TOP, 8 )
 

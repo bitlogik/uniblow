@@ -72,6 +72,7 @@ datai = [
     ("../gui/images/btns/dev_ledger.png", "gui/images/btns/"),
     ("../gui/images/btns/dev_cryptnox.png", "gui/images/btns/"),
     ("../gui/images/btns/dev_openpgp.png", "gui/images/btns/"),
+    ("../gui/images/btns/dev_satochip.png", "gui/images/btns/"),
     ("../gui/images/btns/addrchk.png", "gui/images/btns/"),
     ("../gui/images/btns/tokens.png", "gui/images/btns/"),
     ("../gui/images/btns/nfts.png", "gui/images/btns/"),
