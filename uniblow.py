@@ -87,6 +87,7 @@ DEVICES_LIST = [
     "Ledger",
     "Cryptnox",
     "OpenPGP",
+    "Satochip",
 ]
 
 DEFAULT_PASSWORD = "NoPasswd"
@@ -263,6 +264,11 @@ def device_selected(sel_device):
         coins_list.remove("SOL")
     if device_sel_name == "Cryptnox":
         coins_list.remove("SOL")
+    if device_sel_name == "Satochip":
+        coins_list.remove("SOL")
+        coins_list.remove("EOS")
+        coins_list.remove("BTC")
+        coins_list.remove("LTC")
     if sel_device == 0:
         # Seed Watcher
         start_seedwatcher(app, cb_open_wallet)

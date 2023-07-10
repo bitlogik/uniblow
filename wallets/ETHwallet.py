@@ -261,6 +261,28 @@ class ETHwalletCore:
         )
         return tx_final.hex()
 
+    def add_vrs_satochip(self, vrs):
+        v_int = vrs[0] + 35 + 2*self.chainID #EIP155
+        logger.debug(f"v_int: {v_int}")
+        v = int2bytearray(v_int)
+        r = int2bytearray(vrs[1])
+        s = int2bytearray(vrs[2])
+        tx_final = rlp_encode(
+            [
+                self.nonce,
+                self.gasprice,
+                self.startgas,
+                self.to,
+                self.value,
+                self.data,
+                v,
+                r,
+                s,
+            ]
+        )
+        logger.debug(f"tx_final: {tx_final.hex()}")
+        return tx_final.hex()
+
     def add_vrs(self, vrs):
         # v from Ledger hardware device is only the 8 bits LSB
         v_high = self.chainID >> 7
@@ -324,10 +346,10 @@ class ETH_wallet:
         ],
         # testnets
         [
-            "m/44'/1'/{}'/0/{}",
+            "m/44'/60'/{}'/0/{}", #"m/44'/1'/{}'/0/{}",
         ],
         [
-            "m/44'/1'/{}'/0/{}",
+            "m/44'/60'/{}'/0/{}", #"m/44'/1'/{}'/0/{}",
         ],
     ]
 
@@ -570,7 +592,11 @@ class ETH_wallet:
         if data is None:
             data = bytearray(b"")
         tx_bin, hash_to_sign = self.eth.prepare(account, amount, gazprice, ethgazlimit, data)
-        if self.current_device.has_screen:
+        if self.current_device.device_name == "Satochip":
+            vrs = self.current_device.sign(tx_bin)
+            logger.debug(f"vrs: {vrs}")
+            return self.eth.add_vrs_satochip(vrs)
+        elif self.current_device.has_screen:
             if self.eth.contract and self.current_device.ledger_tokens_compat:
                 # Token known by Ledger ?
                 ledger_info = self.ledger_tokens.get(self.eth.contract.lower())
@@ -647,7 +673,11 @@ class ETH_wallet:
         elif self.current_device.has_hardware_button:
             sign_request += USER_BUTTON
         if self.confirm_callback(sign_request):
-            if self.current_device.has_screen:
+            logger.debug(f"type(current_device): {type(self.current_device)}")
+            if self.current_device.device_name == "Satochip":
+                v, r, s = self.current_device.sign_eip712(data_obj)
+                return self.eth.encode_vrs(v, r, s)
+            elif self.current_device.has_screen:
                 v, r, s = self.current_device.sign_eip712(hash_domain, hash_data)
                 return self.eth.encode_vrs(v, r, s)
             # else
