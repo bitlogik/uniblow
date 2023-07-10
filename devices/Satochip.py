@@ -44,6 +44,9 @@ class pwdException(Exception):
 class NotinitException(Exception):
     pass
 
+class NoCardPresent(Exception):
+    pass
+
 MESSAGE_HEADER = b"\x19Ethereum Signed Message:\n"
 EIP712_HEADER = b"\x19\x01"
 
@@ -210,6 +213,8 @@ class Satochip(BaseDevice):
         logger.debug(f"in open_account")
         logger.debug(f"self.cc.setup_done: {self.cc.setup_done}")
         logger.debug(f"self.cc.is_seeded: {self.cc.is_seeded}")
+        if not self.cc.card_present:
+            raise NoCardPresent("No Satochip found... Please insert card and try again!")
         if not self.cc.setup_done:
             raise NotinitException()
         if not self.cc.is_seeded:
