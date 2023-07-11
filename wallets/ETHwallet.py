@@ -346,10 +346,10 @@ class ETH_wallet:
         ],
         # testnets
         [
-            "m/44'/60'/{}'/0/{}", #"m/44'/1'/{}'/0/{}",
+            "m/44'/1'/{}'/0/{}",
         ],
         [
-            "m/44'/60'/{}'/0/{}", #"m/44'/1'/{}'/0/{}",
+            "m/44'/1'/{}'/0/{}",
         ],
     ]
 
@@ -648,6 +648,7 @@ class ETH_wallet:
         if chain_id is not None and self.chainID != data_obj["domain"]["chainId"]:
             logger.debug("Wrong chain id in signedTypedData")
             return None
+            #return self.eth.encode_vrs(0,0,0) # send dummy signature ?
         hash_domain, hash_data = typed_sign_hash(data_obj)
         sign_request = (
             "WalletConnect signature request :\n\n"
