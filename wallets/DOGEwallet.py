@@ -27,8 +27,6 @@ from cryptolib.cryptography import compress_pubkey, sha2
 from wallets.name_service import resolve
 from wallets.wallets_utils import balance_string, shift_10, NotEnoughTokens
 
-from cryptolib.cryptography import sha2 # debug satochip
-
 logger = logging.getLogger(__name__)
 
 
@@ -170,9 +168,7 @@ class DOGEwalletCore:
         if changevalue > 0:
             outs.append({"value": changevalue, "address": self.address})
         self.tx = cryptolib.coins.dogecoin.Doge(testnet=self.testnet).mktx(inputs, outs)
-        logger.debug(f"self.tx: {self.tx}") # debugsatochip
         script = cryptolib.coins.mk_pubkey_script(self.address)
-        logger.debug(f"script: {script}") # debugsatochip
 
         # Finish tx
         # Sign each input
@@ -183,10 +179,6 @@ class DOGEwalletCore:
                 self.tx, i, script, cryptolib.coins.SIGHASH_ALL
             )
             datahashes.append(cryptolib.coins.bin_txhash(signing_tx, cryptolib.coins.SIGHASH_ALL))
-            logger.debug(f"input nbr: {i}") # debugsatochip
-            logger.debug(f"signing_tx: {signing_tx}") # debugsatochip
-            #logger.debug(f"signing_tx_hex: {signing_tx.hex()}") # debugsatochip
-            logger.debug(f"datahash: {cryptolib.coins.bin_txhash(signing_tx, cryptolib.coins.SIGHASH_ALL).hex()}") # debugsatochip
         return datahashes
 
     def send(self, signatures):
@@ -196,7 +188,6 @@ class DOGEwalletCore:
                 [signature_der_hex, self.pubkey]
             )
         txhex = cryptolib.coins.serialize(self.tx)
-        logger.debug(f"txhex: {txhex}") # debug satochip
         return "\nDONE, txID : " + self.api.pushtx(txhex)
 
     def balance_fmutxos(self, utxos):
@@ -293,13 +284,11 @@ class DOGE_wallet:
         tx_signatures = []
         for msg in msgs_to_sign:
             if not self.current_device.has_screen:
-                msg = sha2(msg)
+                msg = sha2(msg) # compute second hash of tx
             msg = sha2(msg)
-            logger.debug(f"msg after hash: {msg.hex()}") # debug satochip
             # endbug
             asig = self.current_device.sign(msg)
             tx_signatures.append(asig)
-            logger.debug(f"tx_signatures (in bytes): {tx_signatures}") # debug satochip
         return self.doge.send(tx_signatures)
 
     def assess_fee(self, fee_priority):
