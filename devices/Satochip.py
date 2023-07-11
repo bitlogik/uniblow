@@ -24,19 +24,12 @@ from devices.BaseDevice import BaseDevice
 from wallets.typed_data_hash import typed_sign_hash, print_text_query
 from cryptolib.cryptography import public_key_recover, sha2, sha3, makeup_sig
 from cryptolib.HDwallet import (
-    HD_Wallet,
-    mnemonic_to_seed,
     generate_mnemonic,
-    encode_bip32_string, 
-    BIP32node, 
-    mnemonic_to_seed, 
     bip39_mnemonic_to_seed, 
     bip39_is_checksum_valid,
-    generate_mnemonic,
 )
 
 logger = getLogger(__name__)
-logger.setLevel(DEBUG)
 
 class pwdException(Exception):
     pass
@@ -74,20 +67,12 @@ class Satochip(BaseDevice):
     account = "0"
     aindex = "0"
     #legacy_derive = False?
-    print("print class Satochip")
 
     def __init__(self):
-        print("print __init__()")
-        loglevel= DEBUG
-        logger.setLevel(loglevel)
-        logger.info(f"Logging set to level: {str(loglevel)}")
-        logger.info(f"info __init__()")
+        # loglevel= DEBUG
+        # logger.setLevel(loglevel)
         logger.debug(f"debug __init__()")
-        logger.warning(f"warning __init__()")
-        logger.error(f"error: __init__()")
         self.created = False
-        #self.ledger_device = None
-        self.cc = None
         self.bin_path = None
         self.account = None
         self.aindex = None
@@ -116,7 +101,7 @@ class Satochip(BaseDevice):
                 msg = msg[len(prefix):]
                 msg = msg[:-len(suffix)]
                 self.pw_left = int(msg)
-                self.pin = None
+                self.pin = None # reset cached PIN since it was wrong
             if type(msg)==str and msg.startswith("Too many failed attempts!"):
                 raise Exception(msg)
         if request_type == "update_status":
@@ -129,9 +114,8 @@ class Satochip(BaseDevice):
 
 
     def PIN_dialog(self, msg):
-        # msg = f'Enter the PIN for your {self.card_type}:'
-        # (is_PIN, pin_0)= self.client.PIN_dialog(msg) #todo: use request?
         logger.debug(f"in PIN_dialog()")
+        # msg = f'Enter the PIN for your {self.card_type}:'
         if self.pin:
             return (True, self.pin)
         else: 
@@ -145,49 +129,47 @@ class Satochip(BaseDevice):
         """When has_password and not password_retries_inf"""
         logger.debug(f"in is_init()")
         import time
-        time.sleep(1)
+        time.sleep(1) # needs some time to access the card
         self.cc.card_get_status()
         # todo: verify version vs pysatochip
         return self.cc.setup_done
 
     def initialize_device(self, settings):
         logger.debug(f"initialize_device")
-        logger.debug(f"type(settings): {type(settings)}")
-        logger.debug(f"settings: {settings}")
+        #logger.debug(f"settings: {settings}")
         self.account = settings["account"]
         self.aindex = settings["index"]
-        self.legacy_derive = settings["legacy_path"] # todo
+        self.legacy_derive = settings["legacy_path"] 
         self.pin = settings["file_password"]
+        if not self.cc.setup_done:
+            # setup device
+            pin_tries_0= 0x05;
+            pin_0= list(self.pin.encode('utf8'))
+            # PUK code can be used when PIN is unknown and the card is locked
+            # We use a random value as the PUK is not used currently in GUI
+            ublk_tries_0= 0x01;
+            ublk_0= list(urandom(16)); 
+            pin_tries_1= 0x01
+            ublk_tries_1= 0x01
+            pin_1= list(urandom(16)); #the second pin is not used currently
+            ublk_1= list(urandom(16));
+            secmemsize= 32 # number of slot reserved in memory cache
+            memsize= 0x0000 # RFU
+            create_object_ACL= 0x01 # RFU
+            create_key_ACL= 0x01 # RFU
+            create_pin_ACL= 0x01 # RFU
+            #setup
+            (response, sw1, sw2)=self.cc.card_setup(pin_tries_0, ublk_tries_0, pin_0, ublk_0,
+                    pin_tries_1, ublk_tries_1, pin_1, ublk_1, 
+                    secmemsize, memsize, 
+                    create_object_ACL, create_key_ACL, create_pin_ACL)
         self.cc.set_pin(0, self.pin)
-        # setup device
-        pin_tries_0= 0x05;
-        pin_0= list(self.pin.encode('utf8'))
-        # PUK code can be used when PIN is unknown and the card is locked
-        # We use a random value as the PUK is not used currently in GUI
-        ublk_tries_0= 0x01;
-        ublk_0= list(urandom(16)); 
-        pin_tries_1= 0x01
-        ublk_tries_1= 0x01
-        pin_1= list(urandom(16)); #the second pin is not used currently
-        ublk_1= list(urandom(16));
-        secmemsize= 32 # number of slot reserved in memory cache
-        memsize= 0x0000 # RFU
-        create_object_ACL= 0x01 # RFU
-        create_key_ACL= 0x01 # RFU
-        create_pin_ACL= 0x01 # RFU
-        #setup
-        (response, sw1, sw2)=self.cc.card_setup(pin_tries_0, ublk_tries_0, pin_0, ublk_0,
-                pin_tries_1, ublk_tries_1, pin_1, ublk_1, 
-                secmemsize, memsize, 
-                create_object_ACL, create_key_ACL, create_pin_ACL)
         self.cc.card_verify_PIN()
-        # Compute the seed
+        # Compute & import the seed
         if bip39_is_checksum_valid(settings["mnemonic"]):
             seedg = bip39_mnemonic_to_seed(
                 mnemonic_phrase=settings["mnemonic"], passphrase= settings["HD_password"]
             )
-            logger.debug(f"seedg: {seedg}")
-            logger.debug(f"seedg.hex(): {seedg.hex()}")
             # Initialize the Satochip
             seed= list(seedg)
             self.authentikey= self.cc.card_bip32_import_seed(seed)
@@ -195,19 +177,8 @@ class Satochip(BaseDevice):
         else:
             raise Exception("BIP39 seed is not valid!")
 
-    # def compute_masterkeys(self, seed):
-    #     """Compute master keys from seed"""
-    #     self.master_node_k1 = HD_Wallet.from_seed(seed, "K1")
-    #     # self.master_node_r1 = HD_Wallet.from_seed(seed, "R1")
-    #     self.master_node_ed = HD_Wallet.from_seed(seed, "ED")
-
     def generate_mnemonic(self):
         return generate_mnemonic(12)
-
-    # def check_mnemonic(self, mnemonic):
-    #     # return checksum_valid, wordlist_valid (bool, bool)
-    #     return bip39_is_checksum_valid(mnemonic)
-
 
     def open_account(self, password):
         logger.debug(f"in open_account")
@@ -219,9 +190,8 @@ class Satochip(BaseDevice):
             raise NotinitException()
         if not self.cc.is_seeded:
             # Must be initialized and seeded
-            #raise Exception("Import a seed in this Satochip card.")
             raise NotinitException()
-        self.account = "0" # todo?
+        self.account = "0" 
         self.aindex = "0"
         if type(password) == str:
             password = list(password.encode('utf8'))
@@ -232,7 +202,7 @@ class Satochip(BaseDevice):
         except Exception as exc:
             logger.error(f"Exception in open_account: {exc}")
             # todo: get remainng PIN value
-            raise pwdException(3)
+            raise pwdException(self.pw_left)
     
     def set_path(self, settings):
         self.account = settings["account"]
@@ -270,7 +240,6 @@ class Satochip(BaseDevice):
 
     def sign(self, data):
         logger.debug(f"in sign:")
-        logger.debug(f"type(data): {type(data)}")
         logger.debug(f"data.hex(): {data.hex()}")
         # data in bytes
         if len(data) == 32:
@@ -278,26 +247,23 @@ class Satochip(BaseDevice):
         else: 
             return self.sign_evm(data)
 
-    # sign hash
+    # sign 32-bytes prehashed value
     def sign_hash(self, hash_bytes):
         logger.debug(f"in sign_hash:")
-        logger.debug(f"type(hash_bytes): {type(hash_bytes)}")
         logger.debug(f"hash_bytes.hex(): {hash_bytes.hex()}")
 
         if self.cc.needs_2FA:
+            # blind signing
             msg={}
             msg['action']= "sign_tx_hash"
-            msg['tx']= "" # blind signing
+            msg['tx']= "" 
             msg['hash']= hash_bytes.hex()
-            #msg['from']= from_ # TODO
             msg['chain']= "" #
-            #msg['chainId']= self.chainId # optionnal, otherwise taken from tx deserialization...
             (is_approved, hmac)= self.do_challenge_response(msg)
         else:
             (is_approved, hmac)= (True, None) 
 
         if is_approved:
-            logger.debug(f"CALLBACK Approve tx signature? YES!")
             try:
                 # derive key
                 # we take the pubkey previously recovered from self.get_public_key()
@@ -306,19 +272,6 @@ class Satochip(BaseDevice):
                 (response, sw1, sw2)=self.cc.card_sign_transaction_hash(keynbr, list(hash_bytes), hmac)
                 logger.debug(f"sign_hash - response= {response}")
                 logger.debug(f"sign_hash - response-hex= {bytes(response).hex()}")
-                ## parse sig
-                # (r,s,v, sigstring)= self.cc.parser.parse_rsv_from_dersig(bytes(response), hash_bytes, self.pubkey)
-                # logger.debug(f"CALLBACK: onEthSign - r= {r}")
-                # logger.debug(f"CALLBACK: onEthSign - s= {s}")
-                # logger.debug(f"CALLBACK: onEthSign - v= {v}")
-                # logger.debug(f"CALLBACK: onEthSign - sigstring= {sigstring.hex()}")
-                # sigstring= sigstring[1:]+ bytes([v+27])# for walletconnect, the v byte is appended AFTER r,s...
-                # logger.debug(f"CALLBACK: onEthSign - sigstring= {sigstring.hex()}")
-                # sign_hex= "0x"+sigstring.hex()
-                # return
-                #return sign_hex #bytes(response).hex()
-                #return (v,r,s)
-                # enforce low-S signature (BIP 62)
                 tx_sig = bytes(response) # DER signatures in bytes 
                 logger.debug(f"tx_sig before low S  : {tx_sig.hex()}")
                 tx_sig = makeup_sig(tx_sig, "K1") # enforce low S
@@ -331,13 +284,13 @@ class Satochip(BaseDevice):
                 raise Exception(msg_error)
         else:
             logger.debug(f"User rejected the hash signature.")
-            raise Exception("You rejected the hash signature.")
+            raise Exception("User rejected the hash signature.")
 
 
     # sign EVM
     def sign_evm(self, tx_bytes):
         # TODO: add blockchain context...
-        logger.debug(f"in sign:")
+        logger.debug(f"in sign_evm:")
         logger.debug(f"type(tx_bytes): {type(tx_bytes)}")
         logger.debug(f"tx_bytes: {tx_bytes}")
         logger.debug(f"tx_hex: {tx_bytes.hex()}")
@@ -357,7 +310,7 @@ class Satochip(BaseDevice):
             (is_approved, hmac)= (True, None) 
 
         if is_approved:
-            logger.debug(f"CALLBACK Approve tx signature? YES!")
+            logger.debug(f"tx signature approved in 2FA (if enabled)")
             try:
                 # derive key
                 # we take the pubkey previously recovered from self.get_public_key()
@@ -382,14 +335,13 @@ class Satochip(BaseDevice):
                 logger.warning(f"{msg_error}")
                 raise Exception(msg_error)
         else:
-            logger.debug(f"User rejected the message signature.")
-            raise Exception("You rejected the message signature.")
+            logger.debug(f"User rejected the transaction signature.")
+            raise Exception("User rejected the transaction signature.")
 
     def sign_message(self, msg_bytes):
         """Sign a personnal message, used when has_screen"""
         logger.debug(f"in sign_message:")
-        logger.debug(f"type(msg_bytes): {type(msg_bytes)}")
-        logger.debug(f"msg_bytes: {msg_bytes}")
+        logger.debug(f"msg_hex: {msg_bytes.hex()}")
         # msg_bytes is bytes format
         msg_header = MESSAGE_HEADER + str(len(msg_bytes)).encode("ascii")
         msg_hash = sha3(msg_header + msg_bytes)
@@ -411,7 +363,7 @@ class Satochip(BaseDevice):
             (is_approved, hmac)= (True, None) 
 
         if is_approved:
-            logger.debug(f"CALLBACK Approve signature? YES!")
+            logger.debug(f"message signature approved in 2FA (if enabled)")
             try:
                 # derive key
                 # we take the pubkey previously recovered from self.get_public_key()
@@ -436,7 +388,7 @@ class Satochip(BaseDevice):
                 raise Exception(msg_error)
         else:
             logger.info(f"User rejected the message signature.")
-            raise Exception("You rejected the message signature.")
+            raise Exception("User rejected the message signature.")
 
 
     #def sign_eip712(self, domain_hash, message_hash):
@@ -453,11 +405,12 @@ class Satochip(BaseDevice):
                 chain_id = int(chain_id[7:])
         hash_domain, hash_data = typed_sign_hash(msg_obj)
         logger.debug(f"type(domain_hash): {type(hash_domain)}")
-        logger.debug(f"domain_hash: {hash_domain}")
+        logger.debug(f"domain_hash: {hash_domain.hex()}")
         logger.debug(f"type(hash_data): {type(hash_data)}")
-        logger.debug(f"hash_data: {hash_data}")
+        logger.debug(f"hash_data: {hash_data.hex()}")
         
         msg_hash = sha3(EIP712_HEADER + hash_domain + hash_data)
+        logger.debug(f"msg_hash: {msg_hash.hex()}")
 
         if self.cc.needs_2FA:
             # construct request msg for 2FA
@@ -472,7 +425,7 @@ class Satochip(BaseDevice):
             (is_approved, hmac)= (True, None) 
 
         if is_approved:
-            logger.debug(f"CALLBACK Approve signature? YES!")
+            logger.debug(f"EIP712 message signature approved in 2FA (if enabled)")
             try:
                 # derive key
                 # we take the pubkey previously recovered from self.get_public_key()
@@ -497,7 +450,7 @@ class Satochip(BaseDevice):
                 raise Exception(msg_error)
         else:
             logger.info(f"User rejected the typed_message signature.")
-            raise Exception("You rejected the typed_message signature.")
+            raise Exception("User rejected the typed_message signature.")
 
 
     def do_challenge_response(self, msg):
@@ -512,14 +465,6 @@ class Satochip(BaseDevice):
         logger.debug("id_2FA: "+ id_2FA)
         
         try: 
-            # get server from config file
-            # if os.path.isfile('satochip_bridge.ini'):  
-            #     from configparser import ConfigParser
-            #     config = ConfigParser()
-            #     config.read('satochip_bridge.ini')
-            #     server_default= config.get('2FA', 'server_default')
-            # else:
-            #     server_default= SERVER_LIST[0] # no config file => default server
             server_default= SERVER_LIST[0] # no config file => default server
             #do challenge-response with 2FA device...
             Satochip2FA.do_challenge_response(d, server_default)

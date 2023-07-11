@@ -464,22 +464,13 @@ def is_bip66(sig):
 
 
 def txhash(tx, hashcode=None, wtxid=True):
-    import logging
-    logger = logging.getLogger(__name__)
-    logger.debug(f"in txhash") # debugsatochip
-    logger.debug(f"tx: {tx}") # debugsatochip
-    logger.debug(f"hashcode: {hashcode}") # debugsatochip
     if isinstance(tx, str) and re.match("^[0-9a-fA-F]*$", tx):
         tx = changebase(tx, 16, 256)
-        logger.debug(f"tx after changebase: {tx}") # debugsatochip
     if not wtxid and is_segwit(tx):
         tx = serialize(deserialize(tx), include_witness=False)
-        logger.debug(f"tx after serialize: {tx}") # debugsatochip
     if hashcode:
-        logger.debug(f"hash if hashcode: {sha2(from_string_to_bytes(tx) + encode(int(hashcode), 256, 4)[::-1])}") # debugsatochip
         return sha2(from_string_to_bytes(tx) + encode(int(hashcode), 256, 4)[::-1])
     else:
-        logger.debug(f"hash no hashcode: {sha2(tx)}") # debugsatochip
         return sha2(tx)
 
 
