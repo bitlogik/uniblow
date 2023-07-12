@@ -5,7 +5,7 @@ name: Building Uniblow binaries
 on:
   push:
     tags: '*'
-    branches: [ cicd, test_* ]
+    branches: [ cicd, test_*, add-satochip-support ]
 
 
 jobs:
