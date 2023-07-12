@@ -27,7 +27,7 @@ setup(
     install_requires=[
         "pysatochip==0.12.5",
         "wxPython>=4.0.7",
-        "cryptography==41.0.1", # >=3.3
+        "cryptography>=3.3",
         "pysha3==1.0.2",
         "qrcode==6.1",
         "PyNaCl==1.5.0",
@@ -35,7 +35,6 @@ setup(
         "OpenPGPpy==1.1",
         "hidapi==0.11.0.post2",
         "pyWalletConnect==1.4.0",
-        #"cffi>=1.4.1",
     ],
     include_package_data=False,
     classifiers=[
