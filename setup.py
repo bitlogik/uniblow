@@ -25,6 +25,7 @@ setup(
     license="GPLv3",
     python_requires=">=3.7.0",
     install_requires=[
+        "pysatochip==0.12.5",
         "wxPython>=4.0.7",
         "cryptography==41.0.1", # >=3.3
         "pysha3==1.0.2",
@@ -34,8 +35,7 @@ setup(
         "OpenPGPpy==1.1",
         "hidapi==0.11.0.post2",
         "pyWalletConnect==1.4.0",
-        "cffi>=1.4.1",
-        "pysatochip==0.12.5",
+        #"cffi>=1.4.1",
     ],
     include_package_data=False,
     classifiers=[
