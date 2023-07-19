@@ -15,9 +15,9 @@ jobs:
     runs-on: windows-2022
 
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
     - name: Set up Python
-      uses: actions/setup-python@v2
+      uses: actions/setup-python@v4
       with:
         python-version: '3.9'
         architecture: 'x64'
@@ -26,7 +26,7 @@ jobs:
         cd package
         ./Build-Windows.bat
     - name: 'Archive windows bin (unsigned!)'
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
         name: windist-unsigned
         path: |
@@ -38,7 +38,7 @@ jobs:
     runs-on: ubuntu-20.04
 
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
     - name: Prepare Linux system
       run: |
         sudo apt update
@@ -48,7 +48,7 @@ jobs:
       run: |
         xvfb-run --server-args='-screen 0, 1024x768x24' bash package/Build-Linux.sh
     - name: 'Archive linux bin (unsigned!)'
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
         name: nuxdist-unsigned
         path: |
@@ -60,7 +60,7 @@ jobs:
     runs-on: macos-11
 
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
     - uses: actions/setup-python@v4
       with:
         python-version: '3.9'
@@ -68,7 +68,7 @@ jobs:
       run: |
         ./package/Build-Mac.sh
     - name: 'Archive MacOS bin (unsigned!)'
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
         name: macdist-unsigned
         path: |
