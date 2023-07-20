@@ -1,5 +1,10 @@
 Uniblow versions history
 
+# 2.5.3
+
+* Fix DOGE and LTC transaction signing
+* WalletConnect : send a rejection message when user denies
+
 # 2.5.2
 
 * Display prices for all blockchains
