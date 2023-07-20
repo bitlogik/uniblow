@@ -497,16 +497,22 @@ class ETH_wallet:
                     signature = self.process_sign_message(parameters[0])
                     if signature is not None:
                         self.wc_client.reply(id_request, f"0x{signature.hex()}")
+                    else:
+                        self.wc_client.reject(id_request)
             elif method == "eth_sign" and len(parameters) > 1:
                 if compare_eth_addresses(parameters[0], self.get_account()):
                     signature = self.process_sign_message(parameters[1])
                     if signature is not None:
                         self.wc_client.reply(id_request, f"0x{signature.hex()}")
+                    else:
+                        self.wc_client.reject(id_request)
             elif method == "eth_signTypedData" and len(parameters) > 1:
                 if compare_eth_addresses(parameters[0], self.get_account()):
                     signature = self.process_sign_typeddata(parameters[1])
                     if signature is not None:
                         self.wc_client.reply(id_request, f"0x{signature.hex()}")
+                    else:
+                        self.wc_client.reject(id_request)
             elif method == "eth_sendTransaction" and len(parameters) > 0:
                 # sign and sendRaw
                 tx_obj_tosign = parameters[0]
@@ -515,12 +521,16 @@ class ETH_wallet:
                     if tx_signed is not None:
                         tx_hash = self.broadcast_tx(tx_signed)
                         self.wc_client.reply(id_request, tx_hash)
+                    else:
+                        self.wc_client.reject(id_request)
             elif method == "eth_signTransaction" and len(parameters) > 0:
                 tx_obj_tosign = parameters[0]
                 if compare_eth_addresses(tx_obj_tosign["from"], self.get_account()):
                     tx_signed = self.process_signtransaction(tx_obj_tosign)
                     if tx_signed is not None:
                         self.wc_client.reply(id_request, f"0x{tx_signed}")
+                    else:
+                        self.wc_client.reject(id_request)
             elif method == "eth_sendRawTransaction" and len(parameters) > 0:
                 tx_data = parameters[0]
                 tx_hash = self.broadcast_tx(tx_data)
@@ -618,7 +628,7 @@ class ETH_wallet:
             chain_id = data_obj["domain"]["chainId"]
             if isinstance(chain_id, str) and chain_id.startswith("eip155:"):
                 chain_id = int(chain_id[7:])
-        # Silent ignore when chain ids mismatch
+        # Send user rejected when chain ids mismatch
         if chain_id is not None and self.chainID != data_obj["domain"]["chainId"]:
             logger.debug("Wrong chain id in signedTypedData")
             return None
