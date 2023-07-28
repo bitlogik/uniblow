@@ -269,7 +269,6 @@ def device_selected(sel_device):
         coins_list.remove("EOS")
         coins_list.remove("BTC")
         coins_list.remove("LTC")
-        #coins_list = LEDGER_EVM_LIST # we limit to EVM chains to start
     if sel_device == 0:
         # Seed Watcher
         start_seedwatcher(app, cb_open_wallet)
