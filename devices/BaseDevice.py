@@ -19,7 +19,6 @@ from abc import ABC, abstractmethod
 
 class BaseDevice(ABC):
     # Default values - Override if different
-    device_name = "BaseDevice"
     created = False
     has_password = False
     password_name = "local user password"
@@ -36,6 +35,8 @@ class BaseDevice(ABC):
     default_admin_password = ""
     is_HD = False
     has_screen = False
+    on_device_check_type = "" # if has_screen, describes the type of screen (screen or 2FA device)
+    provide_parity = False # expects a rsv signature with parity information, otherwise a simple DER signature
     ledger_tokens_compat = False
     has_hardware_button = False
     internally_gen_keys = False

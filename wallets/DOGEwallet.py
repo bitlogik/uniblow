@@ -27,6 +27,7 @@ from cryptolib.cryptography import compress_pubkey, sha2
 from wallets.name_service import resolve
 from wallets.wallets_utils import balance_string, shift_10, NotEnoughTokens
 
+
 logger = logging.getLogger(__name__)
 
 
@@ -283,10 +284,7 @@ class DOGE_wallet:
         msgs_to_sign = self.doge.prepare(to_account, amount, fee)
         tx_signatures = []
         for msg in msgs_to_sign:
-            if self.current_device.device_name == "Satochip":
-                msg = sha2(msg) # compute second hash of tx
-            elif not self.current_device.has_screen:
-                msg = sha2(msg)
+            msg = sha2(msg) # compute second hash of tx
             asig = self.current_device.sign(msg)
             tx_signatures.append(asig)
         return self.doge.send(tx_signatures)
