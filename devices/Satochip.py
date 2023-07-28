@@ -319,17 +319,6 @@ class Satochip(BaseDevice):
                 tx_sig = makeup_sig(tx_sig, "K1") # enforce low S
                 logger.debug(f"tx_sig before after S: {tx_sig.hex()}")
                 return tx_sig
-                # parse to rsv sig
-                # (r,s,v, sigstring)= self.cc.parser.parse_rsv_from_dersig(bytes(response), tx_hash, self.pubkey)
-                # logger.debug(f"sign_evm - r= {r}")
-                # logger.debug(f"sign_evm - s= {s}")
-                # logger.debug(f"sign_evm - v= {v}")
-                # logger.debug(f"sign_evm - sigstring= {sigstring.hex()}")
-                # sigstring= sigstring[1:]+ bytes([v+27])# for walletconnect, the v byte is appended AFTER r,s...
-                # logger.debug(f"CALLBACK: sign_evm - sigstring= {sigstring.hex()}")
-                # sign_hex= "0x"+sigstring.hex()
-                # #return sign_hex
-                # return (v,r,s)
             except Exception as ex:
                 msg_error= f"Failed to sign message! \n\nError: {ex}"
                 logger.warning(f"{msg_error}")
@@ -378,16 +367,6 @@ class Satochip(BaseDevice):
                 tx_sig = makeup_sig(tx_sig, "K1") # enforce low S
                 logger.debug(f"tx_sig before after S: {tx_sig.hex()}")
                 return tx_sig
-                # parse to rsv sig
-                # (r,s,v, sigstring)= self.cc.parser.parse_rsv_from_dersig(bytes(response), msg_hash, self.pubkey)
-                # logger.debug(f"sign_message - r= {r}")
-                # logger.debug(f"sign_message - s= {s}")
-                # logger.debug(f"sign_message - v= {v}")
-                # logger.debug(f"sign_message - sigstring= {sigstring.hex()}")
-                # sigstring= sigstring[1:]+ bytes([v+27])# for walletconnect, the v byte is appended AFTER r,s...
-                # logger.debug(f"sign_message - sigstring= {sigstring.hex()}")
-                # sign_hex= "0x"+sigstring.hex() 
-                # return (v,r,s) # sign_hex
             except Exception as ex:
                 msg_error= f"Failed to sign message! \n\nError: {ex}"
                 logger.warning(f"{msg_error}")
@@ -446,16 +425,6 @@ class Satochip(BaseDevice):
                 tx_sig = makeup_sig(tx_sig, "K1") # enforce low S
                 logger.debug(f"tx_sig before after S: {tx_sig.hex()}")
                 return tx_sig
-                # parse rsv sig
-                # (r,s,v, sigstring)= self.cc.parser.parse_rsv_from_dersig(bytes(response), msg_hash, self.pubkey)
-                # logger.debug(f"sign_eip712 - r= {r}")
-                # logger.debug(f"sign_eip712 - s= {s}")
-                # logger.debug(f"sign_eip712 - v= {v}")
-                # logger.debug(f"sign_eip712 - sigstring= {sigstring.hex()}")
-                # sigstring= sigstring[1:]+ bytes([v+27])# for walletconnect, the v byte is appended AFTER r,s...
-                # logger.debug(f"sign_eip712 - sigstring= {sigstring.hex()}")
-                # sign_hex= "0x"+sigstring.hex()
-                # return (v,r,s) # sign_hex 
             except Exception as ex:
                 msg_error= f"Failed to sign typed_message! \n\nError: {ex}"
                 logger.warning(f"{msg_error}")
@@ -477,7 +446,7 @@ class Satochip(BaseDevice):
         logger.debug("id_2FA: "+ id_2FA)
         
         try: 
-            server_default= SERVER_LIST[1] # no config file => default server
+            server_default= SERVER_LIST[1] # use Satochip server to relay requests
             logger.debug("server_default: "+server_default)
             #do challenge-response with 2FA device...
             Satochip2FA.do_challenge_response(d, server_default)

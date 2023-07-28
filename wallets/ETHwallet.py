@@ -345,10 +345,10 @@ class ETH_wallet:
         ],
         # testnets
         [
-            "m/44'/60'/{}'/0/{}", #"m/44'/1'/{}'/0/{}",
+            "m/44'/1'/{}'/0/{}",
         ],
         [
-            "m/44'/60'/{}'/0/{}", #"m/44'/1'/{}'/0/{}",
+            "m/44'/1'/{}'/0/{}",
         ],
     ]
 
@@ -573,34 +573,6 @@ class ETH_wallet:
             explorer_url += "#tokentxns"
         return explorer_url
 
-    # def build_tx_old(self, amount, gazprice, ethgazlimit, account, data=None):
-    #     """Build and sign a transaction.
-    #     Used to transfer tokens with the given parameters.
-    #     amount is id when NFT.
-    #     """
-    #     if data is None:
-    #         data = bytearray(b"")
-    #     tx_bin, hash_to_sign = self.eth.prepare(account, amount, gazprice, ethgazlimit, data)
-    #     if self.current_device.device_name == "Satochip":
-    #         vrs = self.current_device.sign(tx_bin)
-    #         logger.debug(f"vrs: {vrs}")
-    #         return self.eth.add_vrs_satochip(vrs)
-    #     elif self.current_device.has_screen:
-    #         if self.eth.contract and self.current_device.ledger_tokens_compat:
-    #             # Token known by Ledger ?
-    #             ledger_info = self.ledger_tokens.get(self.eth.contract.lower())
-    #             if ledger_info:
-    #                 # Known token : provide the trusted info to the device
-    #                 name = ledger_info["ticker"]
-    #                 data_sig = ledger_info["signature"]
-    #                 self.current_device.register_token(
-    #                     name, self.eth.contract[2:], self.eth.decimals, self.chainID, data_sig
-    #                 )
-    #         vrs = self.current_device.sign(tx_bin)
-    #         return self.eth.add_vrs(vrs)
-    #     tx_signature = self.current_device.sign(hash_to_sign)
-    #     return self.eth.add_signature(tx_signature)
-
     def build_tx(self, amount, gazprice, ethgazlimit, account, data=None):
         """Build and sign a transaction.
         Used to transfer tokens with the given parameters.
@@ -633,36 +605,6 @@ class ETH_wallet:
     def broadcast_tx(self, txdata):
         """Broadcast and return the tx hash as 0xhhhhhhhh"""
         return self.eth.send(txdata)
-
-    # def process_sign_message(self, data_hex):
-    #     """Process a WalletConnect personal_sign and eth_sign call"""
-    #     # sign(keccak256("\x19Ethereum Signed Message:\n" + len(message) + message)))
-    #     data_bin = bytes.fromhex(data_hex[2:])
-    #     msg_header = MESSAGE_HEADER + str(len(data_bin)).encode("ascii")
-    #     sign_request = (
-    #         "WalletConnect signature request :\n\n"
-    #         f"- Data to sign (hex) :\n"
-    #         f"- {fill(data_hex)}\n"
-    #         f"\n Data to sign (ASCII/UTF8) :\n"
-    #     )
-    #     try:
-    #         sign_request += f" {fill(data_bin.decode('utf8'))}\n"
-    #     except UnicodeDecodeError:
-    #         sign_request += " <can't decode sign data to text>"
-    #     if self.current_device.has_screen:
-    #         hash2_data = sha2(data_bin).hex().upper()
-    #         sign_request += f"\n Hash data to sign (hex) :\n {hash2_data}\n"
-    #         sign_request += USER_SCREEN
-    #     elif self.current_device.has_hardware_button:
-    #         sign_request += USER_BUTTON
-    #     if self.confirm_callback(sign_request):
-    #         if self.current_device.has_screen:
-    #             v, r, s = self.current_device.sign_message(data_bin)
-    #             return self.eth.encode_vrs(v, r, s)
-    #         # else
-    #         hash_sign = sha3(msg_header + data_bin)
-    #         der_signature = self.current_device.sign(hash_sign)
-    #         return self.eth.encode_datasign(hash_sign, der_signature)
 
     def process_sign_message(self, data_hex):
         """Process a WalletConnect personal_sign and eth_sign call"""
@@ -698,46 +640,6 @@ class ETH_wallet:
                 hash_sign = sha3(msg_header + data_bin)
                 der_signature = self.current_device.sign(hash_sign)
                 return self.eth.encode_datasign(hash_sign, der_signature)
-
-    # def process_sign_typeddata(self, data_bin):
-    #     """Process a WalletConnect eth_signTypedData call"""
-    #     data_obj = json.loads(data_bin)
-    #     chain_id = None
-    #     if "domain" in data_obj and "chainId" in data_obj["domain"]:
-    #         chain_id = data_obj["domain"]["chainId"]
-    #         if isinstance(chain_id, str) and chain_id.startswith("eip155:"):
-    #             chain_id = int(chain_id[7:])
-    #     # Silent ignore when chain ids mismatch
-    #     if chain_id is not None and self.chainID != data_obj["domain"]["chainId"]:
-    #         logger.debug("Wrong chain id in signedTypedData")
-    #         return None
-    #         #return self.eth.encode_vrs(0,0,0) # send dummy signature ?
-    #     hash_domain, hash_data = typed_sign_hash(data_obj)
-    #     sign_request = (
-    #         "WalletConnect signature request :\n\n"
-    #         f"- Data to sign (typed) :\n"
-    #         f"{print_text_query(data_obj)}"
-    #         f"\n - Hash domain (hex) :\n"
-    #         f" 0x{hash_domain.hex().upper()}\n"
-    #         f"\n - Hash data (hex) :\n"
-    #         f" 0x{hash_data.hex().upper()}\n"
-    #     )
-    #     if self.current_device.has_screen:
-    #         sign_request += USER_SCREEN
-    #     elif self.current_device.has_hardware_button:
-    #         sign_request += USER_BUTTON
-    #     if self.confirm_callback(sign_request):
-    #         logger.debug(f"type(current_device): {type(self.current_device)}")
-    #         if self.current_device.device_name == "Satochip":
-    #             v, r, s = self.current_device.sign_eip712(data_obj)
-    #             return self.eth.encode_vrs(v, r, s)
-    #         elif self.current_device.has_screen:
-    #             v, r, s = self.current_device.sign_eip712(hash_domain, hash_data)
-    #             return self.eth.encode_vrs(v, r, s)
-    #         # else
-    #         hash_sign = sha3(EIP712_HEADER + hash_domain + hash_data)
-    #         der_signature = self.current_device.sign(hash_sign)
-    #         return self.eth.encode_datasign(hash_sign, der_signature)
 
     def process_sign_typeddata(self, data_bin):
         """Process a WalletConnect eth_signTypedData call"""
