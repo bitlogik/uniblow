@@ -74,6 +74,7 @@ WALLET_DESCR = {
     "name": "Uniblow",
 }
 
+
 def has_checksum(addr):
     # addr without 0x
     return not addr.islower() and not addr.isupper() and not addr.isnumeric()
@@ -258,28 +259,6 @@ class ETHwalletCore:
                 s,
             ]
         )
-        return tx_final.hex()
-
-    def add_vrs_satochip(self, vrs):
-        v_int = vrs[0] + 35 + 2*self.chainID #EIP155
-        logger.debug(f"v_int: {v_int}")
-        v = int2bytearray(v_int)
-        r = int2bytearray(vrs[1])
-        s = int2bytearray(vrs[2])
-        tx_final = rlp_encode(
-            [
-                self.nonce,
-                self.gasprice,
-                self.startgas,
-                self.to,
-                self.value,
-                self.data,
-                v,
-                r,
-                s,
-            ]
-        )
-        logger.debug(f"tx_final: {tx_final.hex()}")
         return tx_final.hex()
 
     def add_vrs(self, vrs):
@@ -592,7 +571,6 @@ class ETH_wallet:
             data = bytearray(b"")
         tx_bin, hash_to_sign = self.eth.prepare(account, amount, gazprice, ethgazlimit, data)
         if self.current_device.has_screen:
-
             if self.eth.contract and self.current_device.ledger_tokens_compat:
                 # Token known by Ledger ?
                 ledger_info = self.ledger_tokens.get(self.eth.contract.lower())
@@ -679,8 +657,6 @@ class ETH_wallet:
         elif self.current_device.has_hardware_button:
             sign_request += USER_BUTTON
         if self.confirm_callback(sign_request):
-            logger.debug(f"type(current_device): {type(self.current_device)}")
-            
             if self.current_device.has_screen:
                 if self.current_device.provide_parity:
                     v, r, s = self.current_device.sign_eip712(hash_domain, hash_data)
