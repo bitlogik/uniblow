@@ -17,8 +17,12 @@
 import json
 from os import urandom
 from logging import getLogger, DEBUG
-from pysatochip.CardConnector import CardConnector, UninitializedSeedError
-from pysatochip.Satochip2FA import Satochip2FA, SERVER_LIST
+#from pysatochip.CardConnector import CardConnector, UninitializedSeedError
+#from pysatochip.Satochip2FA import Satochip2FA, SERVER_LIST
+
+from devices.satochip.CardConnector import CardConnector, UninitializedSeedError
+from devices.satochip.Satochip2FA import Satochip2FA, SERVER_LIST
+
 
 from devices.BaseDevice import BaseDevice
 from wallets.typed_data_hash import typed_sign_hash, print_text_query
