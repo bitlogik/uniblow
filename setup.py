@@ -25,7 +25,6 @@ setup(
     license="GPLv3",
     python_requires=">=3.7.0",
     install_requires=[
-        "pysatochip==0.12.5",
         "wxPython>=4.0.7",
         "cryptography>=3.3",
         "pysha3==1.0.2",
