@@ -7,7 +7,8 @@ import logging
 from os import urandom
 from hashlib import sha1, sha256
 
-from .crypto import aes_encrypt_with_iv, aes_decrypt_with_iv
+#from .crypto import aes_encrypt_with_iv, aes_decrypt_with_iv
+from cryptolib.cryptography import aes_encrypt, aes_decrypt, append_PKCS7_padding, strip_PKCS7_padding
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
@@ -67,7 +68,13 @@ class SecureChannel:
         
         key= self.derived_key
         iv= urandom(12)+(self.sc_IVcounter).to_bytes(4, byteorder='big')
-        ciphertext = aes_encrypt_with_iv(key, iv, data_bytes)
+        #ciphertext = aes_encrypt_with_iv(key, iv, data_bytes)
+        ###wip
+        #logger.debug(f"In encrypt_secure_channel() ciphertext: {ciphertext.hex()}")
+        ciphertext = aes_encrypt(key, iv, append_PKCS7_padding(data_bytes))
+        #logger.debug(f"In encrypt_secure_channel() ciphertext: {ciphertext.hex()}")
+        ###wip
+
 
         self.sc_IVcounter+=2
         
@@ -83,8 +90,13 @@ class SecureChannel:
             raise UninitializedSecureChannelError('Secure channel is not initialized')
         
         key= self.derived_key
-        decrypted = aes_decrypt_with_iv(key, iv, ciphertext)
-        
+        #decrypted = aes_decrypt_with_iv(key, iv, ciphertext)
+        ## WIP
+        #logger.debug(f"In decrypt_secure_channel() decrypted: {decrypted.hex()}")
+        decrypted = strip_PKCS7_padding(aes_decrypt(key, iv, ciphertext))
+        #logger.debug(f"In decrypt_secure_channel() decrypted: {decrypted.hex()}")
+        ##
+
         return list(decrypted)
             
 class UninitializedSecureChannelError(Exception):    
