@@ -9,7 +9,7 @@ from smartcard.sw.SWExceptions import SWException
 from .JCconstants import JCconstants
 from .CardDataParser import CardDataParser
 #from .TxParser import TxParser
-from .ecc import ECPubkey, ECPrivkey
+#from .ecc import ECPubkey, ECPrivkey
 from .SecureChannel import SecureChannel
 from .util import msg_magic, sha256d, hash_160, EncodeBase58Check
 from .version import SATOCHIP_PROTOCOL_MAJOR_VERSION, SATOCHIP_PROTOCOL_MINOR_VERSION, SATOCHIP_PROTOCOL_VERSION, PYSATOCHIP_VERSION
