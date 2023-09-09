@@ -26,7 +26,8 @@ from devices.satochip.Satochip2FA import Satochip2FA, SERVER_LIST
 
 from devices.BaseDevice import BaseDevice
 from wallets.typed_data_hash import typed_sign_hash, print_text_query
-from cryptolib.cryptography import public_key_recover, sha2, sha3, makeup_sig
+#from cryptolib.cryptography import public_key_recover, sha2, sha3, makeup_sig
+from cryptolib.cryptography import sha3, makeup_sig
 from cryptolib.HDwallet import (
     generate_mnemonic,
     bip39_mnemonic_to_seed, 
@@ -234,7 +235,7 @@ class Satochip(BaseDevice):
     def get_public_key(self, showOnScreenCB=None):
         self.path
         (self.pubkey, self.chaincode)=self.cc.card_bip32_get_extendedkey(self.path)
-        return self.pubkey.get_public_key_bytes(compressed=False) 
+        return self.pubkey
 
     def sign(self, data):
         logger.debug(f"in sign:")
