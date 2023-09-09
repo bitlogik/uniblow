@@ -426,7 +426,7 @@ class CardConnector:
         authentikey= None
         if (sw1==0x90) and (sw2==0x00):
             authentikey= self.card_bip32_set_authentikey_pubkey(response)
-            authentikey_hex= authentikey.get_public_key_bytes(True).hex()
+            authentikey_hex= authentikey.hex()
             logger.debug('[card_bip32_import_seed] authentikey_card= ' + authentikey_hex)
             
             # compute authentikey locally from seed 
@@ -569,34 +569,34 @@ class CardConnector:
     #     pubkey_hex=self.parser.get_trusted_pubkey(response)
     #     return pubkey_hex
     
-    def card_export_authentikey(self):        
-        ''' Export the device authentikey.
+    # def card_export_authentikey(self):        
+    #     ''' Export the device authentikey.
         
-        The authentikey identifies uniquely the device and is also used for setting a
-        secure channel when doing a secure import with card_import_encrypted_secret().
+    #     The authentikey identifies uniquely the device and is also used for setting a
+    #     secure channel when doing a secure import with card_import_encrypted_secret().
         
-        Returns: 
-        authentikey: ECPubkey object that identifies the  device
-        '''
-        logger.debug("In card_export_authentikey")
-        cla= JCconstants.CardEdge_CLA
-        ins= 0xAD
-        p1= 0x00
-        p2= 0x00
-        apdu=[cla, ins, p1, p2]
+    #     Returns: 
+    #     authentikey: ECPubkey object that identifies the  device
+    #     '''
+    #     logger.debug("In card_export_authentikey")
+    #     cla= JCconstants.CardEdge_CLA
+    #     ins= 0xAD
+    #     p1= 0x00
+    #     p2= 0x00
+    #     apdu=[cla, ins, p1, p2]
 
-        # send apdu
-        response, sw1, sw2 = self.card_transmit(apdu)
-        if (sw1==0x90) and (sw2==0x00):
-            # compute corresponding pubkey and send to chip for future use
-            authentikey = self.parser.parse_bip32_get_authentikey(response)
-            return authentikey
-        elif (sw1==0x9c and sw2==0x04):
-            logger.info("card_bip32_get_authentikey(): Satochip is not initialized => Raising error!")
-            raise UninitializedSeedError('Satochip is not initialized! You should create a new wallet!\n\n'+MSG_WARNING)
-        else:
-            logger.warning(f"Unexpected error during authentikey export (error code {hex(256*sw1+sw2)})")
-            raise UnexpectedSW12Error(f"Unexpected error during authentikey export (error code {hex(256*sw1+sw2)})")
+    #     # send apdu
+    #     response, sw1, sw2 = self.card_transmit(apdu)
+    #     if (sw1==0x90) and (sw2==0x00):
+    #         # compute corresponding pubkey and send to chip for future use
+    #         authentikey = self.parser.parse_bip32_get_authentikey(response)
+    #         return authentikey
+    #     elif (sw1==0x9c and sw2==0x04):
+    #         logger.info("card_bip32_get_authentikey(): Satochip is not initialized => Raising error!")
+    #         raise UninitializedSeedError('Satochip is not initialized! You should create a new wallet!\n\n'+MSG_WARNING)
+    #     else:
+    #         logger.warning(f"Unexpected error during authentikey export (error code {hex(256*sw1+sw2)})")
+    #         raise UnexpectedSW12Error(f"Unexpected error during authentikey export (error code {hex(256*sw1+sw2)})")
 
     
     def card_reset_seed(self, pin, hmac=[]):
@@ -663,7 +663,7 @@ class CardConnector:
         return authentikey
         
     def card_bip32_set_authentikey_pubkey(self, response):
-        ''' Allows to compute coordy of authentikey externally to optimize computation time-out
+        ''' Allows to compute coordy of authentikey externally to optimize computation time
         coordy value is verified by the chip before being accepted '''
         logger.debug("In card_bip32_set_authentikey_pubkey")
         cla= JCconstants.CardEdge_CLA
@@ -673,8 +673,9 @@ class CardConnector:
 
         authentikey= self.parser.parse_bip32_get_authentikey(response)
         if authentikey:
-            coordy= authentikey.get_public_key_bytes(compressed=False)
-            coordy= list(coordy[33:])
+            coordy = list(authentikey[33:]) # authentikey in bytes (uncompressed)
+            #coordy= authentikey.get_public_key_bytes(compressed=False)
+            #coordy= list(coordy[33:])
             data= response + [len(coordy)&0xFF00, len(coordy)&0x00FF] + coordy
             lc= len(data)
             apdu=[cla, ins, p1, p2, lc]+data
@@ -724,9 +725,9 @@ class CardConnector:
             elif ( (response[32]&0x80)== 0x80):
                 logger.info("[card_bip32_get_extendedkey] Child Derivation optimization...")#debugSatochip
                 (pubkey, chaincode)= self.parser.parse_bip32_get_extendedkey(response)
-                coordy= pubkey.get_public_key_bytes(compressed=False)
+                coordy= pubkey
                 coordy= list(coordy[33:])
-                authcoordy= self.parser.authentikey.get_public_key_bytes(compressed=False)
+                authcoordy= self.parser.authentikey
                 authcoordy= list(authcoordy[33:])
                 data= response+[len(coordy)&0xFF00, len(coordy)&0x00FF]+coordy
                 apdu_opt= [cla, 0x74, 0x00, 0x00, len(data)]
@@ -761,11 +762,11 @@ class CardConnector:
             child_number= bytes([0,0,0,0])
         else: #get parent info
             (parentkey, parentchaincode)= self.card_bip32_get_extendedkey(bytepath[0:-4])
-            fingerprint= hash_160(parentkey.get_public_key_bytes(compressed=True))[0:4]
+            fingerprint= hash_160(parentkey)[0:4]
             child_number= bytepath[-4:]
         
         xpub_header= XPUB_HEADERS_MAINNET[xtype] if is_mainnet else XPUB_HEADERS_TESTNET[xtype]
-        xpub = bytes.fromhex(xpub_header) + bytes([depth]) + fingerprint + child_number + childchaincode + childkey.get_public_key_bytes(compressed=True)
+        xpub = bytes.fromhex(xpub_header) + bytes([depth]) + fingerprint + child_number + childchaincode + compress_pubkey(childkey)
         assert(len(xpub)==78)
         xpub= EncodeBase58Check(xpub)
         logger.info(f"card_bip32_get_xpub(): xpub={str(xpub)}")#debugSatochip
@@ -775,92 +776,92 @@ class CardConnector:
     #           Signing commands              #
     ###########################################
     
-    def card_sign_message(self, keynbr, pubkey, message, hmac=b'', altcoin=None):
-        ''' Sign the message with the device
+    # def card_sign_message(self, keynbr, pubkey, message, hmac=b'', altcoin=None):
+    #     ''' Sign the message with the device
         
-        Message is prepended with a specific header as described here:
-        https://bitcoin.stackexchange.com/questions/77324/how-are-bitcoin-signed-messages-generated
+    #     Message is prepended with a specific header as described here:
+    #     https://bitcoin.stackexchange.com/questions/77324/how-are-bitcoin-signed-messages-generated
         
-        Parameters: 
-        keynbr (int): the key to use (0xFF for bip32 key)
-        pubkey (ECPubkey): the pubkey used for signing; this is used for key recovery
-        message (str | bytes): the message to sign
-        hmac: the 20-byte hmac code required if 2FA is enabled
-        altcoin (str | bytes): for altcoin signing
+    #     Parameters: 
+    #     keynbr (int): the key to use (0xFF for bip32 key)
+    #     pubkey (ECPubkey): the pubkey used for signing; this is used for key recovery
+    #     message (str | bytes): the message to sign
+    #     hmac: the 20-byte hmac code required if 2FA is enabled
+    #     altcoin (str | bytes): for altcoin signing
         
-        Returns: 
-        (response, sw1, sw2, compsig): (list, int, int, bytes)
-        compsig is the signature in  compact 65-byte format 
-        (https://bitcoin.stackexchange.com/questions/12554/why-the-signature-is-always-65-13232-bytes-long)
-        '''
-        logger.debug("In card_sign_message")
-        if (type(message)==str):
-            message = message.encode('utf8')
-        if (type(altcoin)==str):
-            altcoin = altcoin.encode('utf8')
+    #     Returns: 
+    #     (response, sw1, sw2, compsig): (list, int, int, bytes)
+    #     compsig is the signature in  compact 65-byte format 
+    #     (https://bitcoin.stackexchange.com/questions/12554/why-the-signature-is-always-65-13232-bytes-long)
+    #     '''
+    #     logger.debug("In card_sign_message")
+    #     if (type(message)==str):
+    #         message = message.encode('utf8')
+    #     if (type(altcoin)==str):
+    #         altcoin = altcoin.encode('utf8')
             
-        # return signature as byte array
-        # data is cut into chunks, each processed in a different APDU call
-        chunk= 128 # max APDU data=255 => chunk<=255-(4+2)
-        buffer_offset=0
-        buffer_left=len(message)
+    #     # return signature as byte array
+    #     # data is cut into chunks, each processed in a different APDU call
+    #     chunk= 128 # max APDU data=255 => chunk<=255-(4+2)
+    #     buffer_offset=0
+    #     buffer_left=len(message)
 
-        # CIPHER_INIT - no data processed
-        cla= JCconstants.CardEdge_CLA
-        ins= JCconstants.INS_SIGN_MESSAGE
-        p1= keynbr # 0xff=>BIP32 otherwise STD
-        p2= JCconstants.OP_INIT
-        lc= 0x4  if not altcoin else (0x4+0x1+len(altcoin))
-        apdu=[cla, ins, p1, p2, lc]
-        for i in reversed(range(4)):
-            apdu+= [((buffer_left>>(8*i)) & 0xff)]
-        if altcoin:
-	            apdu+= [len(altcoin)]
-	            apdu+=altcoin 
+    #     # CIPHER_INIT - no data processed
+    #     cla= JCconstants.CardEdge_CLA
+    #     ins= JCconstants.INS_SIGN_MESSAGE
+    #     p1= keynbr # 0xff=>BIP32 otherwise STD
+    #     p2= JCconstants.OP_INIT
+    #     lc= 0x4  if not altcoin else (0x4+0x1+len(altcoin))
+    #     apdu=[cla, ins, p1, p2, lc]
+    #     for i in reversed(range(4)):
+    #         apdu+= [((buffer_left>>(8*i)) & 0xff)]
+    #     if altcoin:
+	#             apdu+= [len(altcoin)]
+	#             apdu+=altcoin 
                 
-        # send apdu
-        (response, sw1, sw2) = self.card_transmit(apdu)
+    #     # send apdu
+    #     (response, sw1, sw2) = self.card_transmit(apdu)
 
-        # CIPHER PROCESS/UPDATE (optionnal)
-        while buffer_left>chunk:
-            #cla= JCconstants.CardEdge_CLA
-            #ins= INS_COMPUTE_CRYPT
-            #p1= key_nbr
-            p2= JCconstants.OP_PROCESS
-            lc= 2+chunk
-            apdu=[cla, ins, p1, p2, lc]
-            apdu+=[((chunk>>8) & 0xFF), (chunk & 0xFF)]
-            apdu+= message[buffer_offset:(buffer_offset+chunk)]
-            buffer_offset+=chunk
-            buffer_left-=chunk
-            # send apdu
-            response, sw1, sw2 = self.card_transmit(apdu)
+    #     # CIPHER PROCESS/UPDATE (optionnal)
+    #     while buffer_left>chunk:
+    #         #cla= JCconstants.CardEdge_CLA
+    #         #ins= INS_COMPUTE_CRYPT
+    #         #p1= key_nbr
+    #         p2= JCconstants.OP_PROCESS
+    #         lc= 2+chunk
+    #         apdu=[cla, ins, p1, p2, lc]
+    #         apdu+=[((chunk>>8) & 0xFF), (chunk & 0xFF)]
+    #         apdu+= message[buffer_offset:(buffer_offset+chunk)]
+    #         buffer_offset+=chunk
+    #         buffer_left-=chunk
+    #         # send apdu
+    #         response, sw1, sw2 = self.card_transmit(apdu)
 
-        # CIPHER FINAL/SIGN (last chunk)
-        chunk= buffer_left #following while condition, buffer_left<=chunk
-        #cla= JCconstants.CardEdge_CLA
-        #ins= INS_COMPUTE_CRYPT
-        #p1= key_nbr
-        p2= JCconstants.OP_FINALIZE
-        lc= 2+chunk+ len(hmac)
-        apdu=[cla, ins, p1, p2, lc]
-        apdu+=[((chunk>>8) & 0xFF), (chunk & 0xFF)]
-        apdu+= message[buffer_offset:(buffer_offset+chunk)]+hmac
-        buffer_offset+=chunk
-        buffer_left-=chunk
-        # send apdu
-        response, sw1, sw2 = self.card_transmit(apdu)
+    #     # CIPHER FINAL/SIGN (last chunk)
+    #     chunk= buffer_left #following while condition, buffer_left<=chunk
+    #     #cla= JCconstants.CardEdge_CLA
+    #     #ins= INS_COMPUTE_CRYPT
+    #     #p1= key_nbr
+    #     p2= JCconstants.OP_FINALIZE
+    #     lc= 2+chunk+ len(hmac)
+    #     apdu=[cla, ins, p1, p2, lc]
+    #     apdu+=[((chunk>>8) & 0xFF), (chunk & 0xFF)]
+    #     apdu+= message[buffer_offset:(buffer_offset+chunk)]+hmac
+    #     buffer_offset+=chunk
+    #     buffer_left-=chunk
+    #     # send apdu
+    #     response, sw1, sw2 = self.card_transmit(apdu)
         
-        # parse signature from response
-        if (sw1!=0x90 or sw2!=0x00):
-            logger.warning(f"Unexpected error in card_sign_message() (error code {hex(256*sw1+sw2)})") #debugSatochip
-            compsig=b''
-        else:
-            # Prepend the message for signing as done inside the card!!
-            hash = sha256d(msg_magic(message, altcoin))
-            compsig=self.parser.parse_message_signature(response, hash, pubkey)
+    #     # parse signature from response
+    #     if (sw1!=0x90 or sw2!=0x00):
+    #         logger.warning(f"Unexpected error in card_sign_message() (error code {hex(256*sw1+sw2)})") #debugSatochip
+    #         compsig=b''
+    #     else:
+    #         # Prepend the message for signing as done inside the card!!
+    #         hash = sha256d(msg_magic(message, altcoin))
+    #         compsig=self.parser.parse_message_signature(response, hash, pubkey)
                 
-        return (response, sw1, sw2, compsig)
+    #     return (response, sw1, sw2, compsig)
 
     # def card_parse_transaction(self, transaction: bytes, is_segwit=False):
     #     ''' Parse a transaction to be signed by the device
@@ -1353,7 +1354,7 @@ class CardConnector:
         
         # parse response and extract pubkey...
         peer_pubkey = self.parser.parse_initiate_secure_channel(response)
-        peer_pubkey_bytes= peer_pubkey.get_public_key_bytes(compressed=False)
+        peer_pubkey_bytes= peer_pubkey
         self.sc.initiate_secure_channel(peer_pubkey_bytes)
         
         return peer_pubkey             

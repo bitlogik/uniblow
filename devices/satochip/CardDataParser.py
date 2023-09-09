@@ -24,7 +24,11 @@ from struct import pack, unpack
 from ecdsa.curves import SECP256k1
 from ecdsa.util import sigdecode_der
 
-from .ecc import ECPubkey, InvalidECPointException, sig_string_from_der_sig, sig_string_from_r_and_s, get_r_and_s_from_sig_string, CURVE_ORDER
+#from .ecc import ECPubkey, InvalidECPointException, sig_string_from_der_sig, sig_string_from_r_and_s, get_r_and_s_from_sig_string, CURVE_ORDER
+#from .ecc import ECPubkey
+
+from cryptolib.cryptography import public_key_recover
+
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
@@ -39,9 +43,9 @@ class CardDataParser:
     def __init__(self, loglevel= logging.WARNING):
         logger.setLevel(loglevel)
         logger.debug("In __init__")
-        self.authentikey=None
-        self.authentikey_coordx= None
-        self.authentikey_from_storage=None
+        self.authentikey=None # pubkey in bytes (uncompressed)
+        self.authentikey_coordx= None # in bytes
+        #self.authentikey_from_storage=None
     
     def bip32path2bytes(self, bip32path:str) -> (int, bytes):
         splitPath = bip32path.split('/')
@@ -79,10 +83,10 @@ class CardDataParser:
         self.authentikey= self.get_pubkey_from_signature(coordx, msg, signature)
         self.authentikey_coordx= coordx
 
-        # if already initialized, check that authentikey match value retrieved from storage!
-        if (self.authentikey_from_storage is not None):
-            if  self.authentikey != self.authentikey_from_storage:
-                raise ValueError("The seed used to create this wallet file no longer matches the seed of the Satochip device!\n\n"+MSG_WARNING)
+        # # if already initialized, check that authentikey match value retrieved from storage!
+        # if (self.authentikey_from_storage is not None):
+        #     if  self.authentikey != self.authentikey_from_storage:
+        #         raise ValueError("The seed used to create this wallet file no longer matches the seed of the Satochip device!\n\n"+MSG_WARNING)
 
         return self.authentikey
 
@@ -124,6 +128,7 @@ class CardDataParser:
         if authentikey != self.authentikey:
             raise ValueError("The seed used to create this wallet file no longer matches the seed of the Satochip device!\n\n"+MSG_WARNING)
 
+        # self.pubkey, self.chaincode in bytes
         return (self.pubkey, self.chaincode)
 
     def parse_initiate_secure_channel(self, response):
@@ -152,43 +157,45 @@ class CardDataParser:
                 msg2= response[0:msg2_size]
                 signature2= response[(msg2_size+2):(msg2_size+2+sig2_size)] 
                 authentikey= self.get_pubkey_from_signature(self.authentikey_coordx, msg2, signature2)
-                if ( authentikey.get_public_key_bytes(compressed=False) != self.authentikey.get_public_key_bytes(compressed=False) ):
+                if ( authentikey != self.authentikey ):
                     raise ValueError("Recovered authentikey does not correspond to registered authentikey!")
-                logger.info("In parse_initiate_secure_channel: successfuly recovered authentikey:"+ authentikey.get_public_key_bytes(compressed=False).hex()) #debug
+                logger.info("In parse_initiate_secure_channel: successfuly recovered authentikey:"+ authentikey.hex()) #debug
                     
-            logger.info("In parse_initiate_secure_channel: successfuly recovered pubkey:"+ self.pubkey.get_public_key_bytes(compressed=False).hex()) #debug
+            logger.info("In parse_initiate_secure_channel: successfuly recovered pubkey:"+ self.pubkey.hex()) #debug
             return (self.pubkey)
     
-    ##############
-    def parse_message_signature(self, response, hash, pubkey):
-        logger.debug("In parse_message_signature")
-        # Prepend the message for signing as done inside the card!!
-        #message = to_bytes(message, 'utf8')
-        #hash = sha256d(msg_magic(message))
+############## new
 
-        coordx= pubkey.get_public_key_bytes()
+    # def parse_message_signature(self, response, hash, pubkey):
+    #     logger.debug("In parse_message_signature")
+    #     # Prepend the message for signing as done inside the card!!
+    #     #message = to_bytes(message, 'utf8')
+    #     #hash = sha256d(msg_magic(message))
+
+    #     coordx= pubkey.get_public_key_bytes()
         
-        response= bytearray(response)
-        recid=-1
-        for id in range(4):
-            compsig=self.parse_to_compact_sig(response, id, compressed=True)
-            # remove header byte
-            compsig2= compsig[1:]
+    #     response= bytearray(response)
+    #     recid=-1
+    #     for id in range(4):
+    #         compsig=self.parse_to_compact_sig(response, id, compressed=True)
+    #         # remove header byte
+    #         compsig2= compsig[1:]
 
-            try:
-                pk = ECPubkey.from_sig_string(compsig2, id, hash)
-                pkbytes= pk.get_public_key_bytes(compressed=True)   
-            except InvalidECPointException:
-                continue
+    #         try:
+    #             pk = ECPubkey.from_sig_string(compsig2, id, hash)
+    #             pkbytes= pk.get_public_key_bytes(compressed=True)   
+    #         except InvalidECPointException:
+    #             continue
 
-            if coordx==pkbytes:
-                recid=id
-                break
+    #         if coordx==pkbytes:
+    #             recid=id
+    #             break
 
-        if recid == -1:
-            raise ValueError("Unable to recover public key from signature")
+    #     if recid == -1:
+    #         raise ValueError("Unable to recover public key from signature")
 
-        return compsig
+    #     return compsig
+
 
     ##############
     # def parse_rsv_from_dersig(self, dersig: bytes, hash: bytes, pubkey: ECPubkey):
@@ -266,34 +273,78 @@ class CardDataParser:
         # return compsig
     
     ##############
-    def get_pubkey_from_signature(self, coordx, data, sig):
+    # def get_pubkey_from_signature_old(self, coordx, data, sig):
+    #     logger.debug("In get_pubkey_from_signature")
+    #     data= bytearray(data)
+    #     sig= bytearray(sig)
+    #     coordx= bytearray(coordx)
+
+    #     digest= sha256()
+    #     digest.update(data)
+    #     hash=digest.digest()
+
+    #     recid=-1
+    #     pubkey=None
+    #     for id in range(4):
+    #         compsig=self.parse_to_compact_sig(sig, id, compressed=True)
+    #         # remove header byte
+    #         compsig= compsig[1:]
+
+    #         try:
+    #             pk = ECPubkey.from_sig_string(compsig, id, hash)
+    #             pkbytes= pk.get_public_key_bytes(compressed=True)
+    #         except InvalidECPointException:
+    #             continue
+
+    #         pkbytes= pkbytes[1:]
+
+    #         if coordx==pkbytes:
+    #             recid=id
+    #             pubkey=pk
+    #             break
+
+    #     if recid == -1:
+    #         raise ValueError("Unable to recover public key from signature")
+        
+    #     logger.debug("Signature verified!")
+    #     return pubkey
+
+
+# debug new
+    def get_pubkey_from_signature(self, coordx, data, dersig):
+
         logger.debug("In get_pubkey_from_signature")
         data= bytearray(data)
-        sig= bytearray(sig)
+        dersig= bytearray(dersig)
         coordx= bytearray(coordx)
+        logger.debug(f"coordx: {coordx.hex()}")
 
         digest= sha256()
         digest.update(data)
         hash=digest.digest()
+        h = int.from_bytes(hash, "big")
 
+        # decoding der signature
+        lenr = int(dersig[3])
+        lens = int(dersig[5 + lenr])
+        r = int.from_bytes(dersig[4 : lenr + 4], "big")
+        s = int.from_bytes(dersig[lenr + 6 : lenr + 6 + lens], "big")
+        
         recid=-1
         pubkey=None
         for id in range(4):
-            compsig=self.parse_to_compact_sig(sig, id, compressed=True)
-            # remove header byte
-            compsig= compsig[1:]
-
             try:
-                pk = ECPubkey.from_sig_string(compsig, id, hash)
-                pkbytes= pk.get_public_key_bytes(compressed=True)
+                # Parity recovery
+                pkbytes=  public_key_recover(h, r, s, id)
+                logger.debug(f"recover pubkey: id: {id} - pkbytes: {pkbytes.hex()}")
             except InvalidECPointException:
                 continue
 
-            pkbytes= pkbytes[1:]
-
-            if coordx==pkbytes:
+            coordx_pkbytes= pkbytes[1:33]
+            logger.debug(f"recover pubkey: coordx_pkbytes: {coordx_pkbytes.hex()}")
+            if coordx_pkbytes==coordx:
                 recid=id
-                pubkey=pk
+                pubkey=pkbytes
                 break
 
         if recid == -1:
@@ -301,6 +352,12 @@ class CardDataParser:
         
         logger.debug("Signature verified!")
         return pubkey
+        
+# endbug new
+
+
+
+
 
     #######
     # def verify_signature(self, data, sig, authentikey):
@@ -542,6 +599,6 @@ class CardDataParser:
         except MalformedPointError:
             return False, "Invalid X9.62 encoding of the public key: " + bytes(pubkey).hex()
         
-        
-        
-    
+
+class InvalidECPointException(Exception):
+    """e.g. not on curve, or infinity"""
