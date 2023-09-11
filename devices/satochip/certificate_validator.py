@@ -9,7 +9,7 @@ from cryptography.hazmat.primitives.asymmetric import ec
 from cryptography.hazmat.primitives import hashes
 
 logger = logging.getLogger(__name__)
-logger.setLevel(logging.INFO)
+logger.setLevel(logging.DEBUG)
 
 class CertificateValidator:
    
@@ -27,6 +27,7 @@ class CertificateValidator:
 
         # load subca according to device type
         directory=os.path.join(os.path.dirname(__file__), "cert")
+        logger.debug(f"directory: {directory}")
         path_ca = os.path.join(directory, 'ca.cert')
         if device_type=="SeedKeeper":
             path_subca = os.path.join(directory, 'subca-seedkeeper.cert')
