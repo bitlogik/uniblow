@@ -24,11 +24,7 @@ from struct import pack, unpack
 from ecdsa.curves import SECP256k1
 from ecdsa.util import sigdecode_der
 
-#from .ecc import ECPubkey, InvalidECPointException, sig_string_from_der_sig, sig_string_from_r_and_s, get_r_and_s_from_sig_string, CURVE_ORDER
-#from .ecc import ECPubkey
-
 from cryptolib.cryptography import public_key_recover
-
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
@@ -82,11 +78,6 @@ class CardDataParser:
         coordx=data
         self.authentikey= self.get_pubkey_from_signature(coordx, msg, signature)
         self.authentikey_coordx= coordx
-
-        # # if already initialized, check that authentikey match value retrieved from storage!
-        # if (self.authentikey_from_storage is not None):
-        #     if  self.authentikey != self.authentikey_from_storage:
-        #         raise ValueError("The seed used to create this wallet file no longer matches the seed of the Satochip device!\n\n"+MSG_WARNING)
 
         return self.authentikey
 
@@ -163,154 +154,8 @@ class CardDataParser:
                     
             logger.info("In parse_initiate_secure_channel: successfuly recovered pubkey:"+ self.pubkey.hex()) #debug
             return (self.pubkey)
-    
-############## new
-
-    # def parse_message_signature(self, response, hash, pubkey):
-    #     logger.debug("In parse_message_signature")
-    #     # Prepend the message for signing as done inside the card!!
-    #     #message = to_bytes(message, 'utf8')
-    #     #hash = sha256d(msg_magic(message))
-
-    #     coordx= pubkey.get_public_key_bytes()
-        
-    #     response= bytearray(response)
-    #     recid=-1
-    #     for id in range(4):
-    #         compsig=self.parse_to_compact_sig(response, id, compressed=True)
-    #         # remove header byte
-    #         compsig2= compsig[1:]
-
-    #         try:
-    #             pk = ECPubkey.from_sig_string(compsig2, id, hash)
-    #             pkbytes= pk.get_public_key_bytes(compressed=True)   
-    #         except InvalidECPointException:
-    #             continue
-
-    #         if coordx==pkbytes:
-    #             recid=id
-    #             break
-
-    #     if recid == -1:
-    #         raise ValueError("Unable to recover public key from signature")
-
-    #     return compsig
 
 
-    ##############
-    # def parse_rsv_from_dersig(self, dersig: bytes, hash: bytes, pubkey: ECPubkey):
-    #     """ Takes in input the DER signature returned by Satochip and return the r, s, v and sigstring format."""
-    #     logger.debug("In parse_rsv_from_dersig")
-    #     #dersig= bytearray(response)
-    #     #hash = to_bytes(hash, 'utf8') 
-    #     coordx= pubkey.get_public_key_bytes()
-    
-    #     sigstring= sig_string_from_der_sig(dersig)
-    #     r, s= get_r_and_s_from_sig_string(sigstring) #r,s:long int
-    #     # enforce low-S signature (BIP 62)
-    #     if s > CURVE_ORDER//2:
-    #         logger.debug('In parse_rsv_from_dersig(): S is higher than CURVE_ORDER//2')
-    #         s = CURVE_ORDER - s
-    #         sigstring= sig_string_from_r_and_s(r,s)
-        
-    #     # v
-    #     recid=-1
-    #     for id in range(4):
-    #         try:
-    #             pk = ECPubkey.from_sig_string(sigstring, id, hash)
-    #             pkbytes= pk.get_public_key_bytes(compressed=True)
-    #             logger.debug("    =>parse_hash_signature - rec_pubkey:"+pkbytes.hex())
-    #         except InvalidECPointException:
-    #             continue
-
-    #         if coordx==pkbytes:
-    #             recid=id
-    #             logger.debug("    =>parse_hash_signature - found good pubkey:"+pkbytes.hex())
-    #             break
-
-    #     if recid == -1:
-    #         raise ValueError("Unable to recover public key from signature")
-        
-    #     v= recid % 2# 
-    #     sigstring= bytes([v])+sigstring
-    #     return (r, s, v, sigstring)
-        
-        
-    ##############
-    # def parse_hash_signature(self, response, hash, pubkey):
-        # print("    =>parse_hash_signature - Debug1")
-        # # Prepend the message for signing as done inside the card!!
-        # hash = to_bytes(hash, 'utf8')
-        # print("    =>parse_hash_signature - Debug1A")
-        # #hash = sha256d(msg_magic(message))
-        # print("    =>parse_hash_signature - Debug1B")
-        # coordx= pubkey.get_public_key_bytes()
-        
-        # print("    =>parse_hash_signature - Debug2")
-        
-        # response= bytearray(response)
-        # recid=-1
-        # for id in range(4):
-            # compsig=self.parse_to_compact_sig(response, id, compressed=True)
-            # # remove header byte
-            # compsig2= compsig[1:]
-
-            # try:
-                # pk = ECPubkey.from_sig_string(compsig2, id, hash)
-                # pkbytes= pk.get_public_key_bytes(compressed=True)
-                # print("    =>parse_hash_signature - rec_pubkey:"+pkbytes.hex())
-            # except InvalidECPointException:
-                # continue
-
-            # if coordx==pkbytes:
-                # recid=id
-                # print("    =>parse_hash_signature - found good pubkey:"+pkbytes.hex())
-                # break
-
-        # if recid == -1:
-            # raise ValueError("Unable to recover public key from signature")
-
-        # return compsig
-    
-    ##############
-    # def get_pubkey_from_signature_old(self, coordx, data, sig):
-    #     logger.debug("In get_pubkey_from_signature")
-    #     data= bytearray(data)
-    #     sig= bytearray(sig)
-    #     coordx= bytearray(coordx)
-
-    #     digest= sha256()
-    #     digest.update(data)
-    #     hash=digest.digest()
-
-    #     recid=-1
-    #     pubkey=None
-    #     for id in range(4):
-    #         compsig=self.parse_to_compact_sig(sig, id, compressed=True)
-    #         # remove header byte
-    #         compsig= compsig[1:]
-
-    #         try:
-    #             pk = ECPubkey.from_sig_string(compsig, id, hash)
-    #             pkbytes= pk.get_public_key_bytes(compressed=True)
-    #         except InvalidECPointException:
-    #             continue
-
-    #         pkbytes= pkbytes[1:]
-
-    #         if coordx==pkbytes:
-    #             recid=id
-    #             pubkey=pk
-    #             break
-
-    #     if recid == -1:
-    #         raise ValueError("Unable to recover public key from signature")
-        
-    #     logger.debug("Signature verified!")
-    #     return pubkey
-
-
-# debug new
     def get_pubkey_from_signature(self, coordx, data, dersig):
 
         #logger.debug("In get_pubkey_from_signature")
@@ -353,85 +198,7 @@ class CardDataParser:
         
         logger.debug(f"In get_pubkey_from_signature: recovered pubkey: {pkbytes.hex()}")
         return pubkey
-        
-# endbug new
 
-
-
-
-
-    #######
-    # def verify_signature(self, data, sig, authentikey):
-    #     logger.debug("In verify_signature")
-    #     data= bytearray(data)
-    #     sig= bytearray(sig)
-
-    #     digest= sha256()
-    #     digest.update(data)
-    #     hash=digest.digest()
-
-    #     recid=-1
-    #     for id in range(4):
-    #         compsig=self.parse_to_compact_sig(sig, id, compressed=True)
-    #         # remove header byte
-    #         compsig= compsig[1:]
-
-    #         try:
-    #             pk = ECPubkey.from_sig_string(compsig, id, hash)
-    #         except InvalidECPointException:
-    #             continue
-            
-    #         if pk== authentikey:
-    #             recid=id
-    #             break
-            
-    #     if recid == -1:
-    #         raise ValueError("Unable to recover authentikey from signature")
-
-    #     return pk
-    
-    # def get_trusted_pubkey(self, response):
-    #     pubkey_size= response[0]*256+response[1]
-    #     if (pubkey_size !=65):
-    #         raise RuntimeError(f'Error while recovering trusted pubkey: wrong pubkey size, expected 65 but received {pubkey_size}')
-    #     data= response[0:(2+pubkey_size)]
-    #     sig_size= response[2+pubkey_size]*256 + response[2+pubkey_size+1] 
-    #     sig= response[(2+pubkey_size+2):(2+pubkey_size+2+sig_size)]
-        
-    #     pubkey_hex= bytes(response[2:2+pubkey_size]).hex()
-    #     logger.debug(f"Verifying sig for pubkey {pubkey_hex} using authentikey {self.authentikey.get_public_key_bytes(compressed=False).hex()}")
-        
-    #     try:
-    #         self.verify_signature(data, sig, self.authentikey)
-    #     except Exception as ex:
-    #         logger.error('Exception in get_trusted_pubkey: ' + str(ex))
-            
-    #     return pubkey_hex
-    
-    ##############
-    # def parse_parse_transaction(self, response):
-    #     '''Satochip returns: [(hash_size+2)(2b) | tx_hash(32b) | need2fa(2b) | sig_size(2b) | sig(sig_size) | txcontext]'''
-    #     logger.debug("In parse_to_compact_sig")
-    #     offset=0
-    #     data_size= ((response[offset] & 0xff)<<8) + (response[offset+1] & 0xff)
-    #     txhash_size= data_size-2
-    #     offset+=2
-    #     tx_hash= response[offset:(offset+txhash_size)]
-    #     offset+=txhash_size
-    #     needs_2fa= ((response[offset] & 0xff)<<8) + (response[offset+1] & 0xff)
-    #     needs_2fa= False if (needs_2fa==0) else True
-    #     offset+=2
-    #     sig_size= ((response[offset] & 0xff)<<8) + (response[offset+1] & 0xff)
-    #     sig_data= response[0:data_size+2] # txhash_size+hash+needs_2fa
-    #     offset+=2
-    #     if sig_size>0 and self.authentikey_coordx:
-    #         sig= response[offset:(offset+sig_size)]
-    #         pubkey= self.get_pubkey_from_signature(self.authentikey_coordx, sig_data, sig)
-    #         if pubkey != self.authentikey:
-    #             raise Exception("signing key is not authentikey!")
-    #     #todo: error checking
-
-    #     return (tx_hash, needs_2fa)
 
     def parse_to_compact_sig(self, sigin, recid, compressed):
         ''' convert a DER encoded signature to compact 65-byte format
@@ -480,90 +247,9 @@ class CardDataParser:
             sigout[0]= 27 + recid
 
         return sigout;
-    
-    # def parse_compact_sig_to_ethcompsig(self, compsig):
-        # print("    =>parse_compact_sig_to_ethcompsig - compsig:"+compsig.hex())
-        # v= compsig[0]-27 if (compsig[0]<=28)  else compsig[0]-27-4 # recid is 0 or 1
-        # ethcompsig= compsig[1:]+v.to_bytes(1, byteorder='big')
-        # print("    =>parse_compact_sig_to_ethcompsig - ethcompsig:"+ethcompsig.hex())
-        # return ethcompsig
-    
-    # def parse_compact_sig_to_rsv(self, compsig):
-        # r= compsig[1:33] #init
-        # s= compsig[33:]
-        # #s= compsig[1:33] # new but wrong?
-        # #r= compsig[33:]
-        # v= compsig[0]-27 if (compsig[0]<=28)  else compsig[0]-27-4 # recid is 0 or 1
-        # return (r,s,v)
-    
-    #################################
-    #                  SEEDKEEPER              #        
-    #################################   
-    
-    # def parse_seedkeeper_header(self, response):
-    #     # parse header
-        
-    #     header_dict={}
-    #     if ( len(response) <12 ):
-    #         logger.error(f"SeedKeeper error: header response too short: {len(response)}")
-    #         return header_dict
-        
-    #     header_dict['id']= (response[0]<<8) +response[1]
-    #     header_dict['type']= response[2]
-    #     header_dict['origin']= response[3]
-    #     header_dict['export_rights']= response[4]
-    #     header_dict['export_nbplain']=  response[5]
-    #     header_dict['export_nbsecure']=  response[6]
-    #     header_dict['export_counter']=  response[7]
-    #     header_dict['fingerprint_list']= response[8:12]
-    #     header_dict['fingerprint']= bytes(header_dict['fingerprint_list']).hex()
-    #     header_dict['rfu1']= response[12]
-    #     header_dict['rfu2']= response[13]
-    #     header_dict['label_size']= response[14]
-    #     if ( len(response) <(15+header_dict['label_size'])):
-    #         logger.error(f"SeedKeeper error: header response too short: {len(response)}")
-    #         return header_dict
-            
-    #     header_dict['label_list']= response[15:(15+header_dict['label_size'])]
-    #     try:
-    #         header_dict['label']=  bytes(header_dict['label_list']).decode("utf-8") 
-    #     except UnicodeDecodeError as e:
-    #         logger.warning("UnicodeDecodeError while decoding label header!")
-    #         header_dict['label']=  str(bytes(header_dict['label_list']))
-    #     header_dict['header_list']=  response[0:(15+header_dict['label_size'])]
-    #     header_dict['header']=  bytes(header_dict['header_list']).hex()
-        
-    #     # logger.debug(f"++++++++++++++++++++++++++++++++")
-    #     # logger.debug(f"Secret id: {header_dict['id']}")
-    #     # logger.debug(f"Secret type: {header_dict['type']}")
-    #     # logger.debug(f"Secret export_rights: {header_dict['export_rights']}")
-    #     # logger.debug(f"Secret export_nbplain: {header_dict['export_nbplain']}")
-    #     # logger.debug(f"Secret export_nbsecure: {header_dict['export_nbsecure']}")
-    #     # logger.debug(f"Secret export_counter: {header_dict['export_counter']}")
-    #     # logger.debug(f"Secret fingerprint: {header_dict['fingerprint']}")
-    #     # logger.debug(f"Secret label: {header_dict['label']}")
-    #     # logger.debug(f"Secret label_list: {header_dict['label_list']}")
-    #     # logger.debug(f"++++++++++++++++++++++++++++++++")
-                    
-    #     return header_dict
-    
-    # def parse_seedkeeper_log(self, log):
-        
-    #     # todo: 
-    #     LOG_SIZE=7
-    #     if (len(log)<LOG_SIZE):
-    #         logger.error(f"Log record has the wrong lenght {len(log)}, should be {LOG_SIZE}")
-    #         raise Exception(f"Log record has the wrong lenght {len(log)}, should be {LOG_SIZE}")
-        
-    #     ins= log[0]
-    #     id1= log[1]*256+ log[2]
-    #     id2= log[3]*256+ log[4]
-    #     res= log[5]*256+ log[6]
-        
-    #     return (ins, id1, id2, res)
 
     #################################
-    #                   PERSO PKI                 #        
+    #            PERSO PKI          #        
     #################################    
     
     def convert_bytes_to_string_pem(self, cert_bytes):

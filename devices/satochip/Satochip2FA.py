@@ -48,10 +48,6 @@ SERVER_LIST= [
 
 ca_path = certifi.where()
 ssl_context = ssl.create_default_context(purpose=ssl.Purpose.SERVER_AUTH, cafile=ca_path)
-#server = ServerProxy('https://cosigner.electrum.org', allow_none=True, context=ssl_context)
-#server = ServerProxy('https://cosigner.satochip.io', allow_none=True, context=ssl_context)
-#server = ServerProxy('http://sync.imaginary.cash:8081', allow_none=True, context=ssl_context)
-#server = ServerProxy('https://cosigner.satochip.io:81', allow_none=True, context=ssl_context) # wrong port to generate timeout error
 
 class Satochip2FA:
     def __init__(self, loglevel= logging.INFO):

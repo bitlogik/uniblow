@@ -12,12 +12,6 @@ SATOCHIP_PROTOCOL_MAJOR_VERSION=0
 SATOCHIP_PROTOCOL_MINOR_VERSION=12
 SATOCHIP_PROTOCOL_VERSION= (SATOCHIP_PROTOCOL_MAJOR_VERSION<<8)+SATOCHIP_PROTOCOL_MINOR_VERSION
 
-# SeedKeeper supported version tuple
-# v 0.1: initial version
-# SEEDKEEPER_PROTOCOL_MAJOR_VERSION=0
-# SEEDKEEPER_PROTOCOL_MINOR_VERSION=1
-# SEEDKEEPER_PROTOCOL_VERSION= (SEEDKEEPER_PROTOCOL_MAJOR_VERSION<<8)+SEEDKEEPER_PROTOCOL_MINOR_VERSION
-
 # v0.11.a: initial version
 # v0.11.1: new versioning, minor changes
 # v0.11.2: use ecdsa & pyaes libraries instead of cryptography for ecdh key exchange
@@ -28,7 +22,6 @@ SATOCHIP_PROTOCOL_VERSION= (SATOCHIP_PROTOCOL_MAJOR_VERSION<<8)+SATOCHIP_PROTOCO
 # v0.12.3: patch: downgrade pyscard version in requirements to solve conflicts
 # v0.12.4: Patch dependencies version & minor issue
 # v0.12.5: remove pyopenssl & pyaes dependencies
-# TODO: include SeedKeeper & Satodime version
 PYSATOCHIP_MAJOR_VERSION= 0
 PYSATOCHIP_MINOR_VERSION= 12
 PYSATOCHIP_REVISION= 5
