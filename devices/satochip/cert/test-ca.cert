@@ -1,0 +1,50 @@
+Certificate:
+    Data:
+        Version: 3 (0x2)
+        Serial Number: 1 (0x1)
+        Signature Algorithm: ecdsa-with-SHA512
+        Issuer: C=BE, ST=Brussels, O=Toporin, CN=TEST CA 1
+        Validity
+            Not Before: Dec  1 12:00:00 2020 GMT
+            Not After : Dec  1 12:00:00 2040 GMT
+        Subject: C=BE, ST=Brussels, O=Toporin, CN=TEST CA 1
+        Subject Public Key Info:
+            Public Key Algorithm: id-ecPublicKey
+                Public-Key: (384 bit)
+                pub:
+                    04:ff:6e:47:7a:ae:eb:26:fa:b1:09:c3:b8:c2:af:
+                    b2:f5:b0:00:e5:80:b7:74:98:43:a4:7f:00:20:11:
+                    db:27:ec:38:83:89:de:56:64:0b:ca:b5:b4:c0:ed:
+                    71:1f:f4:78:35:ef:01:6f:b1:93:03:e6:18:cb:4f:
+                    f1:8e:d9:6c:e8:a1:c2:81:41:4a:06:00:8a:b5:02:
+                    b4:ec:2b:52:35:65:fa:19:58:8d:f1:96:03:96:fb:
+                    41:b5:99:56:3a:2f:4b
+                ASN1 OID: secp384r1
+                NIST CURVE: P-384
+        X509v3 extensions:
+            X509v3 Basic Constraints: critical
+                CA:TRUE, pathlen:1
+            X509v3 Subject Key Identifier: 
+                52:2A:7F:D3:C2:92:45:37:7C:03:14:3A:5D:8B:9F:56:FF:39:13:87
+            X509v3 Key Usage: critical
+                Certificate Sign, CRL Sign
+    Signature Algorithm: ecdsa-with-SHA512
+         30:65:02:30:4f:12:e1:09:e3:f0:2c:a5:66:d7:76:5d:98:97:
+         11:7f:96:08:78:f2:91:7b:eb:64:ec:97:b0:da:85:fb:66:9a:
+         13:54:36:e8:7f:81:a5:ce:fe:da:23:7d:42:b2:86:b7:02:31:
+         00:83:e1:07:6e:3f:0c:83:32:40:71:8b:dd:6c:5f:1d:74:7f:
+         29:bb:92:55:61:1a:76:89:93:e7:07:7e:a0:be:30:9d:89:17:
+         3c:c5:f4:db:4d:86:ae:1f:c0:eb:59:e0:ab
+-----BEGIN CERTIFICATE-----
+MIIB/TCCAYOgAwIBAgIBATAKBggqhkjOPQQDBDBGMQswCQYDVQQGEwJCRTERMA8G
+A1UECAwIQnJ1c3NlbHMxEDAOBgNVBAoMB1RvcG9yaW4xEjAQBgNVBAMMCVRFU1Qg
+Q0EgMTAeFw0yMDEyMDExMjAwMDBaFw00MDEyMDExMjAwMDBaMEYxCzAJBgNVBAYT
+AkJFMREwDwYDVQQIDAhCcnVzc2VsczEQMA4GA1UECgwHVG9wb3JpbjESMBAGA1UE
+AwwJVEVTVCBDQSAxMHYwEAYHKoZIzj0CAQYFK4EEACIDYgAE/25Heq7rJvqxCcO4
+wq+y9bAA5YC3dJhDpH8AIBHbJ+w4g4neVmQLyrW0wO1xH/R4Ne8Bb7GTA+YYy0/x
+jtls6KHCgUFKBgCKtQK07CtSNWX6GViN8ZYDlvtBtZlWOi9Lo0UwQzASBgNVHRMB
+Af8ECDAGAQH/AgEBMB0GA1UdDgQWBBRSKn/TwpJFN3wDFDpdi59W/zkThzAOBgNV
+HQ8BAf8EBAMCAQYwCgYIKoZIzj0EAwQDaAAwZQIwTxLhCePwLKVm13ZdmJcRf5YI
+ePKRe+tk7Jew2oX7ZpoTVDbof4Glzv7aI31Csoa3AjEAg+EHbj8MgzJAcYvdbF8d
+dH8pu5JVYRp2iZPnB36gvjCdiRc8xfTbTYauH8DrWeCr
+-----END CERTIFICATE-----

@@ -17,12 +17,16 @@
 import json
 from os import urandom
 from logging import getLogger, DEBUG
-from pysatochip.CardConnector import CardConnector, UninitializedSeedError
-from pysatochip.Satochip2FA import Satochip2FA, SERVER_LIST
+
+from gui.app import InfoBox
+import wx
+
+from devices.satochip.CardConnector import CardConnector, UninitializedSeedError
+from devices.satochip.Satochip2FA import Satochip2FA, SERVER_LIST
 
 from devices.BaseDevice import BaseDevice
 from wallets.typed_data_hash import typed_sign_hash, print_text_query
-from cryptolib.cryptography import public_key_recover, sha2, sha3, makeup_sig
+from cryptolib.cryptography import sha3, makeup_sig
 from cryptolib.HDwallet import (
     generate_mnemonic,
     bip39_mnemonic_to_seed, 
@@ -195,8 +199,31 @@ class Satochip(BaseDevice):
             self.cc.card_verify_PIN()
         except Exception as exc:
             logger.error(f"Exception in open_account: {exc}")
-            # todo: get remainng PIN value
+            # get remaining PIN value
             raise pwdException(self.pw_left)
+
+        # check authenticity
+        is_valid_chalresp, txt_ca, txt_subca, txt_device, txt_error = self.cc.card_verify_authenticity()
+        if (is_valid_chalresp):
+            logger.debug(f"Card is authentic!")
+            logger.debug(f"txt_ca: {txt_ca}")
+            logger.debug(f"txt_subca: {txt_subca}")
+            logger.debug(f"txt_device: {txt_device}")
+        else:
+            # todo: display warning if fails!
+            logger.warning(f"Failed to verify card authenticity!")
+            logger.warning(f"txt_error: {txt_error}")
+            logger.warning(f"txt_ca: {txt_ca}")
+            logger.warning(f"txt_subca: {txt_subca}")
+            logger.warning(f"txt_device: {txt_device}")
+            warning_msg = "WARNING:\n"
+            warning_msg += "The issuer of this card could not be authenticated!\n"
+            warning_msg += "If you did not load the card yourself, be extremely careful!\n"
+            warning_msg += "Contact support(at)satochip.io to report a suspicious device.\n\n"
+            warning_msg += "Error:\n" + txt_error+"\n\n"
+            warning_msg += "Device certificate:\n" + txt_device
+            InfoBox(warning_msg, "Warning", wx.OK | wx.ICON_WARNING, None)
+
     
     def set_path(self, settings):
         self.account = settings["account"]
@@ -230,7 +257,7 @@ class Satochip(BaseDevice):
     def get_public_key(self, showOnScreenCB=None):
         self.path
         (self.pubkey, self.chaincode)=self.cc.card_bip32_get_extendedkey(self.path)
-        return self.pubkey.get_public_key_bytes(compressed=False) 
+        return self.pubkey
 
     def sign(self, data):
         logger.debug(f"in sign:")
