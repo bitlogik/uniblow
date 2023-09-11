@@ -29,21 +29,17 @@ class CertificateValidator:
         directory=os.path.join(os.path.dirname(__file__), "cert")
         logger.debug(f"directory: {directory}")
         path_ca = os.path.join(directory, 'ca.cert')
-        if device_type=="SeedKeeper":
-            path_subca = os.path.join(directory, 'subca-seedkeeper.cert')
-        elif device_type=="Satochip":
+        if device_type=="Satochip":
             path_subca = os.path.join(directory, 'subca-satochip.cert')
-        elif device_type=="SatoDime":
-            path_subca = os.path.join(directory, 'subca-satodime.cert')
         else:
             txt_error= "Unknown card_type: "+ str(device_type)
             return False, device_pubkey, txt_ca, txt_subca, txt_device, txt_error
         
-        # for testing purpose only!
-        if is_test_ca:
-            #path_ca = os.path.join(directory, 'bad-ca.cert') #for testing purpose!
-            path_ca = os.path.join(directory, 'test-ca.cert') #for testing purpose!
-            path_subca = os.path.join(directory, 'test-subca-seedkeeper.cert') #for testing purpose! 
+        # # for testing purpose only, ignore!
+        # if is_test_ca:
+        #     #path_ca = os.path.join(directory, 'bad-ca.cert') #for testing purpose!
+        #     path_ca = os.path.join(directory, 'test-ca.cert') #for testing purpose!
+        #     path_subca = os.path.join(directory, 'test-subca-seedkeeper.cert') #for testing purpose! 
             
         # todo: FileNotFoundError
         logger.debug(f"path_ca: {path_ca}")
@@ -97,9 +93,9 @@ class CertificateValidator:
             txt_error= "Failed to verify device certificate signature: "+ str(ex)
             return False, device_pubkey, txt_ca, txt_subca, txt_device, txt_error
 
-        if is_test_ca:
-            txt_error= "WARNING: Chain certificate validated with TEST CA! NOT FOR PRODUCTION!"
-            return False, device_pubkey, txt_ca, txt_subca, txt_device, txt_error
+        # if is_test_ca:
+        #     txt_error= "WARNING: Chain certificate validated with TEST CA! NOT FOR PRODUCTION!"
+        #     return False, device_pubkey, txt_ca, txt_subca, txt_device, txt_error
         
         return True, device_pubkey, txt_ca, txt_subca, txt_device, txt_error
         
