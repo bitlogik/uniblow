@@ -103,7 +103,7 @@ class CardDataParser:
 
         # double signature: first is self-signed, second by authentikey
         # firs self-signed sig: data= coordx
-        logger.debug('[CardDataParser] parse_bip32_get_extendedkey: first signature recovery')
+        #logger.debug('parse_bip32_get_extendedkey: first signature recovery')
         self.chaincode= bytearray(response[0:32])
         data_size = ((response[32] & 0x7f)<<8) + (response[33] & 0xff) # (response[32] & 0x80) is ignored (optimization flag)
         data= response[34:(32+2+data_size)]
@@ -119,7 +119,7 @@ class CardDataParser:
         self.pubkey_coordx= coordx
 
         # second signature by authentikey
-        logger.debug('[CardDataParser] parse_bip32_get_extendedkey: second signature recovery')
+        #logger.debug('parse_bip32_get_extendedkey: second signature recovery')
         msg2_size= msg_size+2+sig_size
         msg2= response[0:msg2_size]
         sig2_size = ((response[msg2_size] & 0xff)<<8) + (response[msg2_size+1] & 0xff)
@@ -313,11 +313,11 @@ class CardDataParser:
 # debug new
     def get_pubkey_from_signature(self, coordx, data, dersig):
 
-        logger.debug("In get_pubkey_from_signature")
+        #logger.debug("In get_pubkey_from_signature")
         data= bytearray(data)
         dersig= bytearray(dersig)
         coordx= bytearray(coordx)
-        logger.debug(f"coordx: {coordx.hex()}")
+        #logger.debug(f"In get_pubkey_from_signature coordx: {coordx.hex()}")
 
         digest= sha256()
         digest.update(data)
@@ -336,12 +336,13 @@ class CardDataParser:
             try:
                 # Parity recovery
                 pkbytes=  public_key_recover(h, r, s, id)
-                logger.debug(f"recover pubkey: id: {id} - pkbytes: {pkbytes.hex()}")
+                #logger.debug(f"In get_pubkey_from_signature id: {id}")
+                #logger.debug(f"In get_pubkey_from_signature pkbytes: {pkbytes.hex()}")
             except InvalidECPointException:
                 continue
 
             coordx_pkbytes= pkbytes[1:33]
-            logger.debug(f"recover pubkey: coordx_pkbytes: {coordx_pkbytes.hex()}")
+            #logger.debug(f"In get_pubkey_from_signature coordx_pkbytes: {coordx_pkbytes.hex()}")
             if coordx_pkbytes==coordx:
                 recid=id
                 pubkey=pkbytes
@@ -350,7 +351,7 @@ class CardDataParser:
         if recid == -1:
             raise ValueError("Unable to recover public key from signature")
         
-        logger.debug("Signature verified!")
+        logger.debug(f"In get_pubkey_from_signature: recovered pubkey: {pkbytes.hex()}")
         return pubkey
         
 # endbug new
