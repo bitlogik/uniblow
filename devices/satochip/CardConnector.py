@@ -141,6 +141,7 @@ class CardConnector:
         logger.debug("In __init__")
         self.logger= logger
         self.parser=CardDataParser(loglevel)
+        self.validator= CertificateValidator(loglevel)
         self.client=client
         if self.client is not None:
             self.client.cc=self
@@ -1146,8 +1147,37 @@ class CardConnector:
         verif= self.parser.verify_challenge_response_pki(response, challenge_from_host, pubkey)
         
         return verif;
-    
-    
+
+    def card_verify_authenticity(self):
+        logger.debug("In card_verify_authenticity")
+        cert_pem=txt_error=""
+        try:
+            cert_pem= self.card_export_perso_certificate()
+            logger.debug('Cert PEM: '+ str(cert_pem))
+        except CardError as ex:
+            txt_error= ''.join(["Unable to get device certificate: feature unsupported! \n", 
+                                "Authenticity validation is only available starting with Satochip v0.12 and higher"])
+        except CardNotPresentError as ex:
+            txt_error= "No card found! Please insert card."
+        except UnexpectedSW12Error as ex:
+            txt_error= "Exception during device certificate export: " + str(ex)
+
+        if cert_pem=="(empty)":
+            txt_error= "Device certificate is empty: the card has not been personalized!"
+
+        if txt_error!="":
+            return False, "(empty)", "(empty)", "(empty)", txt_error
+
+        # check the certificate chain from root CA to device
+        is_valid_chain, device_pubkey, txt_ca, txt_subca, txt_device, txt_error= self.validator.validate_certificate_chain(cert_pem, self.card_type)
+        if not is_valid_chain:
+            return False, txt_ca, txt_subca, txt_device, txt_error
+
+        # perform challenge-response with the card to ensure that the key is correctly loaded in the device
+        is_valid_chalresp, txt_error = self.card_challenge_response_pki(device_pubkey)
+
+        return is_valid_chalresp, txt_ca, txt_subca, txt_device, txt_error
+
     #################################
     #           HELPERS             #        
     ################################# 
