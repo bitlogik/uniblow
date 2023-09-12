@@ -329,6 +329,14 @@ cannot perform advanced operations such as PIN unlock, nor card reset.
 
 For quick demo, the default PIN is setup to "1234".
 
+### Satochip card
+
+The [Satochip card](https://satochip.io) is an easy-to-use, [open-source](https://github.com/Toporin/SatochipApplet) hardware wallet based on a smartcard. 
+
+Satochip can be initialized from Uniblow by providing a new PIN (4 to 16 alphanumeric characters) and a BIP39 seed. By design, once a seed is imported into Satochip, it cannot be recovered, and the private keys derived from the seed are never exported outside of the chip. So it is important that the user makes a backup of the seed before the card initialization.
+
+Satochip supports both contact (usb smartcard reader) and contactless (NFC) connections.
+
 ### OpenPGP device
 
 Works with an OpenPGP v2/v3 device that accepts ECP 256K1 key pairs.
