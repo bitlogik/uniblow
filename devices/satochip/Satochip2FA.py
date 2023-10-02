@@ -30,8 +30,7 @@
 import hashlib
 import base64
 import time
-import logging 
-import certifi
+import logging
 import ssl
 from xmlrpc.client import ServerProxy
 
@@ -46,8 +45,7 @@ SERVER_LIST= [
     'http://sync.imaginary.cash:8081', 
 ]
 
-ca_path = certifi.where()
-ssl_context = ssl.create_default_context(purpose=ssl.Purpose.SERVER_AUTH, cafile=ca_path)
+ssl_context = ssl.create_default_context(purpose=ssl.Purpose.SERVER_AUTH)
 
 class Satochip2FA:
     def __init__(self, loglevel= logging.INFO):
