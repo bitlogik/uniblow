@@ -17,6 +17,7 @@
 import json
 from os import urandom
 from logging import getLogger, DEBUG
+from time import sleep
 
 from gui.app import InfoBox
 import wx
@@ -125,8 +126,7 @@ class Satochip(BaseDevice):
     def is_init(self):
         """When has_password and not password_retries_inf"""
         logger.debug(f"in is_init()")
-        import time
-        time.sleep(1) # needs some time to access the card
+        sleep(0.2)
         self.cc.card_get_status()
         self.has_screen = self.cc.needs_2FA # if 2FA is activated, it is considered as a screen
         # todo: verify version vs pysatochip
