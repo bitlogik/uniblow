@@ -73,6 +73,8 @@ class Satochip(BaseDevice):
         self.aindex = None
         self.cc= CardConnector(self, logger.getEffectiveLevel())
         self.pw_left = 5
+        if not self.cc.card_present:
+            raise NoCardPresent("No Satochip found... Please insert card and try again!")
 
     def disconnect(self):
         logger.debug(f"close()")
