@@ -285,7 +285,7 @@ class DOGE_wallet:
         tx_signatures = []
         for msg in msgs_to_sign:
             if self.current_device.device_name == "Satochip":
-                msg = sha2(msg) # compute second hash of tx
+                msg = sha2(msg)  # compute second hash of tx
             elif not self.current_device.has_screen:
                 msg = sha2(msg)
             asig = self.current_device.sign(msg)

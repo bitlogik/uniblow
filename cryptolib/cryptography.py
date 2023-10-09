@@ -169,9 +169,11 @@ def unpad_data(data):
         raise Exception("Bad padding in received data")
     return data[:i]
 
+
 def append_PKCS7_padding(data: bytes) -> bytes:
     padlen = 16 - (len(data) % 16)
     return data + bytes([padlen]) * padlen
+
 
 def strip_PKCS7_padding(data: bytes) -> bytes:
     if len(data) % 16 != 0 or len(data) == 0:
@@ -183,6 +185,7 @@ def strip_PKCS7_padding(data: bytes) -> bytes:
         if i != padlen:
             raise Exception("invalid padding byte (inconsistent)")
     return data[0:-padlen]
+
 
 def gen_iv():
     """Randomly generates 16 bytes data."""

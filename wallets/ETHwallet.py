@@ -59,9 +59,7 @@ SAFETRANSFER_FUNCTION = "42842e0e"
 MESSAGE_HEADER = b"\x19Ethereum Signed Message:\n"
 EIP712_HEADER = b"\x19\x01"
 
-USER_SCREEN = (
-    "\n>> !!!  Once approved, check on your {check_type} to confirm the signature  !!! <<"
-)
+USER_SCREEN = "\n>> !!!  Once approved, check on your {check_type} to confirm the signature  !!! <<"
 USER_BUTTON = (
     "\n>> !!!  Once approved, press the button on the device to confirm the signature  !!! <<"
 )
@@ -617,7 +615,7 @@ class ETH_wallet:
             sign_request += USER_BUTTON
         if self.confirm_callback(sign_request):
             if self.current_device.has_screen:
-                if self.current_device.provide_parity: 
+                if self.current_device.provide_parity:
                     v, r, s = self.current_device.sign_message(data_bin)
                     return self.eth.encode_vrs(v, r, s)
                 else:
@@ -641,7 +639,7 @@ class ETH_wallet:
         if chain_id is not None and self.chainID != data_obj["domain"]["chainId"]:
             logger.debug("Wrong chain id in signedTypedData")
             return None
-            #return self.eth.encode_vrs(0,0,0) # send dummy signature ?
+            # return self.eth.encode_vrs(0,0,0) # send dummy signature ?
         hash_domain, hash_data = typed_sign_hash(data_obj)
         sign_request = (
             "WalletConnect signature request :\n\n"
@@ -693,7 +691,9 @@ class ETH_wallet:
             f"Max fee cost: {balance_string(gas_limit*gas_price, self.eth.decimals)} {self.coin}\n"
         )
         if self.current_device.has_screen:
-            request_message += USER_SCREEN.format(check_type=self.current_device.on_device_check_type)
+            request_message += USER_SCREEN.format(
+                check_type=self.current_device.on_device_check_type
+            )
         elif self.current_device.has_hardware_button:
             request_message += USER_BUTTON
         if self.confirm_callback(request_message):

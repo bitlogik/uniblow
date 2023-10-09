@@ -2,7 +2,7 @@
 #
 # Satochip 2-Factor-Authentication app for the Satochip Bitcoin Hardware Wallet
 # (c) 2019 by Toporin - 16DMCk4WUaHofchAhpMaQS4UPm4urcy2dN
-# Sources available on https://github.com/Toporin	
+# Sources available on https://github.com/Toporin
 #
 # Based on Electrum - lightweight Bitcoin client
 # Copyright (C) 2014 Thomas Voegtlin
@@ -39,42 +39,43 @@ logger.setLevel(logging.DEBUG)
 
 # User can select his 2FA server from a list
 # User should select the same server on the 2FA app
-SERVER_LIST= [
-    'https://cosigner.electrum.org',
-    'https://cosigner.satochip.io', 
-    'http://sync.imaginary.cash:8081', 
+SERVER_LIST = [
+    "https://cosigner.electrum.org",
+    "https://cosigner.satochip.io",
+    "http://sync.imaginary.cash:8081",
 ]
 
 ssl_context = ssl.create_default_context(purpose=ssl.Purpose.SERVER_AUTH)
 
+
 class Satochip2FA:
-    def __init__(self, loglevel= logging.INFO):
+    def __init__(self, loglevel=logging.INFO):
         logger.setLevel(loglevel)
-    
-    # send the challenge and get the reply 
+
+    # send the challenge and get the reply
     @classmethod
-    def do_challenge_response(cls, d, server_name= SERVER_LIST[0]):
+    def do_challenge_response(cls, d, server_name=SERVER_LIST[0]):
         logger.debug("In do_challenge_response()")
-        id_2FA= d['id_2FA']
-        msg= d['msg_encrypt']        
-        replyhash= hashlib.sha256(id_2FA.encode('utf-8')).hexdigest()
-        
+        id_2FA = d["id_2FA"]
+        msg = d["msg_encrypt"]
+        replyhash = hashlib.sha256(id_2FA.encode("utf-8")).hexdigest()
+
         # set server
         if server_name not in SERVER_LIST:
-            server_name= SERVER_LIST[0]
+            server_name = SERVER_LIST[0]
         server = ServerProxy(server_name, allow_none=True, context=ssl_context)
-        
-        #purge server from old messages then sends message
+
+        # purge server from old messages then sends message
         server.delete(id_2FA)
         server.delete(replyhash)
         server.put(id_2FA, msg)
         logger.info(f"Challenge sent to id_2FA:{id_2FA}")
-                
+
         # wait for reply
-        timeout= 180
-        period=10
-        reply= None
-        while timeout>0:
+        timeout = 180
+        period = 10
+        reply = None
+        while timeout > 0:
             try:
                 reply = server.get(replyhash)
             except Exception as e:
@@ -83,14 +84,13 @@ class Satochip2FA:
             if reply:
                 logger.info(f"Received response from {replyhash}")
                 logger.info(f"Response received: {reply}")
-                d['reply_encrypt']=base64.b64decode(reply)
+                d["reply_encrypt"] = base64.b64decode(reply)
                 server.delete(replyhash)
                 break
             # poll every t seconds
             time.sleep(period)
-            timeout-=period
-        
+            timeout -= period
+
         if reply is None:
             logger.warning(f"Error: Time-out without server reply...")
-            d['reply_encrypt']= None #default 
-    
+            d["reply_encrypt"] = None  # default
