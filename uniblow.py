@@ -276,7 +276,7 @@ def device_selected(sel_device):
             logger.error(
                 "Error during device loading : %s", str(exc), exc_info=exc, stack_info=True
             )
-            app.warn_modal(str(exc))
+            app.warn_modal(str(exc), modal=True)
             return
         pin_left = -1
         password_default = device_loaded.default_password
