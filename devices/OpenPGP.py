@@ -107,8 +107,8 @@ class OpenPGP(BaseDevice):
             self.PGPdevice.get_public_key("B600")
             return True
         except OpenPGPpy.PGPCardException as exc:
-            # SW = 0x6581 or 0x6A88 or 0x6F00 ?
-            if exc.sw_code != 0x6581 and exc.sw_code != 0x6A88 and exc.sw_code != 0x6F00:
+            # SW = 0x6581 or 0x6A8x or 0x6F00 ?
+            if exc.sw_code not in [0x6581, 0x6A88, 0x6A80, 0x6A82, 0x6F00]:
                 raise exc
             return False
 
@@ -119,8 +119,8 @@ class OpenPGP(BaseDevice):
         except OpenPGPpy.ConnectionException:
             raise Exception("OpenPGP device was disconnected.")
         except OpenPGPpy.PGPCardException as exc:
-            # SW = 0x6581 or 0x6A88 or 0x6F00 ?
-            if exc.sw_code != 0x6581 and exc.sw_code != 0x6A88 and exc.sw_code != 0x6F00:
+            # SW = 0x6581 or 0x6A8x or 0x6F00 ?
+            if exc.sw_code not in [0x6581, 0x6A88, 0x6A80, 0x6A82, 0x6F00]:
                 raise
             # SIGn key is not present
             raise NotinitException()
