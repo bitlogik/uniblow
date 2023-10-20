@@ -14,13 +14,9 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
-from smartcard.CardType import AnyCardType
-from smartcard.CardRequest import CardRequest
-from smartcard.CardConnectionObserver import CardConnectionObserver
-from smartcard.CardMonitoring import CardMonitor, CardObserver
-from smartcard.Exceptions import CardConnectionException, CardRequestTimeoutException
-from smartcard.util import toHexString, toBytes
-from smartcard.sw.SWExceptions import SWException
+from smartcard.System import readers
+from smartcard.CardConnection import CardConnection
+from smartcard.util import toHexString
 
 from cryptolib.cryptography import Hash160, compress_pubkey
 from cryptolib.base58 import encode_base58
@@ -83,79 +79,9 @@ XPUB_HEADERS_TESTNET = {
 }
 
 
-# simple observer that will print on the console the card connection events.
-class LogCardConnectionObserver(CardConnectionObserver):
-    def update(self, cardconnection, ccevent):
-        if "connect" == ccevent.type:
-            logger.info("connecting to" + repr(cardconnection.getReader()))
-        elif "disconnect" == ccevent.type:
-            logger.info("disconnecting from" + repr(cardconnection.getReader()))
-        elif "command" == ccevent.type:
-            if ccevent.args[0][1] in (
-                JCconstants.INS_SETUP,
-                JCconstants.INS_SET_2FA_KEY,
-                JCconstants.INS_BIP32_IMPORT_SEED,
-                JCconstants.INS_BIP32_RESET_SEED,
-                JCconstants.INS_CREATE_PIN,
-                JCconstants.INS_VERIFY_PIN,
-                JCconstants.INS_CHANGE_PIN,
-                JCconstants.INS_UNBLOCK_PIN,
-            ):
-                logger.debug(
-                    f"> {toHexString(ccevent.args[0][0:5])}{(len(ccevent.args[0])-5)*' *'}"
-                )
-            else:
-                logger.debug(f"> {toHexString(ccevent.args[0])}")
-        elif "response" == ccevent.type:
-            if [] == ccevent.args[0]:
-                logger.debug(f"< [] {toHexString(ccevent.args[-2:])}")
-            else:
-                logger.debug(f"< {toHexString(ccevent.args[0])} {toHexString(ccevent.args[-2:])}")
-
-
-# a card observer that detects inserted/removed cards and initiate connection
-class RemovalObserver(CardObserver):
-    """A simple card observer that is notified
-    when cards are inserted/removed from the system and
-    prints the list of cards
-    """
-
-    def __init__(self, cc):
-        self.cc = cc
-        self.observer = LogCardConnectionObserver()  # ConsoleCardConnectionObserver()
-
-    def update(self, observable, actions):
-        (addedcards, removedcards) = actions
-        for card in addedcards:
-            # TODO check ATR and check if more than 1 card?
-            logger.info(f"+Inserted: {toHexString(card.atr)}")
-            self.cc.card_present = True
-            self.cc.cardservice = card
-            self.cc.cardservice.connection = card.createConnection()
-            self.cc.cardservice.connection.connect()
-            self.cc.cardservice.connection.addObserver(self.observer)
-            try:
-                (response, sw1, sw2) = self.cc.card_select()
-                if sw1 != 0x90 or sw2 != 0x00:
-                    self.cc.card_disconnect()
-                    break
-                (response, sw1, sw2, status) = self.cc.card_get_status()
-                if (sw1 != 0x90 or sw2 != 0x00) and (sw1 != 0x9C or sw2 != 0x04):
-                    self.cc.card_disconnect()
-                    break
-
-                if self.cc.needs_secure_channel:
-                    self.cc.card_initiate_secure_channel()
-
-            except Exception as exc:
-                logger.warning(f"Error during connection: {repr(exc)}")
-            if self.cc.client is not None:
-                self.cc.client.request("update_status", True)
-
-        for card in removedcards:
-            logger.info(f"-Removed: {toHexString(card.atr)}")
-            self.cc.card_disconnect()
-
+class SatochipException(Exception):
+    """Satochip generic exception."""
+    pass
 
 class CardConnector:
     # Satochip supported version tuple
@@ -170,7 +96,6 @@ class CardConnector:
     # v0.12: support for SeedKeeper &  factory-reset & Perso certificate & card label
     # define the apdus used in this script
     SATOCHIP_AID = [0x53, 0x61, 0x74, 0x6F, 0x43, 0x68, 0x69, 0x70]  # SatoChip
-    SEEDKEEPER_AID = [0x53, 0x65, 0x65, 0x64, 0x4B, 0x65, 0x65, 0x70, 0x65, 0x72]  # SatoChip
 
     def __init__(self, client=None, loglevel=logging.WARNING):
         logger.setLevel(loglevel)
@@ -182,7 +107,6 @@ class CardConnector:
         self.client = client
         if self.client is not None:
             self.client.cc = self
-        self.cardtype = AnyCardType()  # TODO: specify ATR to ignore connection to wrong card types?
         self.needs_2FA = None
         self.is_seeded = None
         self.setup_done = None
@@ -194,69 +118,77 @@ class CardConnector:
         # SeedKeeper or Satochip?
         self.card_type = "card"
         self.cert_pem = None  # PEM certificate of device, if any
-        # cardservice
-        self.cardservice = None  # will be instantiated when a card is inserted
-        try:
-            self.cardrequest = CardRequest(timeout=0, cardType=self.cardtype)
-            self.cardservice = self.cardrequest.waitforcard()
-            # TODO check ATR and check if more than 1 card?
-            self.card_present = True
-        except CardRequestTimeoutException:
-            self.card_present = False
-        # monitor if a card is inserted or removed
-        self.cardmonitor = CardMonitor()
-        self.cardobserver = RemovalObserver(self)
-        self.cardmonitor.addObserver(self.cardobserver)
+
+        # Search for a Satochip and connect to it
+        card_present = False
+        readers_list = readers()
+        if len(readers_list) > 0:
+            logger.debug("Available smartcard readers : %s", readers_list)
+            for r in readers_list:
+                if not str(r).startswith("Yubico") and "hello" not in str(r).lower():
+                    try:
+                        logger.debug("Trying with reader : %s", r)
+                        self.connection = r.createConnection()
+                        self.connection.connect(CardConnection.T1_protocol)
+                        logger.debug("Before card_Select...")
+                        self.card_select()
+                        logger.debug("After card_Select...")
+                        card_present = hasattr(self, "connection")
+                    except Exception as ex:
+                        logger.debug(f"Failed with this reader: {ex}")
+                        pass
+                if card_present:
+                    logger.debug("A Satochip was detected, using %s", r)
+                    (response, sw1, sw2, status) = self.card_get_status()
+                    if (sw1 != 0x90 or sw2 != 0x00) and (sw1 != 0x9C or sw2 != 0x04):
+                        self.card_disconnect()
+                        raise Exception("Failed to get Satochip card status")
+                    if self.needs_secure_channel:
+                        self.card_initiate_secure_channel()
+                    break
+        if not card_present:
+            raise Exception("Can't find any Satochip connected.")
+
 
     ###########################################
-    #                   Applet management                        #
+    #           Applet management             #
     ###########################################
 
     def card_transmit(self, plain_apdu):
         logger.debug("In card_transmit")
-        while self.card_present:
-            try:
-                # encrypt apdu
-                ins = plain_apdu[1]
-                if (self.needs_secure_channel) and (
-                    ins not in [0xA4, 0x81, 0x82, JCconstants.INS_GET_STATUS]
-                ):
-                    apdu = self.card_encrypt_secure_channel(plain_apdu)
-                else:
-                    apdu = plain_apdu
 
-                # transmit apdu
-                (response, sw1, sw2) = self.cardservice.connection.transmit(apdu)
+        # encrypt apdu
+        ins = plain_apdu[1]
+        if (self.needs_secure_channel) and (
+            ins not in [0xA4, 0x81, 0x82, JCconstants.INS_GET_STATUS]
+        ):
+            apdu = self.card_encrypt_secure_channel(plain_apdu)
+        else:
+            apdu = plain_apdu
 
-                # PIN authentication is required
-                if (sw1 == 0x9C) and (sw2 == 0x06):
-                    (response, sw1, sw2) = self.card_verify_PIN()
-                # decrypt response
-                elif (sw1 == 0x90) and (sw2 == 0x00):
-                    if (self.needs_secure_channel) and (
-                        ins not in [0xA4, 0x81, 0x82, JCconstants.INS_GET_STATUS]
-                    ):
-                        response = self.card_decrypt_secure_channel(response)
-                    return (response, sw1, sw2)
-                else:
-                    return (response, sw1, sw2)
+        # transmit apdu
+        try:
+            (response, sw1, sw2) = self.connection.transmit(apdu)
+        except CardConnectionException as ex:
+            logger.warning(f"Error during connection: {repr(exc)}")
+            raise SatochipException("Satochip card was disconnected.")
 
-            except Exception as exc:
-                logger.warning(f"Error during connection: {repr(exc)}")
-                traceback.print_exc()  # debug
-                if self.client is not None:
-                    self.client.request("show_error", "Error during connection:" + repr(exc))
-                return ([], 0x00, 0x00)
-
-        # no card present
-        if self.client is not None:
-            self.client.request("show_error", "No card found! Please insert card!")
-        return ([], 0x00, 0x00)
-        # TODO return errror or throw exception?
+        # PIN authentication is required
+        if (sw1 == 0x9C) and (sw2 == 0x06):
+            (response, sw1, sw2) = self.card_verify_PIN()
+        # decrypt response
+        elif (sw1 == 0x90) and (sw2 == 0x00):
+            if (self.needs_secure_channel) and (
+                ins not in [0xA4, 0x81, 0x82, JCconstants.INS_GET_STATUS]
+            ):
+                response = self.card_decrypt_secure_channel(response)
+            return (response, sw1, sw2)
+        else:
+            return (response, sw1, sw2)
 
     def card_get_ATR(self):
         logger.debug("In card_get_ATR()")
-        return self.cardservice.connection.getATR()
+        return self.connection.getATR()
 
     def card_disconnect(self):
         logger.debug("In card_disconnect()")
@@ -266,11 +198,8 @@ class CardConnector:
         self.needs_2FA = None
         self.setup_done = None
         self.needs_secure_channel = None
-        self.card_present = False
         self.card_type = "card"
-        if self.cardservice:
-            self.cardservice.connection.disconnect()
-            self.cardservice = None
+        self.connection.disconnect()
         if self.client is not None:
             self.client.request("update_status", False)
         # reset authentikey
@@ -278,27 +207,19 @@ class CardConnector:
         self.parser.authentikey_coordx = None
         self.parser.authentikey_from_storage = None
 
-    def get_sw12(self, sw1, sw2):
-        return 16 * sw1 + sw2
-
     def card_select(self):
         logger.debug("In card_select")
         SELECT = [0x00, 0xA4, 0x04, 0x00, 0x08]
         apdu = SELECT + CardConnector.SATOCHIP_AID
-        (response, sw1, sw2) = self.card_transmit(apdu)
+        (response, sw1, sw2) = self.connection.transmit(apdu)
 
         if sw1 == 0x90 and sw2 == 0x00:
             self.card_type = "Satochip"
             logger.debug("Found a Satochip!")
+            return (response, sw1, sw2)
         else:
-            SELECT = [0x00, 0xA4, 0x04, 0x00, 0x0A]
-            apdu = SELECT + CardConnector.SEEDKEEPER_AID
-            (response, sw1, sw2) = self.card_transmit(apdu)
-            if sw1 == 0x90 and sw2 == 0x00:
-                self.card_type = "SeedKeeper"
-                logger.debug("Found a SeedKeeper!")
-
-        return (response, sw1, sw2)
+            logger.debug("No Satochip found!")
+            raise SatochipException("No Satochip found!")
 
     def card_get_status(self):
         logger.debug("In card_get_status")
@@ -443,6 +364,7 @@ class CardConnector:
         (response, sw1, sw2) = self.card_transmit(apdu)
         if (sw1 == 0x90) and (sw2 == 0x00):
             self.set_pin(0, pin0)  # cache PIN value
+            self.setup_done = True
         return (response, sw1, sw2)
 
     ###########################################
@@ -480,13 +402,6 @@ class CardConnector:
             authentikey = self.card_bip32_set_authentikey_pubkey(response)
             authentikey_hex = authentikey.hex()
             logger.debug("[card_bip32_import_seed] authentikey_card= " + authentikey_hex)
-
-            # compute authentikey locally from seed
-            # TODO: remove check if authentikey is not derived from seed
-            # pub_hex= self.get_authentikey_from_masterseed(seed)
-            # if (pub_hex != authentikey_hex):
-            # raise RuntimeError('Authentikey mismatch: local value differs from card value!')
-
             self.is_seeded = True
         elif sw1 == 0x9C and sw2 == 0x17:
             logger.error(f"Error during secret import: card is already seeded (0x9C17)")
@@ -904,7 +819,7 @@ class CardConnector:
     def card_verify_PIN(self):
         logger.debug("In card_verify_PIN")
 
-        while self.card_present:
+        while True:
             if self.pin is None:
                 is_PIN = False
                 if self.client is not None:
@@ -921,7 +836,7 @@ class CardConnector:
 
             if self.needs_secure_channel:
                 apdu = self.card_encrypt_secure_channel(apdu)
-            response, sw1, sw2 = self.cardservice.connection.transmit(apdu)
+            response, sw1, sw2 = self.connection.transmit(apdu)
 
             # correct PIN: cache PIN value
             if sw1 == 0x90 and sw2 == 0x00:
@@ -961,7 +876,6 @@ class CardConnector:
                     self.client.request("show_error", msg)
                 return (response, sw1, sw2)
 
-        # if not self.card_present:
         if self.client is not None:
             self.client.request("show_error", "No card found! Please insert card!")
         else:

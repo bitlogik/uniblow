@@ -17,7 +17,6 @@
 import json
 from os import urandom
 from logging import getLogger, DEBUG
-from time import sleep
 
 from gui.app import InfoBox
 import wx
@@ -79,14 +78,11 @@ class Satochip(BaseDevice):
         self.aindex = None
         self.cc = CardConnector(self, logger.getEffectiveLevel())
         self.pw_left = 5
-        if not self.cc.card_present:
-            raise NoCardPresent("No Satochip found... Please insert card and try again!")
 
     def disconnect(self):
         logger.debug(f"close()")
         if self.cc is not None:
             self.cc.card_disconnect()
-            self.cc.cardmonitor.deleteObserver(self.cc.cardobserver)
 
     def request(self, request_type, *args):
         # this method is called by pysatochip to provide info/error messages to client
@@ -130,8 +126,6 @@ class Satochip(BaseDevice):
     def is_init(self):
         """When has_password and not password_retries_inf"""
         logger.debug(f"in is_init()")
-        sleep(0.2)
-        self.cc.card_get_status()
         self.has_screen = self.cc.needs_2FA  # if 2FA is activated, it is considered as a screen
         # todo: verify version vs pysatochip
         return self.cc.setup_done
@@ -177,6 +171,7 @@ class Satochip(BaseDevice):
                 create_key_ACL,
                 create_pin_ACL,
             )
+            self.cc.card_get_status()
         self.cc.set_pin(0, list(self.pin.encode("utf8")))
         self.cc.card_verify_PIN()
         # Compute & import the seed
@@ -199,8 +194,6 @@ class Satochip(BaseDevice):
         logger.debug(f"satochip setup_done: {self.cc.setup_done}")
         logger.debug(f"satochip is_seeded: {self.cc.is_seeded}")
         logger.debug(f"satochip needs_2FA: {self.cc.needs_2FA}")
-        if not self.cc.card_present:
-            raise NoCardPresent("No Satochip found... Please insert card and try again!")
         if not self.cc.setup_done:
             raise NotinitException()
         if not self.cc.is_seeded:
