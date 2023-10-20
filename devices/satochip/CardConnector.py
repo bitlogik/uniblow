@@ -32,7 +32,7 @@ from .version import (
     SATOCHIP_PROTOCOL_VERSION,
     PYSATOCHIP_VERSION,
 )
-from .certificate_validator import CertificateValidator
+from .CertificateValidator import CertificateValidator
 
 import hashlib
 import hmac
