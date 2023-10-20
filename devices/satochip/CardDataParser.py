@@ -121,7 +121,7 @@ class CardDataParser:
                 + MSG_WARNING
             )
 
-        # self.pubkey, self.chaincode in bytes
+        # self.pubkey in bytes (uncompressed format), self.chaincode in bytes
         return (self.pubkey, self.chaincode)
 
     def parse_initiate_secure_channel(self, response):
@@ -165,6 +165,7 @@ class CardDataParser:
         return self.pubkey
 
     def get_pubkey_from_signature(self, coordx, data, dersig):
+        # return pubkey in uncompressed format
         # logger.debug("In get_pubkey_from_signature")
         data = bytearray(data)
         dersig = bytearray(dersig)
@@ -187,7 +188,7 @@ class CardDataParser:
         for id in range(4):
             try:
                 # Parity recovery
-                pkbytes = public_key_recover(h, r, s, id)
+                pkbytes = public_key_recover(h, r, s, id) # uncompressed
                 # logger.debug(f"In get_pubkey_from_signature id: {id}")
                 # logger.debug(f"In get_pubkey_from_signature pkbytes: {pkbytes.hex()}")
             except InvalidECPointException:

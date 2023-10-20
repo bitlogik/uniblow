@@ -22,10 +22,13 @@ from smartcard.Exceptions import CardConnectionException, CardRequestTimeoutExce
 from smartcard.util import toHexString, toBytes
 from smartcard.sw.SWExceptions import SWException
 
+from cryptolib.cryptography import Hash160, compress_pubkey
+from cryptolib.base58 import encode_base58
+
 from .JCconstants import JCconstants
 from .CardDataParser import CardDataParser
 from .SecureChannel import SecureChannel
-from .util import msg_magic, sha256d, hash_160, EncodeBase58Check
+from .util import hash_160, EncodeBase58Check
 from .version import (
     SATOCHIP_PROTOCOL_MAJOR_VERSION,
     SATOCHIP_PROTOCOL_MINOR_VERSION,
@@ -664,7 +667,10 @@ class CardConnector:
             child_number = bytes([0, 0, 0, 0])
         else:  # get parent info
             (parentkey, parentchaincode) = self.card_bip32_get_extendedkey(bytepath[0:-4])
-            fingerprint = hash_160(parentkey)[0:4]
+            fingerprint_old = hash_160(parentkey)[0:4] # todo remove!
+            logger.info(f"card_bip32_get_xpub(): fingerprint_old={(fingerprint_old)}")  # debugSatochip
+            fingerprint = Hash160(parentkey)[0:4]
+            logger.info(f"card_bip32_get_xpub(): fingerprint={(fingerprint)}") # debugSatochip
             child_number = bytepath[-4:]
 
         xpub_header = XPUB_HEADERS_MAINNET[xtype] if is_mainnet else XPUB_HEADERS_TESTNET[xtype]
@@ -677,7 +683,9 @@ class CardConnector:
             + compress_pubkey(childkey)
         )
         assert len(xpub) == 78
-        xpub = EncodeBase58Check(xpub)
+        xpub_old = EncodeBase58Check(xpub) # todo remove deprecated
+        logger.info(f"card_bip32_get_xpub(): xpub_old={str(xpub_old)}")  # debugSatochip
+        xpub = encode_base58(xpub)
         logger.info(f"card_bip32_get_xpub(): xpub={str(xpub)}")  # debugSatochip
         return xpub
 
