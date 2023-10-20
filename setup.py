@@ -34,7 +34,6 @@ setup(
         "OpenPGPpy==1.1",
         "hidapi==0.11.0.post2",
         "pyWalletConnect==1.5.0",
-        "pysatochip==0.12.5",
     ],
     include_package_data=False,
     classifiers=[
