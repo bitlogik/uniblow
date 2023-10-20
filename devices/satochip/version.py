@@ -12,6 +12,7 @@ SATOCHIP_PROTOCOL_MAJOR_VERSION = 0
 SATOCHIP_PROTOCOL_MINOR_VERSION = 12
 SATOCHIP_PROTOCOL_VERSION = (SATOCHIP_PROTOCOL_MAJOR_VERSION << 8) + SATOCHIP_PROTOCOL_MINOR_VERSION
 
+# code based on pysatochip
 # v0.11.a: initial version
 # v0.11.1: new versioning, minor changes
 # v0.11.2: use ecdsa & pyaes libraries instead of cryptography for ecdh key exchange
@@ -22,9 +23,10 @@ SATOCHIP_PROTOCOL_VERSION = (SATOCHIP_PROTOCOL_MAJOR_VERSION << 8) + SATOCHIP_PR
 # v0.12.3: patch: downgrade pyscard version in requirements to solve conflicts
 # v0.12.4: Patch dependencies version & minor issue
 # v0.12.5: remove pyopenssl & pyaes dependencies
+# v0.12.6: adapt & refactor code for Uniblow
 PYSATOCHIP_MAJOR_VERSION = 0
 PYSATOCHIP_MINOR_VERSION = 12
-PYSATOCHIP_REVISION = 5
+PYSATOCHIP_REVISION = 6
 PYSATOCHIP_VERSION = (
     str(PYSATOCHIP_MAJOR_VERSION)
     + "."

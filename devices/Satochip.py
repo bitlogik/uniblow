@@ -2,7 +2,7 @@
 # -*- coding: utf8 -*-
 
 # UNIBLOW Satochip hardware device
-# Copyright (C) 2021-2022 BitLogiK
+# Copyright (C) 2021-2022 BitLogiK & Satochip
 
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
