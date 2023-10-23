@@ -17,6 +17,7 @@
 from smartcard.System import readers
 from smartcard.CardConnection import CardConnection
 from smartcard.util import toHexString
+from smartcard.Exceptions import CardConnectionException
 
 from cryptolib.cryptography import Hash160, compress_pubkey
 from cryptolib.base58 import encode_base58
@@ -83,6 +84,12 @@ class SatochipException(Exception):
     """Satochip generic exception."""
     pass
 
+class SatochipPinException(Exception):
+    """Satochip PIN exception."""
+    def __init__(self, msg, pin_left): 
+        self.msg = msg
+        self.pin_left = pin_left
+
 class CardConnector:
     # Satochip supported version tuple
     # v0.4: getBIP32ExtendedKey also returns chaincode
@@ -107,6 +114,7 @@ class CardConnector:
         self.client = client
         if self.client is not None:
             self.client.cc = self
+        self.status = None
         self.needs_2FA = None
         self.is_seeded = None
         self.setup_done = None
@@ -139,7 +147,7 @@ class CardConnector:
                         pass
                 if card_present:
                     logger.debug("A Satochip was detected, using %s", r)
-                    (response, sw1, sw2, status) = self.card_get_status()
+                    (response, sw1, sw2, self.status) = self.card_get_status()
                     if (sw1 != 0x90 or sw2 != 0x00) and (sw1 != 0x9C or sw2 != 0x04):
                         self.card_disconnect()
                         raise Exception("Failed to get Satochip card status")
@@ -172,12 +180,8 @@ class CardConnector:
         except CardConnectionException as ex:
             logger.warning(f"Error during connection: {repr(exc)}")
             raise SatochipException("Satochip card was disconnected.")
-
-        # PIN authentication is required
-        if (sw1 == 0x9C) and (sw2 == 0x06):
-            (response, sw1, sw2) = self.card_verify_PIN()
-        # decrypt response
-        elif (sw1 == 0x90) and (sw2 == 0x00):
+        
+        if (sw1 == 0x90) and (sw2 == 0x00):
             if (self.needs_secure_channel) and (
                 ins not in [0xA4, 0x81, 0x82, JCconstants.INS_GET_STATUS]
             ):
@@ -200,8 +204,6 @@ class CardConnector:
         self.needs_secure_channel = None
         self.card_type = "card"
         self.connection.disconnect()
-        if self.client is not None:
-            self.client.request("update_status", False)
         # reset authentikey
         self.parser.authentikey = None
         self.parser.authentikey_coordx = None
@@ -816,71 +818,56 @@ class CardConnector:
     #             PIN commands                #
     ###########################################
 
-    def card_verify_PIN(self):
+    def card_verify_PIN(self, pin = None):
+        """ Verify card PIN using pin provided as list(bytes)
+            If PIN is None, use cached value
+        """
         logger.debug("In card_verify_PIN")
 
-        while True:
+        if pin is None:
             if self.pin is None:
-                is_PIN = False
-                if self.client is not None:
-                    msg = f"Enter the PIN for your {self.card_type}:"
-                    (is_PIN, pin_0) = self.client.PIN_dialog(msg)  # todo: use request?
-                if is_PIN is False:
-                    raise RuntimeError(("Device cannot be unlocked without PIN code!"))
-                pin_0 = list(pin_0)
+                raise RuntimeError(("Device cannot be unlocked without PIN code!"))
             else:
-                pin_0 = self.pin
-            cla = JCconstants.CardEdge_CLA
-            ins = JCconstants.INS_VERIFY_PIN
-            apdu = [cla, ins, 0x00, 0x00, len(pin_0)] + pin_0
+                pin = self.pin    
 
-            if self.needs_secure_channel:
-                apdu = self.card_encrypt_secure_channel(apdu)
-            response, sw1, sw2 = self.connection.transmit(apdu)
+        cla = JCconstants.CardEdge_CLA
+        ins = JCconstants.INS_VERIFY_PIN
+        apdu = [cla, ins, 0x00, 0x00, len(pin)] + pin
 
-            # correct PIN: cache PIN value
-            if sw1 == 0x90 and sw2 == 0x00:
-                self.set_pin(0, pin_0)
-                return (response, sw1, sw2)
-            # wrong PIN, get remaining tries available (since v0.11)
-            elif sw1 == 0x63 and (sw2 & 0xC0) == 0xC0:
-                self.set_pin(0, None)  # reset cached PIN value
-                pin_left = sw2 & ~0xC0
-                msg = ("Wrong PIN! {} tries remaining!").format(pin_left)
-                if self.client is not None:
-                    self.client.request("show_error", msg)
-            # wrong PIN (legacy before v0.11)
-            elif sw1 == 0x9C and sw2 == 0x02:
-                self.set_pin(0, None)  # reset cached PIN value
-                (
-                    response2,
-                    sw1b,
-                    sw2b,
-                    d,
-                ) = self.card_get_status()  # get number of pin tries remaining
-                pin_left = d.get("PIN0_remaining_tries", -1)
-                msg = ("Wrong PIN! {} tries remaining!").format(pin_left)
-                if self.client is not None:
-                    self.client.request("show_error", msg)
-            # blocked PIN
-            elif sw1 == 0x9C and sw2 == 0x0C:
-                msg = f"Too many failed attempts! Your device has been blocked! \n\nYou need your PUK code to unblock it (error code {hex(256*sw1+sw2)})"
-                if self.client is not None:
-                    self.client.request("show_error", msg)
-                raise RuntimeError(msg)
-            # any other edge case
-            else:
-                self.set_pin(0, None)  # reset cached PIN value
-                msg = f"Please check your card! Unexpected error (error code {hex(256*sw1+sw2)})"
-                if self.client is not None:
-                    self.client.request("show_error", msg)
-                return (response, sw1, sw2)
+        if self.needs_secure_channel:
+            apdu = self.card_encrypt_secure_channel(apdu)
+        response, sw1, sw2 = self.connection.transmit(apdu)
 
-        if self.client is not None:
-            self.client.request("show_error", "No card found! Please insert card!")
+        # correct PIN: cache PIN value
+        if sw1 == 0x90 and sw2 == 0x00:
+            self.set_pin(0, pin)
+            return (response, sw1, sw2)
+        # wrong PIN, get remaining tries available (since v0.11)
+        elif sw1 == 0x63 and (sw2 & 0xC0) == 0xC0:
+            self.set_pin(0, None)  # reset cached PIN value
+            pin_left = sw2 & ~0xC0
+            raise SatochipPinException(f"Wrong PIN! {pin_left} tries remaining!", pin_left)
+        # wrong PIN (legacy before v0.11)
+        elif sw1 == 0x9C and sw2 == 0x02:
+            self.set_pin(0, None)  # reset cached PIN value
+            (
+                response2,
+                sw1b,
+                sw2b,
+                self.status,
+            ) = self.card_get_status()  # get number of pin tries remaining
+            pin_left = self.status.get("PIN0_remaining_tries", -1)
+            raise SatochipPinException(f"Wrong PIN! {pin_left} tries remaining!", pin_left)
+        # blocked PIN
+        elif sw1 == 0x9C and sw2 == 0x0C:
+            self.set_pin(0, None)  # reset cached PIN value
+            msg = f"Too many failed attempts! Your device has been blocked! \n\nYou need your PUK code to unblock it (error code {hex(256*sw1+sw2)})"
+            raise SatochipPinException(msg, 0)
+        # any other edge case
         else:
-            raise RuntimeError("No card found! Please insert card!")
-        return
+            self.set_pin(0, None)  # reset cached PIN value
+            msg = f"Please check your card! Unexpected error (error code {hex(256*sw1+sw2)})"
+            raise SatochipPinException(msg, 0)
 
     def set_pin(self, pin_nbr, pin):
         self.pin_nbr = pin_nbr
@@ -906,23 +893,18 @@ class CardConnector:
             self.set_pin(pin_nbr, None)  # reset cached PIN value
             pin_left = sw2 & ~0xC0
             msg = ("Wrong PIN! {} tries remaining!").format(pin_left)
-            if self.client is not None:
-                self.client.request("show_error", msg)
+            raise SatochipPinException(msg, pin_left)
         # wrong PIN (legacy before v0.11)
         elif sw1 == 0x9C and sw2 == 0x02:
             self.set_pin(pin_nbr, None)  # reset cached PIN value
-            (response2, sw1b, sw2b, d) = self.card_get_status()  # get number of pin tries remaining
-            pin_left = d.get("PIN0_remaining_tries", -1)
+            (response2, sw1b, sw2b, self.status) = self.card_get_status()  # get number of pin tries remaining
+            pin_left = self.status.get("PIN0_remaining_tries", -1)
             msg = ("Wrong PIN! {} tries remaining!").format(pin_left)
-            if self.client is not None:
-                self.client.request("show_error", msg)
-            raise RuntimeError(msg)
+            raise SatochipPinException(msg, pin_left)
         # blocked PIN
         elif sw1 == 0x9C and sw2 == 0x0C:
             msg = f"Too many failed attempts! Your device has been blocked! \n\nYou need your PUK code to unblock it (error code {hex(256*sw1+sw2)})"
-            if self.client is not None:
-                self.client.request("show_error", msg)
-            raise RuntimeError(msg)
+            raise SatochipPinException(msg, 0)
 
         return (response, sw1, sw2)
 
@@ -942,22 +924,18 @@ class CardConnector:
             self.set_pin(pin_nbr, None)  # reset cached PIN value
             pin_left = sw2 & ~0xC0
             msg = ("Wrong PUK! {} tries remaining!").format(pin_left)
-            if self.client is not None:
-                self.client.request("show_error", msg)
+            raise SatochipPinException(msg, pin_left)
         # wrong PUK (legacy before v0.11)
         elif sw1 == 0x9C and sw2 == 0x02:
             self.set_pin(pin_nbr, None)  # reset cached PIN value
-            (response2, sw1b, sw2b, d) = self.card_get_status()  # get number of pin tries remaining
-            pin_left = d.get("PUK0_remaining_tries", -1)
+            (response2, sw1b, sw2b, self.status) = self.card_get_status()  # get number of pin tries remaining
+            pin_left = self.status.get("PUK0_remaining_tries", -1)
             msg = ("Wrong PUK! {} tries remaining!").format(pin_left)
-            if self.client is not None:
-                self.client.request("show_error", msg)
+            raise SatochipPinException(msg, pin_left)
         # blocked PUK
         elif sw1 == 0x9C and sw2 == 0x0C:
-            msg = f"Too many failed attempts! Your device has been blocked! \n\nYou need your PUK code to unblock it (error code {hex(256*sw1+sw2)})"
-            if self.client is not None:
-                self.client.request("show_error", msg)
-            raise RuntimeError(msg)
+            msg = f"Too many failed attempts! Your device has been bricked! \n\nYou need to reset your card to factory settings."
+            raise SatochipPinException(msg, 0)
 
         return (response, sw1, sw2)
 

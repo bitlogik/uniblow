@@ -21,7 +21,7 @@ from logging import getLogger, DEBUG
 from gui.app import InfoBox
 import wx
 
-from devices.satochip.CardConnector import CardConnector, UninitializedSeedError
+from devices.satochip.CardConnector import CardConnector, UninitializedSeedError, SatochipPinException
 from devices.satochip.Satochip2FA import Satochip2FA, SERVER_LIST
 
 from devices.BaseDevice import BaseDevice
@@ -41,10 +41,6 @@ class pwdException(Exception):
 
 
 class NotinitException(Exception):
-    pass
-
-
-class NoCardPresent(Exception):
     pass
 
 
@@ -77,47 +73,12 @@ class Satochip(BaseDevice):
         self.account = None
         self.aindex = None
         self.cc = CardConnector(self, logger.getEffectiveLevel())
-        self.pw_left = 5
+        self.pw_left = self.cc.status.get("PIN0_remaining_tries", 5)
 
     def disconnect(self):
         logger.debug(f"close()")
         if self.cc is not None:
             self.cc.card_disconnect()
-
-    def request(self, request_type, *args):
-        # this method is called by pysatochip to provide info/error messages to client
-        logger.debug("in request: ")
-        logger.debug(f"request: {request_type}")
-        logger.debug(f"args*: {args}")
-        # recover remaining tries in case of wrong PIN:
-        # "Wrong PIN! {} tries remaining!"
-        if request_type == "show_error":
-            msg = args[0]
-            logger.debug(f"msg: {msg}")
-            prefix = "Wrong PIN! "
-            suffix = " tries remaining!"
-            if type(msg) == str and msg.startswith(prefix) and msg.endswith(suffix):
-                msg = msg[len(prefix) :]
-                msg = msg[: -len(suffix)]
-                self.pw_left = int(msg)
-                self.pin = None  # reset cached PIN since it was wrong
-            if type(msg) == str and msg.startswith("Too many failed attempts!"):
-                raise Exception(msg)
-        if request_type == "update_status":
-            # todo: update status: inserted/removed card
-            # todo: erase PIN on card removal?
-            if args[0] == True:
-                logger.info("Card inserted!")
-            else:
-                logger.info("Card removed!")
-
-    def PIN_dialog(self, msg):
-        logger.debug(f"in PIN_dialog()")
-        # msg = f'Enter the PIN for your {self.card_type}:'
-        if self.pin:
-            return (True, self.pin)
-        else:
-            raise Exception("No PIN available to authentify Satochip!")
 
     def get_pw_left(self):
         """When has_password and not password_retries_inf"""
@@ -136,11 +97,14 @@ class Satochip(BaseDevice):
         self.account = settings["account"]
         self.aindex = settings["index"]
         self.legacy_derive = settings["legacy_path"]
-        self.pin = settings["file_password"]
+        password = settings["file_password"]
+        if type(password) == str:
+            password = list(password.encode("utf8"))
+        self.pin = password
         if not self.cc.setup_done:
             # setup device
             pin_tries_0 = 0x05
-            pin_0 = list(self.pin.encode("utf8"))
+            pin_0 = self.pin
             # PUK code can be used when PIN is unknown and the card is locked
             # We use a random value as the PUK is not used currently in GUI
             ublk_tries_0 = 0x01
@@ -172,8 +136,12 @@ class Satochip(BaseDevice):
                 create_pin_ACL,
             )
             self.cc.card_get_status()
-        self.cc.set_pin(0, list(self.pin.encode("utf8")))
-        self.cc.card_verify_PIN()
+        try:
+            self.cc.card_verify_PIN(self.pin)
+        except SatochipPinException as ex:
+            self.pw_left = ex.pin_left
+            raise pwdException(self.pw_left)
+
         # Compute & import the seed
         if bip39_is_checksum_valid(settings["mnemonic"]):
             seedg = bip39_mnemonic_to_seed(
@@ -204,13 +172,11 @@ class Satochip(BaseDevice):
         self.has_screen = self.cc.needs_2FA  # if 2FA is enabled, it is considered as a screen
         if type(password) == str:
             password = list(password.encode("utf8"))
+        self.pin = password
         try:
-            self.pin = password
-            self.cc.set_pin(0, self.pin)
-            self.cc.card_verify_PIN()
-        except Exception as exc:
-            logger.error(f"Exception in open_account: {exc}")
-            # get remaining PIN value
+            self.cc.card_verify_PIN(self.pin)
+        except SatochipPinException as ex:
+            self.pw_left = ex.pin_left
             raise pwdException(self.pw_left)
 
         # check authenticity
