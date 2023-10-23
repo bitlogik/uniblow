@@ -180,7 +180,7 @@ class CardConnector:
         # transmit apdu
         try:
             (response, sw1, sw2) = self.connection.transmit(apdu)
-        except CardConnectionException as ex:
+        except CardConnectionException as exc:
             logger.warning(f"Error during connection: {repr(exc)}")
             raise SatochipException("Satochip card was disconnected.")
 
@@ -431,7 +431,7 @@ class CardConnector:
         if type(pin) is str:
             pin = list(pin.encode("utf-8"))
         elif type(pin) is bytes:
-            seed = list(seed)
+            pin = list(pin)
 
         if type(hmac) is str:
             hmac = list(bytes.fromhex(hmac))
