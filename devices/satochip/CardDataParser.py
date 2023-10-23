@@ -188,7 +188,7 @@ class CardDataParser:
         for id in range(4):
             try:
                 # Parity recovery
-                pkbytes = public_key_recover(h, r, s, id) # uncompressed
+                pkbytes = public_key_recover(h, r, s, id)  # uncompressed
                 # logger.debug(f"In get_pubkey_from_signature id: {id}")
                 # logger.debug(f"In get_pubkey_from_signature pkbytes: {pkbytes.hex()}")
             except InvalidECPointException:

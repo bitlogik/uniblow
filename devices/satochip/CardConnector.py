@@ -82,13 +82,17 @@ XPUB_HEADERS_TESTNET = {
 
 class SatochipException(Exception):
     """Satochip generic exception."""
+
     pass
+
 
 class SatochipPinException(Exception):
     """Satochip PIN exception."""
-    def __init__(self, msg, pin_left): 
+
+    def __init__(self, msg, pin_left):
         self.msg = msg
         self.pin_left = pin_left
+
 
 class CardConnector:
     # Satochip supported version tuple
@@ -157,7 +161,6 @@ class CardConnector:
         if not card_present:
             raise Exception("Can't find any Satochip connected.")
 
-
     ###########################################
     #           Applet management             #
     ###########################################
@@ -180,7 +183,7 @@ class CardConnector:
         except CardConnectionException as ex:
             logger.warning(f"Error during connection: {repr(exc)}")
             raise SatochipException("Satochip card was disconnected.")
-        
+
         if (sw1 == 0x90) and (sw2 == 0x00):
             if (self.needs_secure_channel) and (
                 ins not in [0xA4, 0x81, 0x82, JCconstants.INS_GET_STATUS]
@@ -818,9 +821,9 @@ class CardConnector:
     #             PIN commands                #
     ###########################################
 
-    def card_verify_PIN(self, pin = None):
-        """ Verify card PIN using pin provided as list(bytes)
-            If PIN is None, use cached value
+    def card_verify_PIN(self, pin=None):
+        """Verify card PIN using pin provided as list(bytes)
+        If PIN is None, use cached value
         """
         logger.debug("In card_verify_PIN")
 
@@ -828,7 +831,7 @@ class CardConnector:
             if self.pin is None:
                 raise RuntimeError(("Device cannot be unlocked without PIN code!"))
             else:
-                pin = self.pin    
+                pin = self.pin
 
         cla = JCconstants.CardEdge_CLA
         ins = JCconstants.INS_VERIFY_PIN
@@ -897,7 +900,12 @@ class CardConnector:
         # wrong PIN (legacy before v0.11)
         elif sw1 == 0x9C and sw2 == 0x02:
             self.set_pin(pin_nbr, None)  # reset cached PIN value
-            (response2, sw1b, sw2b, self.status) = self.card_get_status()  # get number of pin tries remaining
+            (
+                response2,
+                sw1b,
+                sw2b,
+                self.status,
+            ) = self.card_get_status()  # get number of pin tries remaining
             pin_left = self.status.get("PIN0_remaining_tries", -1)
             msg = ("Wrong PIN! {} tries remaining!").format(pin_left)
             raise SatochipPinException(msg, pin_left)
@@ -928,7 +936,12 @@ class CardConnector:
         # wrong PUK (legacy before v0.11)
         elif sw1 == 0x9C and sw2 == 0x02:
             self.set_pin(pin_nbr, None)  # reset cached PIN value
-            (response2, sw1b, sw2b, self.status) = self.card_get_status()  # get number of pin tries remaining
+            (
+                response2,
+                sw1b,
+                sw2b,
+                self.status,
+            ) = self.card_get_status()  # get number of pin tries remaining
             pin_left = self.status.get("PUK0_remaining_tries", -1)
             msg = ("Wrong PUK! {} tries remaining!").format(pin_left)
             raise SatochipPinException(msg, pin_left)

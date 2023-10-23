@@ -21,7 +21,11 @@ from logging import getLogger, DEBUG
 from gui.app import InfoBox
 import wx
 
-from devices.satochip.CardConnector import CardConnector, UninitializedSeedError, SatochipPinException
+from devices.satochip.CardConnector import (
+    CardConnector,
+    UninitializedSeedError,
+    SatochipPinException,
+)
 from devices.satochip.Satochip2FA import Satochip2FA, SERVER_LIST
 
 from devices.BaseDevice import BaseDevice
