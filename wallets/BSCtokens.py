@@ -7,6 +7,7 @@ tokens_values = [
         "Wrapped BNB (WBNB)": "0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c",
         "Binance USD Coin (USDC)": "0x8AC76a51cc950d9822D68b83fE1Ad97B32Cd580d",
         "USDC (anyUSDC)": "0x8965349fb649A33a30cbFDa057D8eC2C48AbE2A2",
+        "First Digital USD (FDUSD) ": "0xc5f0f7b66764F6ec8C8Dff7BA683102295E16409",
         "Binance XRP (XRP)": "0x1D2F0da169ceB9fC7B3144628dB156f3F6c60dBE",
         "Binance Cardano (ADA)": "0x3EE2200Efb3400fAbB9AacF31297cBdD1d435D47",
         "Matic (MATIC)": "0xCC42724C6683B7E57334c4E856f4c9965ED682bD",
