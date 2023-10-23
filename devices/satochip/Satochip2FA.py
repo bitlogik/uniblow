@@ -79,5 +79,5 @@ class Satochip2FA:
             timeout -= period
 
         if reply is None:
-            logger.warning(f"Error: Time-out without server reply...")
+            logger.warning("Error: Time-out without server reply...")
             d["reply_encrypt"] = None  # default

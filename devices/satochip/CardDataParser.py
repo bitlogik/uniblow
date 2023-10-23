@@ -17,7 +17,7 @@
 import logging
 import base64
 from hashlib import sha256
-from struct import pack, unpack
+from struct import pack
 
 from cryptolib.cryptography import public_key_recover
 from cryptolib.ECKeyPair import ECpubkey

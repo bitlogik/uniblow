@@ -14,7 +14,6 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
-import sys
 import os
 import traceback
 import logging
@@ -131,7 +130,7 @@ class CertificateValidator:
         cert_txt += f"signature: {cert_obj.signature.hex()} \n"
         # cert_txt+= f"tbs_certificate_bytes: {cert_obj.tbs_certificate_bytes.hex()} \n"
         cert_txt += f"pubkkey: {cert_obj.public_key().public_bytes(Encoding.X962, PublicFormat.UncompressedPoint).hex()} \n"
-        cert_txt += f"extension(s): \n"
+        cert_txt += "extension(s): \n"
         for ext in cert_obj.extensions:
             cert_txt += f"{ext} \n"
         # cert_txt+= f"\n\n"

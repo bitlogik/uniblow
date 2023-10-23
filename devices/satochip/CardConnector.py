@@ -25,23 +25,12 @@ from cryptolib.base58 import encode_base58
 from .JCconstants import JCconstants
 from .CardDataParser import CardDataParser
 from .SecureChannel import SecureChannel
-from .version import (
-    SATOCHIP_PROTOCOL_MAJOR_VERSION,
-    SATOCHIP_PROTOCOL_MINOR_VERSION,
-    SATOCHIP_PROTOCOL_VERSION,
-    PYSATOCHIP_VERSION,
-)
 from .CertificateValidator import CertificateValidator
 
-import hashlib
-import hmac
 import base64
 import logging
 from os import urandom
 
-# debug
-import sys
-import traceback
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
@@ -283,10 +272,10 @@ class CardConnector:
         (response, sw1, sw2) = self.card_transmit(apdu)
 
         if sw1 == 0x90 and sw2 == 0x00:
-            label_size = response[0]
+            # label_size = response[0]
             try:
                 label = bytes(response[1:]).decode("utf8")
-            except UnicodeDecodeError as e:
+            except UnicodeDecodeError:
                 logger.warning("UnicodeDecodeError while decoding card label !")
                 label = str(bytes(response[1:]))
         elif sw1 == 0x6D and sw2 == 0x00:  # unsupported by the card
@@ -373,7 +362,7 @@ class CardConnector:
         return (response, sw1, sw2)
 
     ###########################################
-    #                        BIP32 commands                      #
+    #           BIP32 commands                #
     ###########################################
 
     def card_bip32_import_seed(self, seed):
@@ -409,11 +398,11 @@ class CardConnector:
             logger.debug("[card_bip32_import_seed] authentikey_card= " + authentikey_hex)
             self.is_seeded = True
         elif sw1 == 0x9C and sw2 == 0x17:
-            logger.error(f"Error during secret import: card is already seeded (0x9C17)")
+            logger.error("Error during secret import: card is already seeded (0x9C17)")
             raise CardError("Secure import failed: card is already seeded (0x9C17)!")
         elif sw1 == 0x9C and sw2 == 0x0F:
-            logger.error(f"Error during secret import: invalid parameter (0x9C0F)")
-            raise CardError(f"Error during secret import: invalid parameter (0x9C0F)")
+            logger.error("Error during secret import: invalid parameter (0x9C0F)")
+            raise CardError("Error during secret import: invalid parameter (0x9C0F)")
 
         return authentikey
 
@@ -514,7 +503,7 @@ class CardConnector:
         pubkey: ECPubkey object
         chaincode: bytearray
         """
-        if type(path) == str:
+        if isinstance(path, str):
             (depth, path) = self.parser.bip32path2bytes(path)
 
         logger.debug("In card_bip32_get_extendedkey")
@@ -577,7 +566,7 @@ class CardConnector:
 
         # path is of the form 44'/0'/1'
         logger.info(f"card_bip32_get_xpub(): path={str(path)}")  # debugSatochip
-        if type(path) == str:
+        if isinstance(path, str):
             (depth, bytepath) = self.parser.bip32path2bytes(path)
 
         (childkey, childchaincode) = self.card_bip32_get_extendedkey(bytepath)
@@ -629,7 +618,7 @@ class CardConnector:
 
         if len(txhash) != 32:
             raise ValueError("Wrong txhash length: " + str(len(txhash)) + "(should be 32)")
-        elif chalresponse == None:
+        elif chalresponse is None:
             data = txhash
         else:
             if len(chalresponse) != 20:
@@ -647,7 +636,7 @@ class CardConnector:
         return (response, sw1, sw2)
 
     ###########################################
-    #                         2FA commands                        #
+    #            2FA commands                 #
     ###########################################
 
     def card_set_2FA_key(self, hmacsha160_key, amount_limit):
@@ -714,7 +703,7 @@ class CardConnector:
 
     def card_crypt_transaction_2FA(self, msg, is_encrypt=True):
         logger.debug("In card_crypt_transaction_2FA")
-        if type(msg) == str:
+        if isinstance(msg, str):
             msg = msg.encode("utf8")
         msg = list(msg)
         msg_out = []
@@ -814,7 +803,7 @@ class CardConnector:
             msg_out = msg_out[0:-pad]
             msg_out = bytes(msg_out).decode(
                 "latin-1"
-            )  #''.join(chr(i) for i in msg_out) #bytes(msg_out).decode('latin-1')
+            )  # ''.join(chr(i) for i in msg_out) #bytes(msg_out).decode('latin-1')
             return msg_out
 
     ###########################################
@@ -947,7 +936,7 @@ class CardConnector:
             raise SatochipPinException(msg, pin_left)
         # blocked PUK
         elif sw1 == 0x9C and sw2 == 0x0C:
-            msg = f"Too many failed attempts! Your device has been bricked! \n\nYou need to reset your card to factory settings."
+            msg = "Too many failed attempts! Your device has been bricked! \n\nYou need to reset your card to factory settings."
             raise SatochipPinException(msg, 0)
 
         return (response, sw1, sw2)
@@ -1066,9 +1055,9 @@ class CardConnector:
         if sw1 == 0x90 and sw2 == 0x00:
             pass
         elif sw1 == 0x6D and sw2 == 0x00:
-            logger.error(f"Error during personalization pubkey export: command unsupported(0x6D00")
+            logger.error("Error during personalization pubkey export: command unsupported(0x6D00")
             raise CardError(
-                f"Error during personalization pubkey export: command unsupported (0x6D00)"
+                "Error during personalization pubkey export: command unsupported (0x6D00)"
             )
         else:
             logger.error(
@@ -1093,17 +1082,15 @@ class CardConnector:
             pass
         elif sw1 == 0x6D and sw2 == 0x00:
             logger.error(
-                f"Error during personalization certificate export: command unsupported(0x6D00)"
+                "Error during personalization certificate export: command unsupported(0x6D00)"
             )
             raise CardError(
-                f"Error during personalization certificate export: command unsupported (0x6D00)"
+                "Error during personalization certificate export: command unsupported (0x6D00)"
             )
         elif sw1 == 0x00 and sw2 == 0x00:
-            logger.error(
-                f"Error during personalization certificate export: no card present(0x0000)"
-            )
+            logger.error("Error during personalization certificate export: no card present(0x0000)")
             raise CardNotPresentError(
-                f"Error during personalization certificate export: no card present (0x0000)"
+                "Error during personalization certificate export: no card present (0x0000)"
             )
         else:
             logger.error(
@@ -1121,7 +1108,6 @@ class CardConnector:
         p2 = 0x02  # update
         certificate = certificate_size * [0]
         chunk_size = 128
-        chunk = []
         remaining_size = certificate_size
         cert_offset = 0
         while remaining_size > 128:
@@ -1168,14 +1154,14 @@ class CardConnector:
         try:
             cert_pem = self.card_export_perso_certificate()
             logger.debug("Cert PEM: " + str(cert_pem))
-        except CardError as ex:
+        except CardError:
             txt_error = "".join(
                 [
                     "Unable to get device certificate: feature unsupported! \n",
                     "Authenticity validation is only available starting with Satochip v0.12 and higher",
                 ]
             )
-        except CardNotPresentError as ex:
+        except CardNotPresentError:
             txt_error = "No card found! Please insert card."
         except UnexpectedSW12Error as ex:
             txt_error = "Exception during device certificate export: " + str(ex)

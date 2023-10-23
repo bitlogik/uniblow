@@ -17,7 +17,7 @@
 import hmac
 import logging
 from os import urandom
-from hashlib import sha1, sha256
+from hashlib import sha1
 
 from cryptolib.cryptography import (
     aes_encrypt,
