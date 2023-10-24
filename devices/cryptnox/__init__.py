@@ -655,6 +655,8 @@ class CryptnoxCard:
             derivation += 16
         COMMsig = [0x80, 0xC0, derivation, sigtype]
         if derivation & 0x0F == 1 and derivation != 3:
+            if path_bin is None:
+                raise ValueError("Should provide a valid path_bin.")
             path = path_bin
         else:
             path = b""

@@ -117,6 +117,8 @@ def decode(hrp, addr):
     hrpgot, data = bech32_decode(addr, checksum_val)
     if hrpgot != hrp:
         return (None, None)
+    if data is None:
+        return (None, None)
     decoded = convertbits(data[1:], 5, 8, False)
     if decoded is None or len(decoded) < 2 or len(decoded) > 40:
         return (None, None)

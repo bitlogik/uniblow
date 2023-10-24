@@ -508,7 +508,7 @@ def output_script_to_address(script, magicbyte=0):
         script = script[:-4]
     else:
         script = script[:-2]
-    return encode_base58_header(safe_from_hex(script), magicbyte=magicbyte)
+    return encode_base58_header(safe_from_hex(script), magicbyte)
 
 
 def mk_p2w_scripthash_script(witver, witprog):
