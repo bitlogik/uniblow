@@ -108,6 +108,12 @@ class SendModal(SendDialog):
             self.panel.bmp_chk.SetBitmap(self.BAD_BMP)
 
     def compute_value(self, evt):
+        # Replace comma by point while typing
+        amnt_txt = self.panel.text_amount
+        value = amnt_txt.GetValue()
+        if value[-1] == ",":
+            amnt_txt.SetValue(value[:-1] + ".")
+            amnt_txt.SetInsertionPointEnd()
         # Update total balance
         bal_txt = self.GetParent().balance_info.GetLabel()
         bal_txt += self.GetParent().balance_small.GetLabel()
