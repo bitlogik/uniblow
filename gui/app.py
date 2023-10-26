@@ -791,6 +791,10 @@ class UniblowApp(wx.App):
         if not hasattr(self, "wallet"):
             self.erase_info()
             return
+        if not hasattr(self, "gui_panel"):
+            # When device disconnected
+            # and there's still a balance call pending
+            return
         coinw = type(self.wallet)
         wall_net = self.gui_panel.network_choice.GetSelection()
         try:
