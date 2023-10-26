@@ -36,7 +36,11 @@ from cryptolib.HDwallet import bip39_is_checksum_valid
 logger = getLogger(__name__)
 
 
-BAD_ADDRESS = "Wrong destination account address checksum, wrong format, or non-registered domain. Check the destination input."
+BAD_ADDRESS = (
+    "Wrong destination account address checksum, "
+    "wrong format, or non-registered domain. "
+    "Check the destination input."
+)
 BLANK_ADDR = " " * 65
 
 
