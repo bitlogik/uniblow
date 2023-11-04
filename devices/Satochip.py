@@ -52,7 +52,6 @@ EIP712_HEADER = b"\x19\x01"
 
 
 class Satochip(BaseDevice):
-    device_name = "Satochip"
     # created = False ?
     has_password = True
     password_name = "PIN"
