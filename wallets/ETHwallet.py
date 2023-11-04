@@ -2,7 +2,7 @@
 # -*- coding: utf8 -*-
 
 # UNIBLOW ETH wallet with RPC API REST
-# Copyright (C) 2021-2022 BitLogiK
+# Copyright (C) 2021-2023 BitLogiK
 
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -408,11 +408,16 @@ class ETH_wallet:
             WCClient.set_origin("https://uniblow.org")
             try:
                 self.wc_client = WCClient.from_wc_uri(wc_uri)
-                req_id, req_chain_id, request_info = self.wc_client.open_session()
+                req_id, wc_chain_ids, request_info = self.wc_client.open_session()
             except (WCClientInvalidOption, WCClientException) as exc:
                 if hasattr(self, "wc_client"):
                     self.wc_client.close()
                 raise InvalidOption(exc)
+            if wc_chain_ids:
+                if self.chainID not in wc_chain_ids:
+                    self.wc_client.reject_session_request(req_id)
+                    self.wc_client.close()
+                    raise InvalidOption("The dapp chain ID is not this current chain/network.")
             relay = self.wc_client.get_relay_url()
             request_message = (
                 "WalletConnect request from :\n\n"
@@ -537,6 +542,12 @@ class ETH_wallet:
                 tx_data = parameters[0]
                 tx_hash = self.broadcast_tx(tx_data)
                 self.wc_client.reply(id_request, tx_hash)
+            elif method == "wallet_switchEthereumChain" and len(parameters) > 0:
+                if hex(self.chainID) == parameters[0].get("chainId"):
+                    self.wc_client.reply(id_request, None)
+                else:
+                    # Chain change not supported
+                    self.wc_client.reject(id_request)
             logger.debug("WC command processing finished, now reading next available message.")
             wc_message = self.wc_client.get_message()
 

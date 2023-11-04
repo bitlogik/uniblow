@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 # Uniblow : setup data
-# Copyright (C) 2021-2022  BitLogiK
+# Copyright (C) 2021-2023  BitLogiK
 
 
 from setuptools import setup, find_packages
@@ -33,7 +33,7 @@ setup(
         "pyweb3==0.1.7",
         "OpenPGPpy==1.1",
         "hidapi==0.11.0.post2",
-        "pyWalletConnect==1.5.0",
+        "pyWalletConnect==1.6.0",
     ],
     include_package_data=False,
     classifiers=[
