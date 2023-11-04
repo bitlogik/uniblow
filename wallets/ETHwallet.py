@@ -506,7 +506,9 @@ class ETH_wallet:
                         self.wc_client.reply(id_request, f"0x{signature.hex()}")
                     else:
                         self.wc_client.reject(id_request)
-            elif method == "eth_signTypedData" and len(parameters) > 1:
+            elif (method == "eth_signTypedData" or method == "eth_signTypedData_v4") and len(
+                parameters
+            ) > 1:
                 if compare_eth_addresses(parameters[0], self.get_account()):
                     signature = self.process_sign_typeddata(parameters[1])
                     if signature is not None:
