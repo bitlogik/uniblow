@@ -309,7 +309,7 @@ class Satochip(BaseDevice):
             msg["hash"] = tx_hash.hex()
             # msg['from']= from_ # TODO
             msg["chain"] = "EVM"
-            # msg['chainId']= self.chainId # optionnal, otherwise taken from tx deserialization...
+            # msg['chainId']= self.chainId # optional, otherwise taken from tx deserialization...
             (is_approved, hmac) = self.do_challenge_response(msg)
         else:
             (is_approved, hmac) = (True, None)
@@ -341,7 +341,7 @@ class Satochip(BaseDevice):
             raise Exception("User rejected the transaction signature.")
 
     def sign_message(self, msg_bytes):
-        """Sign a personnal message, used when has_screen"""
+        """Sign a personal message, used when on_device_check"""
         logger.debug("in sign_message:")
         logger.debug(f"msg_hex: {msg_bytes.hex()}")
         # msg_bytes is bytes format

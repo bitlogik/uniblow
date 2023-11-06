@@ -207,7 +207,7 @@ class Ledger(BaseDevice):
         return unpack_vrs(vrs_bin)
 
     def sign_message(self, message):
-        """Sign a personnal message, used when has_screen"""
+        """Sign a personal message, used when on_device_check"""
         msg_sz = BIP32node.ser32(len(message))
         data_frames = split_data(self.bin_path + msg_sz + message)
         is_subsequent = False
