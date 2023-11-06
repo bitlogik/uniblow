@@ -341,9 +341,10 @@ class TRX_wallet:
         logger.debug(tx)
         # Check TxID is correct
         try:
-            txid = sha2(bytes.fromhex(tx["raw_data_hex"]))
+            full_tx = bytes.fromhex(tx["raw_data_hex"])
         except ValueError:
             raise Exception("Bad rawtx format.")
+        txid = sha2(full_tx)
         if txid != bytes.fromhex(tx["txID"]):
             raise Exception("Invalid hash data.")
         # Before signing, a quick check that
@@ -353,7 +354,15 @@ class TRX_wallet:
             dest_addr = dest_addr[24:]
         if dest_addr not in tx["raw_data_hex"].lower():
             raise Exception("Destination not present in tx created.")
-        signature = self.current_device.sign(txid)
+        # Tron is a non-EVM chain enabled for Satochip.
+        # This requires a special case handling.
+        if (
+            self.current_device.__class__.__name__ == "Satochip"
+            or not self.current_device.on_device_check
+        ):
+            signature = self.current_device.sign(txid)
+        else:
+            signature = self.current_device.sign(full_tx)
         sig_hex_tron = convert_signature(self.pubkey, txid, signature)
         tx["signature"] = [sig_hex_tron]
         return tx

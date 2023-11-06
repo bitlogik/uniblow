@@ -715,9 +715,9 @@ def transfer(to, amount, fee_opt=1):
         parent=app.gui_frame,
     )
     wait_msg = "Building and signing the transaction"
-    if app.wallet.current_device.has_screen:
+    if app.wallet.current_device.on_device_check:
         wait_msg += "\nCheck on your {check_type} to confirm the signature.".format(
-            check_type=app.wallet.current_device.on_device_check_type
+            check_type=app.wallet.current_device.on_device_check
         )
     if app.wallet.current_device.has_hardware_button:
         wait_msg += "\nPress the button on the physical device to confirm."

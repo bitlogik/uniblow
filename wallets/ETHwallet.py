@@ -568,7 +568,7 @@ class ETH_wallet:
         if data is None:
             data = bytearray(b"")
         tx_bin, hash_to_sign = self.eth.prepare(account, amount, gazprice, ethgazlimit, data)
-        if self.current_device.has_screen:
+        if self.current_device.on_device_check:
             if self.eth.contract and self.current_device.ledger_tokens_compat:
                 # Token known by Ledger ?
                 ledger_info = self.ledger_tokens.get(self.eth.contract.lower())
@@ -607,14 +607,14 @@ class ETH_wallet:
             sign_request += f" {fill(data_bin.decode('utf8'))}\n"
         except UnicodeDecodeError:
             sign_request += " <can't decode sign data to text>"
-        if self.current_device.has_screen:
+        if self.current_device.on_device_check:
             hash2_data = sha2(data_bin).hex().upper()
             sign_request += f"\n Hash data to sign (hex) :\n {hash2_data}\n"
-            sign_request += USER_SCREEN.format(check_type=self.current_device.on_device_check_type)
+            sign_request += USER_SCREEN.format(check_type=self.current_device.on_device_check)
         elif self.current_device.has_hardware_button:
             sign_request += USER_BUTTON
         if self.confirm_callback(sign_request):
-            if self.current_device.has_screen:
+            if self.current_device.on_device_check:
                 if self.current_device.provide_parity:
                     v, r, s = self.current_device.sign_message(data_bin)
                     return self.eth.encode_vrs(v, r, s)
@@ -650,12 +650,12 @@ class ETH_wallet:
             f"\n - Hash data (hex) :\n"
             f" 0x{hash_data.hex().upper()}\n"
         )
-        if self.current_device.has_screen:
-            sign_request += USER_SCREEN.format(check_type=self.current_device.on_device_check_type)
+        if self.current_device.on_device_check:
+            sign_request += USER_SCREEN.format(check_type=self.current_device.on_device_check)
         elif self.current_device.has_hardware_button:
             sign_request += USER_BUTTON
         if self.confirm_callback(sign_request):
-            if self.current_device.has_screen:
+            if self.current_device.on_device_check:
                 if self.current_device.provide_parity:
                     v, r, s = self.current_device.sign_eip712(hash_domain, hash_data)
                     return self.eth.encode_vrs(v, r, s)
@@ -690,10 +690,8 @@ class ETH_wallet:
             f" Gas limit  : {gas_limit}\n"
             f"Max fee cost: {balance_string(gas_limit*gas_price, self.eth.decimals)} {self.coin}\n"
         )
-        if self.current_device.has_screen:
-            request_message += USER_SCREEN.format(
-                check_type=self.current_device.on_device_check_type
-            )
+        if self.current_device.on_device_check:
+            request_message += USER_SCREEN.format(check_type=self.current_device.on_device_check)
         elif self.current_device.has_hardware_button:
             request_message += USER_BUTTON
         if self.confirm_callback(request_message):

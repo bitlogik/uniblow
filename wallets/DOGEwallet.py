@@ -284,7 +284,13 @@ class DOGE_wallet:
         msgs_to_sign = self.doge.prepare(to_account, amount, fee)
         tx_signatures = []
         for msg in msgs_to_sign:
-            msg = sha2(msg)  # compute second hash of tx
+            # DOGE is a non-EVM chain enabled for Satochip.
+            # This requires a special case handling.
+            if (
+                self.current_device.__class__.__name__ == "Satochip"
+                or not self.current_device.on_device_check
+            ):
+                msg = sha2(msg)
             asig = self.current_device.sign(msg)
             tx_signatures.append(asig)
         return self.doge.send(tx_signatures)

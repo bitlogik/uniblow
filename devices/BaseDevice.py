@@ -34,11 +34,11 @@ class BaseDevice(ABC):
     admin_pwd_maxlen = 24
     default_admin_password = ""
     is_HD = False
-    has_screen = False
-    on_device_check_type = ""  # if has_screen, describes the type of screen (screen or 2FA device)
-    provide_parity = (
-        False  # expects a rsv signature with parity information, otherwise a simple DER signature
-    )
+    # If on_device_check : describes the type of screen (e.g. "screen" or "2FA device")
+    # When activated, sends the full tx to sign, else sends pre-hash.
+    on_device_check = ""
+    # Returns (v,r,s) signature with parity, otherwise a standard DER signature
+    provide_parity = False
     ledger_tokens_compat = False
     has_hardware_button = False
     internally_gen_keys = False
@@ -90,9 +90,12 @@ class BaseDevice(ABC):
     @abstractmethod
     def sign(self, hashed_msg):
         """Sign a hash and return with ASN1 DER encoding.
-        In case has_screen :
+        In case on_device_check :
             hashed_msg is the message, hash is perfomed on device.
-            For EVM, return v,r,s.
-        For EdDSA it returns the "raw" 64 bytes RS signature.
+            Else provides the hash (pre-hashed signature).
+        In case provide_parity :
+            returns with parity information, intergers tuple (v,r,s)
+            Else returns standard DER encoded signature.
+        For EdDSA it always returns the "raw" 64 bytes RS signature.
         """
         pass

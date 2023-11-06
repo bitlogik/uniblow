@@ -352,7 +352,7 @@ class BTC_wallet:
         msgs_to_sign = self.btc.prepare(to_account, amount, fee)
         tx_signatures = []
         for msg in msgs_to_sign:
-            if not self.current_device.has_screen:
+            if not self.current_device.on_device_check:
                 msg = sha2(msg)
             asig = self.current_device.sign(msg)
             tx_signatures.append(asig)

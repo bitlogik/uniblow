@@ -283,6 +283,7 @@ class SOL_wallet:
         Used to transfer tokens with the given parameters.
         """
         unsigned_tx_bin = self.sol.prepare(account, amount)
+        # Since this is EdDSA, provide the full tx to sign device
         tx_signature = self.current_device.sign(unsigned_tx_bin)
         return self.sol.add_signature(unsigned_tx_bin, tx_signature)
 

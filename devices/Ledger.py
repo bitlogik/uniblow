@@ -61,8 +61,7 @@ def split_data(data):
 
 class Ledger(BaseDevice):
     is_HD = True
-    has_screen = True
-    on_device_check_type = "device screen"
+    on_device_check = "device screen"
     provide_parity = True
     ledger_tokens_compat = True
     has_hardware_button = True
@@ -228,7 +227,7 @@ class Ledger(BaseDevice):
         return unpack_vrs(vrs_bin)
 
     def sign_eip712(self, domain_hash, message_hash):
-        """Sign an EIP712 typed hash request, used when has_screen"""
+        """Sign an EIP712 typed hash request, used when on_device_check"""
         if len(domain_hash) != 32 or len(message_hash) != 32:
             raise ValueError("Incorrect data format to sign.")
         apdu = [LEDGER_CLASS, INSTRUCTION_SIGN712, 0x00, 0x00, len(self.bin_path) + 64]
