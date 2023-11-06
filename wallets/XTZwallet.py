@@ -365,6 +365,10 @@ class XTZ_wallet:
             tx_signature = self.current_device.sign(hash_to_sign)
         else:
             tx_signature = self.current_device.sign(full_tx)
+        if self.current_device.provide_parity:
+            raise NotImplementedError(
+                "Device with provide_parity attribute was not implemented in this Tezos wallet."
+            )
         return self.xtz.send(tx_signature)
 
     def transfer(self, amount, to_account, priority_fee):

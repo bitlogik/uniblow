@@ -24,7 +24,7 @@ import logging
 import cryptolib.coins
 from cryptolib.base58 import decode_base58
 from cryptolib.bech32 import test_bech32
-from cryptolib.cryptography import compress_pubkey, sha2
+from cryptolib.cryptography import compress_pubkey, sha2, encode_der_s
 from wallets.name_service import resolve
 from wallets.wallets_utils import balance_string, shift_10, NotEnoughTokens
 
@@ -341,6 +341,9 @@ class LTC_wallet:
             if not self.current_device.on_device_check:
                 msg = sha2(msg)
             asig = self.current_device.sign(msg)
+            if self.current_device.provide_parity:
+                # asig : v,r,s turn into DER
+                asig = encode_der_s(asig[1], asig[2], "K1")
             tx_signatures.append(asig)
         return self.ltc.send(tx_signatures)
 

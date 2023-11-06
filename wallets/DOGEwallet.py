@@ -23,7 +23,7 @@ import re
 
 import cryptolib.coins
 from cryptolib.base58 import decode_base58
-from cryptolib.cryptography import compress_pubkey, sha2
+from cryptolib.cryptography import compress_pubkey, sha2, encode_der_s
 from wallets.name_service import resolve
 from wallets.wallets_utils import balance_string, shift_10, NotEnoughTokens
 
@@ -292,6 +292,9 @@ class DOGE_wallet:
             ):
                 msg = sha2(msg)
             asig = self.current_device.sign(msg)
+            if self.current_device.provide_parity:
+                # asig : v,r,s turn into DER
+                asig = encode_der_s(asig[1], asig[2], "K1")
             tx_signatures.append(asig)
         return self.doge.send(tx_signatures)
 

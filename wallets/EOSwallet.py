@@ -381,6 +381,10 @@ class EOS_wallet:
                     tx_signature = self.current_device.sign(pu_tx)
                 else:
                     tx_signature = self.current_device.sign(ptxhash)
+                if self.current_device.provide_parity:
+                    raise NotImplementedError(
+                        "Device with provide_parity attribute was not implemented in this Tezos wallet."
+                    )
                 len_r = int(tx_signature[3])
                 len_s = int(tx_signature[5 + len_r])
             # Finalize powerup tx and send it
@@ -399,6 +403,10 @@ class EOS_wallet:
                 tx_signature = self.current_device.sign(atx)
             else:
                 tx_signature = self.current_device.sign(hash_to_sign)
+            if self.current_device.provide_parity:
+                raise NotImplementedError(
+                    "Device with provide_parity attribute was not implemented in this Tezos wallet."
+                )
             len_r = int(tx_signature[3])
             len_s = int(tx_signature[5 + len_r])
         return self.eos.send(atx, hash_to_sign, tx_signature)

@@ -16,11 +16,10 @@
 
 
 import OpenPGPpy
+from cryptolib.cryptography import encode_der_s
 from devices.BaseDevice import BaseDevice
 
 
-CURVE_K1_ORDER = 0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEBAAEDCE6AF48A03BBFD25E8CD0364141
-EC_BYTES_SIZE = 32
 ECDSA_K1 = "132B8104000A"
 
 
@@ -32,34 +31,13 @@ class NotinitException(Exception):
     pass
 
 
-def encode_int(intarray):
-    # encode a bytes array to a DER integer (bytes list)
-    if intarray[0] >= 128:
-        return [2, len(intarray) + 1, 0, *intarray]
-    if intarray[0] == 0:
-        return encode_int(intarray[1:])
-    return [2, len(intarray), *intarray]
-
-
-def encode_der_s(int_r, int_s):
-    # Encode raw signature R|S (2x EC size bytes) into ASN1 DER
-    # Enforce low S
-    array_r = encode_int(int_r.to_bytes(EC_BYTES_SIZE, byteorder="big"))
-    if int_s > (CURVE_K1_ORDER >> 1):
-        s_data = (CURVE_K1_ORDER - int_s).to_bytes(EC_BYTES_SIZE, byteorder="big")
-        array_s = encode_int(s_data)
-    else:
-        array_s = encode_int(int_s.to_bytes(EC_BYTES_SIZE, byteorder="big"))
-    return bytes([0x30, len(array_r) + len(array_s), *array_r, *array_s])
-
-
 def fix_s_sig(sigRS):
     # Quick MPI decoder
     ec_sz = len(sigRS) // 2
     r_value = int.from_bytes(sigRS[:ec_sz], "big")
     s_value = int.from_bytes(sigRS[ec_sz:], "big")
     # to DER with low S
-    return encode_der_s(r_value, s_value)
+    return encode_der_s(r_value, s_value, "K1")
 
 
 class OpenPGP(BaseDevice):

@@ -84,6 +84,14 @@ def convert_signature(pubkey, datahash, signature_der):
     return (r + s + v).hex()
 
 
+def convert_signature_vrs(signature):
+    # Signature encoding fron (v,r,s)
+    r = uint256(signature[1])
+    s = uint256(signature[2])
+    v = bytes([signature[0] % 2])
+    return (r + s + v).hex()
+
+
 class TronApi:
     def __init__(self, network):
         if network == "mainnet":
@@ -363,7 +371,10 @@ class TRX_wallet:
             signature = self.current_device.sign(txid)
         else:
             signature = self.current_device.sign(full_tx)
-        sig_hex_tron = convert_signature(self.pubkey, txid, signature)
+        if self.current_device.provide_parity:
+            sig_hex_tron = convert_signature_vrs(signature)
+        else:
+            sig_hex_tron = convert_signature(self.pubkey, txid, signature)
         tx["signature"] = [sig_hex_tron]
         return tx
 
