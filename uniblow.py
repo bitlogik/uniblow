@@ -720,7 +720,7 @@ def transfer(to, amount, fee_opt=1):
             check_type=app.wallet.current_device.on_device_check
         )
     if app.wallet.current_device.has_hardware_button:
-        wait_msg += "\nPress the button on the physical device to confirm."
+        wait_msg += "\nYou may need to be press a confirm button on the physical device."
     progress_modal.Update(50, wait_msg)
     progress_modal.Fit()
     wx.CallLater(250, perform_transfer, to, amount, fee_opt, progress_modal)
