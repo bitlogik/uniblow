@@ -344,6 +344,7 @@ class LTC_wallet:
             if self.current_device.provide_parity:
                 # asig : v,r,s turn into DER
                 asig = encode_der_s(asig[1], asig[2], "K1")
+                # Even msg before hash is a hash, to be modified
             tx_signatures.append(asig)
         return self.ltc.send(tx_signatures)
 

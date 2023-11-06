@@ -354,6 +354,7 @@ class BTC_wallet:
         for msg in msgs_to_sign:
             if not self.current_device.on_device_check:
                 msg = sha2(msg)
+                # Even msg before hash is a hash, to be modified
             asig = self.current_device.sign(msg)
             if self.current_device.provide_parity:
                 # asig : v,r,s turn into DER
