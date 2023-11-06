@@ -574,7 +574,8 @@ def set_coin(coin, network, wallet_type):
 
     # Detect is token or wallet connect
     if "ERC20" in get_coin_class(coin).wtypes:
-        call_return = lambda x: process_coin_select(coin, network, 0)
+        def call_return(evt):
+            return process_coin_select(coin, network, 0)
         if wallet_type == 1:
             btn = app.token_started()
             btn.Bind(wx.EVT_BUTTON, call_return)
@@ -603,7 +604,7 @@ def display_coin(account_addr):
     app.gui_panel.qr_button.Enable()
     app.gui_panel.copy_button.Enable()
     app.gui_panel.hist_button.Enable()
-    app.gui_panel.balance_info.SetLabel(f"  ...  ")
+    app.gui_panel.balance_info.SetLabel("  ...  ")
     app.gui_panel.account_addr.Layout()
     app.balance_timer = DisplayTimer()
     app.balance_timer.Start(12000)
