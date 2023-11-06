@@ -87,6 +87,7 @@ DEVICES_LIST = [
     "Ledger",
     "Cryptnox",
     "OpenPGP",
+    "Satochip",
 ]
 
 DEFAULT_PASSWORD = "NoPasswd"
@@ -263,6 +264,11 @@ def device_selected(sel_device):
         coins_list.remove("SOL")
     if device_sel_name == "Cryptnox":
         coins_list.remove("SOL")
+    if device_sel_name == "Satochip":
+        coins_list.remove("SOL")
+        coins_list.remove("EOS")
+        coins_list.remove("BTC")
+        coins_list.remove("LTC")
     if sel_device == 0:
         # Seed Watcher
         start_seedwatcher(app, cb_open_wallet)
@@ -708,7 +714,11 @@ def transfer(to, amount, fee_opt=1):
         style=wx.PD_APP_MODAL | wx.PD_AUTO_HIDE | wx.PD_SMOOTH,
         parent=app.gui_frame,
     )
-    wait_msg = "Buiding and signing the transaction"
+    wait_msg = "Building and signing the transaction"
+    if app.wallet.current_device.on_device_check:
+        wait_msg += "\nCheck on your {check_type} to confirm the signature.".format(
+            check_type=app.wallet.current_device.on_device_check
+        )
     if app.wallet.current_device.has_hardware_button:
         wait_msg += "\nPress the button on the physical device to confirm."
     progress_modal.Update(50, wait_msg)

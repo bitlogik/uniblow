@@ -152,4 +152,5 @@ class LocalFile(BaseDevice):
         return self.pvkey.get_public_key()
 
     def sign(self, hashed_msg):
+        # Actually when key is EdDSA, the full msg is provided
         return self.pvkey.sign(hashed_msg)

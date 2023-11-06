@@ -240,7 +240,7 @@ class XTZwalletCore:
         )
         self.signing_tx_hex = self.api.get_serialtx(self.operation["operation"])
         self.datahash = blake2b(bytes.fromhex("03" + self.signing_tx_hex))
-        return self.datahash
+        return self.datahash, bytes.fromhex(self.signing_tx_hex)
 
     def send(self, signature_der):
         # Signature decoding
@@ -353,9 +353,18 @@ class XTZ_wallet:
         return XTZ_EXPLORER_URL
 
     def raw_tx(self, amount, fee, gazlimit, account):
-        hash_to_sign = self.xtz.prepare(account, amount, fee, gazlimit)
-        # For Ed, the signed message is the hash also
-        tx_signature = self.current_device.sign(hash_to_sign)
+        # full_tx is without "03" tx header
+        hash_to_sign, full_tx = self.xtz.prepare(account, amount, fee, gazlimit)
+        # With Tezos, even for Ed, the signed message is also the hash
+        # Tezos is a non-EVM chain enabled for Satochip.
+        # This requires a special case handling.
+        if (
+            self.current_device.__class__.__name__ == "Satochip"
+            or not self.current_device.on_device_check
+        ):
+            tx_signature = self.current_device.sign(hash_to_sign)
+        else:
+            tx_signature = self.current_device.sign(full_tx)
         return self.xtz.send(tx_signature)
 
     def transfer(self, amount, to_account, priority_fee):

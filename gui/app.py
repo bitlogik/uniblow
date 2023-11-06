@@ -408,6 +408,9 @@ class UniblowApp(wx.App):
         elif evt.GetEventObject() is self.dev_panel.d_btn05:
             # OpenPGP
             sel_dev = 4
+        elif evt.GetEventObject() is self.dev_panel.d_btn06:
+            # Satochip
+            sel_dev = 5
         else:
             raise Exception("Bad device button object")
         wx.CallAfter(self.gowallet, sel_dev)

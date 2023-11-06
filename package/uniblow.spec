@@ -49,6 +49,8 @@ pkgs_remove = [
 datai = [
     (ICON, "gui/"),
     ("../cryptolib/wordslist/english.txt", "cryptolib/wordslist/"),
+    ("../devices/satochip/cert/ca.cert", "devices/satochip/cert/"),
+    ("../devices/satochip/cert/subca-satochip.cert", "devices/satochip/cert/"),
     ("../gui/images/logo.png", "gui/images/"),
     ("../gui/images/good.png", "gui/images/"),
     ("../gui/images/bad.png", "gui/images/"),
@@ -72,6 +74,7 @@ datai = [
     ("../gui/images/btns/dev_ledger.png", "gui/images/btns/"),
     ("../gui/images/btns/dev_cryptnox.png", "gui/images/btns/"),
     ("../gui/images/btns/dev_openpgp.png", "gui/images/btns/"),
+    ("../gui/images/btns/dev_satochip.png", "gui/images/btns/"),
     ("../gui/images/btns/addrchk.png", "gui/images/btns/"),
     ("../gui/images/btns/tokens.png", "gui/images/btns/"),
     ("../gui/images/btns/nfts.png", "gui/images/btns/"),

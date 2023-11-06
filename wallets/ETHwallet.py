@@ -59,9 +59,7 @@ SAFETRANSFER_FUNCTION = "42842e0e"
 MESSAGE_HEADER = b"\x19Ethereum Signed Message:\n"
 EIP712_HEADER = b"\x19\x01"
 
-USER_SCREEN = (
-    "\n>> !!!  Once approved, check on your device screen to confirm the signature  !!! <<"
-)
+USER_SCREEN = "\n>> !!!  Once approved, check on your {check_type} to confirm the signature  !!! <<"
 USER_BUTTON = (
     "\n>> !!!  Once approved, press the button on the device to confirm the signature  !!! <<"
 )
@@ -583,7 +581,7 @@ class ETH_wallet:
         if data is None:
             data = bytearray(b"")
         tx_bin, hash_to_sign = self.eth.prepare(account, amount, gazprice, ethgazlimit, data)
-        if self.current_device.has_screen:
+        if self.current_device.on_device_check:
             if self.eth.contract and self.current_device.ledger_tokens_compat:
                 # Token known by Ledger ?
                 ledger_info = self.ledger_tokens.get(self.eth.contract.lower())
@@ -594,10 +592,14 @@ class ETH_wallet:
                     self.current_device.register_token(
                         name, self.eth.contract[2:], self.eth.decimals, self.chainID, data_sig
                     )
-            vrs = self.current_device.sign(tx_bin)
-            return self.eth.add_vrs(vrs)
-        tx_signature = self.current_device.sign(hash_to_sign)
-        return self.eth.add_signature(tx_signature)
+            tx_signature = self.current_device.sign(tx_bin)
+        else:
+            tx_signature = self.current_device.sign(hash_to_sign)
+        if self.current_device.provide_parity:
+            tx_signed = self.eth.add_vrs(tx_signature)
+        else:
+            tx_signed = self.eth.add_signature(tx_signature)
+        return tx_signed
 
     def broadcast_tx(self, txdata):
         """Broadcast and return the tx hash as 0xhhhhhhhh"""
@@ -618,20 +620,25 @@ class ETH_wallet:
             sign_request += f" {fill(data_bin.decode('utf8'))}\n"
         except UnicodeDecodeError:
             sign_request += " <can't decode sign data to text>"
-        if self.current_device.has_screen:
+        if self.current_device.on_device_check:
             hash2_data = sha2(data_bin).hex().upper()
             sign_request += f"\n Hash data to sign (hex) :\n {hash2_data}\n"
-            sign_request += USER_SCREEN
+            sign_request += USER_SCREEN.format(check_type=self.current_device.on_device_check)
         elif self.current_device.has_hardware_button:
             sign_request += USER_BUTTON
         if self.confirm_callback(sign_request):
-            if self.current_device.has_screen:
-                v, r, s = self.current_device.sign_message(data_bin)
-                return self.eth.encode_vrs(v, r, s)
-            # else
-            hash_sign = sha3(msg_header + data_bin)
-            der_signature = self.current_device.sign(hash_sign)
-            return self.eth.encode_datasign(hash_sign, der_signature)
+            if self.current_device.on_device_check:
+                if self.current_device.provide_parity:
+                    v, r, s = self.current_device.sign_message(data_bin)
+                    return self.eth.encode_vrs(v, r, s)
+                else:
+                    hash_sign = sha3(msg_header + data_bin)
+                    der_signature = self.current_device.sign(data_bin)
+                    return self.eth.encode_datasign(hash_sign, der_signature)
+            else:
+                hash_sign = sha3(msg_header + data_bin)
+                der_signature = self.current_device.sign(hash_sign)
+                return self.eth.encode_datasign(hash_sign, der_signature)
 
     def process_sign_typeddata(self, data_bin):
         """Process a WalletConnect eth_signTypedData call"""
@@ -645,6 +652,7 @@ class ETH_wallet:
         if chain_id is not None and self.chainID != data_obj["domain"]["chainId"]:
             logger.debug("Wrong chain id in signedTypedData")
             return None
+            # return self.eth.encode_vrs(0,0,0) # send dummy signature ?
         hash_domain, hash_data = typed_sign_hash(data_obj)
         sign_request = (
             "WalletConnect signature request :\n\n"
@@ -655,14 +663,19 @@ class ETH_wallet:
             f"\n - Hash data (hex) :\n"
             f" 0x{hash_data.hex().upper()}\n"
         )
-        if self.current_device.has_screen:
-            sign_request += USER_SCREEN
+        if self.current_device.on_device_check:
+            sign_request += USER_SCREEN.format(check_type=self.current_device.on_device_check)
         elif self.current_device.has_hardware_button:
             sign_request += USER_BUTTON
         if self.confirm_callback(sign_request):
-            if self.current_device.has_screen:
-                v, r, s = self.current_device.sign_eip712(hash_domain, hash_data)
-                return self.eth.encode_vrs(v, r, s)
+            if self.current_device.on_device_check:
+                if self.current_device.provide_parity:
+                    v, r, s = self.current_device.sign_eip712(hash_domain, hash_data)
+                    return self.eth.encode_vrs(v, r, s)
+                else:
+                    hash_sign = sha3(EIP712_HEADER + hash_domain + hash_data)
+                    der_signature = self.current_device.sign_eip712(data_obj)
+                    return self.eth.encode_datasign(hash_sign, der_signature)
             # else
             hash_sign = sha3(EIP712_HEADER + hash_domain + hash_data)
             der_signature = self.current_device.sign(hash_sign)
@@ -690,8 +703,8 @@ class ETH_wallet:
             f" Gas limit  : {gas_limit}\n"
             f"Max fee cost: {balance_string(gas_limit*gas_price, self.eth.decimals)} {self.coin}\n"
         )
-        if self.current_device.has_screen:
-            request_message += USER_SCREEN
+        if self.current_device.on_device_check:
+            request_message += USER_SCREEN.format(check_type=self.current_device.on_device_check)
         elif self.current_device.has_hardware_button:
             request_message += USER_BUTTON
         if self.confirm_callback(request_message):
