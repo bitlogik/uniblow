@@ -574,8 +574,10 @@ def set_coin(coin, network, wallet_type):
 
     # Detect is token or wallet connect
     if "ERC20" in get_coin_class(coin).wtypes:
+
         def call_return(evt):
             return process_coin_select(coin, network, 0)
+
         if wallet_type == 1:
             btn = app.token_started()
             btn.Bind(wx.EVT_BUTTON, call_return)

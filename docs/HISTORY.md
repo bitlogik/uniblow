@@ -1,5 +1,14 @@
 Uniblow versions history
 
+# 2.6.0
+
+* Add Satochip device
+* Update WC for namespaces and switchEthereumChain
+* Increase OpenPGP compatibility
+* Update Ledger tokens
+* Accept eth_signTypedData_v4 in WC
+* Small improvements in UX/GUI
+
 # 2.5.3
 
 * Fix DOGE and LTC transaction signing
