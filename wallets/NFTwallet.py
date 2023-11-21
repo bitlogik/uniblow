@@ -23,7 +23,7 @@ from time import sleep
 from cryptolib.coins.ethereum import read_int_array, read_string, uint256
 
 
-IPFS_GATEWAY = "https://nftstorage.link/ipfs/"
+IPFS_GATEWAY = "https://gateway.ipfs.io/ipfs/"
 REPLACED_IPFS_GATEWAY = "https://ipfs.io/ipfs/"
 USER_AGENT = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/99.0.4844.84 Safari/537.36"
 
