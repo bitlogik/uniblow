@@ -412,7 +412,7 @@ class ETH_wallet:
                     self.wc_client.close()
                 raise InvalidOption(exc)
             if wc_chain_ids:
-                if self.chainID not in wc_chain_ids:
+                if str(self.chainID) not in wc_chain_ids:
                     self.wc_client.reject_session_request(req_id)
                     self.wc_client.close()
                     raise InvalidOption("The dapp chain ID is not this current chain/network.")
@@ -645,14 +645,13 @@ class ETH_wallet:
         data_obj = json.loads(data_bin)
         chain_id = None
         if "domain" in data_obj and "chainId" in data_obj["domain"]:
-            chain_id = data_obj["domain"]["chainId"]
+            chain_id = str(data_obj["domain"]["chainId"])
             if isinstance(chain_id, str) and chain_id.startswith("eip155:"):
-                chain_id = int(chain_id[7:])
+                chain_id = chain_id[7:]
         # Send user rejected when chain ids mismatch
-        if chain_id is not None and self.chainID != data_obj["domain"]["chainId"]:
+        if chain_id is not None and str(self.chainID) != chain_id:
             logger.debug("Wrong chain id in signedTypedData")
             return None
-            # return self.eth.encode_vrs(0,0,0) # send dummy signature ?
         hash_domain, hash_data = typed_sign_hash(data_obj)
         sign_request = (
             "WalletConnect signature request :\n\n"

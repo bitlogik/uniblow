@@ -33,7 +33,7 @@ setup(
         "pyweb3==0.1.7",
         "OpenPGPpy==1.1",
         "hidapi==0.11.0.post2",
-        "pyWalletConnect==1.6.0",
+        "pyWalletConnect==1.6.2",
     ],
     include_package_data=False,
     classifiers=[
