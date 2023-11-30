@@ -1,5 +1,10 @@
 Uniblow versions history
 
+# 2.6.2
+
+* Update WalletConnect to keep chainID as string
+* Update IPFS gateway
+
 # 2.6.0
 
 * Add Satochip device
