@@ -48,8 +48,6 @@ class RPC_api:
 
     def __init__(self, network):
         self.url = f"https://{network}.smartpy.io"
-        self.chainID = self.getData("/chains/main/chain_id")
-        self.protocol = self.getData(f"{RPC_api.BASE_BLOCK_URL}/protocols")["protocol"]
 
     def getData(self, method, params=[]):
         full_url = self.url + method
@@ -138,6 +136,11 @@ class XTZwalletCore:
         "ED",
     ]
 
+    chain_ids = {
+        "mainnet": "NetXdQprcVkpaWU",
+        "ghostnet": "NetXnHfVqm9iesp",
+    }
+
     SIGED_HEADER = bytes([9, 245, 205, 134, 18])  # edsig
     ADDRESS_ED_HEADER = bytes([6, 161, 159])  # tz1
     PUBKEY_ED_HEADER = bytes([13, 15, 37, 217])  # edpk
@@ -149,6 +152,8 @@ class XTZwalletCore:
     # PUBKEY_R1_HEADER = bytes([3, 178, 139, 127])  # p2pk
 
     def __init__(self, pubkey, network, wtype, api):
+        if network not in XTZwalletCore.chain_ids:
+            raise Exception("Unsupported Tezos network.")
         if wtype == 1:
             # tz1 Ed
             self.SIG_HEADER = XTZwalletCore.SIGED_HEADER
@@ -166,6 +171,7 @@ class XTZwalletCore:
         pubkey_hashed = blake2b(self.pubkey, 20)
         self.address = encode_base58(ADDRESS_HEADER + pubkey_hashed)
         self.api = api
+        self.chain_id = XTZwalletCore.chain_ids[network]
         self.network = network
 
     def getbalance(self):
@@ -211,7 +217,7 @@ class XTZwalletCore:
                 "branch": curr_branch,
                 "contents": [],
             },
-            "chain_id": self.api.chainID,
+            "chain_id": self.chain_id,
         }
         if not key_revealed:  # need reveal
             self.nonce += 1
@@ -262,7 +268,9 @@ class XTZwalletCore:
         checked_simu = self.check_operation(simu_result)
         if checked_simu:
             raise Exception(str(checked_simu))
-        self.operation["operation"]["protocol"] = self.api.protocol
+        self.operation["operation"]["protocol"] = self.api.getData(
+            f"{RPC_api.BASE_BLOCK_URL}/protocols"
+        )["protocol"]
         # Full test (preapply) tx
         apply_result = self.api.preapply_tx([self.operation["operation"]])
         checked_apply = self.check_operation(apply_result)
