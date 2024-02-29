@@ -817,7 +817,6 @@ class UniblowApp(wx.App):
             self.disable_send()
             self.deactivate_option_buttons()
             self.gui_panel.wallopt_label.Disable()
-            self.gui_panel.wallopt_choice.Disable()
             self.gui_panel.balance_info.SetLabel(" -  offline  -")
             self.gui_panel.balance_small.SetLabel("")
             self.gui_panel.balance_unit.SetLabel("")
