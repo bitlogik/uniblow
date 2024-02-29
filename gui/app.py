@@ -838,7 +838,11 @@ class UniblowApp(wx.App):
             return
         if not hasattr(self, "wallet"):
             return
-        balance_num, balance_coin = balance.split(" ")[:2]
+        # special case for EOS
+        if balance.startswith("No pubkey"):
+            balance_num, balance_coin = balance, ""
+        else:
+            balance_num, balance_coin = balance.split(" ")[:2]
         if "." in balance_num:
             balance_int, balance_float = balance_num.split(".")
             balance_int += "."
@@ -852,7 +856,7 @@ class UniblowApp(wx.App):
             # No fund in the wallet
             balance_num not in ("0", "0.0")
             # EOS when register pubkey mode : disable sending
-            and balance_num != "Register"
+            and not balance_num.startswith("No pubkey")
             # WalletConnect : disable sending
             and not hasattr(self.wallet, "wc_timer")
         ):

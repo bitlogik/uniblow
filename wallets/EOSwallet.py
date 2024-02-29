@@ -150,7 +150,10 @@ class EOSwalletCore:
         return self.api.get_balance(self.account)
 
     def getaccount(self, addr):
-        return self.api.get_account(addr)
+        try:
+            return self.api.get_account(addr)
+        except (IOError, OSError):
+            return ""
 
     def getresources(self):
         """Return the CPU available"""
@@ -344,7 +347,7 @@ class EOS_wallet:
     def get_balance(self):
         # Get balance in base integer unit
         if not self.eos.account:
-            return "Register publickey"
+            return "No pubkey found\n(not registered or offline)"
         bal_list = self.eos.getbalance()
         return bal_list[0] if len(bal_list) > 0 else f"0 {self.coin}"
 
