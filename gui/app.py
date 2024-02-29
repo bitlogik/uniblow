@@ -629,7 +629,18 @@ class UniblowApp(wx.App):
         self.send_dialog.Enable()
 
     def open_send(self, evt):
-        cansend_all = not getattr(self.wallet, "sendall_notallowed", False)
+        cansend_all = True
+        if not (
+            (
+                hasattr(self.wallet, "eth")
+                and self.wallet.eth.contract
+                and self.wallet.eth.is_fungible
+            )
+            or (self.current_chain == "TRX" and self.wallet.contract)
+        ):
+            # Native : disable SendAll for layer2 chains
+            cansend_all = not getattr(self.wallet, "sendall_notallowed", False)
+
         self.send_dialog = SendModal(
             self.gui_panel,
             self.wallet.coin,
