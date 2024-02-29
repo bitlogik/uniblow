@@ -1,7 +1,7 @@
 # -*- coding: utf8 -*-
 
 # UNIBLOW app
-# Copyright (C) 2021-2022 BitLogiK
+# Copyright (C) 2021-2024 BitLogiK
 
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
