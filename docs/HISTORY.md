@@ -1,5 +1,12 @@
 Uniblow versions history
 
+# 2.6.3
+
+* Change wallet startup behavior for EOS and XTZ, allowing offline mode
+* Let wallet type choice in offline mode
+* Rework SendAll activation
+* Add PYUSD token
+
 # 2.6.2
 
 * Update WalletConnect to keep chainID as string
