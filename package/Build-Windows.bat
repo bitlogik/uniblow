@@ -54,4 +54,6 @@ POPD
 echo Compilation done.
 echo Binary result is in the dist folder.
 
+IF "%GITHUB_ACTION%"=="" (
 PAUSE
+)
