@@ -44,6 +44,7 @@ cd bootloader
 %INSTALLDIR%\%python_env% waf --target-arch 64bit all
 cd ..
 echo Installing PyInstaller %PYINSTALLER_VER%
+%INSTALLDIR%\%python_env% -m pip install packaging==22.0
 %INSTALLDIR%\%python_env% setup.py install
 
 echo Packaging Uniblow
