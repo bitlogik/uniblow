@@ -309,7 +309,6 @@ class ETH_wallet:
 
     networks = [
         "Mainnet",
-        "Goerli",
         "Sepolia",
     ]
 
@@ -321,9 +320,6 @@ class ETH_wallet:
             "m/44'/60'/{}'/0/{}",
         ],
         # testnets
-        [
-            "m/44'/1'/{}'/0/{}",
-        ],
         [
             "m/44'/1'/{}'/0/{}",
         ],
@@ -361,10 +357,6 @@ class ETH_wallet:
             self.chainID = 1
             rpc_endpoint = "https://rpc.ankr.com/eth/"
             self.explorer = "https://etherscan.io/address/0x"
-        elif self.network == "goerli":
-            self.chainID = 5
-            rpc_endpoint = "https://rpc.ankr.com/eth_goerli"
-            self.explorer = f"https://{self.network}.etherscan.io/address/0x"
         elif self.network == "sepolia":
             self.chainID = 11155111
             rpc_endpoint = "https://rpc.sepolia.org"

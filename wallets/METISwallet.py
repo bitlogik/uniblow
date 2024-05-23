@@ -25,17 +25,12 @@ class METIS_wallet(ETH_wallet):
 
     networks = [
         "Mainnet",
-        "Testnet",
     ]
 
     derive_paths = [
         # Mainnet Andromeda
         [
             "m/44'/60'/{}'/0/{}",
-        ],
-        # Testnet Rinkeby stardust
-        [
-            "m/44'/1'/{}'/0/{}",
         ],
     ]
 
@@ -50,8 +45,4 @@ class METIS_wallet(ETH_wallet):
             self.chainID = 1088
             rpc_endpoint = "https://andromeda.metis.io/"
             self.explorer = "https://andromeda-explorer.metis.io/address/0x"
-        if self.network == "testnet":
-            self.chainID = 588
-            rpc_endpoint = "https://stardust.metis.io/"
-            self.explorer = "https://stardust-explorer.metis.io/address/0x"
         self.load_base(rpc_endpoint, device, contract_addr, wc_uri, confirm_callback, wtype != 3)

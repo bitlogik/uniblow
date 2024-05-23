@@ -38,6 +38,4 @@ tokens_values = [
         "Metauce (MINES)": "0xE9Aa15a067b010a4078909baDE54F0C6aBcBB852",
         "BinaryDAO Token (BYTE)": "0x721532bC0dA5ffaeB0a6A45fB24271E8098629A7",
     },
-    # Testnet
-    {},
 ]

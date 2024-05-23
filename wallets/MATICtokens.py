@@ -115,11 +115,7 @@ tokens_values = [
         "Synth sUSD (sUSD)": "0xF81b4Bec6Ca8f9fe7bE01CA734F55B2b6e03A7a0",
     },
     # Testnet
-    {
-        "Plasma (TST)": "0x2d7882beDcbfDDce29Ba99965dd3cdF7fcB10A1e",
-        "Dummy (DERC)": "0xfe4F5145f6e09952a5ba9e956ED0C25e3Fa4c7F1",
-        "Link (LINK)": "0x326c977e6efc84e512bb9c30f76e30c160ed06fb",
-    },
+    {},
 ]
 
 

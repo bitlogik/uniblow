@@ -27,7 +27,7 @@ class OP_wallet(ETH_wallet):
 
     networks = [
         "Mainnet",
-        "Testnet",
+        "OPSepolia",
     ]
 
     derive_paths = [
@@ -35,7 +35,7 @@ class OP_wallet(ETH_wallet):
         [
             "m/44'/60'/{}'/0/{}",
         ],
-        # Testnet Goerli
+        # Testnet Sepolia
         [
             "m/44'/1'/{}'/0/{}",
         ],
@@ -53,10 +53,10 @@ class OP_wallet(ETH_wallet):
             self.chainID = 10
             rpc_endpoint = "https://mainnet.optimism.io/"
             self.explorer = "https://optimistic.etherscan.io/address/0x"
-        elif self.network == "testnet":
-            self.chainID = 420
-            rpc_endpoint = "https://goerli.optimism.io/"
-            self.explorer = "https://goerli-optimism.etherscan.io/address/0x"
+        elif self.network == "opsepolia":
+            self.chainID = 11155420
+            rpc_endpoint = "https://sepolia.optimism.io/"
+            self.explorer = "https://sepolia-optimistic.etherscan.io/address/0x"
         else:
             raise ValueError("Wrong OP network.")
         self.load_base(rpc_endpoint, device, contract_addr, wc_uri, confirm_callback, wtype != 3)

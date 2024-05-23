@@ -106,8 +106,6 @@ tokens_values = [
         "Onyxcoin (XCN)": "0xA2cd3D43c775978A96BdBf12d733D5A1ED94fb18",
         "Huobi BTC (HBTC)": "0x0316EB71485b0Ab14103307bf65a021042c6d380",
     },
-    # Goerli
-    {},
     # Sepolia
     {},
 ]
@@ -164,8 +162,6 @@ nfts_values = [
         "Wolf Game - Genesis Land": "0x2c88aa0956bc9813505d73575f653f69ada60923",
         "Terraforms": "0x4e1f41613c9084fdb9e34e11fae9412427480e56",
     },
-    # Goerli
-    {},
     # Sepolia
     {},
 ]

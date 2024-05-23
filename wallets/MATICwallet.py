@@ -25,7 +25,7 @@ class MATIC_wallet(ETH_wallet):
 
     networks = [
         "Mainnet",
-        "Mumbai",
+        "Amoy",
     ]
 
     derive_paths = [
@@ -33,7 +33,7 @@ class MATIC_wallet(ETH_wallet):
         [
             "m/44'/60'/{}'/0/{}",
         ],
-        # Testnet Mumbai
+        # Testnet Amoy
         [
             "m/44'/1'/{}'/0/{}",
         ],
@@ -51,9 +51,9 @@ class MATIC_wallet(ETH_wallet):
             self.chainID = 137
             rpc_endpoint = "https://rpc.ankr.com/polygon/"
             self.explorer = "https://polygonscan.com/address/0x"
-        if self.network == "mumbai":
-            self.chainID = 80001
-            rpc_endpoint = "https://rpc-mumbai.maticvigil.com/"
-            self.explorer = "https://mumbai.polygonscan.com/address/0x"
+        if self.network == "amoy":
+            self.chainID = 80002
+            rpc_endpoint = "https://rpc-amoy.polygon.technology/"
+            self.explorer = "https://amoy.polygonscan.com/address/0x"
         self.load_base(rpc_endpoint, device, contract_addr, wc_uri, confirm_callback, wtype != 3)
         self.ledger_tokens = ledger_tokens
