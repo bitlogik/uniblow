@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 # Uniblow : setup data
-# Copyright (C) 2021-2023  BitLogiK
+# Copyright (C) 2021-2024  BitLogiK
 
 
 from setuptools import setup, find_packages
@@ -23,16 +23,16 @@ setup(
     author_email="contact@bitlogik.fr",
     url="https://github.com/bitlogik/uniblow",
     license="GPLv3",
-    python_requires=">=3.7.0",
+    python_requires=">=3.9.0",
     install_requires=[
         "wxPython>=4.0.7",
         "cryptography>=3.3",
-        "pysha3==1.0.2",
+        "safe-pysha3==1.0.4",
         "qrcode==6.1",
         "PyNaCl==1.5.0",
         "pyweb3==0.1.7",
         "OpenPGPpy==1.1",
-        "hidapi==0.11.0.post2",
+        "hidapi==0.14.0",
         "pyWalletConnect==1.6.2",
     ],
     include_package_data=False,

@@ -3,8 +3,8 @@
 # Build uniblow Debian/Ubuntu binary package release
 
 
-if ! (cat /etc/os-release | grep -E "20\.04(\.[0-9]+)? LTS \(Focal Fossa\)" > /dev/null ) then
-  echo "This Uniblow building script only runs on Ubuntu 18.04."
+if ! (cat /etc/os-release | grep -E "22\.04(\.[0-9]+)? LTS \(Jammy Jellyfish\)" > /dev/null ) then
+  echo "This Uniblow building script only runs on Ubuntu 22.04."
   exit 1
 fi
 
@@ -34,10 +34,10 @@ python -m pip install -U pip
 
 echo Installing pip dependencies ...
 
-python -m pip install https://extras.wxpython.org/wxPython4/extras/linux/gtk3/ubuntu-20.04/wxPython-4.2.0-cp38-cp38-linux_x86_64.whl
+python -m pip install https://extras.wxpython.org/wxPython4/extras/linux/gtk3/ubuntu-22.04/wxPython-4.2.1-cp310-cp310-linux_x86_64.whl
 python -m pip install -U pip
 
-python setup.py install
+python -m pip install .
 python -m pip install pyinstaller==4.10
 
 echo Building package ...

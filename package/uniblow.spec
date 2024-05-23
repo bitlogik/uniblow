@@ -183,6 +183,6 @@ if os_platform == "mac":
                 "LANG": "en_US.UTF-8",
                 "LC_CTYPE": "en_US.UTF-8",
             },
-            "NSHumanReadableCopyright": "Copyright (C) 2021-2023 BitLogiK",
+            "NSHumanReadableCopyright": "Copyright (C) 2021-2024 BitLogiK",
         },
     )

@@ -13,7 +13,7 @@ SET PYINSTALLER_VER=4.10
 REM Detect if run in Github Action
 IF "%GITHUB_ACTION%"=="" (
   REM Building in a standard machine
-  SET python_bin="%UserProfile%\AppData\Local\Programs\Python\Python39\python.exe"
+  SET python_bin="%UserProfile%\AppData\Local\Programs\Python\Python310\python.exe"
   SET pyinst_dest="C:\pyinstaller_src"
 ) ELSE (
   REM Building in a Github Action VM
@@ -28,8 +28,8 @@ echo Preparing environment and dependencies
 %python_bin% -m venv unibenv
 %python_env% -m pip install -U pip
 %python_env% -m pip install wheel
-%python_env% -m pip install wxPython==4.2.0
-%python_env% setup.py install
+%python_env% -m pip install wxPython==4.2.1
+%python_env% -m pip install .
 
 echo Getting PyInstaller source
 %python_env% package/get-pyinst-src.py %PYINSTALLER_VER%
@@ -45,7 +45,7 @@ cd bootloader
 cd ..
 echo Installing PyInstaller %PYINSTALLER_VER%
 %INSTALLDIR%\%python_env% -m pip install packaging==22.0
-%INSTALLDIR%\%python_env% setup.py install
+%INSTALLDIR%\%python_env% -m pip install .
 
 echo Packaging Uniblow
 cd %INSTALLDIR%

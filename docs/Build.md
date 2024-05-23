@@ -15,9 +15,9 @@ This document provides specific instructions and scripts to build uniblow binari
 * Start the **Build-Windows** batch script in the *package* directory, double-click on this bat file to start it.
 
 
-## Linux (Ubuntu 18.04)
+## Linux (Ubuntu 22.04)
 
-Requires Python >=3.7
+Requires Python >=3.9
 
 * Install required packages
 ```

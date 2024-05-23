@@ -6,9 +6,9 @@ We provide a **Linux binary file** which can be used directly on Ubuntu, Debian 
 
 For the following Linux OS :
 
-* Ubuntu from version 20.04
+* Ubuntu from version 22.04
 * Ubuntu derivatives, like Mint or PureOS
-* Debian Buster 10 and Bullseye 11, untested on 9.x
+* Debian Bullseye 11
 * Tails OS : Should work on any v5.x
 
 It may run on other Linux, as RHEL or Fedora. But without any testing and no guarantee.

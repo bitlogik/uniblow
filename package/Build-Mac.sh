@@ -3,7 +3,7 @@
 # Build the uniblow MacOS binary package release
 
 # Requires Xcode developer tools
-# Python 3.8/3.9
+# Python 3.9
 # If needed, python3 -m venv unibenv should trigger the dev tools installation
 
 
@@ -16,7 +16,7 @@ source unibenv/bin/activate
 
 echo Installing pip dependencies ...
 python -m pip install pip==21.2.1
-python -m pip install wxPython==4.2.0
+python -m pip install wxPython>=4.2.0
 python -m pip install .
 
 python -m pip install -U certifi

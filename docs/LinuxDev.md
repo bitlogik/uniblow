@@ -17,7 +17,7 @@ This document presents instructions how to run uniblow from source on the follow
 
 ## Debian
 
-For Debian 10-11
+For Debian 11
 
 On **AMD64** systems
 
@@ -26,7 +26,7 @@ On **AMD64** systems
 sudo apt update
 sudo apt install -y git libnotify4 libgtk-3-0 libpcsclite1 libsdl2-2.0-0 python3-venv python3-pip python3-pyscard
 python3 -m pip install -U pip < /dev/null
-python3 -m pip install https://extras.wxpython.org/wxPython4/extras/linux/gtk3/debian-10/wxPython-4.2.0-cp37-cp37m-linux_x86_64.whl < /dev/null
+python3 -m pip install https://extras.wxpython.org/wxPython4/extras/linux/gtk3/debian-11/wxPython-4.2.1-cp39-cp39-linux_x86_64.whl < /dev/null
 python3 -m pip install -U pip setuptools-rust < /dev/null
 ```
 
@@ -60,7 +60,7 @@ source unibenv/bin/activate
 
 #### Install uniblow dependencies
 ```
-python setup.py install
+python -m install .
 ```
 
 #### Run uniblow
@@ -85,7 +85,7 @@ deactivate
 
 ## Ubuntu / Mint
 
-Requires Python >= 3.7
+Requires Python >= 3.9
 
 #### Install system packages
 
@@ -95,24 +95,22 @@ sudo apt update < /dev/null
 sudo apt install -y git python3-venv python3-pip < /dev/null
 ```
 
-#### Install required packages (For Ubuntu 20.04)
+#### Install required packages
 ```
 sudo apt install -y libsdl2-dev < /dev/null
 python3 -m pip install -U pip < /dev/null
-sudo pip3 install https://extras.wxpython.org/wxPython4/extras/linux/gtk3/ubuntu-20.04/wxPython-4.2.0-cp38-cp38-linux_x86_64.whl < /dev/null
+sudo pip3 install https://extras.wxpython.org/wxPython4/extras/linux/gtk3/ubuntu-22.04/wxPython-4.2.1-cp310-cp310-linux_x86_64.whl < /dev/null
 sudo apt install -y python3-pyscard < /dev/null
 ```
 
 
 The wxPython link has to be changed for the good one that fits your distro. Check [here in the list](https://extras.wxpython.org/wxPython4/extras/linux/gtk3/) for your distro.
 
-For Ubuntu from version 20.04 and 21.04 [this whl for cp38](https://extras.wxpython.org/wxPython4/extras/linux/gtk3/ubuntu-20.04/wxPython-4.2.0-cp38-cp38-linux_x86_64.whl) can be used. The systemd package might be required to be installed for libsdl2. 3.9 for 21.04?
-
-For Ubuntu from version 22.04 [this whl for cp310](https://extras.wxpython.org/wxPython4/extras/linux/gtk3/ubuntu-22.04/wxPython-4.2.0-cp310-cp310-linux_x86_64.whl) can be used. The systemd package might be required to be installed for libsdl2.
+For Ubuntu from version 22.04 [this whl for cp310](https://extras.wxpython.org/wxPython4/extras/linux/gtk3/ubuntu-22.04/wxPython-4.2.1-cp310-cp310-linux_x86_64.whl) can be used. The systemd package might be required to be installed for libsdl2.
 
 All the wxPython wheel binaries are provided for the AMD64 architecture. To run on any others CPU architecture, the wxPython has to be compiled from sources.
 
-In such cases, calling *pip3 install wxPython==4.2.0* will download the source archive and will attempt to build it for you. If you have the required compiler and dependent libraries installed, then this will be a feasible approach, although it can take some time to do the build. The end result will be the same as if there was a binary wheel available. Pip can also be told to just build the wheel and not do the install. This way you can reuse the wheel file for different Python environments or on other similar machines, without needing to rebuild for each one. [This web page](https://wxpython.org/blog/2017-08-17-builds-for-linux-with-pip/index.html) can help you in such process.
+In such cases, calling *pip3 install wxPython>=4.2.0* will download the source archive and will attempt to build it for you. If you have the required compiler and dependent libraries installed, then this will be a feasible approach, although it can take some time to do the build. The end result will be the same as if there was a binary wheel available. Pip can also be told to just build the wheel and not do the install. This way you can reuse the wheel file for different Python environments or on other similar machines, without needing to rebuild for each one. [This web page](https://wxpython.org/blog/2017-08-17-builds-for-linux-with-pip/index.html) can help you in such process.
 
 #### Get the uniblow source
 ```
@@ -128,7 +126,7 @@ source unibenv/bin/activate
 
 #### Install uniblow dependencies
 ```
-python setup.py install
+python -m pip install .
 ```
 
 #### Run uniblow
@@ -153,7 +151,7 @@ deactivate
 
 ## Fedora / RHEL / centOS
 
-Tested on Fedora 32-34
+Tested on Fedora 33-34
 
 #### Install system packages
 ```
@@ -181,7 +179,7 @@ source unibenv/bin/activate
 #### Install uniblow dependencies
 ```
 python -m pip install -U pip
-python setup.py install
+python -m pip install .
 ```
 
 #### Run uniblow
