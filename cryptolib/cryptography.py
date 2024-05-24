@@ -24,7 +24,7 @@ from secrets import randbelow
 try:
     import sha3 as keccak
 except Exception as exc:
-    raise Exception("Requires PySHA3 : pip3 install pysha3") from exc
+    raise Exception("Requires PySHA3 : pip3 install safe-pysha3") from exc
 from cryptography.hazmat.primitives import hashes
 from cryptography.hazmat.primitives.ciphers import Cipher, algorithms, modes
 from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
