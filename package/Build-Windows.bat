@@ -8,7 +8,7 @@ CD ..
 
 RMDIR /S /Q dist
 
-SET PYINSTALLER_VER=4.10
+SET PYINSTALLER_VER=6.7.0
 
 REM Detect if run in Github Action
 IF "%GITHUB_ACTION%"=="" (

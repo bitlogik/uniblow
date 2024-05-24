@@ -38,7 +38,7 @@ python -m pip install https://extras.wxpython.org/wxPython4/extras/linux/gtk3/ub
 python -m pip install -U pip
 
 python -m pip install .
-python -m pip install pyinstaller==4.10
+python -m pip install pyinstaller==6.7.0
 
 echo Building package ...
 python -OO -m PyInstaller package/uniblow.spec
