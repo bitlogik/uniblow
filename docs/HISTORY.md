@@ -3,8 +3,11 @@ Uniblow versions history
 # 2.6.4
 
 * Update some testnets
+* Fix window erratic resizing
 * Now requires Python 3.9+
-* Can work on Python 3.11
+* Can work on Python 3.10 and 3.11
+* Fallback for RMD160
+* Update packaging bin
 * Use newer safe-pysha3
 * Update wxPython to 4.2.1
 * Compiled for Ubuntu 22.04
