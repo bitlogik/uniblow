@@ -88,11 +88,21 @@ def sha512(raw_message):
     return hashlib.sha512(raw_message).digest()
 
 
-def md160(raw_message):
-    """RIPE MD160"""
-    hmd = hashlib.new("ripemd160")
-    hmd.update(raw_message)
-    return hmd.digest()
+try:
+    hashlib.new("ripemd160")
+
+    # MD160 is provided by Python (openssl)
+    def md160(raw_message):
+        """RIPE MD160"""
+        hmd = hashlib.new("ripemd160")
+        hmd.update(raw_message)
+        return hmd.digest()
+
+except:
+    # Fallback to software implementation
+    from .ripemd import ripemd160
+
+    md160 = ripemd160
 
 
 def sha3(raw_message):
