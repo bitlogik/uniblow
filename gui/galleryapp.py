@@ -199,6 +199,7 @@ class Gallery:
             hsz = Gallery.min_height
         if hsz > Gallery.max_height:
             hsz = Gallery.max_height
+        self.frame.SetMinSize((wsz, hsz))
         self.frame.SetSize(wsz, hsz)
         self.panel.scrwin.Layout()
         self.panel.Layout()

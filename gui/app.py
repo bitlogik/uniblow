@@ -74,6 +74,12 @@ def scaleSize(frame, sz):
     return (int(sz[0] * scal_fact), int(sz[1] * scal_fact))
 
 
+def resize(frame, new_size):
+    scaled_sz = scaleSize(frame, new_size)
+    frame.SetMinSize(scaled_sz)
+    frame.SetSize(scaled_sz)
+
+
 class InfoBox(gui.infodialog.InfoDialog):
     def __init__(self, message, title, style, parent, block_modal=False):
         super().__init__(parent)
@@ -328,13 +334,13 @@ class UniblowApp(wx.App):
         if sys.platform.startswith("darwin"):
             self.dev_panel.m_staticText1.SetFont(wx.Font(wx.FontInfo(26)))
         self.dev_panel.Layout()
-        self.gui_frame.SetSize(scaleSize(self.gui_frame, (500, 450)))
+        resize(self.gui_frame, (500, 468))
         self.gui_frame.Layout()
 
     def start_wallet_panel(self):
         """Kill devices choice panel and start the wallet panel."""
         self.dev_panel.Destroy()
-        self.gui_frame.SetSize(scaleSize(self.gui_frame, (820, 460)))
+        resize(self.gui_frame, (820, 475))
         self.gui_frame.Layout()
         self.gui_panel = gui.maingui.WalletPanel(self.gui_frame)
         self.gui_panel.copy_button.SetBitmap(
@@ -651,7 +657,7 @@ class UniblowApp(wx.App):
             cansend_all,
             self.callback_send,
         )
-        self.send_dialog.SetSize(scaleSize(self.send_dialog, (520, 420)))
+        resize(self.send_dialog, (520, 432))
         self.gui_panel.Disable()
         self.send_dialog.Show()
 
@@ -704,7 +710,7 @@ class UniblowApp(wx.App):
 
     def get_option(self, network_id, input_value, preset_values):
         option_dialog = gui.maingui.OptionDialog(self.gui_frame)
-        option_dialog.SetSize(scaleSize(option_dialog, (455, 380)))
+        resize(option_dialog, (455, 400))
         option_panel = app_option_panel(option_dialog)
         option_panel.SetTitle(f"Wallet settings : {input_value} selection")
         option_panel.SetPresetLabel(f"preset {input_value}")
@@ -752,7 +758,7 @@ class UniblowApp(wx.App):
             self.gui_hdpanel.m_textCtrl_pwd.Destroy()
             self.gui_hdpanel.m_checkBox_secboost.Destroy()
             self.gui_hdpanel.m_usertxt.SetLabel("Choose account and index for the key to use.")
-            self.gui_hdframe.SetSize(scaleSize(self.gui_hdframe, (580, 360)))
+            resize(self.gui_hdframe, (580, 380))
         self.gui_hdpanel.m_butOK.SetCursor(self.HAND_CURSOR)
         self.gui_hdpanel.m_butCancel.SetCursor(self.HAND_CURSOR)
         ret = self.gui_hdframe.ShowModal()
