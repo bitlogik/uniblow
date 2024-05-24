@@ -1,5 +1,14 @@
 Uniblow versions history
 
+# 2.6.4
+
+* Update some testnets
+* Now requires Python 3.9+
+* Can work on Python 3.11
+* Use newer safe-pysha3
+* Update wxPython to 4.2.1
+* Compiled for Ubuntu 22.04
+
 # 2.6.3
 
 * Change wallet startup behavior for EOS and XTZ, allowing offline mode
