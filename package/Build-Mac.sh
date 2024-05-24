@@ -20,7 +20,7 @@ python -m pip install wxPython>=4.2.0
 python -m pip install .
 
 python -m pip install -U certifi
-python -m pip install pyinstaller==6.7.0
+python -m pip install pyinstaller==4.10
 
 echo Building package ...
 python -OO -m PyInstaller package/uniblow.spec
