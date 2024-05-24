@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 ###########################################################################
-## Python code generated with wxFormBuilder (version 3.10.1-0-g8feb16b3)
+## Python code generated with wxFormBuilder (version 4.0.0-0-g0efcecf)
 ## http://www.wxformbuilder.org/
 ##
 ## PLEASE DO *NOT* EDIT THIS FILE!
@@ -267,7 +267,7 @@ class WalletPanel ( wx.Panel ):
         bSizer6.Add( self.m_panel4, 0, wx.EXPAND|wx.BOTTOM|wx.RIGHT|wx.LEFT, 6 )
 
 
-        bSizer6.Add( ( 0, 0), 0, wx.TOP, 12 )
+        bSizer6.Add( ( 0, 0), 0, wx.TOP, 10 )
 
         self.btn_send = wx.BitmapButton( self.m_panel1, wx.ID_ANY, wx.NullBitmap, wx.DefaultPosition, wx.DefaultSize, wx.BU_AUTODRAW|wx.BORDER_NONE|wx.BORDER_NONE )
         bSizer6.Add( self.btn_send, 0, wx.RIGHT|wx.ALIGN_RIGHT, 72 )
@@ -513,7 +513,7 @@ class HDPanel ( wx.Panel ):
         bSizer12.Add( self.m_butOK, 0, wx.ALL, 5 )
 
 
-        bSizer12.Add( ( 0, 0), 1, wx.RIGHT, 25 )
+        bSizer12.Add( ( 0, 0), 1, wx.RIGHT, 20 )
 
         self.m_butCancel = wx.BitmapButton( self, wx.ID_ANY, wx.NullBitmap, wx.DefaultPosition, wx.DefaultSize, wx.BU_AUTODRAW|0|wx.BORDER_NONE )
 
@@ -521,7 +521,7 @@ class HDPanel ( wx.Panel ):
         bSizer12.Add( self.m_butCancel, 0, wx.ALL, 5 )
 
 
-        bSizer11.Add( bSizer12, 0, wx.ALIGN_CENTER_HORIZONTAL|wx.ALL, 18 )
+        bSizer11.Add( bSizer12, 0, wx.ALIGN_CENTER_HORIZONTAL|wx.ALL, 16 )
 
 
         self.SetSizer( bSizer11 )
@@ -555,7 +555,7 @@ class HDPanel ( wx.Panel ):
 class SendDialog ( wx.Dialog ):
 
     def __init__( self, parent ):
-        wx.Dialog.__init__ ( self, parent, id = wx.ID_ANY, title = u"Sending", pos = wx.DefaultPosition, size = wx.Size( 520,420 ), style = wx.DEFAULT_DIALOG_STYLE )
+        wx.Dialog.__init__ ( self, parent, id = wx.ID_ANY, title = u"Sending", pos = wx.DefaultPosition, size = wx.Size( 520,480 ), style = wx.DEFAULT_DIALOG_STYLE )
 
         self.SetSizeHints( wx.DefaultSize, wx.DefaultSize )
 
@@ -740,7 +740,7 @@ class SendPanel ( wx.Panel ):
         bSizer19.Add( self.cancel_btn, 0, wx.ALL, 5 )
 
 
-        bSizer23.Add( bSizer19, 0, wx.ALIGN_CENTER_HORIZONTAL|wx.TOP, 24 )
+        bSizer23.Add( bSizer19, 0, wx.ALIGN_CENTER_HORIZONTAL|wx.TOP, 18 )
 
 
         bSizer23.Add( ( 0, 0), 0, wx.TOP, 16 )
@@ -767,7 +767,7 @@ class SendPanel ( wx.Panel ):
 class OptionDialog ( wx.Dialog ):
 
     def __init__( self, parent ):
-        wx.Dialog.__init__ ( self, parent, id = wx.ID_ANY, title = wx.EmptyString, pos = wx.DefaultPosition, size = wx.Size( 455,380 ), style = wx.DEFAULT_DIALOG_STYLE )
+        wx.Dialog.__init__ ( self, parent, id = wx.ID_ANY, title = wx.EmptyString, pos = wx.DefaultPosition, size = wx.Size( 460,420 ), style = wx.DEFAULT_DIALOG_STYLE )
 
         self.SetSizeHints( wx.DefaultSize, wx.DefaultSize )
 
@@ -784,7 +784,7 @@ class OptionDialog ( wx.Dialog ):
 
 class OptionPanel ( wx.Panel ):
 
-    def __init__( self, parent, id = wx.ID_ANY, pos = wx.DefaultPosition, size = wx.Size( 396,400 ), style = wx.TAB_TRAVERSAL, name = wx.EmptyString ):
+    def __init__( self, parent, id = wx.ID_ANY, pos = wx.DefaultPosition, size = wx.Size( 400,416 ), style = wx.TAB_TRAVERSAL, name = wx.EmptyString ):
         wx.Panel.__init__ ( self, parent, id = id, pos = pos, size = size, style = style, name = name )
 
         self.SetForegroundColour( wx.Colour( 0, 0, 0 ) )

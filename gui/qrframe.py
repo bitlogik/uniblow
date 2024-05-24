@@ -11,7 +11,7 @@ class QRFrame(wx.Frame):
             parent,
             id=wx.ID_ANY,
             title=f"  Receive {coin}",
-            size=wx.Size(360, 328),
+            size=wx.Size(372, 348),
             style=wx.FRAME_FLOAT_ON_PARENT | wx.DEFAULT_FRAME_STYLE | wx.TAB_TRAVERSAL,
         )
         self.btn = btn
@@ -43,7 +43,7 @@ class QRFrame(wx.Frame):
         qrpanel.bmpqr = wx.StaticBitmap(
             qrpanel, wx.ID_ANY, wxi, wx.DefaultPosition, wx.DefaultSize, 0
         )
-        siz1.Add(qrpanel.bmpqr, 0, wx.ALIGN_CENTER_HORIZONTAL | wx.TOP, 32)
+        siz1.Add(qrpanel.bmpqr, 0, wx.ALIGN_CENTER_HORIZONTAL | wx.TOP, 24)
         qrpanel.stxt = wx.StaticText(
             qrpanel,
             wx.ID_ANY,

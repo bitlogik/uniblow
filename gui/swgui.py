@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 ###########################################################################
-## Python code generated with wxFormBuilder (version Oct 26 2018)
+## Python code generated with wxFormBuilder (version 4.0.0-0-g0efcecf)
 ## http://www.wxformbuilder.org/
 ##
 ## PLEASE DO *NOT* EDIT THIS FILE!
@@ -18,7 +18,7 @@ import wx.dataview
 class MainFrame ( wx.Frame ):
 
     def __init__( self, parent ):
-        wx.Frame.__init__ ( self, parent, id = wx.ID_ANY, title = u"  [ Uniblow ]    Seed Watcher", pos = wx.DefaultPosition, size = wx.Size( 650,700 ), style = wx.CAPTION|wx.CLOSE_BOX|wx.SYSTEM_MENU|wx.FULL_REPAINT_ON_RESIZE|wx.TAB_TRAVERSAL )
+        wx.Frame.__init__ ( self, parent, id = wx.ID_ANY, title = u"  [ Uniblow ]    Seed Watcher", pos = wx.DefaultPosition, size = wx.Size( 660,720 ), style = wx.CAPTION|wx.CLOSE_BOX|wx.SYSTEM_MENU|wx.FULL_REPAINT_ON_RESIZE|wx.TAB_TRAVERSAL )
 
         self.SetSizeHints( wx.DefaultSize, wx.DefaultSize )
 
@@ -32,7 +32,7 @@ class MainFrame ( wx.Frame ):
         pass
 
 
-    # Virtual event handlers, overide them in your derived class
+    # Virtual event handlers, override them in your derived class
     def closesw( self, event ):
         event.Skip()
 
@@ -250,7 +250,7 @@ class MainPanel ( wx.Panel ):
         pass
 
 
-    # Virtual event handlers, overide them in your derived class
+    # Virtual event handlers, override them in your derived class
     def gen_new_mnemonic( self, event ):
         event.Skip()
 
