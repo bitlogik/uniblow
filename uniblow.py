@@ -37,7 +37,6 @@ from devices.SeedWatcher import start_seedwatcher
 from devices.SingleKey import SKdevice
 from wallets.wallets_utils import InvalidOption, NotEnoughTokens
 from wallets.NFTwallet import NFTWallet
-from version import VERSION
 
 SUPPORTED_COINS = [
     "BTC",
@@ -729,11 +728,6 @@ def transfer(to, amount, fee_opt=1):
     wx.CallLater(250, perform_transfer, to, amount, fee_opt, progress_modal)
 
 
-def start_main_app():
-    app.gui_frame.SetLabel(f"  Uniblow  -  {VERSION}")
-    app.gui_frame.Show()
-
-
 if __name__ == "__main__":
     app = gui.app.UniblowApp(DEVICES_LIST, get_coin_class)
     app.dev_selected = device_selected
@@ -743,5 +737,4 @@ if __name__ == "__main__":
     if "-v" in argv[1:]:
         basicConfig(level=DEBUG)
 
-    start_main_app()
     app.MainLoop()

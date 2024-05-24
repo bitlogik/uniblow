@@ -29,6 +29,7 @@ from gui.utils import file_path, show_history, icon_file
 from gui.send_frame import SendModal
 from gui.qrframe import QRFrame
 from gui.fiat_price import PriceAPI
+from version import VERSION
 
 from cryptolib.HDwallet import bip39_is_checksum_valid
 
@@ -300,6 +301,8 @@ class UniblowApp(wx.App):
         self.gui_frame.SetIcons(wicon)
         self.open_devices_panel()
         self.SetTopWindow(self.gui_frame)
+        self.gui_frame.SetLabel(f"  Uniblow  -  {VERSION}")
+        self.gui_frame.Show()
         return True
 
     def InitLocale(self):
