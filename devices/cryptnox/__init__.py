@@ -23,6 +23,7 @@ from cryptography.x509 import load_der_x509_certificate
 
 from smartcard.System import readers
 from smartcard.CardConnection import CardConnection
+from smartcard.scard import SCARD_SHARE_EXCLUSIVE
 from smartcard.util import toBytes
 from smartcard.Exceptions import CardConnectionException
 
@@ -96,7 +97,9 @@ class CryptnoxCard:
                     try:
                         logger.debug("Trying with reader : %s", r)
                         self.connection = r.createConnection()
-                        self.connection.connect(CardConnection.T1_protocol)
+                        self.connection.connect(
+                            CardConnection.T1_protocol, mode=SCARD_SHARE_EXCLUSIVE
+                        )
                         self.select()
                         reader_detected = hasattr(self, "connection")
                     except Exception:

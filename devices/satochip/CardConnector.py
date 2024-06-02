@@ -16,6 +16,7 @@
 
 from smartcard.System import readers
 from smartcard.CardConnection import CardConnection
+from smartcard.scard import SCARD_SHARE_EXCLUSIVE
 from smartcard.util import toHexString
 from smartcard.Exceptions import CardConnectionException
 
@@ -130,7 +131,9 @@ class CardConnector:
                     try:
                         logger.debug("Trying with reader : %s", r)
                         self.connection = r.createConnection()
-                        self.connection.connect(CardConnection.T1_protocol)
+                        self.connection.connect(
+                            CardConnection.T1_protocol, mode=SCARD_SHARE_EXCLUSIVE
+                        )
                         logger.debug("Before card_Select...")
                         self.card_select()
                         logger.debug("After card_Select...")
