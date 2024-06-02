@@ -58,6 +58,7 @@ from wallets.MATICwallet import MATIC_wallet
 from wallets.TRXwallet import TRX_wallet
 from wallets.FTMwallet import FTM_wallet
 from wallets.OPwallet import OP_wallet
+from wallets.BASEwallet import BASE_wallet
 from wallets.METISwallet import METIS_wallet
 from wallets.CELOwallet import CELO_wallet
 from wallets.GLMRwallet import GLMR_wallet
@@ -82,6 +83,7 @@ coins_list = [
     {"name": "TRON (alt. deriv)", "path": "m/44'/195'/{2}'", "wallet_lib": TRX_wallet},
     {"name": "FTM", "path": "m/44'/60'/{}'/{}/{}", "wallet_lib": FTM_wallet},
     {"name": "OP", "path": "m/44'/60'/{}'/{}/{}", "wallet_lib": OP_wallet},
+    {"name": "BASE", "path": "m/44'/60'/{}'/{}/{}", "wallet_lib": BASE_wallet},
     {"name": "METIS", "path": "m/44'/60'/{}'/{}/{}", "wallet_lib": METIS_wallet},
     {"name": "CELO", "path": "m/44'/60'/{}'/{}/{}", "wallet_lib": CELO_wallet},
     {"name": "GLMR", "path": "m/44'/60'/{}'/{}/{}", "wallet_lib": GLMR_wallet, "network": 0},

@@ -46,6 +46,7 @@ SUPPORTED_COINS = [
     "TRX",
     "FTM",
     "OP",
+    "BASE",
     "METIS",
     "CELO",
     "GLMR",
@@ -64,6 +65,7 @@ LEDGER_EVM_LIST = [
     "MATIC",
     "FTM",
     "OP",
+    "BASE",
     "METIS",
     "CELO",
     "GLMR",
@@ -76,6 +78,7 @@ NFT_LIST = [
     "MATIC",
     "BSC",
     "OP",
+    "BASE",
     "ARB",
     "AVAX",
 ]
@@ -106,6 +109,8 @@ def get_coin_class(coin_name):
         cname = "ARB"
     if coin_name == "OP/ETH":
         cname = "OP"
+    if coin_name == "BASE/ETH":
+        cname = "BASE"
     return getattr(wallets[f"{cname}wallet"], f"{cname}_wallet")
 
 
@@ -206,6 +211,8 @@ def cb_open_wallet(wallet_obj, pkey, waltype, sw_frame, pubkey_cpr):
         wallet_coin = "ARB"
     if app.wallet.coin == "OP/ETH":
         wallet_coin = "OP"
+    if app.wallet.coin == "BASE/ETH":
+        wallet_coin = "BASE"
     if "ERC20" in get_coin_class(wallet_coin).wtypes:
         app.activate_option_buttons()
         app.gui_panel.wallopt_choice.Disable()

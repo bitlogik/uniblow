@@ -23,6 +23,7 @@ chain_names = {
     "METIS": "metis-andromeda",
     "ETH": "ethereum",
     "OP": "optimistic-ethereum",
+    "BASE": "base",
 }
 
 native_tokens = {
@@ -47,6 +48,7 @@ native_tokens = {
     "METIS": "metis-token",
     "ETH": "ethereum",
     "OP/ETH": "ethereum",
+    "BASE/ETH": "ethereum",
 }
 
 
