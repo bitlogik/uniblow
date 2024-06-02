@@ -39,3 +39,30 @@ tokens_values = [
         "BinaryDAO Token (BYTE)": "0x721532bC0dA5ffaeB0a6A45fB24271E8098629A7",
     },
 ]
+
+
+# From Ledger trusted tokens data
+# extracted on 2024-06-02T15:49
+# from https://raw.githubusercontent.com/LedgerHQ/ledger-live/develop/libs/ledgerjs/packages/cryptoassets/src/data/evm/1088/erc20.json
+ledger_tokens = {
+    "0xb27bbeaaca2c00d6258c3118bab6b5b6975161c8": {
+        "ticker": "HERMES",
+        "signature": "3045022100f4c1a1e467eacba9c889c6fc974be35a288dccc0f819f94d628442af37af09bd0220320b3fd4dfdfcc993f18eac812003cfc1cf8c4b1aabc1896594c4be4a2dfcbb3",
+    },
+    "0x72c232d56542ba082592dee7c77b1c6cfa758bcd": {
+        "ticker": "MAIA",
+        "signature": "3044022041ec95fc72c5fc6ede2a338d4528249b37de4941bb3358beecf4b2d2c2a1dddb02202230d34e6445992f70de45ace7a8bbebc12c25aad8218d077fdab54b16eda893",
+    },
+    "0x90fe084f877c65e1b577c7b2ea64b8d8dd1ab278": {
+        "ticker": "NETT",
+        "signature": "3045022100d0d636b47dfd6063a8e88e3b0db015d318fb43f10db935b0e2771e26341a088b02202e1560d6053fb04da67919782a82104deda89cb0abdbca5caebaee32238bb36b",
+    },
+    "0xbb06dca3ae6887fabf931640f67cab3e3a16f4dc": {
+        "ticker": "MUSDT",
+        "signature": "3045022100f1d40eb50c21af570b5ce8b15a66e3a70f2daffbe2c8dd2b213c9d235706033a022055427e40b0c1281ca6f4875f8e7a93a571ddc5a4601635c51a4c1c99a3180e24",
+    },
+    "0xea32a96608495e54156ae48931a7c20f0dcc1a21": {
+        "ticker": "MUSDC",
+        "signature": "3045022100c6f5098034f7e4fc5dd2f980f356c28143ba95cb9c7fb52f91ade794d82636f30220044b7b621df995787eb86804487a4c148573fa71fdc9afeef884c1d2c2e25ef6",
+    },
+}

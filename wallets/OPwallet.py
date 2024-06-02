@@ -17,7 +17,7 @@
 
 from copy import deepcopy
 from wallets.ETHwallet import ETH_wallet
-from wallets.OPtokens import tokens_values, nfts_values
+from wallets.OPtokens import tokens_values, nfts_values, ledger_tokens
 
 
 class OP_wallet(ETH_wallet):
@@ -60,4 +60,4 @@ class OP_wallet(ETH_wallet):
         else:
             raise ValueError("Wrong OP network.")
         self.load_base(rpc_endpoint, device, contract_addr, wc_uri, confirm_callback, wtype != 3)
-        self.ledger_tokens = {}
+        self.ledger_tokens = ledger_tokens

@@ -17,7 +17,7 @@
 
 from copy import deepcopy
 from wallets.ETHwallet import ETH_wallet
-from wallets.GLMRtokens import tokens_values
+from wallets.GLMRtokens import tokens_values, ledger_tokens
 
 
 class GLMR_wallet(ETH_wallet):
@@ -65,3 +65,4 @@ class GLMR_wallet(ETH_wallet):
             rpc_endpoint = "https://rpc.api.moonbase.moonbeam.network/"
             self.explorer = "https://moonbase.moonscan.io/address/0x"
         self.load_base(rpc_endpoint, device, contract_addr, wc_uri, confirm_callback, wtype != 3)
+        self.ledger_tokens = ledger_tokens

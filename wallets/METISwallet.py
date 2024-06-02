@@ -17,7 +17,7 @@
 
 from copy import deepcopy
 from wallets.ETHwallet import ETH_wallet
-from wallets.METIStokens import tokens_values
+from wallets.METIStokens import tokens_values, ledger_tokens
 
 
 class METIS_wallet(ETH_wallet):
@@ -46,3 +46,4 @@ class METIS_wallet(ETH_wallet):
             rpc_endpoint = "https://andromeda.metis.io/"
             self.explorer = "https://andromeda-explorer.metis.io/address/0x"
         self.load_base(rpc_endpoint, device, contract_addr, wc_uri, confirm_callback, wtype != 3)
+        self.ledger_tokens = ledger_tokens
