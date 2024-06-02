@@ -17,7 +17,9 @@ tokens_values = [
         "Thales DAO Token (THALES)": "0x217D47011b23BB961eB6D93cA9945B7501a5BB11",
     },
     # Testnet
-    {},
+    {
+        "USD Coin (USDC)": "0x5fd84259d66Cd46123540766Be93DFE6D43130D7",
+    },
 ]
 
 

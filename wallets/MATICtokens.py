@@ -115,7 +115,9 @@ tokens_values = [
         "Synth sUSD (sUSD)": "0xF81b4Bec6Ca8f9fe7bE01CA734F55B2b6e03A7a0",
     },
     # Testnet
-    {},
+    {
+        "USD Coin (USDC)": "0x41e94eb019c0762f9bfcf9fb1e58725bfb0e7582",
+    },
 ]
 
 

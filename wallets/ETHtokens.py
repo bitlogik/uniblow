@@ -107,7 +107,10 @@ tokens_values = [
         "Huobi BTC (HBTC)": "0x0316EB71485b0Ab14103307bf65a021042c6d380",
     },
     # Sepolia
-    {},
+    {
+        "USD Coin (USDC)": "0x1c7D4B196Cb0C7B01d743Fbc6116a902379C7238",
+        "EUR Coin (EURC)": "0x08210F9170F89Ab7658F0B5E3fF39b0E03C594D4",
+    },
 ]
 
 

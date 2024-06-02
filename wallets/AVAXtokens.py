@@ -103,7 +103,10 @@ tokens_values = [
         "Ankr Avalanche Reward Earning Bond (aAVAXb)": "0x6C6f910A79639dcC94b4feEF59Ff507c2E843929",
     },
     # Testnet
-    {},
+    {
+        "USD Coin (USDC)": "0x5425890298aed601595a70ab815c96711a31bc65",
+        "EUR Coin (EURC)": "0x5e44db7996c682e92a960b65ac713a54ad815c6b",
+    },
 ]
 
 

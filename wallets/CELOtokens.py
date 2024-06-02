@@ -41,6 +41,7 @@ tokens_values = [
     {
         "Celo Dollar (cUSD)": "0x874069fa1eb16d44d622f2e0ca25eea172369bc1",
         "Celo Euro (cEUR)": "0x10c892a6ec43a53e45d0b916b4b7d383b1b78c0f",
+        "USD Coin (USDC)": "0x2F25deB3848C207fc8E0c34035B3Ba7fC157602B",
     },
     # Baklava testnet
     {
