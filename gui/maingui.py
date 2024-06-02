@@ -113,6 +113,7 @@ class WalletPanel ( wx.Panel ):
 
         self.txt_fiat.SetFont( wx.Font( 10, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, False, wx.EmptyString ) )
         self.txt_fiat.SetForegroundColour( wx.Colour( 248, 248, 248 ) )
+        self.txt_fiat.SetToolTip( u"Powered by CoinGecko" )
 
         bSizer31.Add( self.txt_fiat, 0, wx.ALL, 3 )
 
