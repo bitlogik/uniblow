@@ -19,7 +19,7 @@ A **uni**versal **blo**ckchain **w**allet for cryptos
 
 - Multiple networks (testnets,...)
 
-- Multi platforms : PC, Mac and Linux
+- Multi-platform : PC, Mac and Linux
 
 - Open source GPLv3
 
@@ -176,14 +176,14 @@ On **Windows** : Minimum version is Windows 8.1
 
 - Download the Uniblow binary [from the uniblow official website](https://uniblow.org/get).
 
-To increase the security, the Windows exe releases are signed with our [Extended
+To increase the security, the Windows exe releases are signed with the publisher [Extended
 Validation certificate](https://en.wikipedia.org/wiki/Code_signing#Extended_validation_(EV)_code_signing), bringing even greater confidence in the integrity of the application.
 
 On **Debian / Tails / Ubuntu** :
 
 - Follow the [dedicated instructions page](docs/LinuxRunBin.md).
 
-To increase the security, the Linux binaries releases are [signed with our PGP
+To increase the security, the Linux binaries releases are [signed with the publisher PGP
 key](https://bitlogik.fr/pgp/bitlogik.asc), bringing even greater confidence in
 the integrity of the application. The checking process is described in [this
 instructions document](docs/LinuxRunBin.md).
@@ -199,8 +199,8 @@ On **MacOS**
 
 - Eject the dmg disk and you can delete the dmg file.
 
-To increase the security, the Mac dmg package and also the uniblow app are
-signed (stapled) and notarized by Apple, bringing even greater confidence in the
+To increase the security, the Mac dmg package and the uniblow app are
+signed (stapled) and notarized by Apple, bringing greater confidence in the
 integrity of the application.
 
 Devices
@@ -278,10 +278,6 @@ The folder where the HDseed file is stored, sits in the user data directory.
 - MacOS :  
   \~/Library/Application Support/Uniblow/keys/
 
-This device was previously named *HDdevice*, and the *BasicFile* device was
-removed. If you used the BasicFile device and have cryptos in it, use an old
-Uniblow version before 1.5 and transfer your fund.
-
 ### Ledger
 
 A Ledger hardware device such as Nano X and Nano S, can be used with Uniblow but
@@ -341,7 +337,7 @@ For quick demo, the default PIN is setup to "1234".
 
 The [Satochip card](https://satochip.io) is an easy-to-use, [open-source](https://github.com/Toporin/SatochipApplet) hardware wallet based on a smartcard. 
 
-Satochip can be initialized from Uniblow by providing a new PIN (4 to 16 alphanumeric characters) and a BIP39 seed. By design, once a seed is imported into Satochip, it cannot be recovered, and the private keys derived from the seed are never exported outside of the chip. So it is important that the user makes a backup of the seed before the card initialization.
+Satochip can be initialized from Uniblow by providing a new PIN (4 to 16 alphanumeric characters) and a BIP39 seed. By design, once a seed is imported into Satochip, it cannot be recovered, and the private keys derived from the seed are never exported outside of the chip. So it is important that the user makes a backup of the mnemonic seed during the card initialization.
 
 Satochip supports both contact (usb smartcard reader) and contactless (NFC) connections.
 
@@ -387,7 +383,7 @@ In ETH, BSC, MATIC, FTM, OP, BASE, METIS, CELO, GLMR, MOVR, AVAX or ARB, Uniblow
 using the WalletConnect system. Click on the WalletConnect option,
 input the wc URI and it will connect to the web3 app using WalletConnect.  
 Note that in this mode, Uniblow disables sending any transaction from the GUI.
-All the sending transactions have to be performed from the connected web app,
+All the transactions have to be performed from the connected web app,
 after your approval in Uniblow. Else you have to connect to a standard (or
 token) account type to process a sending transaction using Uniblow directly.
 
