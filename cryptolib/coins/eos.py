@@ -2,7 +2,7 @@
 # -*- coding: utf8 -*-
 
 # UNIBLOW  : EOS utilities
-# Copyright (C) 2021-2022 BitLogiK
+# Copyright (C) 2021-2024 BitLogiK
 
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -15,8 +15,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 
-from datetime import datetime as dt
-from datetime import timedelta
+from datetime import datetime as dt, timedelta, timezone
 from math import ceil
 from cryptolib.uintEncode import uint2bin
 
@@ -47,7 +46,7 @@ def string_to_binname(s):
 
 def near_future_iso_str(n_sec):
     """Return the current UTC time plus n seconds, in a ISO8601 data time format string"""
-    return (dt.utcnow() + timedelta(seconds=n_sec)).isoformat(timespec="seconds")
+    return (dt.now(timezone.utc) + timedelta(seconds=n_sec)).isoformat(timespec="seconds")
 
 
 def expiration_string_epoch_int(exp_str):
