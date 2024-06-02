@@ -1,5 +1,15 @@
 Uniblow versions history
 
+# 2.6.5
+
+* Add Base blockchain
+* Add Circle tokens for testnets
+* More robust connection with smartcard-based wallets
+* OpenPGP device allow T=0 card
+* Update Ledger tokens whitelist
+* More generic gas management for EVM L2
+* Windows packaging back to pyInstaller v5
+
 # 2.6.4
 
 * Update some testnets
