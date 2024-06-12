@@ -355,18 +355,18 @@ class ETH_wallet:
         self.network = self.networks[network].lower()
         if self.network == "mainnet":
             self.chainID = 1
-            rpc_endpoint = "https://rpc.ankr.com/eth/"
+            rpc_endpoint = "ethereum"
             self.explorer = "https://etherscan.io/address/0x"
         elif self.network == "sepolia":
             self.chainID = 11155111
-            rpc_endpoint = "https://rpc.sepolia.org"
+            rpc_endpoint = "ethereum-sepolia"
             self.explorer = "https://sepolia.etherscan.io/address/0x"
         else:
             raise InvalidOption("Invalid network name.")
         self.load_base(rpc_endpoint, device, contract_addr, wc_uri, confirm_callback, wtype != 3)
         self.ledger_tokens = ledger_tokens
 
-    def load_base(self, rpc_endpoint, device, contract_addr, wc_uri, confirm_callback, fungible):
+    def load_base(self, chain_domain, device, contract_addr, wc_uri, confirm_callback, fungible):
         """Finish initialization, second part common for all chains"""
         self.current_device = device
         self.confirm_callback = confirm_callback
@@ -382,10 +382,12 @@ class ETH_wallet:
                 contract_addr_str = "0x" + contract_addr_str
         else:
             contract_addr_str = None
+        if not chain_domain.startswith("https:"):
+            chain_domain = f"https://{chain_domain}-rpc.publicnode.com"
         self.eth = ETHwalletCore(
             pubkey,
             self.network,
-            Web3Client(rpc_endpoint, "Uniblow/2"),
+            Web3Client(chain_domain, "Uniblow/2"),
             self.chainID,
             contract_addr_str,
             fungible,

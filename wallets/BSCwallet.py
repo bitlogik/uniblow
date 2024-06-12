@@ -49,11 +49,11 @@ class BSC_wallet(ETH_wallet):
         self.network = BSC_wallet.networks[network].lower()
         if self.network == "mainnet":
             self.chainID = 56
-            rpc_endpoint = "https://bsc-dataseed2.binance.org/"
+            rpc_endpoint = "bsc"
             self.explorer = "https://www.bscscan.com/address/0x"
         if self.network == "testnet":
             self.chainID = 97
             rpc_endpoint = "https://data-seed-prebsc-2-s2.binance.org:8545/"
-            self.explorer = "https://testnet.bscscan.com/address/0x"
+            self.explorer = "bsc-testnet"
         self.load_base(rpc_endpoint, device, contract_addr, wc_uri, confirm_callback, wtype != 3)
         self.ledger_tokens = ledger_tokens

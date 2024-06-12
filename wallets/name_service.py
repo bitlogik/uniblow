@@ -96,7 +96,7 @@ def get_zil_domain(api, contract, id):
 
 def resolveENS(name):
     """Ethereum Domain Name Service on-chain resolution"""
-    api = Web3Client("https://rpc.ankr.com/eth/", "Uniblow/2")
+    api = Web3Client("https://ethereum-rpc.publicnode.com", "Uniblow/2")
     nodeid = name_hash(name)
     # Call the registry to get the resolver for this node id
     # resolver(bytes32)
@@ -114,13 +114,13 @@ def resolveENS(name):
 def resolveUD(name, crypto):
     """UnstoppableDomains service EVM chain resolution"""
     # Try on the Polygon blockchain
-    api = Web3Client("https://rpc.ankr.com/polygon", "Uniblow/2")
+    api = Web3Client("https://polygon-bor-rpc.publicnode.com", "Uniblow/2")
     name_id = name_hash(name)
     res = get_domain(api, resolver_polygon, name_id, crypto)
     if res:
         return res
     # Retry on the Ethereum blockchain
-    api = Web3Client("https://rpc.ankr.com/eth", "Uniblow/2")
+    api = Web3Client("https://ethereum-rpc.publicnode.com", "Uniblow/2")
     return get_domain(api, resolver_eth, name_id, crypto)
 
 
@@ -147,7 +147,7 @@ def resolveZIL(name, crypto):
                     if res:
                         return res
     # Try on the Polygon blockchain
-    api = Web3Client("https://rpc.ankr.com/polygon", "Uniblow/2")
+    api = Web3Client("https://polygon-bor-rpc.publicnode.com", "Uniblow/2")
     name_id = name_hash(name)
     return get_domain(api, resolver_polygon, name_id, crypto)
 

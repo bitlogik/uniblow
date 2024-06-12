@@ -53,11 +53,11 @@ class GLMR_wallet(ETH_wallet):
         if self.network == "Moonriver":
             self.coin = "MOVR"
             self.chainID = 1285
-            rpc_endpoint = "https://rpc.api.moonriver.moonbeam.network/"
+            rpc_endpoint = "moonriver"
             self.explorer = "https://moonriver.moonscan.io/address/0x"
         if self.network == "Moonbeam":
             self.chainID = 1284
-            rpc_endpoint = "https://rpc.ankr.com/moonbeam/"
+            rpc_endpoint = "moonbeam"
             self.explorer = "https://moonbeam.moonscan.io/address/0x"
         if self.network == "Moonbase Alpha":
             self.coin = "MDEV"

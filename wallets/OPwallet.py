@@ -51,11 +51,11 @@ class OP_wallet(ETH_wallet):
         self.network = OP_wallet.networks[network].lower()
         if self.network == "mainnet":
             self.chainID = 10
-            rpc_endpoint = "https://mainnet.optimism.io/"
+            rpc_endpoint = "optimism"
             self.explorer = "https://optimistic.etherscan.io/address/0x"
         elif self.network == "opsepolia":
             self.chainID = 11155420
-            rpc_endpoint = "https://sepolia.optimism.io/"
+            rpc_endpoint = "optimism-sepolia"
             self.explorer = "https://sepolia-optimistic.etherscan.io/address/0x"
         else:
             raise ValueError("Wrong OP network.")

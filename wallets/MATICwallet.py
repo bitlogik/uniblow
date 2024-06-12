@@ -49,11 +49,11 @@ class MATIC_wallet(ETH_wallet):
         self.network = MATIC_wallet.networks[network].lower()
         if self.network == "mainnet":
             self.chainID = 137
-            rpc_endpoint = "https://rpc.ankr.com/polygon/"
+            rpc_endpoint = "polygon-bor"
             self.explorer = "https://polygonscan.com/address/0x"
         if self.network == "amoy":
             self.chainID = 80002
-            rpc_endpoint = "https://rpc-amoy.polygon.technology/"
+            rpc_endpoint = "polygon-amoy-bor"
             self.explorer = "https://amoy.polygonscan.com/address/0x"
         self.load_base(rpc_endpoint, device, contract_addr, wc_uri, confirm_callback, wtype != 3)
         self.ledger_tokens = ledger_tokens

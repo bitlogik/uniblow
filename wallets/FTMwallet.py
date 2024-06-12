@@ -48,11 +48,11 @@ class FTM_wallet(ETH_wallet):
         self.network = FTM_wallet.networks[network].lower()
         if self.network == "mainnet":
             self.chainID = 250
-            rpc_endpoint = "https://rpc.ankr.com/fantom/"
+            rpc_endpoint = "fantom"
             self.explorer = "https://ftmscan.com/address/0x"
         if self.network == "testnet":
             self.chainID = 4002
-            rpc_endpoint = "https://rpc.testnet.fantom.network/"
+            rpc_endpoint = "fantom-testnet"
             self.explorer = "https://testnet.ftmscan.com//address/0x"
         self.load_base(rpc_endpoint, device, contract_addr, wc_uri, confirm_callback, wtype != 3)
         self.ledger_tokens = ledger_tokens

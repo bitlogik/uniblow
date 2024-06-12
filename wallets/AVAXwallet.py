@@ -49,11 +49,11 @@ class AVAX_wallet(ETH_wallet):
         self.network = AVAX_wallet.networks[network].lower()
         if self.network == "mainnet":
             self.chainID = 43114
-            rpc_endpoint = "https://rpc.ankr.com/avalanche/"
+            rpc_endpoint = "avalanche-c-chain"
             self.explorer = "https://snowtrace.io/address/0x"
         if self.network == "fujitest":
             self.chainID = 43113
-            rpc_endpoint = "https://api.avax-test.network/ext/bc/C/rpc"
+            rpc_endpoint = "avalanche-fuji-c-chain"
             self.explorer = "https://testnet.snowtrace.io/address/0x"
         self.load_base(rpc_endpoint, device, contract_addr, wc_uri, confirm_callback, wtype != 3)
         self.ledger_tokens = ledger_tokens

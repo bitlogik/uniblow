@@ -50,11 +50,11 @@ class BASE_wallet(ETH_wallet):
         self.network = BASE_wallet.networks[network].lower()
         if self.network == "mainnet":
             self.chainID = 8453
-            rpc_endpoint = "https://mainnet.base.org/"
+            rpc_endpoint = "base"
             self.explorer = "https://basescan.org/address/0x"
         elif self.network == "basesepolia":
             self.chainID = 84532
-            rpc_endpoint = "https://sepolia.base.org/"
+            rpc_endpoint = "base-sepolia"
             self.explorer = "https://sepolia.basescan.org/address/0x"
         else:
             raise ValueError("Wrong BASE network.")
