@@ -52,6 +52,9 @@ def round_secret(id_bin, i, data_input, key, iterations):
 
 
 def decrypt_lrwb(enc_seed, identifier, iter_exp, key):
+    """Decrypt the encrypted share value.
+    Wide-blocksize pseudorandom permutation based on the Luby-Rackoff construction
+    """
     id_bin = b""
     if identifier is not None:
         # Not extendable
@@ -69,6 +72,7 @@ def mnemonic_to_seed(
     mnemonic_phrase,
     passphrasestr="",
 ):
+    """Compute seed from a SLIP39 mnemonic"""
     passphrase = passphrasestr.encode("ascii")
     words = [word for word in mnemonic_phrase.split()]
 
@@ -162,6 +166,7 @@ def slip39_is_checksum_valid(mnemonic):
 
 
 def slip39_mnemonic_to_seed(mnemonic_phrase, passphrase=""):
+    """Check SLIP39 mnemonic and compute seed from it."""
     words_len = len(mnemonic_phrase.split())
     if words_len not in [20, 33]:
         raise ValueError("Mnemonic has not the right words number (should be 20 or 33)")
