@@ -49,6 +49,7 @@ def mnemonic_to_seed(
 ):
     passphrase = passphrasestr.encode("ascii")
     words = [word for word in mnemonic_phrase.split()]
+
     n = len(SLIP39_WORDSLIST)
     i = 0
     for w in words:
@@ -58,12 +59,15 @@ def mnemonic_to_seed(
             return False, False
         i = i * n + k
 
-    # checksum = i % (1 << 31)
+    # Decode bits from right to left
+
+    # checksum = i & ((1 << 30) - 1)
     # Skipped : already checked
     i >>= 30
 
-    share_value = i & ((1 << 130) - 1)
-    i >>= 130
+    padded_share_len_bits = len(words) * 10 - 70
+    share_value = i & ((1 << padded_share_len_bits) - 1)
+    i >>= padded_share_len_bits
 
     member_threshold = i & ((1 << 4) - 1)
     i >>= 4
@@ -86,20 +90,10 @@ def mnemonic_to_seed(
     extendable = i & ((1 << 1) - 1)
     i >>= 1
 
-    identifier = i
-
-    print(f"{share_value=}")
-    print(f"{member_threshold=}")
-    print(f"{member_index=}")
-    print(f"{group_count=}")
-    print(f"{group_threshold=}")
-    print(f"{group_index=}")
-    print(f"{iterations_exp=}")
-    print(f"{extendable=}")
-    print(f"{identifier=}")
+    identifier = i  # remaining bits
 
     # Decrypt the master secret
-    enc_seed = share_value.to_bytes(16, "big")
+    enc_seed = share_value.to_bytes(padded_share_len_bits // 8, "big")
     return decrypt_lrwb(enc_seed, identifier, iterations_exp, passphrase)
 
 
