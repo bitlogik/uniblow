@@ -690,13 +690,13 @@ class UniblowApp(wx.App):
         if hist_url:
             show_history(hist_url)
 
-    def warn_modal(self, warning_text, modal=False, parent=None):
+    def warn_modal(self, warning_text, modal=True, parent=None):
         if parent is None:
             parent = self.gui_frame
         InfoBox(warning_text, "Error", wx.OK | wx.ICON_WARNING, parent, block_modal=modal)
 
     def info_modal(self, title, info_text):
-        InfoBox(info_text, title, wx.OK | wx.ICON_INFORMATION, self.gui_frame)
+        InfoBox(info_text, title, wx.OK | wx.ICON_INFORMATION, self.gui_frame, True)
 
     def get_password(self, device_nam, input_message):
         pwd_dialog = wx.PasswordEntryDialog(
