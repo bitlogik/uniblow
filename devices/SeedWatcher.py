@@ -49,6 +49,7 @@ from cryptolib.HDwallet import (
     bip39_is_checksum_valid,
     ElectrumOldWallet,
 )
+from cryptolib.slip39 import slip39_is_checksum_valid
 
 
 from wallets.BTCwallet import BTC_wallet
@@ -158,7 +159,7 @@ class SeedWatcherFrame(gui.swgui.MainFrame):
 class SeedWatcherPanel(gui.swgui.MainPanel):
     def mnemo_changed(self, event):
         event.Skip()
-        if self.m_typechoice.GetSelection() > 0:
+        if self.m_typechoice.GetSelection() > 1:
             self.m_staticText5.Hide()
             self.m_staticText6.Hide()
             self.m_bitmap_wl.Hide()
@@ -172,7 +173,7 @@ class SeedWatcherPanel(gui.swgui.MainPanel):
             self.m_bitmap_cs.SetBitmap(self.BAD_BMP)
         self.m_dataViewListCtrl1.DeleteAllItems()
         self.m_staticTextcopy.Disable()
-        self.check_mnemonic()
+        self.check_mnemonic(self.m_typechoice.GetSelection())
 
     def gen_new_mnemonic(self, event):
         event.Skip()
@@ -229,7 +230,7 @@ class SeedWatcherPanel(gui.swgui.MainPanel):
             # Panel was closed
             return
         derivation_type_code = self.m_typechoice.GetSelection()
-        if derivation_type_code == 1:
+        if derivation_type_code == 2:
             # Electrum special path
             if coin["name"][:8] != "Bitcoin ":
                 # Use only Bitcoin for the Electrum seed
@@ -241,7 +242,7 @@ class SeedWatcherPanel(gui.swgui.MainPanel):
             elif coin["type"] == 1 or coin["type"] == 2:
                 # p2wsh and segwit
                 cpath = "m/{}'/{}/{}"
-        if derivation_type_code == 2:
+        if derivation_type_code == 3:
             if coin["name"] != "Bitcoin Legacy":
                 # Use only Bitcoin legacy for the Electrum seed
                 self.enable_inputs()
@@ -262,7 +263,7 @@ class SeedWatcherPanel(gui.swgui.MainPanel):
             # Only for last, means all the index down to m shall be hardened
             path += "'"
 
-        if derivation_type_code == 2:
+        if derivation_type_code == 3:
             wallet = ElectrumOldWallet.from_seed(seed)
         else:
             wallet = HD_Wallet.from_seed(seed, key_type)
@@ -310,14 +311,31 @@ class SeedWatcherPanel(gui.swgui.MainPanel):
     def compute_seed(self, *args):
         try:
             wallet_seed = HD_Wallet.seed_from_mnemonic(*args)
-        except Exception:
+        except Exception as exc:
+            error_modal = MessageDialog(
+                self,
+                "Cannot watch for this wallet\n\n"
+                "Because of the following reason:"
+                f"\n{str(exc)}.\n\n",
+                "Watch Error",
+                STAY_ON_TOP | CENTER,
+                DefaultPosition,
+            )
+            error_modal.ShowModal()
             self.enable_inputs()
             return
         self.async_getcoininfo_idx(0, wallet_seed)
 
-    def check_mnemonic(self):
+    def check_mnemonic(self, der_type):
         """Recompute HD wallet keys"""
-        cs, wl = bip39_is_checksum_valid(self.m_textCtrl_mnemo.GetValue())
+        if der_type == 0:
+            # BIP39
+            test_checksum = bip39_is_checksum_valid
+        elif der_type == 1:
+            test_checksum = slip39_is_checksum_valid
+        else:
+            raise Exception("Invalid derivation type for checksum")
+        cs, wl = test_checksum(self.m_textCtrl_mnemo.GetValue())
         if wl:
             self.m_bitmap_wl.SetBitmap(self.GOOD_BMP)
         if cs:
@@ -330,11 +348,13 @@ class SeedWatcherPanel(gui.swgui.MainPanel):
         self.coins = []
         mnemo_txt = self.m_textCtrl_mnemo.GetValue()
         password = self.m_textpwd.GetValue()
-        if self.m_typechoice.GetSelection() == 3:
+        if self.m_typechoice.GetSelection() == 4:
             derivation = "BOOST"
         elif self.m_typechoice.GetSelection() == 1:
-            derivation = "Electrum"
+            derivation = "SLIP39"
         elif self.m_typechoice.GetSelection() == 2:
+            derivation = "Electrum"
+        elif self.m_typechoice.GetSelection() == 3:
             derivation = "ElectrumOLD"
         else:
             derivation = "BIP39"
@@ -395,7 +415,7 @@ class SeedWatcherPanel(gui.swgui.MainPanel):
         wallet_open = partial(coins_list[sel_wallet]["wallet_lib"], 0, wallet_type)
         key = self.coins[sel_wallet].wallet.current_device.ecpair
         pkcpr = True
-        if wallet_type == 0 and self.m_typechoice.GetSelection() == 2:
+        if wallet_type == 0 and self.m_typechoice.GetSelection() == 3:
             # Special case for Bitcoin Electrum old
             pkcpr = False
         self.cb_wallet(wallet_open, key, wallet_type, self.GetParent(), pkcpr)
