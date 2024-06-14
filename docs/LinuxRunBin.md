@@ -6,10 +6,10 @@ We provide a **Linux binary file** which can be used directly on Ubuntu, Debian 
 
 For the following Linux OS :
 
-* Ubuntu from version 22.04
+* Ubuntu version 22.04 and newer
 * Ubuntu derivatives, like Mint or PureOS
 * Debian Bullseye 11, Bookworm 12
-* Tails OS : Should work on any v6.x
+* Tails OS v6.x
 
 It may run on other Linux, as RHEL or Fedora. But without any testing and no guarantee.
 
