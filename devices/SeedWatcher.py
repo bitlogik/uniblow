@@ -195,6 +195,8 @@ class SeedWatcherPanel(gui.swgui.MainPanel):
         dv3 = dataview.DataViewColumn("Balance", dataview.DataViewTextRenderer(), 2)
         dv3.SetWidth(86)
         ctab.AppendColumn(dv3)
+        self.m_bitmap_wl.SetBitmap(self.BAD_BMP)
+        self.m_bitmap_cs.SetBitmap(self.BAD_BMP)
         self.cb_wallet = cb_wallet
 
     def generate_mnemonic(self, n_words):
