@@ -557,9 +557,11 @@ class UniblowApp(wx.App):
         self.gui_frame.Layout()
 
     def clear_coin_selected(self):
+        self.current_chain = ""
         coin_btns = self.gui_panel.scrolled_coins.GetChildren()
         for btn in coin_btns:
             btn.SetBackgroundColour(wx.Colour(248, 250, 252))
+        self.erase_info(False, True)
 
     def load_coins_list(self, coins_list):
         sizer = wx.BoxSizer(wx.VERTICAL)

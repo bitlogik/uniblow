@@ -499,7 +499,6 @@ def wallet_error(exc, level="hard"):
         erase_option = app.wallet.coin != "BTC"
     else:
         app.clear_coin_selected()
-        app.current_chain = ""
         erase_option = False
     app.erase_info(erase_option)
     logger.error("Error in the wallet : %s", str(exc), exc_info=exc, stack_info=True)
