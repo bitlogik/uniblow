@@ -924,7 +924,7 @@ class UniblowApp(wx.App):
         # are displayed : address and balance.
         # Changing the coin selected could mix crypto info. So this terminates some
         # process path that are no longer valid.
-        if hasattr(self, "wallet") and self.current_chain is not None:
+        if hasattr(self, "wallet") and self.current_chain:
             if current_wallet is None:
                 current_wallet = type(self.wallet)
             coin_class = self.coin_classes(self.current_chain)
