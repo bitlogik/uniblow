@@ -69,11 +69,7 @@ def mnemonic_to_seed(
     n = len(SLIP39_WORDSLIST)
     i = 0
     for w in words:
-        try:
-            k = SLIP39_WORDSLIST.index(w)
-        except ValueError:
-            return False, False
-        i = i * n + k
+        i = i * n + WORDS_DICT[w]
 
     # Decode bits from right to left
 
