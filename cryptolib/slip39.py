@@ -82,15 +82,30 @@ def mnemonic_to_seed(
     i >>= padded_share_len_bits
 
     member_threshold = i & ((1 << 4) - 1)
+    if member_threshold != 0:
+        raise ValueError(
+            "Only compatible with single share (no split/sharing). "
+            "Member threshold is expected to be zero"
+        )
     i >>= 4
 
     member_index = i & ((1 << 4) - 1)
     i >>= 4
 
     group_count = i & ((1 << 4) - 1)
+    if group_count != 0:
+        raise ValueError(
+            "Only compatible with single share (no split/sharing). "
+            "Group count is expected to be zero"
+        )
     i >>= 4
 
     group_threshold = i & ((1 << 4) - 1)
+    if group_threshold != 0:
+        raise ValueError(
+            "Only compatible with single share (no split/sharing). "
+            "Group threshold is expected to be zero"
+        )
     i >>= 4
 
     group_index = i & ((1 << 4) - 1)
