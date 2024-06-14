@@ -135,12 +135,12 @@ def slip39_is_checksum_valid(mnemonic):
 def slip39_mnemonic_to_seed(mnemonic_phrase, passphrase=""):
     words_len = len(mnemonic_phrase.split())
     if words_len not in [20, 33]:
-        raise ValueError("Mnemonic has not the right words size")
+        raise ValueError("Mnemonic has not the right words number (should be 20 or 33)")
 
     bip39_mnemonic_info = slip39_is_checksum_valid(mnemonic_phrase)
     if not bip39_mnemonic_info[1]:
         raise ValueError("Mnemonic is not from wordlist")
     if not bip39_mnemonic_info[0]:
-        raise ValueError("BIP39 Checksum is invalid for this mnemonic")
+        raise ValueError("Checksum is invalid for this SLIP39 mnemonic")
 
     return mnemonic_to_seed(mnemonic_phrase, passphrase)
