@@ -490,11 +490,17 @@ def wallet_error(exc, level="hard"):
     """Process wallet exception"""
     if level == "hard":
         app.gui_panel.network_choice.Clear()
+        app.gui_panel.network_choice.Disable()
         app.clear_coin_selected()
         app.deactivate_option_buttons()
         app.gui_panel.wallopt_choice.Clear()
         app.gui_panel.wallopt_choice.Disable()
         app.gui_panel.btn_chkaddr.Disable()
+        logger.error(
+            "Unrecoverable error in the wallet : %s", str(exc), exc_info=exc, stack_info=True
+        )
+        app.warn_modal(str(exc))
+        return
     if hasattr(app, "wallet"):
         erase_option = app.wallet.coin != "BTC"
     else:
