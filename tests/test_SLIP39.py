@@ -7,6 +7,7 @@ from cryptolib.slip39 import slip39_mnemonic_to_seed
 
 
 SLIP39_TESTS_DATA = [
+    # Non extendable
     [
         "duckling enlarge academic academic agency result length solution fridge kidney coal piece deal husband erode duke ajar critical decision keyboard",
         "bb54aac4b89dc868ba37d9cc21b2cece",
@@ -21,6 +22,22 @@ SLIP39_TESTS_DATA = [
         # 1MuB33X9BdL6ctrmMG5iQS91DDTTY12Y8H
         "020f8b94d8fd249367c57b826923de63cc79b4d939ad7c48b393e2caa3afb71492",
     ],
+    # Extendable
+    [
+        "testify swimming academic academic column loyalty smear include exotic bedroom exotic wrist lobe cover grief golden smart junior estimate learn",
+        "1679b4516e0ee5954351d288a838f45e",
+        "xprv9s21ZrQH143K2w6eTpQnB73CU8Qrhg6gN3D66Jr16n5uorwoV7CwxQ5DofRPyok5DyRg4Q3BfHfCgJFk3boNRPPt1vEW1ENj2QckzVLQFXu",
+        # 12YBQQspmVfWTrBCAk2kQu1D8i3cg7G6ob
+        "0380946783b7f20012b326693b7df5a178eb0fe31c7113ba7fcf6adb59075c51c5",
+    ],
+    [
+        "impulse calcium academic academic alcohol sugar lyrics pajamas column facility finance tension extend space birthday rainbow swimming purple syndrome facility trial warn duration snapshot shadow hormone rhyme public spine counter easy hawk album",
+        "8340611602fe91af634a5f4608377b5235fa2d757c51d720c0c7656249a3035f",
+        "xprv9s21ZrQH143K2yJ7S8bXMiGqp1fySH8RLeFQKQmqfmmLTRwWmAYkpUcWz6M42oGoFMJRENmvsGQmunWTdizsi8v8fku8gpbVvYSiCYJTF1Y",
+        # 175ibUer1wAxtf2s3Ae933XEsXgDdgqjNr
+        "0240ce1a5889078c2eccc0bf0a3bbdc4f434dfdbc5ddf8227bc493613b72f32609",
+    ],
+]
 ]
 
 
