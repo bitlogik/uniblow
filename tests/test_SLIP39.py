@@ -38,6 +38,32 @@ SLIP39_TESTS_DATA = [
         "0240ce1a5889078c2eccc0bf0a3bbdc4f434dfdbc5ddf8227bc493613b72f32609",
     ],
 ]
+
+SLIP39_TESTS_DATA_ERRORS = [
+    [
+        "duckling enlarge academic academic agency result length solution fridge kidney coal piece deal husband erode duke ajar critical decision kidney",
+        "Checksum is invalid for this SLIP39 mnemonic",
+    ],
+    [
+        "duckling enlarge academic academic email result length solution fridge kidney coal piece deal husband erode duke ajar music cargo fitness",
+        "Invalid share padding bits",
+    ],
+    [
+        "shadow pistol academic always adequate wildlife fancy gross oasis cylinder mustang wrist rescue view short owner flip making coding armed",
+        "Only compatible with single share (no split/sharing)",
+    ],
+    [
+        "theory painting academic academic armed sweater year military elder discuss acne wildlife boring employer fused large satoshi bundle carbon diagnose anatomy hamster leaves tracks paces beyond phantom capital marvel lips brave detect lunar",
+        "Checksum is invalid for this SLIP39 mnemonic",
+    ],
+    [
+        "theory painting academic academic campus sweater year military elder discuss acne wildlife boring employer fused large satoshi bundle carbon diagnose anatomy hamster leaves tracks paces beyond phantom capital marvel lips facility obtain sister",
+        "Invalid share padding bits",
+    ],
+    [
+        "enemy favorite academic acid cowboy phrase havoc level response walnut budget painting inside trash adjust froth kitchen learn tidy punish",
+        "Only compatible with single share (no split/sharing)",
+    ],
 ]
 
 
@@ -52,3 +78,11 @@ def test_process_slip39(test_data):
     hdw = BIP32node.master_node(seed, "K1")
     pubkey_computed = hdw.derive_path_private(BIP44_BTC_PATH).pv_key.get_public_key(True)
     assert pubkey_computed.hex() == test_data[3]
+
+
+@pytest.mark.parametrize("test_data_err", SLIP39_TESTS_DATA_ERRORS)
+def test_error_slip39(test_data_err):
+    mnemonic = test_data_err[0]
+    with pytest.raises(Exception) as exc_info:
+        slip39_mnemonic_to_seed(mnemonic, "TREZOR")
+    assert exc_info.value.args[0].startswith(test_data_err[1])
