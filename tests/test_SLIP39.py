@@ -6,7 +6,7 @@ from cryptolib.slip39 import slip39_mnemonic_to_seed
 # Tests from https://github.com/trezor/python-shamir-mnemonic/blob/master/vectors.json
 
 
-BIP39_TESTS_DATA = [
+SLIP39_TESTS_DATA = [
     [
         "duckling enlarge academic academic agency result length solution fridge kidney coal piece deal husband erode duke ajar critical decision keyboard",
         "bb54aac4b89dc868ba37d9cc21b2cece",
@@ -27,8 +27,8 @@ BIP39_TESTS_DATA = [
 BIP44_BTC_PATH = "m/44'/0'/0'/0/0"
 
 
-@pytest.mark.parametrize("test_data", BIP39_TESTS_DATA)
-def test_strict_slip39(test_data):
+@pytest.mark.parametrize("test_data", SLIP39_TESTS_DATA)
+def test_process_slip39(test_data):
     mnemonic = test_data[0]
     seed = bytes.fromhex(test_data[1])
     assert slip39_mnemonic_to_seed(mnemonic, "TREZOR") == seed
