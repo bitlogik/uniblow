@@ -1,6 +1,4 @@
-
 # Uniblow on Ubuntu, Debian or Tails
-
 
 We provide a **Linux binary file** which can be used directly on Ubuntu, Debian or Tails OS Linux distributions, for the common x86/64 *AMD64* architecture.
 
@@ -23,6 +21,7 @@ Get the binary and its signature file.
 [PGP signature](https://uniblow.org/dist/Uniblow-linux-x86_64-2.6.5.sig)
 
 **Or** using the terminal, in Tails you may need to prepend *torsocks* to these commands :
+
 ```
 wget https://uniblow.org/dist/Uniblow-linux-x86_64-2.6.5
 wget https://uniblow.org/dist/Uniblow-linux-x86_64-2.6.5.sig
@@ -47,12 +46,14 @@ In Tails, using the Files explorer, you can right click on the sig file and sele
 *Valid but untrusted signature by Antoine FERRON <antoine...*
 
 OR alternatively using the Terminal, in Debian/Ubuntu (also valid for Tails) :
+
 ```
 UniblowFile=Uniblow-linux-x86_64-2.6.5
 gpg --verify --trust-model always $UniblowFile.sig $UniblowFile
 ```
 
 The terminal should give out something like :
+
 ```
 gpg: Signature made ddd XXX 202y xx:xx:xx PM UTC
 gpg:                using RSA key 9F8106C10FBDB88A71B7FEE5E353957C22F95B31
@@ -66,7 +67,6 @@ The warning message *untrusted* is because the key is not formally approved by *
 
 Note that since you get the signed binary and the PGP key from 2 different sources (Web distribution server and a key server), a hacker would need to modify data in our web distribution server and our key. Else, you would notice with this signature check. Still, this doesn't protect our building process nor our PGP private key, there are dedicated security measures for those of course.
 
-
 ### Run it
 
 Before to run Uniblow, you have to set as runnable once the binary, like tell Linux this is indeed an executable binary.
@@ -74,6 +74,7 @@ Before to run Uniblow, you have to set as runnable once the binary, like tell Li
 In the GUI, with a file explorer like Files, Nautilus or Nemo : right-click on the Uniblow file, select Properties. Then in the Permissions tab, tick the checkbox *Allow executing file as program* for the Execute option. Then close the properties window.
 
 OR within the terminal :
+
 ```
 chmod +x Uniblow-linux-*
 ```
@@ -81,12 +82,11 @@ chmod +x Uniblow-linux-*
 Now, you can run Uniblow.
 
 In **Tails**, the *torsocks* software is required to wrap the internet queries of the Uniblow app. Else you get the network error message *Network is unreachable*.
+
 ```
 torsocks ./Uniblow-linux-x86_64-2.6.5
 ```
 
-
 In **Debian or Ubuntu**, you can directly run it from the file explorer GUI : double-click on the Uniblow binary icon to start it.
 
 If nothing happens after some seconds, open a terminal in the current directory and type `./Uniblow-linux-x86_64-2.6.5`
-
