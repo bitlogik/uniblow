@@ -41,15 +41,21 @@ def round_secret(id_bin, i, data_input, key, iterations):
     #    iterations = 2500 << e,
     #    dkLen = n/2 bytes, len(R)
     # )
-    # If ext = 1, then salt_prefix is an empty string.
-    # If ext = 0, then salt_prefix = "shamir" || id
-    salt = b"shamir" + id_bin + data_input
+    # No id_bin: ext = 1, salt_prefix is an empty string.
+    # id_bin:    ext = 0, salt_prefix = "shamir" || id
+    salt = data_input
+    if id_bin:
+        # Not extendable
+        salt = b"shamir" + id_bin + data_input
     pbkdf = PBKDF2_SHA256(salt, iterations)
     return pbkdf.derive(bytes([i]) + key)
 
 
 def decrypt_lrwb(enc_seed, identifier, iter_exp, key):
-    id_bin = identifier.to_bytes(2, "big")
+    id_bin = b""
+    if identifier is not None:
+        # Not extendable
+        id_bin = identifier.to_bytes(2, "big")
     left = enc_seed[: len(enc_seed) // 2]
     right = enc_seed[len(enc_seed) // 2 :]
     rounds = 4
@@ -114,14 +120,15 @@ def mnemonic_to_seed(
     iterations_exp = i & ((1 << 4) - 1)
     i >>= 4
 
-    extendable = i & ((1 << 1) - 1)
+    extendable = i & ((1 << 1) - 1) == 1
     i >>= 1
 
     identifier = i  # remaining bits
 
     # Decrypt the master secret
     enc_seed = share_value.to_bytes(padded_share_len_bits // 8, "big")
-    return decrypt_lrwb(enc_seed, identifier, iterations_exp, passphrase)
+    idext = None if extendable else identifier
+    return decrypt_lrwb(enc_seed, idext, iterations_exp, passphrase)
 
 
 def slip39_is_checksum_valid(mnemonic):
@@ -139,8 +146,12 @@ def slip39_is_checksum_valid(mnemonic):
 
     if len(words) not in [20, 33]:
         return False, True
-    # b"shamir" or b"shamir_extendable"
-    return verify_checksum(b"shamir", words_idxs), True
+    if words_idxs[1] & 0b10000:
+        # extendable
+        cs = b"shamir_extendable"
+    else:
+        cs = b"shamir"
+    return verify_checksum(cs, words_idxs), True
 
 
 def slip39_mnemonic_to_seed(mnemonic_phrase, passphrase=""):
