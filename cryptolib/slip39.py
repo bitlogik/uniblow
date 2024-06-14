@@ -84,7 +84,14 @@ def mnemonic_to_seed(
     i >>= 30
 
     padded_share_len_bits = len(words) * 10 - 70
+    if padded_share_len_bits % 10:
+        raise ValueError("Share value is not correctly padded")
+    if padded_share_len_bits % 16 > 8:
+        raise ValueError("Too large share value padding")
     share_value = i & ((1 << padded_share_len_bits) - 1)
+    # Check all padding bits are zero : value less than w/o padding
+    if share_value >= 2 ** (padded_share_len_bits - (padded_share_len_bits % 16)):
+        raise ValueError("Invalid share padding bits")
     i >>= padded_share_len_bits
 
     member_threshold = i & ((1 << 4) - 1)
