@@ -159,7 +159,8 @@ class SeedWatcherFrame(gui.swgui.MainFrame):
 class SeedWatcherPanel(gui.swgui.MainPanel):
     def mnemo_changed(self, event):
         event.Skip()
-        if self.m_typechoice.GetSelection() > 1:
+        mneno = self.m_typechoice.GetSelection()
+        if mneno > 1:
             self.m_staticText5.Hide()
             self.m_staticText6.Hide()
             self.m_bitmap_wl.Hide()
@@ -173,7 +174,7 @@ class SeedWatcherPanel(gui.swgui.MainPanel):
             self.m_bitmap_cs.SetBitmap(self.BAD_BMP)
         self.m_dataViewListCtrl1.DeleteAllItems()
         self.m_staticTextcopy.Disable()
-        self.check_mnemonic(self.m_typechoice.GetSelection())
+        self.check_mnemonic(mneno)
 
     def gen_new_mnemonic(self, event):
         event.Skip()
@@ -326,12 +327,12 @@ class SeedWatcherPanel(gui.swgui.MainPanel):
             return
         self.async_getcoininfo_idx(0, wallet_seed)
 
-    def check_mnemonic(self, der_type):
+    def check_mnemonic(self, mnemo_type):
         """Recompute HD wallet keys"""
-        if der_type == 0:
+        if mnemo_type == 0:
             # BIP39
             test_checksum = bip39_is_checksum_valid
-        elif der_type == 1:
+        elif mnemo_type == 1:
             test_checksum = slip39_is_checksum_valid
         else:
             raise Exception("Invalid derivation type for checksum")
