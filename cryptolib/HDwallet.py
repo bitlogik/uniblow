@@ -27,6 +27,7 @@ from cryptolib.cryptography import (
     random_generator,
 )
 from cryptolib.ECKeyPair import EC_key_pair
+from cryptolib.slip39 import slip39_mnemonic_to_seed
 from cryptolib.ElectrumLegacy import decode_old_mnemonic
 
 
@@ -287,6 +288,8 @@ class HD_Wallet:
         if std == "BIP39":
             mnemonic = mnemonic.lower()
             method = "PBKDF2-2048-HMAC-SHA512"
+        elif std == "SLIP39":
+            return slip39_mnemonic_to_seed(mnemonic, passw)
         elif std == "BOOST":
             method = "SCRYPT"
         elif std == "Electrum":

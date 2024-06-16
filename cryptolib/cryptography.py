@@ -122,6 +122,17 @@ def HMAC_SHA512(key, data):
     return hmac512.digest()
 
 
+def PBKDF2_SHA256(salt, iterations):
+    """Create a PBKDF2 SHA256."""
+    # Then .derive(data)
+    return PBKDF2HMAC(
+        algorithm=hashes.SHA256(),
+        length=64,
+        salt=salt,
+        iterations=iterations,
+    )
+
+
 def PBKDF2_SHA512(salt):
     """Create a PBKDF2 HMAC object."""
     # Then .derive(data)
@@ -138,6 +149,10 @@ def SecuBoost_KDF(data, salt):
     return scrypt(
         data.replace(b" ", b""), salt, n=pow(2, 20), r=8, p=8, dklen=64, maxmem=1.5 * pow(2, 30)
     )
+
+
+def XOR(a: bytes, b: bytes) -> bytes:
+    return bytes(x ^ y for x, y in zip(a, b))
 
 
 def aes_encrypt(key, init_vect, data):

@@ -49,6 +49,7 @@ pkgs_remove = [
 datai = [
     (ICON, "gui/"),
     ("../cryptolib/wordslist/english.txt", "cryptolib/wordslist/"),
+    ("../cryptolib/wordslist/slip_wordlist.txt", "cryptolib/wordslist/"),
     ("../devices/satochip/cert/ca.cert", "devices/satochip/cert/"),
     ("../devices/satochip/cert/subca-satochip.cert", "devices/satochip/cert/"),
     ("../gui/images/logo.png", "gui/images/"),
