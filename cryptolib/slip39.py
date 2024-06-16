@@ -106,7 +106,7 @@ def mnemonic_to_seed(
         )
     i >>= 4
 
-    member_index = i & ((1 << 4) - 1)
+    # member_index = i & ((1 << 4) - 1)
     i >>= 4
 
     group_count = i & ((1 << 4) - 1)
@@ -125,7 +125,7 @@ def mnemonic_to_seed(
         )
     i >>= 4
 
-    group_index = i & ((1 << 4) - 1)
+    # group_index = i & ((1 << 4) - 1)
     i >>= 4
 
     iterations_exp = i & ((1 << 4) - 1)
