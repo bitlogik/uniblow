@@ -150,7 +150,7 @@
                     <property name="gripper">0</property>
                     <property name="hidden">0</property>
                     <property name="id">wxID_ANY</property>
-                    <property name="label">Generation option</property>
+                    <property name="label">BIP39 generation</property>
                     <property name="markup">0</property>
                     <property name="max_size"></property>
                     <property name="maximize_button">0</property>
@@ -248,7 +248,7 @@
             </object>
             <object class="sizeritem" expanded="true">
               <property name="border">10</property>
-              <property name="flag">wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM|wxLEFT</property>
+              <property name="flag">wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM</property>
               <property name="proportion">0</property>
               <object class="wxBitmapButton" expanded="true">
                 <property name="BottomDockable">1</property>
@@ -660,7 +660,7 @@
         </object>
         <object class="sizeritem" expanded="true">
           <property name="border">5</property>
-          <property name="flag">wxALL|wxEXPAND</property>
+          <property name="flag">wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT</property>
           <property name="proportion">0</property>
           <object class="wxTextCtrl" expanded="true">
             <property name="BottomDockable">1</property>

@@ -58,7 +58,7 @@ class MainPanel ( wx.Panel ):
         bSizer31.SetMinSize( wx.Size( -1,40 ) )
         bSizer6 = wx.BoxSizer( wx.VERTICAL )
 
-        self.m_staticText9 = wx.StaticText( self, wx.ID_ANY, u"Generation option", wx.DefaultPosition, wx.DefaultSize, 0 )
+        self.m_staticText9 = wx.StaticText( self, wx.ID_ANY, u"BIP39 generation", wx.DefaultPosition, wx.DefaultSize, 0 )
         self.m_staticText9.Wrap( -1 )
 
         self.m_staticText9.SetFont( wx.Font( 9, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, False, wx.EmptyString ) )
@@ -80,7 +80,7 @@ class MainPanel ( wx.Panel ):
         self.m_button_gen = wx.BitmapButton( self, wx.ID_ANY, wx.NullBitmap, wx.DefaultPosition, wx.DefaultSize, wx.BU_AUTODRAW|wx.BORDER_NONE|wx.BORDER_NONE )
 
         self.m_button_gen.SetBitmap( wx.NullBitmap )
-        bSizer31.Add( self.m_button_gen, 0, wx.ALIGN_CENTER_VERTICAL|wx.TOP|wx.BOTTOM|wx.LEFT, 10 )
+        bSizer31.Add( self.m_button_gen, 0, wx.ALIGN_CENTER_VERTICAL|wx.TOP|wx.BOTTOM, 10 )
 
 
         bSizer11.Add( bSizer31, 0, wx.ALIGN_CENTER_HORIZONTAL, 5 )
@@ -129,7 +129,7 @@ class MainPanel ( wx.Panel ):
         self.m_textCtrl_mnemo.SetForegroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_WINDOWTEXT ) )
         self.m_textCtrl_mnemo.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_WINDOW ) )
 
-        bSizer11.Add( self.m_textCtrl_mnemo, 0, wx.ALL|wx.EXPAND, 5 )
+        bSizer11.Add( self.m_textCtrl_mnemo, 0, wx.EXPAND|wx.BOTTOM|wx.RIGHT|wx.LEFT, 5 )
 
         bSizer4 = wx.BoxSizer( wx.HORIZONTAL )
 
