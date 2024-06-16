@@ -26,17 +26,18 @@ CHARSET = "qpzry9x8gf2tvdw0s3jn54khce6mua7l"
 
 XOR_CONSTANT = 1
 XOR_CONSTANT_M = 0x2BC830A3  # BIP350
+GENERATOR = [0x3B6A57B2, 0x26508E6D, 0x1EA119FA, 0x3D4233DD, 0x2A1462B3]
 
 
 def bech32_polymod(values):
     """Internal function that computes the Bech32 checksum."""
-    generator = [0x3B6A57B2, 0x26508E6D, 0x1EA119FA, 0x3D4233DD, 0x2A1462B3]
     chk = 1
     for value in values:
         top = chk >> 25
         chk = (chk & 0x1FFFFFF) << 5 ^ value
         for i in range(5):
-            chk ^= generator[i] if ((top >> i) & 1) else 0
+            if (top >> i) & 1:
+                chk ^= GENERATOR[i]
     return chk
 
 
