@@ -1,6 +1,6 @@
 # Uniblow on Ubuntu, Debian or Tails
 
-We provide a **Linux binary file** which can be used directly on Ubuntu, Debian or Tails OS Linux distributions, for the common x86/64 *AMD64* architecture.
+A **Linux binary file** is provided, that can be used directly on Ubuntu, Debian or Tails OS Linux distributions, for the common x86/64 *AMD64* architecture.
 
 For the following Linux OS :
 
@@ -16,15 +16,15 @@ It may run on other Linux, as RHEL or Fedora. But without any testing and no gua
 Get the binary and its signature file.
 
 **Download** from the uniblow website :  
-[Uniblow program](https://uniblow.org/dist/Uniblow-linux-x86_64-2.6.5)  
+[Uniblow program](https://uniblow.org/dist/Uniblow-linux-x86_64-2.7.0)  
  and its  
-[PGP signature](https://uniblow.org/dist/Uniblow-linux-x86_64-2.6.5.sig)
+[PGP signature](https://uniblow.org/dist/Uniblow-linux-x86_64-2.7.0.sig)
 
 **Or** using the terminal, in Tails you may need to prepend *torsocks* to these commands :
 
 ```
-wget https://uniblow.org/dist/Uniblow-linux-x86_64-2.6.5
-wget https://uniblow.org/dist/Uniblow-linux-x86_64-2.6.5.sig
+wget https://uniblow.org/dist/Uniblow-linux-x86_64-2.7.0
+wget https://uniblow.org/dist/Uniblow-linux-x86_64-2.7.0.sig
 ```
 
 ### Check authenticity
@@ -48,7 +48,7 @@ In Tails, using the Files explorer, you can right click on the sig file and sele
 OR alternatively using the Terminal, in Debian/Ubuntu (also valid for Tails) :
 
 ```
-UniblowFile=Uniblow-linux-x86_64-2.6.5
+UniblowFile=Uniblow-linux-x86_64-2.7.0
 gpg --verify --trust-model always $UniblowFile.sig $UniblowFile
 ```
 
@@ -84,9 +84,9 @@ Now, you can run Uniblow.
 In **Tails**, the *torsocks* software is required to wrap the internet queries of the Uniblow app. Else you get the network error message *Network is unreachable*.
 
 ```
-torsocks ./Uniblow-linux-x86_64-2.6.5
+torsocks ./Uniblow-linux-x86_64-2.7.0
 ```
 
 In **Debian or Ubuntu**, you can directly run it from the file explorer GUI : double-click on the Uniblow binary icon to start it.
 
-If nothing happens after some seconds, open a terminal in the current directory and type `./Uniblow-linux-x86_64-2.6.5`
+If nothing happens after some seconds, open a terminal in the current directory and type `./Uniblow-linux-x86_64-2.7.0`

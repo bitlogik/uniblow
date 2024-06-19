@@ -1,5 +1,11 @@
 Uniblow versions history
 
+# 2.7.0
+
+* Add SLIP39 in SeedWatcher
+* Use Allnodes public RPC for EVM chains (can work over Tor)
+* Various GUI improvements/fixes
+
 # 2.6.5
 
 * Add Base blockchain
