@@ -3,7 +3,7 @@
 # Build the uniblow MacOS binary package release
 
 # Requires Xcode developer tools
-# Python 3.10
+# Python 3.11
 # If needed, python3 -m venv unibenv should trigger the dev tools installation
 
 
