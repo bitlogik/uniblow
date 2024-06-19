@@ -212,6 +212,8 @@ Useful for paperwallets or one-time analysis of a mnemonic seed. This specific
 device can be also useful to provide an ephemeral temporary wallet, in TailsOS
 for example.
 
+It is compatible with BIP39, SLIP39 (Trezor) and Electrum mnemonics. The derivation complies with BIP32/44 and SLIP10.
+
 This device doesn't store permanently the private keys. It provides a window GUI
 to read a mnemonic seed, analyzes it, and displays the major cryptos held by
 this given mnemonic, with their respective balance. It can also securely
