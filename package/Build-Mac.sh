@@ -20,8 +20,7 @@ python -m pip install -U swig
 python -m pip install OpenPGPpy --no-deps
 python -m pip install pyscard==2.0.10
 python -m pip install wxPython>=4.2.0
-python -m pip install .
-
+python -m pip install "cryptography>=3.3" "safe-pysha3==1.0.4" "qrcode==6.1" "PyNaCl==1.5.0" "pyweb3==0.1.7" "hidapi==0.14.0" "pyWalletConnect==1.6.2",
 
 python -m pip install -U certifi
 python -m pip install pyinstaller==5.13.2
