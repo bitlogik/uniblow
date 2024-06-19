@@ -16,6 +16,7 @@ source unibenv/bin/activate
 
 echo Installing pip dependencies ...
 python -m pip install -U pip
+python -m pip install -U swig
 python -m pip install wxPython>=4.2.0
 python -m pip install .
 
