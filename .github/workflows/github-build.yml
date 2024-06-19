@@ -12,13 +12,13 @@ jobs:
 
   build_mac:
 
-    runs-on: macos-13-large
+    runs-on: flyci-macos-large-latest-m2
 
     steps:
     - uses: actions/checkout@v4
     - uses: actions/setup-python@v5
       with:
-        python-version: '3.10'
+        python-version: '3.11'
     - name: Build bin package
       run: |
         ./package/Build-Mac.sh
