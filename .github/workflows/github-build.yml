@@ -57,7 +57,7 @@ jobs:
 
   build_mac:
 
-    runs-on: macos-13-xlarge
+    runs-on: macos-13-large
 
     steps:
     - uses: actions/checkout@v4
