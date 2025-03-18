@@ -1,44 +1,65 @@
-# Uniblow ERC20 list for Moonbeam generated on 2023-03-02T12:46:39
+# Uniblow ERC20 list for Moonbeam generated on 2025-03-18T18:27:28
 tokens_values = [
     # Moonriver
     {
-        "Tether USD (USDT)": "0xeFAeeE334F0Fd1712f9a8cc375f427D9Cdd40d73",
-        "USD Coin (USDC)": "0x931715FEE2d06333043d11F658C8CE934aC61D0c",
-        "Matic (MATIC)": "0x3405A1bd46B85c5C029483FbECf2F3E611026e45",
-        "Binance-Peg BUSD Token (BUSD)": "0xA649325Aa7C5093d12D6F98EB4378deAe68CE23F",
-        "Avalanche (AVAX)": "0x4792C1EcB969B036eb51330c63bD27899A13D84e",
-        "Dai Stablecoin (DAI)": "0x765277EebeCA2e31912C9946eAe1021199B39C61",
+        "Tether USD (USDT)": "0xc30E9cA94CF52f3Bf5692aaCF81353a27052c46f",
+        "USD Coin (USDC)": "0x098d6eE48341D6a0a0A72dE5baaF80A10E0F6082",
+        "USD Coin (xcUSDC)": "0xFFfffffF7D2B0B761Af01Ca8e25242976ac0aD7D",
         "Wrapped BTC (WBTC)": "0xE57eBd2d67B462E9926e04a8e33f01cD0D64346D",
-        "Fantom (FTM)": "0xC19281F22A075E0F10351cd5D6Ea9f0AC63d4327",
-        "Frax (FRAX)": "0x322E86852e492a7Ee17f28a78c663da38FB33bfb",
-        "Frax Share (FXS)": "0x2CC0A9D8047A5011dEfe85328a6f26968C8aaA1C",
-        "Wrapped GLMR (WGLMR)": "0xAcc15dC74880C9944775448304B263D191c6077F",
-        "BOBA Token (BOBA)": "0x18D17A9fD652D7d6a59903E23792ab97F832Ed6C",
-        "BEPRO Network (BEPRO)": "0x4EdF8E0778967012D46968ceadb75436d0426f88",
-        "XEN Crypto (mbXEN)": "0xb564A5767A00Ee9075cAC561c427643286F8F4E1",
-        "StellaSwap (STELLA)": "0x0E358838ce72d5e61E0018a2ffaC4bEC5F4c88d2",
-        "Convergence (CONV)": "0x8006320739fC281da67Ee62eB9b4Ef8ADD5C903a",
-        "Beamswap Token (GLINT)": "0xcd3B51D98478D53F4515A306bE565c6EebeF1D58",
-        "Energyfi Token (EFT)": "0xA423E7eEB60547d9C7b65005477b63ae7CE67E62",
+        "Avalanche (AVAX)": "0x4792C1EcB969B036eb51330c63bD27899A13D84e",
+        "xcDOT (xcDOT)": "0xFfFFfFff1FcaCBd218EDc0EbA20Fc2308C778080",
         "Wrapped Ether (WETH)": "0xab3f0245B83feB11d15AAffeFD7AD465a59817eD",
-        "Axelar Wrapped USDC (axlUSDC)": "0xCa01a1D0993565291051daFF390892518ACfAD3A",
-        "MoonBeans (BEANS)": "0x65b09ef8c5A096C5Fd3A80f1F7369E56eB932412",
-        "ZooDAO (ZOO)": "0x3907e6ff436e2b2B05D6B929fb05F14c0ee18d90",
-        "Cougar Token (CGS)": "0x2Dfc76901bB2ac2A5fA5fc479590A490BBB10a5F",
-        "Axelar Wrapped ATOM (axlATOM)": "0x27292cf0016E5dF1d8b37306B2A98588aCbD6fCA",
-        "Axelar Wrapped DAI (axlDAI)": "0x14dF360966a1c4582d2b18EDbdae432EA0A27575",
-        "Axelar Wrapped FRAX (axlFRAX)": "0x61C82805453a989E99B544DFB7031902e9bac448",
-        "Axelar Wrapped LUNA (LUNA)": "0x31DAB3430f3081dfF3Ccd80F17AD98583437B213",
-        "Axelar Wrapped USDT (axlUSDT)": "0xDFd74aF792bC6D45D1803F425CE62Dd16f8Ae038",
-        "Axelar Wrapped UST (UST)": "0x085416975fe14C2A731a97eC38B9bF8135231F62",
-        "Beamshare Token (SHARE)": "0x4204cAd97732282d261FbB7088e07557810A6408",
-        "Binance (BNB)": "0xc9BAA8cfdDe8E328787E29b4B078abf2DaDc2055",
-        "e-Money EUR stablecoin (EEUR)": "0xDd26a5c8Ae5b60Bb14aEcED892A052CA48A2e915",
-        "e-Money NGM staking token (NGM)": "0x08fe7A0db575c2a08d76EEcA71763E48C6e60F45",
-        "Ethereum (ETH)": "0xfA9343C3897324496A05fC75abeD6bAC29f8A40f",
+        "Dai Stablecoin (DAI)": "0x06e605775296e851FF43b4dAa541Bb0984E9D6fD",
+        "Cosmos Hub (xcibcATOM)": "0xffFFFffF6807D5082ff2f6F86BdE409245e2D953",
+        "Bifrost Filecoin Native Token (xcFIL)": "0xfFFfFFFF6C57e17D210DF507c82807149fFd70B2",
+        "Axelar (AXL)": "0x467719aD09025FcC6cF6F8311755809d45a5E5f3",
+        "Matic (MATIC)": "0x3405A1bd46B85c5C029483FbECf2F3E611026e45",
+        "Frax (FRAX)": "0x322E86852e492a7Ee17f28a78c663da38FB33bfb",
         "Frax Ether (frxETH)": "0x82bbd1b6f6De2B7bb63D3e1546e6b1553508BE99",
-        "StellaSwap Dual ETH (stellaDualETH)": "0xa3eE3a0a36Dc915fDc93062e4B386DF37d00217E",
-        "XStella (xStella)": "0x06A3b410b681c82417A906993aCeFb91bAB6A080",
+        "Astar (xcASTR)": "0xFfFFFfffA893AD19e540E172C10d78D4d479B5Cf",
+        "Staked Frax Ether (sfrxETH)": "0xecf91116348aF1cfFe335e9807f0051332BE128D",
+        "Frax Share (FXS)": "0x2CC0A9D8047A5011dEfe85328a6f26968C8aaA1C",
+        "Manta (xcMANTA)": "0xfFFffFFf7D3875460d4509eb8d0362c611B4E841",
+        "Wrapped GLMR (WGLMR)": "0xAcc15dC74880C9944775448304B263D191c6077F",
+        "Centrifuge (xcCFG)": "0xFFfFfFff44bD9D2FFEE20B25D1Cf9E78Edb6Eae3",
+        "Binance-Peg BUSD Token (BUSD)": "0xA649325Aa7C5093d12D6F98EB4378deAe68CE23F",
+        "Moonriver (xcibcMOVR)": "0xFfFfffFF3AFcd2cAd6174387df17180a0362E592",
+        "BOBA Token (BOBA)": "0x18D17A9fD652D7d6a59903E23792ab97F832Ed6C",
+        "Acala (xcACA)": "0xffffFFffa922Fef94566104a6e5A35a4fCDDAA9f",
+        "Synapse (SYN)": "0xF44938b0125A6662f9536281aD2CD6c499F22004",
+        "XEN Crypto (mbXEN)": "0xb564A5767A00Ee9075cAC561c427643286F8F4E1",
+        "BNC (xcBNC)": "0xFFffffFf7cC06abdF7201b350A1265c62C8601d2",
+        "BEPRO Network (BEPRO)": "0x4EdF8E0778967012D46968ceadb75436d0426f88",
+        "Bifrost Voucher MANTA (xcvMANTA)": "0xFFfFFfFfdA2a05FB50e7ae99275F4341AEd43379",
+        "StellaSwap (STELLA)": "0x0E358838ce72d5e61E0018a2ffaC4bEC5F4c88d2",
+        "Interlay (xcINTR)": "0xFffFFFFF4C1cbCd97597339702436d4F18a375Ab",
+        "Zeitgeist (xcZTG)": "0xFFFFfffF71815ab6142E0E20c7259126C6B40612",
+        "Polkadex (xcPDEX)": "0xfFffFFFF43e0d9b84010b1b67bA501bc81e33C7A",
+        "Nodle (xcNODL)": "0xfffffffFe896ba7Cb118b9Fa571c6dC0a99dEfF1",
+        "RMRK (RMRK)": "0x524d524B4c9366be706D3A90dcf70076ca037aE3",
+        "Picasso (xcibcPICA)": "0xfFFFFfFFABe9934e61db3b11be4251E6e869cf59",
+        "Unique Network (xcUNQ)": "0xFffffFFFD58f77E6693CFB99EbE273d73C678DC2",
+        "Pendulum (xcPEN)": "0xffFFfFFf2257622F345E1ACDe0D4f46D7d1D77D0",
+        "Subsocial (xcSUB)": "0xfFfFffFf43B4560Bc0C451a3386E082bff50aC90",
+        "Beamswap Token (GLINT)": "0xcd3B51D98478D53F4515A306bE565c6EebeF1D58",
+        "Staked GLINT (stGLINT)": "0x63d43D0EDda7DE4B5ed9B2F2AA855f81FBd71697",
+        "Convergence (CONV)": "0x8006320739fC281da67Ee62eB9b4Ef8ADD5C903a",
+        "Energyfi Token (EFT)": "0xA423E7eEB60547d9C7b65005477b63ae7CE67E62",
+        "Bifrost Voucher DOT (xcvDOT)": "0xFFFfffFf15e1b7E3dF971DD813Bc394deB899aBf",
+        "Stella stDOT (stDOT)": "0xbc7E02c4178a7dF7d3E564323a5c359dc96C4db4",
+        "Take Flight Alpha (TFA)": "0xE065ffaf3f7dED69BB5cf5FDd1Fd1dDA2EEe8493",
+        "Axelar Wrapped USDC (axlUSDC)": "0xCa01a1D0993565291051daFF390892518ACfAD3A",
+        "Tether USD (xcUSDT)": "0xFFFFFFfFea09FB06d082fd1275CD48b191cbCD1d",
+        "Acala Liquid DOT (xcLDOT)": "0xFFfFfFffA9cfFfa9834235Fe53f4733F1b8B28d4",
+        "Fantom (FTM)": "0xC19281F22A075E0F10351cd5D6Ea9f0AC63d4327",
+        "Phala Token (xcPHA)": "0xFFFfFfFf63d24eCc8eB8a7b5D0803e900F7b6cED",
+        "Bifrost Voucher GLMR (xcvGLMR)": "0xFfFfFFff99dABE1a8De0EA22bAa6FD48fdE96F6c",
+        "Bifrost Voucher ASTR (xcvASTR)": "0xFffFffff55C732C47639231a4C4373245763d26E",
+        "MoonBeans (BEANS)": "0x65b09ef8c5A096C5Fd3A80f1F7369E56eB932412",
+        "HydraDX (xcHDX)": "0xFFFfFfff345Dc44DDAE98Df024Eb494321E73FcC",
+        "Cougar Token (CGS)": "0x2Dfc76901bB2ac2A5fA5fc479590A490BBB10a5F",
+        "Equilibrium Token (xcEQ)": "0xFffFFfFf8f6267e040D8a0638C576dfBa4F0F6D6",
+        "DED (xcDED)": "0xfFffFFFf5da2d7214D268375cf8fb1715705FdC6",
     },
     # Moonbeam
     {},
@@ -46,9 +67,8 @@ tokens_values = [
     {},
 ]
 
-
 # From Ledger trusted tokens data
-# extracted on 2024-06-02T15:49
+# extracted on 2025-03-18T18:41
 # from https://raw.githubusercontent.com/LedgerHQ/ledger-live/develop/libs/ledgerjs/packages/cryptoassets/src/data/evm/1284/erc20.json
 ledger_tokens = {
     "0xffffffff52c56a9257bb97f4b2b6f7b2d624ecda": {
@@ -58,6 +78,14 @@ ledger_tokens = {
     "0x1581929770be3275a82068c1135b6dd59c5334ed": {
         "ticker": "ALM",
         "signature": "304402205ff8ad7bd7a1e51cfd1efe2fa132b4241f0c12615184dc499eacd919c2d43f4702206c8c028f66354739c8a9427b9b3179b59119878741619370b8be60cdbc929384",
+    },
+    "0xffffffff8a9736b44ebf188972725bed67bf694e": {
+        "ticker": "XCNCTR",
+        "signature": "3045022100cd72e1494e8897b74f96c419fc0443b5a0fac60409eb7698ced978d6749ab1100220158fdc0f8f110786f27b1ef2c05c993afdcb88692afa23f04e4e6d584874b9e6",
+    },
+    "0xffffffffa893ad19e540e172c10d78d4d479b5cf": {
+        "ticker": "XCASTR",
+        "signature": "304402206c12105d835907310be3fa54915f4e22c68f4823cd5bf36426c3e2227d53f55002204337978bd6ba77314aee7728199839f7ddb35f9aa9f741f9ba2b0c744a26f87e",
     },
     "0xcbabee0658725b5b21e1512244734a5d5c6b51d6": {
         "ticker": "ATH",
@@ -123,6 +151,10 @@ ledger_tokens = {
         "ticker": "BOBA",
         "signature": "3044022011d940aae6180d7917af55e0f8e4756f4d5d66518ba302e9b3ee672299333d74022065a9344f77a836de8a883dbae45c292e0807ebe449f5b6ffef37e5c63d2afd22",
     },
+    "0xfeb25f3fddad13f82c4d6dbc1481516f62236429": {
+        "ticker": "BRLA",
+        "signature": "304402205bb5ad5e1e631e82fccc161e4c32a9486e31b3ed6cc18c31b22bc17f3feb131902201ad89971c35f2126b8c32587906dce2f4b2ef87394a0311875fd2280acfb2507",
+    },
     "0x8006320739fc281da67ee62eb9b4ef8add5c903a": {
         "ticker": "CONV",
         "signature": "30440220566617fb254683585be9bf84ef6243e1cab7e31a2420d5982076bc80aaeb418402201406dd54c4bc0abae41e50fea017c11f9f1e34cc639ee6f3e33ac2672ae56f37",
@@ -131,17 +163,21 @@ ledger_tokens = {
         "ticker": "CGS",
         "signature": "304402205b7d2eb42e95fc401b95f8d8503af36c531ef3aecef1848df3d5123ad6bfd05202202980b9c5db64cfaa5ba2be4ef6fdbe6cd93c98ca0f208d0d684b8215de2896d7",
     },
+    "0x6021d2c27b6fbd6e7608d1f39b41398caee2f824": {
+        "ticker": "CP",
+        "signature": "304402201812e867fe43437bb56c5f177bd99633bc1b8e393174c55935152cf46a3f1b3a0220603e0a6eb5d12ac6d7ee5eaccb1f50af72bc13c9f15ea704deab236c41b20119",
+    },
     "0x765277eebeca2e31912c9946eae1021199b39c61": {
         "ticker": "DAI",
         "signature": "3045022100dcff3d7c044ae02dd1a492d1ce014de26443a1b4ef28236f8641bc3fd93bbfe8022008a8c6b445dd55848570d84ed854d1d44fc11879375fad67d822a7cc94350031",
     },
-    "0x5b08c27c10927ecd8b75edd8e16cfc448d4bf1e4": {
-        "ticker": "RUM",
-        "signature": "3045022100fbec4177a2646abd8daede1b2d115bcde7d888d6df4d29b049e9fd119343254c022022c47bdb76fd904211bf13497100d375b37793c8a50720a685cf2dfe854a35ad",
-    },
     "0x2758b57e3c052ae2b66be2e175c8f1980723d7af": {
         "ticker": "DOUBLOON",
         "signature": "3044022078bf0c6a58dcc18b6f49f59f34e346de362d5c4595f4007264be75a60ce99a4202206aef2852dd1fb68a6fc3267524de03d73f917fea10e64595e179b68a53aa9e85",
+    },
+    "0x5b08c27c10927ecd8b75edd8e16cfc448d4bf1e4": {
+        "ticker": "RUM",
+        "signature": "3045022100fbec4177a2646abd8daede1b2d115bcde7d888d6df4d29b049e9fd119343254c022022c47bdb76fd904211bf13497100d375b37793c8a50720a685cf2dfe854a35ad",
     },
     "0xdd26a5c8ae5b60bb14aeced892a052ca48a2e915": {
         "ticker": "EEUR",
@@ -187,6 +223,10 @@ ledger_tokens = {
         "ticker": "HPO",
         "signature": "304402207e8fb5e0f082714f7fa7eb2525dbdd5db29395461b3e14233c324f48ecd36ffc02207236ed560870b53bc97cfd6a932db54083decfa870f363ca3404f81cf395c03d",
     },
+    "0xffffffff5ac1f9a51a93f5c527385edf7fe98a52": {
+        "ticker": "XCIBTC",
+        "signature": "304402204bbcaf9c8781bf0eaed83705f2f26dd6b933f134ff0cd9fb4369999f3176046c02204c0bb5015d7680e1234cacd75304be197e9a44666e9770ef71d4db7acb4bee1b",
+    },
     "0xdfa46478f9e5ea86d57387849598dbfb2e964b02": {
         "ticker": "MAI",
         "signature": "304402207d0d097a6ab6ed885154af75d36af31364a084dd732e8827c881b14f4da8170002201e178117e4152189fb580da271f0fcd2a25f1210393cde95c37680c90b058516",
@@ -231,6 +271,10 @@ ledger_tokens = {
         "ticker": "STATIK",
         "signature": "304502210088b2d2f9a0714cb0f019ae41451ffd597fa32da16f9edb857f9ad0a51d5c252102206846aef40dc3ff19b85657668235bcf99be8d460600ae694be82e1b73395325a",
     },
+    "0xbc7e02c4178a7df7d3e564323a5c359dc96c4db4": {
+        "ticker": "STDOT",
+        "signature": "3045022100d044bd4dc7061a0f59459636aca311388e10274cadb26e42e13cf29d1b19cec8022012baadfaa895020fd0bba115365922a96a03c62b0543fc70f30ed5a80265407b",
+    },
     "0x0e358838ce72d5e61e0018a2ffac4bec5f4c88d2": {
         "ticker": "STELLA",
         "signature": "30440220059dd67a36c013f0b7fd53bee0fff4c3a95afed887911938e1c4b994c13b67b702206431842aed7bb84e53886f6f38eee65b125448a2e12edceb6b03ed7444b1607b",
@@ -242,6 +286,10 @@ ledger_tokens = {
     "0xefaeee334f0fd1712f9a8cc375f427d9cdd40d73": {
         "ticker": "USDT",
         "signature": "3045022100d8ec2246e1ac69364a50376f85f5e45149462559181eca3e047aefce91e8b39602204cc0e9617d98e292d19a52bc7ff0cb45b5179835e5e51656ac2c1d2ace6f28ff",
+    },
+    "0xffffffffea09fb06d082fd1275cd48b191cbcd1d": {
+        "ticker": "XCUSDT",
+        "signature": "30440220119949c5386d1aebace8d731e2b878946ff778af9f6cd899e7f5159787462e5e02200c3dc505b201d108e16571347506a3fa36f4598944fb19598e1c1b04d4817bdd",
     },
     "0x735abe48e8782948a37c7765ecb76b98cde97b0f": {
         "ticker": "THO",

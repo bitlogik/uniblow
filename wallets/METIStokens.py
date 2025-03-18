@@ -42,7 +42,7 @@ tokens_values = [
 
 
 # From Ledger trusted tokens data
-# extracted on 2024-06-02T15:49
+# extracted on 2025-03-18T18:41
 # from https://raw.githubusercontent.com/LedgerHQ/ledger-live/develop/libs/ledgerjs/packages/cryptoassets/src/data/evm/1088/erc20.json
 ledger_tokens = {
     "0xb27bbeaaca2c00d6258c3118bab6b5b6975161c8": {

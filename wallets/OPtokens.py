@@ -1,20 +1,106 @@
-# Uniblow ERC20 list for Optimism generated on 2023-03-02T12:46:39
+# Uniblow ERC20 list for Optimism generated on 2025-03-18T18:27:28
 tokens_values = [
     # Mainnet
     {
         "Tether USD (USDT)": "0x94b008aA00579c1307B0EF2c499aD98a8ce58e58",
-        "USD Coin (USDC)": "0x7F5c764cBc14f9669B88837ca1490cCa17c31607",
-        "Dai Stablecoin (DAI)": "0xDA10009cBd5D07dd0CeCc66161FC93D7c9000da1",
+        "USD Coin (USDC)": "0x0b2C639c533813f4Aa9D7837CAf62653d097Ff85",
+        "USD Coin (Bridged from Ethereum) (USDC.e)": "0x7F5c764cBc14f9669B88837ca1490cCa17c31607",
         "Wrapped BTC (WBTC)": "0x68f180fcCe6836688e9084f035309E29Bf0A2095",
         "ChainLink Token (LINK)": "0x350a791Bfc2C21F9Ed5d10980Dad2e2638ffa7f6",
+        "Wrapped liquid staked Ether 2.0 (wstETH)": "0x1F32b1c2345538c0c6f582fCB022739c4A194Ebb",
+        "USDe (USDe)": "0x5d3a1Ff2b6BAb83b63cd9AD0787074081a52ef34",
+        "Wrapped Ether (WETH)": "0x4200000000000000000000000000000000000006",
+        "Dai Stablecoin (DAI)": "0xDA10009cBd5D07dd0CeCc66161FC93D7c9000da1",
+        "ENA (ENA)": "0x58538e6A46E07434d7E7375Bc268D3cb839C0133",
+        "Optimism (OP)": "0x4200000000000000000000000000000000000042",
+        "BlackRock USD Institutional Digital Liquidity Fund (BUIDL)": "0xa1CDAb15bBA75a80dF4089CaFbA013e376957cF5",
+        "Worldcoin (WLD)": "0xdC6fF44d5d932Cbd77B52E5612Ba0529DC6226F1",
+        "Lido DAO Token (LDO)": "0xFdb794692724153d1488CcdBE0C56c252596735F",
+        "Renzo Restaked ETH (ezETH)": "0x2416092f143378750bb29b79eD961ab195CcEea5",
+        "Pyth Network (PYTH)": "0x99C59ACeBFEF3BBFB7129DC90D1a11DB0E91187f",
+        "Pendle (PENDLE)": "0xBC7B1Ff1c6989f006a1185318eD4E7b5796e66E1",
+        "Frax (FRAX)": "0x2E3D870790dC77A83DD1d18184Acc7439A53f475",
+        "Optimism tBTC v2 (tBTC)": "0x6c84a8f1c29108F47a79964b5Fe888D4f4D0dE40",
+        "Synthetix Network Token (SNX)": "0x8700dAec35aF8Ff88c16BdF0418774CB3D7599B4",
+        "Coinbase Wrapped Staked ETH (cbETH)": "0xadDb6A0412DE1BA0F936DCaeb8Aaa24578dcF3B2",
+        "1INCH Token (1INCH)": "0xAd42D013ac31486B73b6b059e748172994736426",
+        "LayerZero (ZRO)": "0x6985884C4392D348587B19cb9eAAf157F13271cd",
+        "Wormhole Token (W)": "0xB0fFa8000886e57F86dd5264b9582b2Ad87b2b91",
+        "Frax Ether (frxETH)": "0x6806411765Af15Bddd26f8f544A34cC40cb9838B",
+        "Celo native asset (CELO)": "0x9b88D293b7a791E40d36A39765FFd5A1B9b5c349",
+        "Staked Frax Ether (sfrxETH)": "0x484c2D6e3cDd945a8B2DF735e079178C1036578c",
+        "Frax Share (FXS)": "0x67CCEA5bb16181E7b4109c9c2143c24a1c2205Be",
+        "yearn.finance (YFI)": "0x9046D36440290FfDE54FE0DD84Db8b1CfEE9107B",
+        "WOO (WOO)": "0x871f2F2ff935FD1eD867842FF2a7bfD051A5E527",
+        "Rocket Pool Protocol (RPL)": "0xC81D1F0EB955B0c020E5d5b264E1FF72c14d1401",
+        "Frax USD (frxUSD)": "0x80Eede496655FB9047dd39d9f418d5483ED600df",
+        "Balancer (BAL)": "0xFE8B128bA8C78aabC59d4c64cEE7fF28e9379921",
+        "TerraUSD (UST)": "0xFB21B70922B9f6e3C6274BcD6CB1aa8A0fe20B80",
+        "Kyber Network Crystal v2 (KNC)": "0xa00E3A3511aAC35cA78530c85007AFCd31753819",
+        "Autonolas (OLAS)": "0xFC2E6e6BCbd49ccf3A5f029c79984372DcBFE527",
+        "Dola USD Stablecoin (DOLA)": "0x8aE125E8653821E851F12A49F7765db9a9ce7384",
+        "Velodrome (VELO)": "0x3c8B650257cFb5f272f799F5e2b4e65093a11a05",
+        "USD+ (USD+)": "0x73cb180bf0521828d8849bc8CF2B920918e23032",
+        "SWEAT (SWEAT)": "0x38761749330c23D681d136e8ea3FC47d4Bb93Db3",
         "Synth sUSD (sUSD)": "0x8c6f28f2F1A3C87F0f938b96d27520d9751ec8d9",
-        "Lyra Token (LYRA)": "0x50c5725949A6F0c72E6C4a641F24049A917DB0Cb",
+        "Dimo (DIMO)": "0x5eAA326fB2fc97fAcCe6A79A304876daD0F2e96c",
         "Synth sETH (sETH)": "0xE405de8F52ba7559f9df3C368500B6E6ae6Cee49",
-        "Synth sETH (sETH)": "0xE405de8F52ba7559f9df3C368500B6E6ae6Cee49",
-        "Synth sBTC (sBTC)": "0x298B9B95708152ff6968aafd889c6586e9169f1D",
-        "Synth sLINK (sLINK)": "0xc5Db22719A06418028A40A9B5E9A7c02959D0d08",
-        "beefy.finance (BIFI)": "0x4E720DD3Ac5CFe1e1fbDE4935f386Bb1C66F4642",
+        "Moo BIFI (mooBIFI)": "0xc55E93C62874D8100dBd2DfE307EDc1036ad5434",
+        "Aura (AURA)": "0x1509706a6c66CA549ff0cB464de88231DDBe213B",
+        "Bolide (BLID)": "0x048C6bAd48C51436764ed1FdB3c9D1c25d2C0ada",
+        "Spectra Token (SPECTRA)": "0x248f43B622cE2F35A14dB3FC528284730b619cD5",
+        "Penpie Token (PNP)": "0xC4a65A93dD6CD9717551ebE827E8baEe025d1d7E",
+        "Extra Finance (EXTRA)": "0x2dAD3a13ef0C6366220f989157009e501e7938F8",
+        "Sipher Token (SIPHER)": "0xb94944669f7967E16588E55Ac41Be0d5ef399DcD",
+        "Tarot (TAROT)": "0x1F514A61bcde34F94Bc39731235690ab9da737F7",
         "Thales DAO Token (THALES)": "0x217D47011b23BB961eB6D93cA9945B7501a5BB11",
+        "Synth sBTC (sBTC)": "0x298B9B95708152ff6968aafd889c6586e9169f1D",
+        "Nya (NYA)": "0x38F9bf9dCe51833Ec7f03C9dC218197999999999",
+        "iBTC (IBTC)": "0x2bAa7E92F3F14883264BfA63058cC223Ad719438",
+        "Everclear (NEXT)": "0x58b9cB810A68a7f3e1E4f8Cb45D1B9B3c79705E8",
+        "PoolTogether (POOL)": "0x395Ae52bB17aef68C2888d941736A71dC6d4e125",
+        "TrueUSD (TUSD)": "0xcB59a0A753fDB7491d5F3D794316F1adE197B21E",
+        "ECO (ECO)": "0xe7BC9b3A936F122f08AAC3b1fac3C3eC29A78874",
+        "Rigo Token (GRG)": "0xEcF46257ed31c329F204Eb43E254C609dee143B3",
+        "Synth sLINK (sLINK)": "0xc5Db22719A06418028A40A9B5E9A7c02959D0d08",
+        "Rari Governance Token (RGT)": "0xB548f63D4405466B36C0c0aC3318a22fDcec711a",
+        "YieldFi yToken (yUSD)": "0x895e15020C3f52ddD4D8e9514eB83C39F53B1579",
+        "Wombat Token (WOM)": "0xD2612B256F6f76feA8C6fbca0BF3166D0d13a668",
+        "Giveth Token (GIV)": "0x528CDc92eAB044E1E39FE43B9514bfdAB4412B98",
+        "Jarvis Reward Token (JRT)": "0x15e770B95Edd73fD96b02EcE0266247D50895E76",
+        "Dentacoin (DCN)": "0x1da650C3B2DaA8AA9Ff6F661d4156Ce24d08A062",
+        "CheckDot (CDT)": "0x0cBD6fAdcF8096cC9A43d90B45F65826102e3eCE",
+        "ROOBEE (ROOBEE)": "0xb12c13e66AdE1F72f71834f2FC5082Db8C091358",
+        "Hop (HOP)": "0xc5102fE9359FD9a28f877a67E36B0F050d81a3CC",
+        "BOB (BOB)": "0xB0B195aEFA3650A6908f15CdaC7D92F8a5791B0B",
+        "Ionic (ION)": "0x887d1c6A4f3548279c2a8A9D0FA61B5D458d14fC",
+        "Lyra Token (LYRA)": "0x50c5725949A6F0c72E6C4a641F24049A917DB0Cb",
+        "xSpace Token (xSPACE)": "0x1D1498166DDCEeE616a6d99868e1E0677300056f",
+        "Geyser (GYSR)": "0x117cFd9060525452db4A34d51c0b3b7599087f05",
+        "PickleToken (PICKLE)": "0x0c5b4c92c948691EEBf185C17eeB9c230DC019E9",
+        "O3 Swap Token (O3)": "0xEe9801669C6138E84bD50dEB500827b776777d28",
+        "RadioShack Token (RADIO)": "0xf899e3909B4492859d44260E1de41A9E663e70F5",
+        "Zunami Token (ZUN)": "0x25193034153AfB4251a8E02a8Db0DeaeF4C876F6",
+        "Equalizer (EQZ)": "0x81aB7E0D570b01411fcC4afd3D50eC8C241cb74b",
+        "Collab.Land (COLLAB)": "0x8B21e9b7dAF2c4325bf3D18c1BeB79A347fE902A",
+        "IronBank (IB)": "0x00a35FD824c717879BF370E70AC6868b95870Dfb",
+        "Dackie Token (DACKIE)": "0x47C337Bd5b9344a6F3D6f58C474D9D8cd419D8cA",
+        "Quack Token (QUACK)": "0x59DEBED8D46a0cB823D8BE8b957adD987eAd39aa",
+        "DexToro Pro (DTORO)": "0x1CeF2d62aF4cd26673C7416957CC4Ec619A696a7",
+        "Aave Optimism WBTC (aOptWBTC)": "0x078f358208685046a11C85e8ad32895DED33A249",
+        "Inception Restaked stETH (InstETH)": "0xd08C3F25862077056cb1b710937576Af899a4959",
+        "Aave Optimism wstETH (aOptwstETH)": "0xc45A479877e1e9Dfe9FcD4056c699575a1045dAA",
+        "Aave Optimism rETH (aOptrETH)": "0x724dc807b04555b71ed48a6896b6F41593b8C637",
+        "Zunami Omni ETH (zunETH)": "0x2d691C2492e056ADCAE7cA317569af25910fC4cb",
+        "Aave Optimism WETH (aOptWETH)": "0xe50fA9b3c56FfB159cB0FCA61F5c9D750e8128c8",
+        "Aave Optimism AAVE (aOptAAVE)": "0xf329e36C7bF6E5E86ce2150875a84Ce77f477375",
+        "Aave Optimism LINK (aOptLINK)": "0x191c10Aa4AF7C30e871E70C95dB0E4eb77237530",
+        "Staked USDe (sUSDe)": "0x211Cc4DD073734dA055fbF44a2b4667d5E5fE5d2",
+        "Frax Price Index (FPI)": "0xC5d43A94e26fCa47A9b21CF547ae4AA0268670E1",
+        "Aave Optimism LUSD (aOptLUSD)": "0x8Eb270e296023E9D92081fdF967dDd7878724424",
+        "Axelar Wrapped USDC (axlUSDC)": "0xEB466342C4d449BC9f53A865D5Cb90586f405215",
+        "exactly USDC (exaUSDC)": "0x81C9A7B55A4df39A9B7B5F781ec0e53539694873",
+        "Aave Optimism USDC (aOptUSDC)": "0x625E7708f30cA75bfd92586e17077590C60eb4cD",
     },
     # Testnet
     {
@@ -30,9 +116,8 @@ nfts_values = [
     {},
 ]
 
-
 # From Ledger trusted tokens data
-# extracted on 2024-06-02T15:49
+# extracted on 2025-03-18T18:41
 # from https://raw.githubusercontent.com/LedgerHQ/ledger-live/develop/libs/ledgerjs/packages/cryptoassets/src/data/evm/10/erc20.json
 ledger_tokens = {
     "0xe0bb0d3de8c10976511e5030ca403dbf4c25165b": {
@@ -99,6 +184,10 @@ ledger_tokens = {
         "ticker": "AELIN",
         "signature": "30440220312bf72716e79f976aed82a008bb2a9af7975cb686f2d132f0dd7a85c333cfb102202240aa790811ebe70fe2c7f5c97c3f4fba2d943f4e8a459ab8fe11ef628a385b",
     },
+    "0x9485aca5bbbe1667ad97c7fe7c4531a624c8b1ed": {
+        "ticker": "EURA",
+        "signature": "304502210096ef0680a74af2f0384f49894ddeb2fd56896f2958a470bf7beaa6c294bca9e9022069762f00cbbbebc65f07a381889d37158945e615726a38348931b320ff5b385c",
+    },
     "0x3e29d3a9316dab217754d13b28646b76607c5f04": {
         "ticker": "ALETH",
         "signature": "30440220707a4697084cac388555cff1a6b575992e7e619d342ec54d7e5dc677a6d774480220092deb62208d649f817f8475325514cc4a4a9db8b51509f3fc0bb83eb0257ca9",
@@ -112,8 +201,8 @@ ledger_tokens = {
         "signature": "3044022074bfccbb5f25d18a5154efd1d0666393bf37be304aae9f780b645fdc8456101502202a424edc5354236626ed03e65bf42f12a01c7f97a7134ab092d9fa859f96ea9b",
     },
     "0x0000206329b97db379d5e1bf586bbdb969c63274": {
-        "ticker": "AGUSD",
-        "signature": "3045022100feeaf946b3ee719ef3907ce3553a4edecc0e2ae71648b03f1c738d7610195b6902205781bf41566d38f281540e91eb1bb2068e409f8cb20df54781d8d2afff05361f",
+        "ticker": "USDA",
+        "signature": "3044022056acc550e819dd3acdabeda9547b5d3e609db85c974fec58e02674392e71654302200ab0fdc302d059cb38b0f6598fd1e0457cbaffe2229269ef64cc20dcdc41bdd0",
     },
     "0xaeaeed23478c3a4b798e4ed40d8b7f41366ae861": {
         "ticker": "ANKR",
@@ -127,9 +216,17 @@ ledger_tokens = {
         "ticker": "AI",
         "signature": "304402206417b6fe79788a93e80a3f80d51420590371377d56cfa8eeee5eb332d717f58502201f1131534a90a5bfe6f7717e5a629b79b93004348d2c383047ca66e1c48d83cf",
     },
+    "0xaec9e50e3397f9ddc635c6c429c8c7eca418a143": {
+        "ticker": "ARCUSD",
+        "signature": "3044022061c0a41d9748fd7f5021bf9ae77aed95da9de7c3f14c4b86c3e390e4374df3f502206e314a32cae3f9a7b51b7ef3f050211bfee77b712e1524829ef280a170c5080c",
+    },
     "0xb532178708814f0c174b29b991d2b355106afbc3": {
         "ticker": "AST",
         "signature": "30440220250c1b34b5e825e6f3e21d8dfde7e55e1e9a0849fbfefbf980c890d135dcca3b02201c1657bb8433eaa3dad8162e30807254537e6547f223308d42b2e212dd3a8509",
+    },
+    "0xfc2e6e6bcbd49ccf3a5f029c79984372dcbfe527": {
+        "ticker": "OLAS",
+        "signature": "3045022100d0539ca7d8fa1666cd76b5d96d6b34bb4f83b80c69dc68b290603ebe834e8b2f02203fb3c10a2620639721ea669425c3a48aac8e7cf96ade552afae80e1ff15c0fc7",
     },
     "0xb829b68f57cc546da7e5806a929e53be32a4625d": {
         "ticker": "AXLETH",
@@ -150,6 +247,10 @@ ledger_tokens = {
     "0xc02b55bb2fe3643e1955b13515396ce23b110f80": {
         "ticker": "AXRAS",
         "signature": "30440220689ea56959f038230854e075b4583fd7d2bb510ad3481b5eef76fd63e776431202202d4026ec91835146714152e2280f32bb79530e8a56b2feb12d35754f491be524",
+    },
+    "0xd336c74b840f9962cf2c666f8666d6d61ec24440": {
+        "ticker": "BALN",
+        "signature": "304402205be7d412fcf9f45b7d911a7ee267ce3f05722f0e0db8c6c50b01271064cbb06a02206ef55e4988eb0a4db2a88656f758422e7ac532cb98a464b80d9057823812cc4a",
     },
     "0xfe8b128ba8c78aabc59d4c64cee7ff28e9379921": {
         "ticker": "BAL",
@@ -179,6 +280,10 @@ ledger_tokens = {
         "ticker": "BUSD",
         "signature": "3045022100a296c68a3cb9d579c83e4a6b8d3caa7f777abfcbc841f67a832ebfcff80aeb9a02200584a0fd2436c79f7d43fa6e78832b9a3bff4de709e362878aa7607808116b7c",
     },
+    "0xb5090d514bcaca7dafb7e52763658844121f346d": {
+        "ticker": "BNRY",
+        "signature": "304402205f9ca15984892b8f26aef5cef68a6863474fe2b12ec544f4a3294cb40359ea960220288f99cb9bcbbc1dd7fa41aa753e410757ec7304740ed88d99f5406c8c7c74b3",
+    },
     "0xe3c332a5dce0e1d9bc2cc72a68437790570c28a4": {
         "ticker": "VEE",
         "signature": "3045022100b38030ade6f6b040c7563bae700c6e8b9ffddc125bd5975c59593c0f8678efff0220784afd4b2f48620a9ca38c6f540edcc6ed652ba8814daa8ef62c4279772b4ad5",
@@ -186,6 +291,10 @@ ledger_tokens = {
     "0xb0b195aefa3650a6908f15cdac7d92f8a5791b0b": {
         "ticker": "BOB",
         "signature": "3045022100fbbd4db017e6655172b5b11ab6de7bff40e4a1451a2dffb93b843993bcf1b3a902201e167c549e02595e4e0106f1118457a1aa323028783ff14cb76d6499de9b5c5a",
+    },
+    "0x087c440f251ff6cfe62b86dde1be558b95b4bb9b": {
+        "ticker": "BOLD",
+        "signature": "30450221009699bed5729d009f265a61d0f5defba8bb9b4550a1e7a667bb46e10a0e640d1c02200aacf4628d3a7a5b14fda648fcc5ec6fc7a4b7f733489b3527cbb183fd47fe03",
     },
     "0x135c78d7f52aab6e9f17bcf4a9e8627aa233d050": {
         "ticker": "BOO",
@@ -227,6 +336,10 @@ ledger_tokens = {
         "ticker": "NEXT",
         "signature": "304402203e8ac3a0e6933c2c4d731f5acce52ad657bbf91b7daf48f02946ad721232915e02207a81fd2559fb3ca00af4ac6d402d00d847404cbc9df8c68768fab39c13ef31aa",
     },
+    "0x000000000000012def132e61759048be5b5c6033": {
+        "ticker": "CX",
+        "signature": "30450221009b66d2faf44370e5c207d9864c37d5506f9b96dd4d097e014b91c6c1941d23f002203a365715e59e539861cd71b29b55735cc02bae2aeaf1b4db8a86b7dc6f738627",
+    },
     "0xf8e943f646816e4b51279b8934753821ed832dca": {
         "ticker": "CTH",
         "signature": "304402200bf9d3f49cfbefad8155082ff9bc9697f8ac8d7d01718008a98fdf0aecca169c02207a35b918330f544e0554e4c7a7b5f5ef41ffa179f0bc36d74d241d63e3233257",
@@ -246,6 +359,10 @@ ledger_tokens = {
     "0x47c337bd5b9344a6f3d6f58c474d9d8cd419d8ca": {
         "ticker": "DACKIE",
         "signature": "30440220503d1386a328a43a1211f2c50da77e9cf7dd51a646a0585d4f8838812aff811f02202286b8124abdc36472abce4047bc9f1bf858d114b6029947969f744de2959b6e",
+    },
+    "0x1d01aae6ef5d13406fdabab0e6c12fb862e342c5": {
+        "ticker": "DCKUSD",
+        "signature": "304402206b24aa4165c73dc467884938afcdb90681b87273e98cc0013d1987aa1305fe4a022051b9055714b4dbe122f6bcd7c455e79d396e4085515e5de08ce4fb0bd350a656",
     },
     "0x970d50d09f3a656b43e11b0d45241a84e3a6e011": {
         "ticker": "DAI+",
@@ -267,9 +384,17 @@ ledger_tokens = {
         "ticker": "USDD",
         "signature": "3045022100c61d0a0cf1ee5a6f3cdb2267248f992f2463e6e60d84466cf25c03e75b23957b0220589cc6662e348b860455bd9ab3effe29bde14ed0e5ac6c82c5e2baf8eb8e6d7a",
     },
+    "0x69420f9e38a4e60a62224c489be4bf7a94402496": {
+        "ticker": "MONEY",
+        "signature": "304402201be7ee4bc74fd1e1392b77593505a299cca615cd5467861738f9e7d758b57da6022017195c32a05277b5498a6367bdd6c24a92e4c30866262eb85073ccc3a49ca822",
+    },
     "0x1da650c3b2daa8aa9ff6f661d4156ce24d08a062": {
         "ticker": "DCN",
         "signature": "304502210083784345d8fc7a6928932d61050a0c4d58c7480de58cea30887839156ef3d4ec02200d48e39de4ce8835b72acf3b75269cb5a6112c2e2fe87be9423e5f77c2463517",
+    },
+    "0x33800de7e817a70a694f31476313a7c572bba100": {
+        "ticker": "DRV",
+        "signature": "304502210095f80d927fd3142f8c41e7f60e3d5ee9eb683b1062834a70bbc9d1917f1a9579022022990d99c015ac85372906d872c59be9b4f529830e62e3c9132322b4215abaf0",
     },
     "0x1cef2d62af4cd26673c7416957cc4ec619a696a7": {
         "ticker": "DTORO",
@@ -343,6 +468,10 @@ ledger_tokens = {
         "ticker": "FNLS",
         "signature": "3044022064bcfb5aa31282d0f7d495c112c05ad44c1773c5308b3f7b5c8cd3452bb55391022028630a24e472984817b164d9d2310eb565281e665c08a56acec132ee51775a66",
     },
+    "0x79e6c6b6aaba4432fabacb30cc0c879d8f3e598e": {
+        "ticker": "FOAM",
+        "signature": "3045022100ba3c31a864eb9faf95025f01bca7d26544de4b6c7a12cb9704bbb3ca6eca39c5022022daa8e2b56848245c90bf751e992d72bbfc42d042a96783df97c4756acb82e2",
+    },
     "0x2e3d870790dc77a83dd1d18184acc7439a53f475": {
         "ticker": "FRAX",
         "signature": "3045022100ebbdb9e4c48cde940e0607fd864793b0c96c166c31a5d5a0161d1f2e81a0e0ba0220698920c290bad8e3d2a27e035acaa2584644a19ed5051b67f91632f5b27a102c",
@@ -359,21 +488,33 @@ ledger_tokens = {
         "ticker": "FUSE",
         "signature": "3045022100fc4b3193635d7cb46c54388a2089f51d3a1299a96b49ca588543970c6dd4ae5402205f69ad11c6e3b78bbf07c7a1a7237e6f0b5b68e5329a6ff82309e741ebc6ba22",
     },
-    "0x4f604735c1cf31399c6e711d5962b2b3e0225ad3": {
-        "ticker": "USDGLO",
-        "signature": "304402203fdcf28cf5aaddf4042e1935dd1f2dfde3183f679b52234e2c4e8e8e6543505e02200df74a60df23c89b7363fa5cc40d1cabb17599e3b4bf6564088556c48b74e17d",
+    "0x528cdc92eab044e1e39fe43b9514bfdab4412b98": {
+        "ticker": "GIV",
+        "signature": "30440220315d526c4a89a844a0d8445b9ca58d0c5d146eaa054ca704949076bb2f6120fa02203c7de76fe6db01ecc59033b1a09a141271ef5f6ebbf4fc808de5549760416101",
     },
     "0x181d739a0c016bd0b32bd6e47cbca70d3a0e69d7": {
         "ticker": "GBL",
         "signature": "3045022100aa78f8bab75da1fc0e8bc7c1cc781abe9bba19691c22287c66dc4002995722fe022041c2e45e316dc5275d96e8842e81308b9c98e1609779ef3dbaffc3cc8086e0ed",
     },
+    "0x4f604735c1cf31399c6e711d5962b2b3e0225ad3": {
+        "ticker": "USDGLO",
+        "signature": "304402203fdcf28cf5aaddf4042e1935dd1f2dfde3183f679b52234e2c4e8e8e6543505e02200df74a60df23c89b7363fa5cc40d1cabb17599e3b4bf6564088556c48b74e17d",
+    },
     "0x42069d11a2cc72388a2e06210921e839cfbd3280": {
         "ticker": "GNOME",
         "signature": "30450221008a5b29fd55154f63f53cb9c2e2f76b4d46e2177e6f39e042c7a86d576467481a022059a17c180a383f6bb4fcce07a034e7e1cda352ba972e517b6e3ebfc3a6f8955a",
     },
+    "0xddf7d080c82b8048baae54e376a3406572429b4e": {
+        "ticker": "OOOOOO",
+        "signature": "304402205fcbf0afbeeab706d67de16e76e4f30cd0272fc279c46fba05709a6dac171afc02202c307d4025c1af599cc45de1fe400f0f177d618d7e0aa42343e117d609bb0f83",
+    },
     "0xfd389dc9533717239856190f42475d3f263a270d": {
         "ticker": "GRAIN",
         "signature": "3045022100f7fde547f18d1e01fdb7e4a0ff598bec5e221ee9ebc47c08c921fe6ba5ee48b70220763b9e5be73820cf4056479ee8517d24de6263a603972d15eeddc626add1edf9",
+    },
+    "0xca5d8f8a8d49439357d3cf46ca2e720702f132b8": {
+        "ticker": "GYD",
+        "signature": "3045022100a50ae193a1a15e00b058b82a8ac595ebd6b1bb4b8f750b237ce92107308f203702206b77693ea7e306eeae10679bd320d9a4b5ad1eab92712ce7494da13e3b6354e7",
     },
     "0x10398abc267496e49106b07dd6be13364d10dc71": {
         "ticker": "HAI",
@@ -399,9 +540,29 @@ ledger_tokens = {
         "ticker": "PACT",
         "signature": "304402203351fc165a0f4865e205a748c3ef07b540c356059d95a4c90aa5e94e83078608022002a76d1457baccdb3f84c915e161627fccc30a4930012ee85230b169f5969ad5",
     },
+    "0x5a7a183b6b44dc4ec2e3d2ef43f98c5152b1d76d": {
+        "ticker": "INETH",
+        "signature": "30450221009144edf9fcb03929974fe87e6a5f3de1d145ef40694d6db33e5409da5585ca4d02207e14fb5c00c4cbaaa7932687260e7f4322f729dd3cc3ba67c0688e60bd3c4ff0",
+    },
+    "0xd08c3f25862077056cb1b710937576af899a4959": {
+        "ticker": "INSTETH",
+        "signature": "3045022100c27c0c9a10638a897be7c834e42a4b1004355d8d696aae844e78314742216133022074636ea3ff0925fb6bf936b8838ce639017724a029d618490350d9157acd0ac8",
+    },
     "0x2b1d36f5b61addaf7da7ebbd11b35fd8cfb0de31": {
         "ticker": "ITP",
         "signature": "3044022014a385a7fb470b94c02f7bf9e8aef2e073bfb61a9e027ec9534227440c8d8cc402204b5da0ff3e83b542583e85c7e9ca5793bc7596020e81eb4cac31e5b4de404ce4",
+    },
+    "0x887d1c6a4f3548279c2a8a9d0fa61b5d458d14fc": {
+        "ticker": "ION",
+        "signature": "3044022021a09abde6209682bdb8b67640e37770f62ab4f9d1d11bd01a9cc1cdf014dcf002203ff3489c96cbfe86b66de2f134a4ae35d5f3c1d698676d9c460b365f256a4995",
+    },
+    "0xb2918350826c1fb3c8b25a553b5d49611698206f": {
+        "ticker": "IONUSDT",
+        "signature": "3045022100d2f6aaf27299f8b5c5ce331f85d05562da64b91cb93653726e2a9f8fe59469110220090ceb656b79db833fb24d8a16e45cf8e73c65c526ab7e99fccf8bc2a9d375c9",
+    },
+    "0x50549be7e21c3dc0db03c3abab83e1a78d07e6e0": {
+        "ticker": "IONUSDC",
+        "signature": "304402206a93e73a9955cc6242866d8a2fd3c61940757f353244524de7a53e23cae17f50022079c316b95e00a2f147784c1974d00ae8b45381fb21e005d2557138bf0a67e3af",
     },
     "0x00a35fd824c717879bf370e70ac6868b95870dfb": {
         "ticker": "IB",
@@ -419,9 +580,21 @@ ledger_tokens = {
         "ticker": "JEFE",
         "signature": "304502210096ca340b25a0e7c1edb765ee3db8190017b2995077f360ffe35d0df566a12bf102200e5860a8006abfb985d75df6dc2d2061727ccaef7977b25b38b938a0d7c8792d",
     },
+    "0x4186bfc76e2e237523cbc30fd220fe055156b41f": {
+        "ticker": "RSETH",
+        "signature": "304402203a3dd11dae001c4ee1abf30f8f8e27f64b3494d36f6937b9149ced367179eecd022055a464082bbb93dc4e34a298ec1365cfd0cf5220f074de5f2641adf9fa3bce13",
+    },
+    "0x73e0c0d45e048d25fc26fa3159b0aa04bfa4db98": {
+        "ticker": "KBTC",
+        "signature": "304402207e58fa5fb810891adc9e5a187196751ac0f873f5cf26edd464beed1f410f1bde0220665fce17097dd2723ce518422c7771fef1c95ef75751230f9546845fe725b822",
+    },
     "0xf98dcd95217e15e05d8638da4c91125e59590b07": {
         "ticker": "KROM",
         "signature": "304402200d9f6451797f301919c4dc2ddc97bf8bb84e8633efed1a0f0dbe2509ad6f17d2022060205e53f18679b19f7d4d2a8c9639ea383183d0a3bb63854c3e3e983546311f",
+    },
+    "0x2ed6222cb75e353b8789bec7bb443b7ec9022021": {
+        "ticker": "KRL",
+        "signature": "30450221008006e9675c27645907b39eb7d55fc4672e03684af9858cb60a5fe7ee852bfc45022026653eca095d9df0f8085ff966e40b23baef47cd502920fbfc209209ca14b373",
     },
     "0x3a18dcc9745edcd1ef33ecb93b0b6eba5671e7ca": {
         "ticker": "KUJI",
@@ -439,6 +612,14 @@ ledger_tokens = {
         "ticker": "L2DAO",
         "signature": "3045022100d447cea8f40e6741cd1336d42bc1f62dcdea0f4b2625906dfa58541690242195022005e2df289941fbb3b272483a0ac9882ba9b1cbbc9251ac3569e98f5348d24788",
     },
+    "0x46777c76dbbe40fabb2aab99e33ce20058e76c59": {
+        "ticker": "L3",
+        "signature": "304402201e8f8b1989a96e120ce8a84a3c2d05e4c9d0048162408a63431fc16fc1472b690220569a368bc2dcbc203dfad6890648d5de9fb129d223dd377ff0ff3dec19feec9d",
+    },
+    "0x6985884c4392d348587b19cb9eaaf157f13271cd": {
+        "ticker": "ZRO",
+        "signature": "3045022100ab567b1c6e28d820c18e6a0bd369b88a6e35fbbcc22fa1e8b1f1d7353dd22c7e022043aff6f09a292aae9ae6ac4d0c7a7e4925c96bae6e1c4449110982d0a0d832b7",
+    },
     "0x3ed9acaac7bd974eb83a8ea6432a239e3c829d5d": {
         "ticker": "2192",
         "signature": "3045022100903cbb789aeae89d1795d0193b79e19cedf50a58f79457f05058fa5536aa98ed022034ec4217538175ea7f33b6edf1e4a916017b3d47dd5734f322a577a807759ee5",
@@ -455,17 +636,25 @@ ledger_tokens = {
         "ticker": "LYRA",
         "signature": "304402203d9ab49ebf744823c1dd174edb284e60a652ae9dd29dfdf7b38896ddab2cdf4702200b4ec99299ab9782a5207cd08606b69d0d47a931a7676057994733ae8dd98443",
     },
-    "0xb153fb3d196a8eb25522705560ac152eeec57901": {
-        "ticker": "MIM",
-        "signature": "30440220276ca398b29ea9bfcc2a4218dc6cb7e5110477a4b843b397adddc77dfc3579ce0220503084267504f7e46517246a5b80ee60eae003046cbce0e1b2de3e5eed9a4050",
-    },
     "0x17aabf6838a6303fc6e9c5a227dc1eb6d95c829a": {
         "ticker": "TUX",
         "signature": "30450221008d4309a26fa1471d312fd8cf568fdc8d11612601680ffec8768abd9863d0da4f02203d5e7a2088c27b1a602c1d9caa4cbb3f17c6e19f591c6a21228b3667ad51d570",
     },
+    "0xb153fb3d196a8eb25522705560ac152eeec57901": {
+        "ticker": "MIM",
+        "signature": "30440220276ca398b29ea9bfcc2a4218dc6cb7e5110477a4b843b397adddc77dfc3579ce0220503084267504f7e46517246a5b80ee60eae003046cbce0e1b2de3e5eed9a4050",
+    },
     "0xdfa46478f9e5ea86d57387849598dbfb2e964b02": {
         "ticker": "MAI",
         "signature": "304402206ea60925810f8d32f0b36785d78a490a08a23cbebffbd0a40e9494611bbd10cc022018e3076be9f49a129a1a718f88a7f7d60c056e62d31d3ec5529609afc5fea65d",
+    },
+    "0x3925f9820c312d968644f12ebd314c13558a7c05": {
+        "ticker": "MASKS",
+        "signature": "304402205efc331a2b22ac7c277f0351659ffb753855071ec2577e6f53b2105de802e70202207dad7b0d15e2c10ebec64741382eff530f177a9353e14af4ace75b54d50cbd4b",
+    },
+    "0xdd462e9399624dfcf73018793bd50a7ef47940b9": {
+        "ticker": "MEED",
+        "signature": "3044022028d4dced678e78963a18cdd0291759b5b09fcc2997baa30dcb339ba0e68739e60220734a4bea0243892677e0c87dcb401092ba16432e1f6e1d76dbfce60293afc9aa",
     },
     "0x929b939f8524c3be977af57a4a0ad3fb1e374b50": {
         "ticker": "MTA",
@@ -507,9 +696,21 @@ ledger_tokens = {
         "ticker": "NBL",
         "signature": "30450221009cef4f141fac519284db50bd06d281205ca1261d0169c7602ce06b8ea67a006102200abbb8bc29cb49f00859d8b436278cc6981d2b406384147a9a26e062f9340aa4",
     },
+    "0x139052115f8b1773cf7dcba6a553f922a2e54f69": {
+        "ticker": "(=___=)",
+        "signature": "304502210085ce362bedd78ec43a28b525e87f1f65b71c3f7dffd9cea1d09114361490d2dd022001cf20fed68a838649da4d9bd270f2ba1846ecff644b793a4e0735562224f3cc",
+    },
+    "0xd42fe55e8a43b546aa75fda6483073be1d7ef74c": {
+        "ticker": "NEROX",
+        "signature": "3044022039af36bfa09f17dc568f89f833ca740153047b03ecf66ffe781d8ac2dbd362e302206e6c82221104491528f1558571055ef1ada400dc84c82dbfcba0b32946dde4cd",
+    },
     "0x8637725ada78db0674a679cea2a5e0a0869ef4a1": {
         "ticker": "NFTE",
         "signature": "3045022100e708e157d601fdc41cfa766784220aacf3e9e077f34fda96c8a022f5d744609702204106ba26b8a58b15d3c1c9a35ad27dfb14593d813c8abe26d0e0e006b7ca21b9",
+    },
+    "0x38f9bf9dce51833ec7f03c9dc218197999999999": {
+        "ticker": "NYA",
+        "signature": "3044022078e21f4c7c69bc7eb2062c546d968d31cef6593267e4c093dfafeef64ba5cd4702203f470a123644c2e20d0576d4648c3c55b4d6a8118da52a476f1998574c76c3d2",
     },
     "0xee9801669c6138e84bd50deb500827b776777d28": {
         "ticker": "O3",
@@ -551,13 +752,25 @@ ledger_tokens = {
         "ticker": "TBTC",
         "signature": "30450221008629a5bd48207e4433797074524cc94df5a65ea3e04ff54a316b31a49beaad33022013b825db72c231e0def00362d240ecda82b3eb34246c4f7cfb7ab88d5a1cbaff",
     },
+    "0x1f444e9fb735b2438bee3b841efea060d235abf1": {
+        "ticker": "OPUL",
+        "signature": "3044022041a4d0f059e20e59c97ae7a6dfcd5ff83565c0528b4f67332bd30dcc3e369e65022056172843db889032e3956175e3854017d49874ff7c7e031faec06d69d194933b",
+    },
     "0xcdb4bb51801a1f399d4402c61bc098a72c382e65": {
         "ticker": "OPX",
         "signature": "3045022100fff1ecd2f7f98c7fae891bd57b620db036d787c824a1f4420f33ce985a1c65a70220106de8f561410239ec707f1275307a49895410dabf22edd0ef143100337a4e9a",
     },
+    "0x4e200fe2f3efb977d5fd9c430a41531fb04d97b8": {
+        "ticker": "ORDER",
+        "signature": "3045022100be4483a92f40c9556e6df21c593755440057e179a0b834340bffbaa493e617b5022041061699b2307f95445e94e5b25fd7ecc70d371a8dcf200b4b2b8eaee1c86783",
+    },
     "0xbfd5206962267c7b4b4a8b3d76ac2e1b2a5c4d5e": {
         "ticker": "OSAK",
         "signature": "3044022043006663c40b0d5d81aeadde085285e269605be14af2717f3a65f12d02b2891f0220564633b309cca0ca662786c204f1206bf3281f5bf59ef3f1d44396deaa0eff8b",
+    },
+    "0xfe5b10f053871e66a319a57a16cf4e709f51367f": {
+        "ticker": "OVERPOWERED",
+        "signature": "3045022100d58f74de0ef357cdd0f7e4aee7dec9ede86eb225981f585e873e365af615935f02201d425a82b8731205c6949ab1ea4238e8d79ebb6a784a3dec2c34cf4275e32d75",
     },
     "0x3b08fcd15280e7b5a6e404c4abb87f7c774d1b2e": {
         "ticker": "OVN",
@@ -571,13 +784,25 @@ ledger_tokens = {
         "ticker": "PSP",
         "signature": "3045022100f8e88990e420df246280fa394d9f56b23aa0d68b72c638c456a3ddfefb82e34102205177bb03995b26b10efece9d934696d8a0ab2d8a4f73cae01b76a71191df6805",
     },
+    "0xd0cf4de352ac8dcce00bd6b93ee73d3cb272edc3": {
+        "ticker": "PCM",
+        "signature": "3044022030e44c610ecc3226a3316b0fe1914c580912bd585ce784251141b045e952331f0220059d84a81986abf54732c213c20fcdc43029c1a528dc05d760acd744e03a5fee",
+    },
     "0xbc7b1ff1c6989f006a1185318ed4e7b5796e66e1": {
         "ticker": "PENDLE",
         "signature": "3045022100b968b32a1b4650b1a4cb7d30d1381c5eb0351d362fb17cc4108b6b212cdfd0c1022057cc12a184207008b87ebdf33e52cdf637b1630ba4bada5f582c9810daf0cda1",
     },
+    "0xc4a65a93dd6cd9717551ebe827e8baee025d1d7e": {
+        "ticker": "PNP",
+        "signature": "304402201fd1fdcedd272cf5d29ebe37bdb5ea1b5df3fea8e5bf22c4a63f0653a1669bae022045eae3a1aba25572b750d0d3f42bce6ead712ab6b9a5acf69cfe0670bc66501c",
+    },
     "0x9e1028f5f1d5ede59748ffcee5532509976840e0": {
         "ticker": "PERP",
         "signature": "3044022056ed6b81178d51b231ebb0761aac78747335ad507400e4d32fef5abf647250d402206c0308e8aa00acab5c235d826dc691ff1be941ee13a209101bfc17952c6749ec",
+    },
+    "0xb9243c495117343981ec9f8aa2abffee54396fc0": {
+        "ticker": "USDPY",
+        "signature": "304402205e8e24d566aacd6287b03c3b32f0620de2d4138c76f79ef1d40ff1dca378bea2022020227a2630df5073755f85932210c95e23717b0900048456ae9f9232b9b6b3f2",
     },
     "0x35b5a3bf31b67f832230da9424824edc9f7ad98c": {
         "ticker": "PT",
@@ -623,6 +848,10 @@ ledger_tokens = {
         "ticker": "KITE",
         "signature": "3045022100cf35348f8e1ff30bc410ab7a308fef3eece16a4e3e09d6bad28e7f363f666de002201c7c7927893a817ec916e16578629496b3162820fc58231298a3ab3637092084",
     },
+    "0x023550adde4fa2f90d63a41d9282bee0294c04cd": {
+        "ticker": "PSTAKE",
+        "signature": "304402203d4a8ab040f5c4d038c05a2a1842e02ba300e23f904f03e6b095f373e9b7e4a0022074759fa1e8cc61f9005168273b1b5588d394b9f059252ca9918763cf15f25c48",
+    },
     "0x59debed8d46a0cb823d8be8b957add987ead39aa": {
         "ticker": "QUACK",
         "signature": "3045022100df784691e6520f0b58307f24bdb7b87e8f5b432fd0ca9e4f554e4a0a8261c25a022049250e9356879c0931bad2d9b1ce342abab1fa0911f80883661eacdf60696cd7",
@@ -663,6 +892,30 @@ ledger_tokens = {
         "ticker": "ROUTE",
         "signature": "3045022100f7506ac4b1ee290f765c33afce4e3fad2f83e5acbefd8ffcbcfbfb387078516a0220417cbd50d25f534033f4cded70c06e619f6797a75fcb1da0a82b2bae00cea3dd",
     },
+    "0x87eee96d50fb761ad85b1c982d28a042169d61b1": {
+        "ticker": "WRSETH",
+        "signature": "304402207817d73b75d73e3d1fed1874dc3b583c5d33756cf01beb22aa7071a8b685f45f02206263abe95f825a38794e7a05b6377179132d3af01147940e989d742c6f6b2b4d",
+    },
+    "0xe2dca969624795985f2f083bcd0b674337ba130a": {
+        "ticker": "SKR",
+        "signature": "30450221008b9d099e03ad8eaf3e66163d57e795d55a99829f231493123e4f53ee0206c902022013ef1c079610b3454d86555be14c515459077b41d94c852d50c3a615103fa1a2",
+    },
+    "0x7a1263ec3bf0a19e25c553b8a2c312e903262c5e": {
+        "ticker": "SAIL",
+        "signature": "30440220130e9c1265463bf8b956b99937f0b658168371dcdb675f7ab4269709c509f95f02207f7071c8a6dbbd472b9623382a84064f9e5a591427411bc4d5ebbfad06a9b2ed",
+    },
+    "0x2218a117083f5b482b0bb821d27056ba9c04b1d3": {
+        "ticker": "SDAI",
+        "signature": "30450221009e6637a48e994e5a9739accee9fcd2002636b88ee86f4a5efb7160ed3f38dbe6022013092598c5ac8213d0ae8fde95c04f94e0914502f141c883ad867e46e489f397",
+    },
+    "0xbc404429558292ee2d769e57d57d6e74bbd2792d": {
+        "ticker": "SUSX",
+        "signature": "304402206852ab64df30c93a71b4538f38c36abff529ff12351cc5c1db01261dc9ad8afb02203e6accb06fbeba8164eb210d441ec904b2c17bbfb5687e1ad27035419207c0ad",
+    },
+    "0x5f5292fe4583f476ab90fbf247999816a9503f9e": {
+        "ticker": "SMP",
+        "signature": "304402203dafc1a4eddb08b2824534788b626c8d6ddd048a64cdeae921499ad40523852d02201f1e4fbc61cd42c73ad3b5df871b4d44a1da669262dfd40c5bc9777679ef0740",
+    },
     "0x66e8617d1df7ab523a316a6c01d16aa5bed93681": {
         "ticker": "SHACK",
         "signature": "304402204aa645f5367b0ca3d9ed476a8ab640e3a49fc52b8507ba46b2ff87c0f009b00202207bb22adecd10c72c5be4f2c2f5a282fba84790a4a0790dfd5a1d04141523b793",
@@ -674,6 +927,10 @@ ledger_tokens = {
     "0x5ad323d764301e057614edb0449f470d68ea9485": {
         "ticker": "SIAS",
         "signature": "30440220696946f4be7ec09655d99c8704c00dbcc1cc6a4f3d7a076bb8d0022ec4132ddb0220792961309e7748448bfa838dc346d522c2fcb3a05e5ee1257d14542eaa29ee66",
+    },
+    "0xbcb49fcb41899e31e442a4d7439964966e0c9b28": {
+        "ticker": "SLN",
+        "signature": "30440220327d611b715466c31c2b170f831cfe01bf4d5250e2935ae37c43a5e140fb2c9a0220604bd0c2a9e7d833c2e6a1c3c58eb839a1b9d7694d95b7184d1618f6c150bb62",
     },
     "0xdc8840a0a1ebf8be5ace62a7d9360dfcb26adffc": {
         "ticker": "SMILE",
@@ -687,9 +944,25 @@ ledger_tokens = {
         "ticker": "SONNE",
         "signature": "3045022100fefab7524b32a790de474c5e5c70f97d234d81e0a7d9307d02940d61b67c066f02200e0fa5071ce32b2b7b58940bbcec4b1a86cbe5bc331be72e923e272fccff7f66",
     },
+    "0x5df7abe3c51c01dcf6d1f1f9a0ab4dc3759869b9": {
+        "ticker": "SOONX",
+        "signature": "3045022100e7c11608a630972ce6a5d0c672207e961160932b3c6fc6c573333cf41c5bcf3402206e09cf088a0945bf18e4d32dbf2581e21d139d48b72a226db6b88470e8ec8f12",
+    },
+    "0x248f43b622ce2f35a14db3fc528284730b619cd5": {
+        "ticker": "SPECTRA",
+        "signature": "304402203509e8ad90498bfe133130e5254079870cd99c9ff7cec882710cfda501b9d959022042d26d77c7f8286c8b30a81f4df562ef9c96cdc1287bc4c58b8250766559a26b",
+    },
     "0x0d82b5d3a8420c285c6d353a6bdc30d164bb50f0": {
         "ticker": "SPOS",
         "signature": "304402205039417e1ab2d62524d735b258a7334b69bd51cff84bc82cba227be4e0d6d0570220234e79d6373aa300b123d70a9c4d896ae35251f2eaffdaba424b7ad29abc821b",
+    },
+    "0x0022228a2cc5e7ef0274a7baa600d44da5ab5776": {
+        "ticker": "STUSD",
+        "signature": "3045022100ddb8aa9c46598276e44931edccd455bb12d6820cd60c0523d8cfd2e6865c719f02202eaa88aad402d8d89b9058a006f752b0b9d6d6ae6b4e0336a85b5766679f87c7",
+    },
+    "0xa6ae8f29e0031340ea5dbe11c2da4466cde34464": {
+        "ticker": "SDUSD",
+        "signature": "3045022100e209886f146e903b2839cc53c115fd49f05d0cbf3a04a0bce030a6d103da454302204f4b4838099cba84060452dd92233ccea7af8a027714f1236166e7fab1fdebe1",
     },
     "0x3ee6107d9c93955acbb3f39871d32b02f82b78ab": {
         "ticker": "STERN",
@@ -703,6 +976,10 @@ ledger_tokens = {
         "ticker": "SFRXETH",
         "signature": "304402206092ea821a4f2fa0d2db88325a8cfe17d606f57d1e508e6fbccacd81cd3ba333022054cc111c21e5beb117aa825bb23a1f93f857e2447c275e5b55348613905338b2",
     },
+    "0x80137510979822322193fc997d400d5a6c747bf7": {
+        "ticker": "STONE",
+        "signature": "3044022047faa847a06edcefc08e4eaacec6a83a06efe3a3e3451477a2a75a736208adb202201819f7e3dc10e95b2272885110d0146dd71155629cad5e4a88d767851f71445c",
+    },
     "0x296f55f8fb28e498b858d0bcda06d955b2cb3f97": {
         "ticker": "STG",
         "signature": "30440220048584a5d62b4f9597589186564b31f0f5ab77cbe38719391d748d53d66eb72002206e333c01d5c6afb1c32e789afafbad6ae0dd58d458d071857265c1f1f03637ab",
@@ -710,6 +987,10 @@ ledger_tokens = {
     "0x5a5fff6f753d7c11a56a52fe47a177a87e431655": {
         "ticker": "SYN",
         "signature": "304402205dc6a1c1f62303a49b42bd0569df3f284ea19c472fa5701439fc0ed2882831ed02201a7d97e3e7b179a7025f75017a9b1e4d0d07202b9b01f13586a8ed13edfd57cf",
+    },
+    "0x8700daec35af8ff88c16bdf0418774cb3d7599b4": {
+        "ticker": "SNX",
+        "signature": "3045022100f9694daae21eae34fbb99229ca60193a95127d0223fef4b101265fef2da09ed0022061aa3106a76692dee9981aedcb35e75b5228718906f570377500149e08ab7dfb",
     },
     "0x298b9b95708152ff6968aafd889c6586e9169f1d": {
         "ticker": "SBTC",
@@ -726,10 +1007,6 @@ ledger_tokens = {
     "0x8c6f28f2f1a3c87f0f938b96d27520d9751ec8d9": {
         "ticker": "SUSD",
         "signature": "3045022100aec1237635db13ba9b3732ed54b7553ab18f9d361d95a5fb3cd4d7e6907b0d4e02203698033fe7f52a031c4898c6f1d6756c989ca1553fc114ac8ecef586652cb15e",
-    },
-    "0x8700daec35af8ff88c16bdf0418774cb3d7599b4": {
-        "ticker": "SNX",
-        "signature": "3045022100f9694daae21eae34fbb99229ca60193a95127d0223fef4b101265fef2da09ed0022061aa3106a76692dee9981aedcb35e75b5228718906f570377500149e08ab7dfb",
     },
     "0x1f514a61bcde34f94bc39731235690ab9da737f7": {
         "ticker": "TAROT",
@@ -759,6 +1036,10 @@ ledger_tokens = {
         "ticker": "DOG",
         "signature": "3045022100ccc98ace8478efaec6e344221f30808fb5a10c1bed75f682066e6663b1fb1bb40220744383d92d31e6594c3e3dac10d4732aac472d2d10e33b8f172a978641ce9151",
     },
+    "0xd9cc3d70e730503e7f28c1b407389198c4b75fa2": {
+        "ticker": "TLX",
+        "signature": "304402207abd83223803ab99329934ceedb870672676ab5342be456dbc8a628b81d7390e0220532ec82c2e49d8f1b12e6bddaf003769b28cc73f3a45c2a3cff6f6f2f20da9b0",
+    },
     "0x8fc7c1109c08904160d6ae36482b79814d45eb78": {
         "ticker": "TEC",
         "signature": "3044022072f44a8077592d73548e3d8335161a7e35ff270e74f2888bd2a34451b639e5bb022011f8fbdab533f5df671791e736a806b7c627af6bf6c917417901ef458275986d",
@@ -770,6 +1051,10 @@ ledger_tokens = {
     "0x8fb94e08bc984497aaaf1a545ed455be89f8c675": {
         "ticker": "TVPLS",
         "signature": "3045022100bf52e1d66a30e99f6866cf10f4f95dc41b5adef0b4d1a1fc6bdcfcfa43fc52d402200a8d8184fab724365cefab50ab8b800aeec6b1768431118a32946266237cd26c",
+    },
+    "0x93919784c523f39cacaa98ee0a9d96c3f32b593e": {
+        "ticker": "UNIBTC",
+        "signature": "30450221009be9341a2f22329d39a7eca0c910c14750377334225dd954e0e4d8bfdf9570be0220586a73939294f632d36fe04be520c9dc3f9c86c8408e655954a3fb9965ec04a2",
     },
     "0x28b42698caf46b4b012cf38b6c75867e0762186d": {
         "ticker": "UNIDX",
@@ -803,9 +1088,17 @@ ledger_tokens = {
         "ticker": "VELO",
         "signature": "3044022011964ac54293e8239ad07ee39e5cf5d0bce0a3a34ef810456b7e1234598da7a5022061c6949ee157f247b176b30b34110164d2af0b93e466ec672d08b9f8dcb6b290",
     },
+    "0x4a971e87ad1f61f7f3081645f52a99277ae917cf": {
+        "ticker": "XVS",
+        "signature": "30440220556f7c60fbf8e15f0e25a196a403b0b3c6ec4564e1046aec903c61bb2a6ddfb40220266f4b5db6ec910c65e4408e9ed5dd17a1f2299a26d786fa770308741ed00fb3",
+    },
     "0x071682832d213638f8eda67a873262e581a4006d": {
         "ticker": "VRGNS",
         "signature": "3044022033c580c1065b3aff85e8896c443bea918968435c10f769ee5044faef695cb186022003c93293b496aa17c86568749e15d9cc63bf406495f5656be52eff46fab90f64",
+    },
+    "0xc6bdfc4f2e90196738873e824a9efa03f7c64176": {
+        "ticker": "VCNT",
+        "signature": "304402204f9dcc7964e029ff7e3664683f8b43b1e8cc2533e5345afcfb5becf2173be59d02204345d6174df9b95f61ec3d41f4911f2752ba0dd2220860ce563a9ddb4dceb058",
     },
     "0x6d2e5b8841a6aa5f0f973436357f75d3eeb93312": {
         "ticker": "VMEX",
@@ -815,9 +1108,21 @@ ledger_tokens = {
         "ticker": "WAGMI",
         "signature": "3045022100a9a6c41e9eda5f6017c8959119c4d32a5c3fa0d0156e61550f185a83a6145ddb02205c4a784979636867f4f94c50ee7f582fe97f6123b7af267a0d610af6f3e71cd0",
     },
+    "0xef4461891dfb3ac8572ccf7c794664a8dd927945": {
+        "ticker": "WCT",
+        "signature": "3045022100e9143288d1b8b0fa1a97106a52b7d7c1ed90ff940b3101069aa1cb976c8613aa022020e3a2b983fdcaefe187b4bf7fbdf5092bc03bbf6fbc04afcf3864146cf7e053",
+    },
     "0x6f620ec89b8479e97a6985792d0c64f237566746": {
         "ticker": "WPC",
         "signature": "3045022100eab607e545a926b113bc853ee2189a60ebae5f8ecd6bd6f5fe0599ce07394d1a02203f50fc0e16eac23e263c638a42a20284d8f635aad3af05fdd0e82c0805ad1b3b",
+    },
+    "0x95ec2f13ea96251c7037ecc0c2a25ea7d6be520b": {
+        "ticker": "WILDCOIN",
+        "signature": "3044022066b720752bb50a51d74c6a5af302c3024eeb03833a3e1b9153163637b6eb1bc6022041864dd47c055ed6dff8959f29b10688f346599023f14f68d87714231401f0ab",
+    },
+    "0x67631ff69130ea1a6c4feaa4a0abf0a1e0148be7": {
+        "ticker": "WGC",
+        "signature": "3044022020cfa78778ec3866aae299b08e203de22f9a122e6fd433aa5ca28ffc3d0f7e4602201ee86eed29a5dcf8bc837c6afd6e423fae5a7560c5c0ad0f11e79d2aff373719",
     },
     "0xdc6ff44d5d932cbd77b52e5612ba0529dc6226f1": {
         "ticker": "WLD",
@@ -835,6 +1140,10 @@ ledger_tokens = {
         "ticker": "WSTETH",
         "signature": "30450221008b63229da6b96c812faf0db36f2b3050b7ee1111b9d0e229bbc3d76adb6d83a60220540ed88f736bc50c1dc0897618b6eec50c06d7b140629c9d4dec0188b586bbe3",
     },
+    "0x57f5e098cad7a3d1eed53991d4d66c45c9af7812": {
+        "ticker": "WUSDM",
+        "signature": "3045022100e4a706b15c57d2340aa0505ba6b85c8664fecc9a055863f6dd911342fb140afe02205356b28f006d7eb570ded350bd49ce238db4cbe3a065a68c22f7fc400a1f9474",
+    },
     "0xc26921b5b9ee80773774d36c84328ccb22c3a819": {
         "ticker": "WOPTIDOGE",
         "signature": "3044022044b9f4c2d58e13fedcd7f7097553f6bb6ed21aa95bc283e8422e3b94351f120b02201c6c26bb480d1b3820fc4f44e28ac6c37b1d1c2ebb20e14106f6f22ca30e8fff",
@@ -847,9 +1156,17 @@ ledger_tokens = {
         "ticker": "WTBT",
         "signature": "3045022100f0f242d841b57e5993d51c4a3e548675b594c744413bf7e1a0dfd027c5e6ce66022061fc2e0d1fdceb638a89f7b3d303866c03f5bfcaaa58dfce93af21622895cd53",
     },
+    "0xc7edf7b7b3667a06992508e7b156eff794a9e1c8": {
+        "ticker": "XPRT",
+        "signature": "3044022054ec9bd8e15b4e06cb37a6fab9f5ceffad1f37d6b3d66e8e7f350b9b8138e51702207eef14df7d2c8676de50f0f74d82ac24e6fc635ae84a7bfe40393186751afb25",
+    },
     "0x1e3c6c53f9f60bf8aae0d7774c21fa6b1afddc57": {
         "ticker": "XSHRAP",
         "signature": "304402201b82f898359ba022bd0f07d102b7b18c0616e509f538e10dff8d896a22552654022012d870b0e060736091a02a6df94947c7e6a5168462ac3eedcfb4d7ecccea2677",
+    },
+    "0x1d1498166ddceee616a6d99868e1e0677300056f": {
+        "ticker": "XSPACE",
+        "signature": "30450221008dca257d516c545096f9dbac057f1953886b5f17675347c47e3ea6ab72c63423022060a689ee7f753c29c782d9e9bdf1869aecbbbf939459407915b6f0dec88dc92f",
     },
     "0xb962150760f9a3bb00e3e9cf48297ee20ada4a33": {
         "ticker": "XZOOMER",
@@ -859,8 +1176,32 @@ ledger_tokens = {
         "ticker": "YFI",
         "signature": "3044022027ccd8b9e1f0877c9cd88d812649749048e8c2b5bf4584c603dbe1b8dcc99faf02204b9c7c4387ae5ce4a79404a54cd5f7fbcc3d80932f56aa3232d5d24081e72f87",
     },
+    "0x949185d3be66775ea648f4a306740ea9eff9c567": {
+        "ticker": "YEL",
+        "signature": "3045022100ad8452198cc86f09e7555ad9f2244862f328d38b9431057d3d0f7f61f4d3f79502200a9188ba2eb74458714973c753f7624b1b9d4e74a70dc7ceb1f6d94ab786fb41",
+    },
+    "0x895e15020c3f52ddd4d8e9514eb83c39f53b1579": {
+        "ticker": "YUSD",
+        "signature": "3045022100fc86ed04b7fbabb900aaa33da0b1792ca545a8fa3e83420dac2cae89c3a9459702202cd18caa9fc91048c198bc91ff9b76d45ad17378388f463d6701ad1d1e55dfff",
+    },
+    "0x3b2a34c8a085a6ca425ea64192d9f3a0b5dfb397": {
+        "ticker": "XUSDZ",
+        "signature": "3045022100c5e67960d9ba11e472ff29be744fadb72eafbcddb1058107b598223bcd39dc7d0220366c5e555eefb122d5dd55542247cb1ad2eb2c555d67c6ff599b66dc76f2d147",
+    },
     "0xfa436399d0458dbe8ab890c3441256e3e09022a8": {
         "ticker": "ZIP",
         "signature": "3045022100ab8cc2bbd3f0e2f28dac565225f1e3f22de49677c5bb208afcd916490d5f5bee022058376b7aa37cae7c9ae2f255727dc4966d2362e379ffa55367af817c61816d84",
+    },
+    "0x2d691c2492e056adcae7ca317569af25910fc4cb": {
+        "ticker": "ZUNETH",
+        "signature": "304402206085c8a0204db01eda374ab964af3431acc8da60bf7c3ca7443d85ab8e49393202200441d5035ff6f73e7258e6407a1768769e9fffb86e1457adde9453fe35f67dd1",
+    },
+    "0xdc30b3bde2734a0bc55af01b38943ef04aacb423": {
+        "ticker": "ZUNUSD",
+        "signature": "304402202042ab6f8cfd8542890b251cb6ab464978c61ce457d85f8b36fd4156143a93fb02204a46d5f6a5f9a54d5ac16b59fa08a7fccff13ac7650df137c1262a0c04a199be",
+    },
+    "0x25193034153afb4251a8e02a8db0deaef4c876f6": {
+        "ticker": "ZUN",
+        "signature": "3045022100d72eb1d907712708d12cad322c096f8aceafce34376f1b22faacb983b58fb01f02200cd75f1adcde69d11363af1cb511eae44601f04b39af2514b631d3c57a456ba4",
     },
 }
