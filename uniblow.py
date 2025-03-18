@@ -80,6 +80,7 @@ NFT_LIST = [
     "MATIC",
     "BSC",
     "GNO",
+    "FTM",
     "OP",
     "BASE",
     "ARB",
