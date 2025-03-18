@@ -261,6 +261,26 @@ def test_pubkeys_add():
     )
     assert (Pub_1 + Pub_2).encode_output(False) == Pub3_bin_expected
 
+    # Check (a+b).G == (a.G)+(b.G)
+    alice = 26260923599820793688964662416514129923690826411952052958634006970183794076685
+    bob = 42178125041111355137137477239210458404686765266018789504593120817556900516663
+    target_x = 63236121149451512194578380454955069034969427969286250202265740678483450475118
+    target_y = 65565528365611904138481706224775622437318897155676807901819615835591105644528
+    p_pt_sum = (alice * ECP256k1.generator_256) + (bob * ECP256k1.generator_256)
+    p_from_scalar = (alice + bob) * ECP256k1.generator_256
+    assert p_from_scalar.x() == target_x
+    assert p_from_scalar.y() == target_y
+    assert p_pt_sum.x() == target_x
+    assert p_pt_sum.y() == target_y
+    # And with random points
+    for _ in range(50):
+        first_key = secrets.randbelow(ECP256k1._r)
+        second_key = secrets.randbelow(ECP256k1._r)
+        rp_pt_sum = (first_key * ECP256k1.generator_256) + (second_key * ECP256k1.generator_256)
+        rp_from_scalar = (first_key + second_key) * ECP256k1.generator_256
+        assert rp_from_scalar.x() == rp_pt_sum.x()
+        assert rp_from_scalar.y() == rp_pt_sum.y()
+
 
 def test_ycompute():
     Pub3_bin = bytes(
