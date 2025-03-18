@@ -57,7 +57,7 @@ jobs:
 
   build_mac:
 
-    runs-on: flyci-macos-large-latest-m2
+    runs-on: macos-13
 
     steps:
     - uses: actions/checkout@v4
