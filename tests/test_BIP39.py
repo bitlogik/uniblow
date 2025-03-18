@@ -1,6 +1,10 @@
 import pytest
 
-from cryptolib.HDwallet import bip39_mnemonic_to_seed, entropy_to_mnemonic, mnemonic_to_seed
+from cryptolib.HDwallet import (
+    bip39_mnemonic_to_seed,
+    entropy_to_mnemonic,
+    mnemonic_to_seed,
+)
 
 # Tests from https://github.com/bitcoinjs/bip39/tree/master/test
 

@@ -34,7 +34,10 @@ def test_eip712_A():
                 {"name": "chainId", "type": "uint256"},
                 {"name": "verifyingContract", "type": "address"},
             ],
-            "Person": [{"name": "name", "type": "string"}, {"name": "wallet", "type": "address"}],
+            "Person": [
+                {"name": "name", "type": "string"},
+                {"name": "wallet", "type": "address"},
+            ],
             "Mail": [
                 {"name": "from", "type": "Person"},
                 {"name": "to", "type": "Person"},
@@ -126,7 +129,10 @@ def test_eip712_B():
             "chainId": 1,
             "verifyingContract": "0xCcCCccccCCCCcCCCCCCcCcCccCcCCCcCcccccccC",
         },
-        "message": {"name": "Bob", "wallet": "0xbBbBBBBbbBBBbbbBbbBbbbbBBbBbbbbBbBbbBBbB"},
+        "message": {
+            "name": "Bob",
+            "wallet": "0xbBbBBBBbbBBBbbbBbbBbbbbBBbBbbbbBbBbbBBbB",
+        },
     }
     dom_sep, thash = typed_sign_hash(typed_data1)
     assert dom_sep.hex() == "f2cee375fa42b42143804025fc449deafd50cc031ca257e0b194a650a912090f"
