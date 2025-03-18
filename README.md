@@ -75,6 +75,15 @@ Compatible with the following blockchains :
   
   - TRC20 tokens
 
+
+- Gnosis
+  
+  - Mainnet and Testnet networks
+  
+  - ERC20 tokens and NFTs tokens
+  
+  - WalletConnect Dapps
+
 - FTM
   
   - Mainnet and Testnet networks
@@ -283,7 +292,7 @@ The folder where the HDseed file is stored, sits in the user data directory.
 ### Ledger
 
 A Ledger hardware device such as Nano X and Nano S, can be used with Uniblow but
-only for Ethereum/EVM chains (ETH, BSC, MATIC, FTM, OP, BASE, METIS, CELO, GLMR, MOVR, AVAX and ARB).
+only for Ethereum/EVM chains (ETH, BSC, MATIC, GNO, FTM, OP, BASE, METIS, CELO, GLMR, MOVR, AVAX and ARB).
 
 The Ledger needs to be unlocked and run the Ethereum app. The address displayed
 in the wallet can be checked on the Ledger screen by clicking a dedicated UI
@@ -372,16 +381,16 @@ Special wallet options
 
 ### Tokens / ERC20
 
-In ETH, BSC, MATIC, TRX, FTM, OP, BASE, METIS, CELO, GLMR, MOVR, AVAX or ARB, you can enable the Tokens option. Select a known preset token, or input an ERC20
+In ETH, BSC, MATIC, TRX, GNO, FTM, OP, BASE, METIS, CELO, GLMR, MOVR, AVAX or ARB, you can enable the Tokens option. Select a known preset token, or input an ERC20
 custom token contract address. It is TRC20 base58 address for Tron.
 
 ### NFT
 
-Uniblow can display the NFT or SBT from the collection contract address. NFT ERC721 and SBT BAB are compatible on the networks : ETH, BSC, MATIC, OP, BASE, AVAX and ARB. You can select a known preset token, or input an NFT custom contract address.
+Uniblow can display the NFT or SBT from the collection contract address. NFT ERC721 and SBT BAB are compatible on the networks : ETH, BSC, MATIC, GNO, OP, BASE, AVAX and ARB. You can select a known preset token, or input an NFT custom contract address.
 
 ### WalletConnect
 
-In ETH, BSC, MATIC, FTM, OP, BASE, METIS, CELO, GLMR, MOVR, AVAX or ARB, Uniblow can connect to a Dapp
+In ETH, BSC, MATIC, GNO, FTM, OP, BASE, METIS, CELO, GLMR, MOVR, AVAX or ARB, Uniblow can connect to a Dapp
 using the WalletConnect system. Click on the WalletConnect option,
 input the wc URI and it will connect to the web3 app using WalletConnect.  
 Note that in this mode, Uniblow disables sending any transaction from the GUI.

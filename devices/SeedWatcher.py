@@ -57,6 +57,7 @@ from wallets.ETHwallet import ETH_wallet
 from wallets.BSCwallet import BSC_wallet
 from wallets.MATICwallet import MATIC_wallet
 from wallets.TRXwallet import TRX_wallet
+from wallets.GNOwallet import GNO_wallet
 from wallets.FTMwallet import FTM_wallet
 from wallets.OPwallet import OP_wallet
 from wallets.BASEwallet import BASE_wallet
@@ -82,6 +83,7 @@ coins_list = [
     {"name": "Polygon PoS", "path": "m/44'/60'/{}'/{}/{}", "wallet_lib": MATIC_wallet},
     {"name": "TRON", "path": "m/44'/195'/{}'/{}/{}", "wallet_lib": TRX_wallet},
     {"name": "TRON (alt. deriv)", "path": "m/44'/195'/{2}'", "wallet_lib": TRX_wallet},
+    {"name": "Gnosis", "path": "m/44'/60'/{}'/{}/{}", "wallet_lib": GNO_wallet},
     {"name": "Fantom", "path": "m/44'/60'/{}'/{}/{}", "wallet_lib": FTM_wallet},
     {"name": "Sonic", "path": "m/44'/60'/{}'/{}/{}", "wallet_lib": FTM_wallet, "network": 1},
     {"name": "OP", "path": "m/44'/60'/{}'/{}/{}", "wallet_lib": OP_wallet},
