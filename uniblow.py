@@ -111,6 +111,8 @@ def get_coin_class(coin_name):
     cname = coin_name
     if coin_name == "POL":
         cname = "MATIC"
+    if coin_name == "XDAI":
+        cname = "GNO"
     if coin_name == "ARB/ETH":
         cname = "ARB"
     if coin_name == "OP/ETH":
@@ -213,6 +215,8 @@ def cb_open_wallet(wallet_obj, pkey, waltype, sw_frame, pubkey_cpr):
     app.deactivate_option_buttons()
     app.current_chain = app.wallet.coin
     wallet_coin = app.wallet.coin
+    if app.wallet.coin == "XDAI":
+        wallet_coin = "GNO"
     if app.wallet.coin == "POL":
         wallet_coin = "MATIC"
     if app.wallet.coin == "ARB/ETH":
