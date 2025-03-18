@@ -161,6 +161,8 @@ def resolve(domain, crypto, is_token=False, chain="XXX"):
     if crypto == "ETH" and tld in ENS_TLDS:
         return resolveENS(domain)
     if is_token is False:
+    if crypto == "POL":
+        crypto = "MATIC"
         if crypto == "MATIC":
             crypto = "MATIC.version.MATIC"
         if crypto == "FTM":

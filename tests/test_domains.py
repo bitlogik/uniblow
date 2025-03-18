@@ -62,7 +62,7 @@ def test_resolve_zil():
     assert resolveZIL("paulalcock.zil", "ETH") is None
     assert resolve("jim-unstoppable.zil", "ETH") == "0x57A82545be709963F0182B69F6E9B6f00B977592"
     assert resolve("jim-unstoppable.zil", "BTC") == "bc1q4h40jge84c2stj8hya80hf7dqy77wuzqvd79ac"
-    assert resolve("jim-unstoppable.zil", "MATIC") == "0x621bf2A4720DbFF5E0AC4A94f539ef7c4555Cf22"
+    assert resolve("jim-unstoppable.zil", "POL") == "0x621bf2A4720DbFF5E0AC4A94f539ef7c4555Cf22"
 
 
 def test_resolve():
@@ -80,11 +80,11 @@ def test_resolve():
     # )
     # assert resolve("jim-unstoppable.zil", "USDC") == "0x89f7D2F14Be6d283d69f6D2879637aF4AA3eEb93"
     assert (
-        resolve("jim-unstoppable.crypto", "USDT", True, "MATIC")
+        resolve("jim-unstoppable.crypto", "USDT", True, "POL")
         == "0x89f7D2F14Be6d283d69f6D2879637aF4AA3eEb93"
     )
     assert (
-        resolve("jim-unstoppable.zil", "USDT", True, "MATIC")
+        resolve("jim-unstoppable.zil", "USDT", True, "POL")
         == "0x89f7D2F14Be6d283d69f6D2879637aF4AA3eEb93"
     )
     assert resolve("jim-unstoppable.crypto", "FTM") == "0x621bf2A4720DbFF5E0AC4A94f539ef7c4555Cf22"

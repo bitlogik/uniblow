@@ -21,7 +21,7 @@ from wallets.MATICtokens import tokens_values, nfts_values, ledger_tokens
 
 
 class MATIC_wallet(ETH_wallet):
-    coin = "MATIC"
+    coin = "POL"
 
     networks = [
         "Mainnet",

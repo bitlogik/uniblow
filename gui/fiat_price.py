@@ -39,7 +39,7 @@ native_tokens = {
     "SOL": "solana",
     "FTM": "fantom",
     "CELO": "celo",
-    "MATIC": "matic-network",
+    "POL": "matic-network",
     "MOVR": "moonriver",
     "CRO": "cronos",
     "BOBA": "boba-network",
