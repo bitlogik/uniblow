@@ -1,5 +1,17 @@
 Uniblow versions history
 
+# 2.7.2
+
+* Add Gnosis chain
+* Add Sonic chain (in FTM chain)
+* Fix token price display for subchains
+* Tron can use name resolution
+* Matic gas is renamed POL
+* Update some icons
+* Update tokens data
+* More EVM chain using Allnodes publicnode RPC
+* MacOS packaging update
+
 # 2.7.0
 
 * Add SLIP39 in SeedWatcher
