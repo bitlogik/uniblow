@@ -79,6 +79,7 @@ def test_resolve():
     #     == "0x89f7D2F14Be6d283d69f6D2879637aF4AA3eEb93"
     # )
     # assert resolve("jim-unstoppable.zil", "USDC") == "0x89f7D2F14Be6d283d69f6D2879637aF4AA3eEb93"
+    assert resolve("jim-unstoppable.crypto", "TRX") == "THS5EVGuDVfiHjmdGV8stbmdk6dNU5dN6e"
     assert (
         resolve("jim-unstoppable.crypto", "USDT", True, "POL")
         == "0x89f7D2F14Be6d283d69f6D2879637aF4AA3eEb93"

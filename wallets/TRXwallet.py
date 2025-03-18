@@ -23,6 +23,7 @@ from logging import getLogger
 
 from cryptolib.base58 import encode_base58, decode_base58
 from cryptolib.cryptography import sha2, sha3, public_key_recover
+from wallets.name_service import resolve
 from wallets.wallets_utils import InvalidOption, balance_string, shift_10, NotEnoughTokens
 from cryptolib.coins.ethereum import uint256, read_string
 from wallets.TRXtokens import tokens_values
@@ -321,7 +322,10 @@ class TRX_wallet:
         return balance_string(balance, self.decimals)[:20] + " " + self.coin
 
     def check_address(self, addr_str):
-        # Check if address is valid
+        # Check if address or domain is valid
+        resolved = resolve(addr_str, TRX_wallet.coin)
+        if resolved:
+            addr_str = resolved
         return testaddr(addr_str)
 
     def history(self):
