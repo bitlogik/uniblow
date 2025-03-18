@@ -45,7 +45,7 @@ class ARB_wallet(ETH_wallet):
     ):
         self.network = ARB_wallet.networks[network].lower()
         self.chainID = 42161
-        rpc_endpoint = "https://rpc.ankr.com/arbitrum/"
+        rpc_endpoint = "arbitrum-one"
         self.explorer = "https://arbiscan.io/address/0x"
         self.load_base(rpc_endpoint, device, contract_addr, wc_uri, confirm_callback, wtype != 3)
         self.ledger_tokens = ledger_tokens

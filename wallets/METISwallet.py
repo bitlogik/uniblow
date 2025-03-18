@@ -43,7 +43,7 @@ class METIS_wallet(ETH_wallet):
         self.network = METIS_wallet.networks[network].lower()
         if self.network == "mainnet":
             self.chainID = 1088
-            rpc_endpoint = "https://andromeda.metis.io/"
+            rpc_endpoint = "metis"
             self.explorer = "https://andromeda-explorer.metis.io/address/0x"
         self.load_base(rpc_endpoint, device, contract_addr, wc_uri, confirm_callback, wtype != 3)
         self.ledger_tokens = ledger_tokens

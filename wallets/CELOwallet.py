@@ -52,7 +52,7 @@ class CELO_wallet(ETH_wallet):
         self.network = CELO_wallet.networks[network].lower()
         if self.network == "mainnet":
             self.chainID = 42220
-            rpc_endpoint = "https://rpc.ankr.com/celo/"
+            rpc_endpoint = "celo"
             self.explorer = "https://explorer.celo.org/address/0x"
         if self.network == "alfajores":
             self.chainID = 44787
