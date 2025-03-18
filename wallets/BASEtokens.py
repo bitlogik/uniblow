@@ -83,6 +83,13 @@ tokens_values = [
     },
 ]
 
+nfts_values = [
+    # Mainnet
+    {},
+    # Testnet
+    {},
+]
+
 # From Ledger trusted tokens data
 # extracted on 2024-06-02T15:49
 # from https://raw.githubusercontent.com/LedgerHQ/ledger-live/develop/libs/ledgerjs/packages/cryptoassets/src/data/evm/8453/erc20.json

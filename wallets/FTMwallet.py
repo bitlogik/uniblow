@@ -17,7 +17,7 @@
 
 from copy import deepcopy
 from wallets.ETHwallet import ETH_wallet
-from wallets.FTMtokens import tokens_values, ledger_tokens
+from wallets.FTMtokens import tokens_values, ledger_tokens, nfts_values
 
 
 class FTM_wallet(ETH_wallet):
@@ -49,6 +49,7 @@ class FTM_wallet(ETH_wallet):
 
     options_data = deepcopy(ETH_wallet.options_data)
     options_data[0]["preset"] = tokens_values
+    options_data[2]["preset"] = nfts_values
 
     def __init__(
         self, network, wtype, device, contract_addr=None, wc_uri=None, confirm_callback=None
