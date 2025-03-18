@@ -577,7 +577,11 @@ def set_coin(coin, network, wallet_type):
         app.balance_timer.Stop()
     if not app.check_coin_consistency(network_num=network):
         return
-    if app.gui_panel.network_choice.GetSelection() > 0 and app.current_chain != "GLMR":
+    if (
+        app.gui_panel.network_choice.GetSelection() > 0
+        and app.current_chain != "GLMR"
+        and app.current_chain != "FTM"
+    ):
         # Testnet
         app.wallet.coin = "t" + app.wallet.coin
     app.gui_panel.scrolled_coins.Enable()

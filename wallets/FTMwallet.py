@@ -24,8 +24,10 @@ class FTM_wallet(ETH_wallet):
     coin = "FTM"
 
     networks = [
-        "Mainnet",
-        "Testnet",
+        "Fantom Opera",
+        "Sonic",
+        "Ftm Tst",
+        "Sonic Blaze",
     ]
 
     derive_paths = [
@@ -33,7 +35,13 @@ class FTM_wallet(ETH_wallet):
         [
             "m/44'/60'/{}'/0/{}",
         ],
+        [
+            "m/44'/60'/{}'/0/{}",
+        ],
         # testnets
+        [
+            "m/44'/1'/{}'/0/{}",
+        ],
         [
             "m/44'/1'/{}'/0/{}",
         ],
@@ -46,13 +54,24 @@ class FTM_wallet(ETH_wallet):
         self, network, wtype, device, contract_addr=None, wc_uri=None, confirm_callback=None
     ):
         self.network = FTM_wallet.networks[network].lower()
-        if self.network == "mainnet":
+        if self.network == "fantom opera":
             self.chainID = 250
             rpc_endpoint = "fantom"
             self.explorer = "https://ftmscan.com/address/0x"
-        if self.network == "testnet":
+        if self.network == "sonic":
+            self.coin = "S"
+            self.chainID = 146
+            rpc_endpoint = "sonic"
+            self.explorer = "https://sonicscan.org/address/0x"
+        if self.network == "ftm tst":
+            self.coin = "tFTM"
             self.chainID = 4002
             rpc_endpoint = "fantom-testnet"
-            self.explorer = "https://testnet.ftmscan.com//address/0x"
+            self.explorer = "https://testnet.ftmscan.com/address/0x"
+        if self.network == "sonic blaze":
+            self.coin = "tstS"
+            self.chainID = 57054
+            rpc_endpoint = "sonic-blaze"
+            self.explorer = "https://testnet.sonicscan.org/address/0x"
         self.load_base(rpc_endpoint, device, contract_addr, wc_uri, confirm_callback, wtype != 3)
         self.ledger_tokens = ledger_tokens

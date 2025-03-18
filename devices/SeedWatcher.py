@@ -83,6 +83,7 @@ coins_list = [
     {"name": "TRON", "path": "m/44'/195'/{}'/{}/{}", "wallet_lib": TRX_wallet},
     {"name": "TRON (alt. deriv)", "path": "m/44'/195'/{2}'", "wallet_lib": TRX_wallet},
     {"name": "FTM", "path": "m/44'/60'/{}'/{}/{}", "wallet_lib": FTM_wallet},
+    {"name": "Sonic", "path": "m/44'/60'/{}'/{}/{}", "wallet_lib": FTM_wallet, "network": 1},
     {"name": "OP", "path": "m/44'/60'/{}'/{}/{}", "wallet_lib": OP_wallet},
     {"name": "BASE", "path": "m/44'/60'/{}'/{}/{}", "wallet_lib": BASE_wallet},
     {"name": "METIS", "path": "m/44'/60'/{}'/{}/{}", "wallet_lib": METIS_wallet},

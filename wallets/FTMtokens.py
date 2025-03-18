@@ -103,7 +103,9 @@ tokens_values = [
         "pDollar (PDO)": "0xb9D62c829fbF7eAff1EbA4E50F3D0480b66c1748",
         "Partial Token (PARTIAL)": "0x9486fDA4C1192db69a08CA7235E2E6bAf31B467B",
     },
+    {},
     # Testnet
+    {},
     {},
 ]
 
