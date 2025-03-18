@@ -891,7 +891,18 @@ class UniblowApp(wx.App):
             ):
                 if hasattr(self.wallet, "eth"):
                     if self.wallet.eth.contract and self.wallet.eth.is_fungible:
-                        PriceAPI(cb_fiat, self.wallet.eth.contract, self.current_chain)
+                        chain = self.current_chain
+                        if (
+                            self.gui_panel.network_choice.GetSelection() == 1
+                            and self.wallet.__class__.coin == "GLMR"
+                        ):
+                            chain = "MOVR"
+                        if (
+                            self.gui_panel.network_choice.GetSelection() == 1
+                            and self.wallet.__class__.coin == "FTM"
+                        ):
+                            chain = "S"
+                        PriceAPI(cb_fiat, self.wallet.eth.contract, chain)
                     if not self.wallet.eth.contract:
                         PriceAPI(cb_fiat, self.wallet.coin)
                 elif self.current_chain == "TRX" and self.wallet.contract:
