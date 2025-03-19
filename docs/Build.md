@@ -53,9 +53,8 @@ bash package/Build-Linux.sh
 
 * Install prerequisites, your MacOS system needs :
 
-    -   [Python 3.9
-    pkg](https://www.python.org/ftp/python/3.9.9/python-3.9.9-macos11.pkg)
-    installed
+    -   [Python 3.11
+    pkg](https://www.python.org/ftp/python/3.11.9/python-3.11.9-macos11.pkg) installed
 
     -   XCode and developer tools
 
