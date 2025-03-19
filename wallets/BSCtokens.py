@@ -2,7 +2,6 @@
 tokens_values = [
     # Mainnet
     {
-"Cryptonovae (YAE)": "0x4eE438be38F8682ABB089F2BFeA48851C5E71EAF",
         "Binance Ethereum Token (ETH)": "0x2170Ed0880ac9A755fd29B2688956BD959F933F8",
         "Binance BSC-USD (BSC-USD)": "0x55d398326f99059fF775485246999027B3197955",
         "Binance XRP Token (XRP)": "0x1D2F0da169ceB9fC7B3144628dB156f3F6c60dBE",
