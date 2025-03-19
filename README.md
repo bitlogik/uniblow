@@ -47,7 +47,7 @@ Compatible with the following blockchains :
 
 - ETH
   
-  - mainnet, Goerli and Sepolia networks
+  - mainnet and Sepolia networks
   
   - ERC20 tokens, NFTs and SBTs
   
@@ -63,9 +63,9 @@ Compatible with the following blockchains :
 
 - MATIC
   
-  - Mainnet and Mumbai networks
+  - Mainnet and Amoy networks
   
-  - ERC20 tokens, NFTs and SBTs
+  - ERC20 tokens, NFTs
   
   - WalletConnect Dapps
 
@@ -75,7 +75,6 @@ Compatible with the following blockchains :
   
   - TRC20 tokens
 
-
 - Gnosis
   
   - Mainnet and Testnet networks
@@ -84,11 +83,19 @@ Compatible with the following blockchains :
   
   - WalletConnect Dapps
 
-- FTM
+- FTM Opera
   
   - Mainnet and Testnet networks
   
-  - ERC20 tokens
+  - ERC20 tokens, NFTs
+  
+  - WalletConnect Dapps
+
+- Sonic
+  
+  - Mainnet and Blaze testnet networks
+  
+  - ERC20 tokens, NFTs
   
   - WalletConnect Dapps
 
@@ -176,7 +183,7 @@ Compatible with the following blockchains :
   
   - K1 wallet
   
-  - EOSio and Jungle3 networks
+  - EOSio and Jungle4 networks
 
 Run Uniblow
 -----------
