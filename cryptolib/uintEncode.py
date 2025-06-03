@@ -24,7 +24,7 @@ def uint2bin(n, sz_out):
 
 
 def uint8(n):
-    """Unsigned integer to 16 bits"""
+    """Unsigned integer to 8 bits"""
     return uint2bin(n, 1)
 
 
