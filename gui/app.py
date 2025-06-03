@@ -53,7 +53,8 @@ def attach_tt(elt, txt):
 
         def remove_tt():
             ttc.SetTip("")
-            elt.UnsetToolTip()
+            if elt:
+                elt.UnsetToolTip()
 
         wx.CallLater(1200, remove_tt)
 
