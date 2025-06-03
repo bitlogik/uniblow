@@ -1,5 +1,14 @@
 Uniblow versions history
 
+# 2.7.3
+
+* Watch seed only if there is an input
+* Close QRcode upon wallet change
+* Clean up BIP32 HD implementation
+* Update some icons
+* Guard some GUI objects deletion to avoid crashes
+* Typos fixes
+
 # 2.7.2
 
 * Add Gnosis chain
