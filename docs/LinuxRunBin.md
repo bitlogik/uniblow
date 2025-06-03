@@ -56,7 +56,7 @@ The terminal should give out something like :
 
 ```
 gpg: Signature made ddd XXX 202y xx:xx:xx PM UTC
-gpg:                using RSA key 737BFE6010915A10951A1675D90DB24779F9EAF2
+gpg:                using RSA key 9F8106C10FBDB88A71B7FEE5E353957C22F95B31
 gpg: Good signature from "Antoine FERRON (BitLogiK) <antoine.ferron@bitlogik.fr>" [unknown]
 gpg: WARNING: Using untrusted key!
 ```
