@@ -179,12 +179,11 @@ def generate_mnemonic(nwords):
 class BIP32node:
     HARDENED_LIMIT = 2**31
 
-    def __init__(self, i, depth, pvkey, chaincode, curve, parent_fingerprint):
+    def __init__(self, i, depth, pvkey, chaincode, curve):
         self.curve = curve.upper()
         self.pv_key = EC_key_pair(pvkey, self.curve)
         self.chain_code = chaincode
         self.child_number = i
-        self.parent_fingerprint = parent_fingerprint
         self.depth = depth
 
     def derive_private(self, i):
@@ -202,7 +201,6 @@ class BIP32node:
             n_order = CURVES_ORDER.get(self.curve)
             if n_order is None:
                 raise Exception("Curve not supported, input R1, K1 or ED")
-        fingerprint = 0  # Hash160(privkey_to_pubkey(self.pv_key, self.curve, True))[:4]
         while not key_valid:  # SLIP10
             deriv = HMAC_SHA512(self.chain_code, data)
             derIL = int.from_bytes(deriv[:32], "big")
@@ -216,7 +214,7 @@ class BIP32node:
                     deriv = HMAC_SHA512(self.chain_code, data)
                 else:
                     key_valid = True
-        return BIP32node(i, self.depth + 1, newkey, deriv[32:], self.curve, fingerprint)
+        return BIP32node(i, self.depth + 1, newkey, deriv[32:], self.curve)
 
     def derive_path_private(self, path_str):
         if self.depth > 0:
@@ -258,7 +256,6 @@ class BIP32node:
             int.from_bytes(result[:32], "big"),
             result[32:],
             curve.upper(),
-            BIP32node.ser32(0),
         )
 
     @staticmethod
