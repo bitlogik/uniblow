@@ -14,7 +14,7 @@ FEES_PRORITY_TEXT = [
 ]
 
 BAD_AMNT_INPUT = "Input an amount value to transfer."
-BAD_ADDR_INPUT = "Input an destination address/domain."
+BAD_ADDR_INPUT = "Input a destination address/domain."
 LOW_BALANCE = "Not enough balance for this transfer."
 
 
