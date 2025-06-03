@@ -19,7 +19,8 @@ from logging import getLogger
 from devices.BaseDevice import BaseDevice
 from devices.ledger.ledgerComm import getDongle
 from devices.ledger.ledgerException import LedgerException
-from cryptolib.HDwallet import encode_bip32_string, BIP32node
+from cryptolib.HDwallet import encode_bip32_string
+from cryptolib.uintEncode import ser32
 
 logger = getLogger(__name__)
 
@@ -179,8 +180,8 @@ class Ledger(BaseDevice):
         ]
         apdu.extend(token_name_bin)
         apdu.extend(bytes.fromhex(token_addr))
-        apdu.extend(BIP32node.ser32(token_decimals))
-        apdu.extend(BIP32node.ser32(chain_id))
+        apdu.extend(ser32(token_decimals))
+        apdu.extend(ser32(chain_id))
         apdu.extend(ledger_signature)
         self.ledger_device.exchange(bytearray(apdu))
 
@@ -208,7 +209,7 @@ class Ledger(BaseDevice):
 
     def sign_message(self, message):
         """Sign a personal message, used when on_device_check"""
-        msg_sz = BIP32node.ser32(len(message))
+        msg_sz = ser32(len(message))
         data_frames = split_data(self.bin_path + msg_sz + message)
         is_subsequent = False
         try:

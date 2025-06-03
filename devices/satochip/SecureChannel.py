@@ -26,6 +26,8 @@ from cryptolib.cryptography import (
     strip_PKCS7_padding,
 )
 from cryptolib.ECKeyPair import EC_key_pair
+from cryptolib.uintEncode import ser32
+
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
@@ -73,7 +75,7 @@ class SecureChannel:
             raise UninitializedSecureChannelError("Secure channel is not initialized")
 
         key = self.derived_key
-        iv = urandom(12) + (self.sc_IVcounter).to_bytes(4, byteorder="big")
+        iv = urandom(12) + ser32(self.sc_IVcounter)
         ciphertext = aes_encrypt(key, iv, append_PKCS7_padding(data_bytes))
 
         self.sc_IVcounter += 2

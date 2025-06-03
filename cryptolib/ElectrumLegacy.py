@@ -1,3 +1,4 @@
+from cryptolib.uintEncode import ser32
 
 v2_words = [
     "like", "just", "love", "know", "never", "want", "time", "out", "there",
@@ -227,7 +228,7 @@ def read_v2_words(words):
     w3 = v2_words.index(words[2])
     cs_res += V2_LIST_LEN * ((w2 - cs_res) % V2_LIST_LEN)
     cs_res += V2_LIST_LEN_POW2 * ((w3 - w2) % V2_LIST_LEN)
-    return cs_res.to_bytes(4, byteorder="big")
+    return ser32(cs_res)
 
 
 def decode_old_mnemonic(words):
