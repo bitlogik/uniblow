@@ -175,9 +175,13 @@ class SeedWatcherPanel(gui.swgui.MainPanel):
             self.m_bitmap_cs.Show()
             self.m_bitmap_wl.SetBitmap(self.BAD_BMP)
             self.m_bitmap_cs.SetBitmap(self.BAD_BMP)
-        self.m_dataViewListCtrl1.DeleteAllItems()
-        self.m_staticTextcopy.Disable()
-        self.check_mnemonic(mneno)
+        if self.m_textCtrl_mnemo.GetValue():
+            self.m_btnseek.Enable()
+            self.m_dataViewListCtrl1.DeleteAllItems()
+            self.m_staticTextcopy.Disable()
+            self.check_mnemonic(mneno)
+        else:
+            self.m_btnseek.Disable()
 
     def gen_new_mnemonic(self, event):
         event.Skip()
@@ -446,6 +450,7 @@ def start_seedwatcher(app, cb_wallet):
     app.panel_sw.m_btnseek.SetBitmap(
         Bitmap(file_path("gui/images/btns/SeekAssets.png"), BITMAP_TYPE_PNG)
     )
+    app.panel_sw.m_btnseek.Disable()
 
     app.panel_sw.m_button_gen.SetCursor(HAND_CURSOR)
     app.panel_sw.m_choice_nwords.SetCursor(HAND_CURSOR)
