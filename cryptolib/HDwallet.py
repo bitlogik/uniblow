@@ -27,6 +27,7 @@ from cryptolib.cryptography import (
     random_generator,
 )
 from cryptolib.ECKeyPair import EC_key_pair
+from cryptolib.uintEncode import ser32
 from cryptolib.slip39 import slip39_mnemonic_to_seed
 from cryptolib.ElectrumLegacy import decode_old_mnemonic
 
@@ -54,10 +55,10 @@ def decode_bip32_path(path_string):
 
 def encode_bip32_path(bip39_path_ints):
     """Encode an integer list of a path into binary (x 32 bits)."""
-    enc_out = b""
+    enc_out = bytearray()
     for idx in bip39_path_ints:
-        enc_out += BIP32node.ser32(idx)
-    return enc_out
+        enc_out.extend(ser32(idx))
+    return bytes(enc_out)
 
 
 def encode_bip32_string(bip32_path_string):
@@ -190,12 +191,15 @@ class BIP32node:
         """private parent key to private child key"""
         if i >= BIP32node.HARDENED_LIMIT:
             # hardened
-            data = bytes([0]) + self.pv_key.ser256() + BIP32node.ser32(i)
+            data = bytearray(1)
+            data.extend(self.pv_key.ser256())
+            data.extend(ser32(i))
         else:
             # standard (non-hardened)
             if self.curve == "ED":
                 raise Exception("Ed25519 derivation can't be done with a non-hardened normal child")
-            data = self.pv_key.get_public_key(True) + BIP32node.ser32(i)
+            data = bytearray(self.pv_key.get_public_key(True))
+            data.extend(ser32(i))
         key_valid = False
         if self.curve != "ED":
             n_order = CURVES_ORDER.get(self.curve)
@@ -210,7 +214,10 @@ class BIP32node:
             else:
                 newkey = (derIL + self.pv_key.pv_int()) % n_order
                 if derIL >= n_order or newkey == 0:
-                    data = bytes([1]) + deriv[32:] + BIP32node.ser32(i)
+                    data = bytearray()
+                    data.append(1)
+                    data.extend(deriv[32:])
+                    data.extend(ser32(i))
                     deriv = HMAC_SHA512(self.chain_code, data)
                 else:
                     key_valid = True
@@ -257,14 +264,6 @@ class BIP32node:
             result[32:],
             curve.upper(),
         )
-
-    @staticmethod
-    def ser32(num):
-        return num.to_bytes(4, "big")
-
-    @staticmethod
-    def ser256(num):
-        return num.to_bytes(32, "big")
 
 
 # HDWallet : BIP39, BIP32, ...

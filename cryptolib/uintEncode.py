@@ -15,6 +15,14 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 
+# Big endian integers binary conversion
+
+
+def ser32(num):
+    """Serialized integer to 32 bits BE"""
+    return num.to_bytes(4, "big")
+
+
 # Little endian integers binary conversion
 
 
