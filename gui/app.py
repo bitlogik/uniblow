@@ -292,6 +292,7 @@ class UniblowApp(wx.App):
     def __init__(self, devices, coinclasses):
         self.devices = devices
         self.open_devices_sz = None
+        self.qr_frame = None
         super().__init__(redirect=False)
         self.Bind(wx.EVT_ACTIVATE_APP, self.OnActivate)
         self.coin_classes = coinclasses
@@ -393,6 +394,7 @@ class UniblowApp(wx.App):
         self.gui_frame.Layout()
 
     def gowallet(self, sdevice):
+        self.qr_close()
         dev_info = self.dev_selected(sdevice)
         if isinstance(dev_info, list):
             self.start_wallet_panel()
@@ -426,6 +428,7 @@ class UniblowApp(wx.App):
         wx.CallAfter(self.gowallet, sel_dev)
 
     def change_device(self, evt):
+        self.qr_close()
         if hasattr(self, "balance_timer"):
             self.balance_timer.Stop()
         if hasattr(self, "device"):
@@ -510,6 +513,7 @@ class UniblowApp(wx.App):
         event.Skip()
 
     def OnClose(self, event):
+        self.qr_close()
         if hasattr(self, "balance_timer"):
             self.balance_timer.Stop()
         if hasattr(self, "device"):
@@ -522,6 +526,7 @@ class UniblowApp(wx.App):
         self.BringWindowToFront()
 
     def erase_info(self, reset=False, first_time=False):
+        self.qr_close()
         if hasattr(self, "balance_timer"):
             self.balance_timer.Stop()
         if hasattr(self, "wallet") and hasattr(self.wallet, "wc_timer"):
@@ -667,7 +672,12 @@ class UniblowApp(wx.App):
     def qr_open(self, evt):
         addr = self.wallet.get_account()
         self.gui_panel.qr_button.Disable()
-        QRFrame(self.gui_frame, self.wallet.coin, addr, self.gui_panel.qr_button)
+        self.qr_frame = QRFrame(self.gui_frame, self.wallet.coin, addr, self.gui_panel.qr_button)
+
+    def qr_close(self):
+        if self.qr_frame:
+            self.qr_frame.Destroy()
+            self.qr_frame = None
 
     def copy_account(self, ev):
         if not hasattr(self, "wallet"):
@@ -928,6 +938,7 @@ class UniblowApp(wx.App):
             # Back to device panel
             self.gui_panel.Destroy()
             del self.gui_panel
+            self.qr_close()
             self.open_devices_panel()
         logger.error("Error with device : %s", str(exc), exc_info=exc, stack_info=True)
         self.warn_modal(str(exc))
