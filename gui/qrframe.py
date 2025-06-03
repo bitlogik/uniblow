@@ -77,6 +77,7 @@ class QRFrame(wx.Frame):
         self.Show()
 
     def closing(self, event):
-        self.btn.Enable()
+        if self.btn:
+            self.btn.Enable()
         event.Skip()
         self.Destroy()
