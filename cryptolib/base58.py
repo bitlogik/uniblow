@@ -15,7 +15,7 @@
 
 
 from math import ceil
-from .cryptography import b58checksum, md160
+from .cryptography import b58checksum
 
 
 BASE58 = 58

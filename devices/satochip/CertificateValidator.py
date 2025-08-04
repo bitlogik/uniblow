@@ -67,7 +67,6 @@ class CertificateValidator:
             subca_pem = f.read()
             subca_pem_bytes = subca_pem.encode("utf-8")
             logger.debug("SUBCA pem: " + subca_pem)
-        # print("DEVICE pem: " + device_pem)
 
         try:
             logger.debug("Trying to parse certs...")
