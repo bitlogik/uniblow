@@ -607,7 +607,7 @@ class UniblowApp(wx.App):
         )
         return confirm_tx_modal.ShowModal()
 
-    def callback_send(self, status, address, amount_str, sel_fee, domain=""):
+    def callback_send(self, status, address, amount_str, sel_fee=1, domain=""):
         self.gui_panel.Enable()
         if status != "OK":
             self.send_dialog.Destroy()
