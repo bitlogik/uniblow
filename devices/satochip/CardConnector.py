@@ -2,7 +2,7 @@
 # -*- coding: utf8 -*-
 
 # Satochip smartcard applet commands
-# Copyright (C) 2023  BitLogiK & Satochip
+# Copyright (C) 2023-2025  BitLogiK & Satochip
 
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
