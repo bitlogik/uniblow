@@ -756,7 +756,7 @@ def perform_transfer(to, amnt, fees, status_modal):
         wx.MilliSleep(250)
 
 
-def transfer(to, amount, fee_opt=1):
+def transfer(to, amount, fee_opt):
     progress_modal = wx.ProgressDialog(
         "Processing transaction",
         "",
