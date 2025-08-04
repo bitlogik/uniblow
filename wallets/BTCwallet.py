@@ -32,7 +32,7 @@ class blkhub_api:
     # Electra API
     def __init__(self, network):
         if network == "mainnet":
-            self.url = "https://blkhub.net/api/"
+            self.url = "https://blockstream.info/api/"
         elif network == "testnet":
             self.url = "https://blockstream.info/testnet/api/"
         else:
@@ -110,10 +110,6 @@ class blkhub_api:
         if priority == 2:
             return fees_table["2"]
         raise Exception("bad priority argument for get_fee, must be 0, 1 or 2")
-        # With btc-fee, only for mainnet, prio is "slow", "medium", "fast"
-        # fee_resp = urllib.request.urlopen("https://btc-fee.net/api.json")
-        # fees_data = json.load(fee_resp)
-        # return fees_data[priority]
 
 
 def testaddr(btc_addr, is_testnet):
@@ -345,7 +341,7 @@ class BTC_wallet:
         if self.btc.testnet:
             BTC_EXPLORER_URL = f"https://blockstream.info/testnet/address/{self.btc.address}"
         else:
-            BTC_EXPLORER_URL = f"https://blkhub.net/explorer/address/{self.btc.address}"
+            BTC_EXPLORER_URL = f"https://blockstream.info/address/{self.btc.address}"
         return BTC_EXPLORER_URL
 
     def raw_tx(self, amount, fee, to_account):
