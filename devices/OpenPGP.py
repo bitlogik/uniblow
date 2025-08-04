@@ -2,7 +2,7 @@
 # -*- coding: utf8 -*-
 
 # UNIBLOW OpenPGP Wallet manager
-# Copyright (C) 2021-2022 BitLogiK
+# Copyright (C) 2021-2025 BitLogiK
 
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -46,11 +46,9 @@ class OpenPGP(BaseDevice):
     has_password = True
     has_admin_password = True
     password_name = "PIN"
-    default_password = "123456"
     password_min_len = 6
     password_retries_inf = False
     admin_pass_name = "Administrator PIN3"
-    default_admin_password = "12345678"
     admin_pwd_minlen = 8
     has_hardware_button = True
     internally_gen_keys = True
@@ -105,6 +103,8 @@ class OpenPGP(BaseDevice):
                 raise
             # SIGn key is not present
             raise NotinitException()
+        if not self.PIN:
+            raise pwdException("BadPass")
         try:
             self.PGPdevice.verify_pin(1, self.PIN)
         except OpenPGPpy.ConnectionException:

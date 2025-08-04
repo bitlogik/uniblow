@@ -264,10 +264,6 @@ user data directory. The encryption is done with your password. LocalFile stores
 only the seed encrypted [with a random salt using libsodium XSalsa20/Poly1305](https://libsodium.gitbook.io/doc/secret-key_cryptography/secretbox#algorithm-details),
 using an encryption key derived from the user chosen password using [Argon2id
 (moderate settings)](https://raw.githubusercontent.com/P-H-C/phc-winner-argon2/master/argon2-specs.pdf).
-One can choose to use a default password. To do so, just leave blank the
-password prompt input when asked the first time at device setting. Without a
-personalized password, the security of the key is what your hard-drive computer
-offers for your files.  
 If you setup a password but forget it, there would be no way to recover your
 coins from the backup file. But you can still initialize a new Local File wallet
 with the same mnemonic words.
@@ -344,7 +340,6 @@ If the card is locked, only half initialized, or in a fancy state, you can use
 the [CryptnoxPro](https://github.com/Cryptnox-Software/cryptnoxpro) or the [Cryptnox iOS app](https://apps.apple.com/app/id1583011693). Because Uniblow
 cannot perform advanced operations such as PIN unlock, nor card reset.
 
-For quick demo, the default PIN is setup to "1234".
 
 ### Satochip card
 

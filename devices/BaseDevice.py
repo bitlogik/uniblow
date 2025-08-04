@@ -2,7 +2,7 @@
 # -*- coding: utf8 -*-
 
 # UNIBLOW Base Device
-# Copyright (C) 2021-2022 BitLogiK
+# Copyright (C) 2021-2025 BitLogiK
 
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -25,14 +25,12 @@ class BaseDevice(ABC):
     password_min_len = 8
     password_max_len = 24
     is_pin_numeric = False
-    default_password = "NoPasswd"
     password_retries_inf = False
     password_softlock = 0
     has_admin_password = False
     admin_pass_name = "Administrator Password"
     admin_pwd_minlen = 8
     admin_pwd_maxlen = 24
-    default_admin_password = ""
     is_HD = False
     # If on_device_check : describes the type of screen (e.g. "screen" or "2FA device")
     # When activated, sends the full tx to sign, else sends pre-hash.
@@ -48,7 +46,7 @@ class BaseDevice(ABC):
 
     @abstractmethod
     def open_account(self):
-        """Start/connect to the device."""
+        """Start/connect to the device. password string arg if has_password"""
         pass
 
     def set_key_type(self, ktype):

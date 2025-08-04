@@ -95,8 +95,6 @@ DEVICES_LIST = [
     "Satochip",
 ]
 
-DEFAULT_PASSWORD = "NoPasswd"
-
 
 logger = getLogger(__name__)
 
@@ -304,7 +302,7 @@ def device_selected(sel_device):
             app.warn_modal(str(exc), modal=True)
             return
         pin_left = -1
-        password_default = device_loaded.default_password
+        device_password = ""
         while True:
             try:
                 pwd_pin = the_device.password_name
@@ -324,9 +322,9 @@ def device_selected(sel_device):
                                 except:
                                     pass
                                 return
-                        raise pwdException
+                        raise pwdException()
                     # Can raise notinit
-                    device_loaded.open_account(password_default)
+                    device_loaded.open_account(device_password)
                 else:
                     device_loaded.open_account()
                 break
@@ -349,10 +347,6 @@ def device_selected(sel_device):
                         f"Choose the {the_device.admin_pass_name} to init "
                         f"the {device_sel_name} device.\n"
                     )
-                    set_admin_message += "\nFor demo, quick insecure setup, it can be left blank,\n"
-                    set_admin_message += (
-                        f"and a default {the_device.admin_pass_name} will be used.\n\n"
-                    )
                     lenmsg = (
                         str(device_loaded.admin_pwd_minlen)
                         if device_loaded.admin_pwd_minlen == device_loaded.admin_pwd_maxlen
@@ -369,8 +363,6 @@ def device_selected(sel_device):
                             except:
                                 pass
                             return
-                        if admin_password == "":
-                            admin_password = device_loaded.default_admin_password
                         if (
                             len(admin_password) >= device_loaded.admin_pwd_minlen
                             and len(admin_password) <= device_loaded.admin_pwd_maxlen
@@ -382,8 +374,6 @@ def device_selected(sel_device):
                         )
                 if the_device.has_password:
                     inp_message = f"Choose your {pwd_pin} to setup the {device_sel_name} wallet.\n"
-                    inp_message += "\nFor demo, quick insecure setup, it can be left blank,\n"
-                    inp_message += f"and a default {pwd_pin} will be used.\n\n"
                     lenmsg = (
                         str(device_loaded.password_min_len)
                         if device_loaded.password_min_len == device_loaded.password_max_len
@@ -401,8 +391,6 @@ def device_selected(sel_device):
                             except:
                                 pass
                             return
-                        if password == "":
-                            password = device_loaded.default_password
                         if (
                             len(password) >= device_loaded.password_min_len
                             and len(password) <= device_loaded.password_max_len
@@ -486,17 +474,17 @@ def device_selected(sel_device):
                     if device_loaded.is_pin_numeric:
                         pintype = "digits"
                     inp_message += f"\nThe {pwd_pin} to provide\nis {lenmsg} {pintype} long."
-                    password_default = app.get_password(device_sel_name, inp_message)
-                    if password_default is None:
+                    device_password = app.get_password(device_sel_name, inp_message)
+                    if device_password is None:
                         try:
                             device_loaded.disconnect()
                         except:
                             pass
                         return
                     if (
-                        len(password_default) >= device_loaded.password_min_len
-                        and len(password_default) <= device_loaded.password_max_len
-                        and (not device_loaded.is_pin_numeric or password_default.isdigit())
+                        len(device_password) >= device_loaded.password_min_len
+                        and len(device_password) <= device_loaded.password_max_len
+                        and (not device_loaded.is_pin_numeric or device_password.isdigit())
                     ):
                         break
                     wmsg = f"Device {pwd_pin} shall be {lenmsg} {pintype} long."

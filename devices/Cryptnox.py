@@ -2,7 +2,7 @@
 # -*- coding: utf8 -*-
 
 # UNIBLOW Cryptnox card device
-# Copyright (C) 2022 BitLogiK
+# Copyright (C) 2022-2025 BitLogiK
 
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -37,11 +37,9 @@ class Cryptnox(BaseDevice):
     is_pin_numeric = True
     password_retries_inf = False
     password_softlock = 3
-    default_password = "1234"
     admin_pass_name = "admin code"
     admin_pwd_minlen = 12
     admin_pwd_maxlen = 12
-    default_admin_password = "123456789012"
     internally_gen_keys = False
     basic_card_id = 0x42
     nft_card_id = 0x4E
@@ -53,7 +51,7 @@ class Cryptnox(BaseDevice):
         self.aindex = None
 
     def disconnect(self):
-        if self.card is not None:
+        if hasattr(self, "card") and self.card is not None:
             del self.card
 
     def initialize_device(self, settings):
@@ -101,6 +99,8 @@ class Cryptnox(BaseDevice):
         card_info = self.card.get_card_info()
         if card_info.key_type not in ["X", "S", "D", "L"]:
             raise Exception("This Cryptnox card wasn't setup with a derivable key type.")
+        if not password:
+            raise pwdException()
         try:
             self.card.testPIN(password)
         except Exception as exc:
