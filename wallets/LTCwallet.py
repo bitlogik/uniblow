@@ -1,8 +1,8 @@
 #!/usr/bin/python3
 # -*- coding: utf8 -*-
 
-# UNIBLOW LTC wallet with electra API REST
-# Copyright (C) 2021-2022 BitLogiK
+# UNIBLOW LTC wallet with Blockcypher API REST
+# Copyright (C) 2021-2025 BitLogiK
 
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -39,7 +39,6 @@ class blockcypher_api:
             self.coin = "LTC"
         else:
             raise Exception("Unknown LTC network name")
-        self.jsres = []
 
     def getData(self, command, param, paramsurl={}, data=None):
         parameters = {key: value for key, value in paramsurl.items()}
@@ -47,17 +46,22 @@ class blockcypher_api:
         url = f"{self.url}{command}/{param}"
         if params_enc:
             url += f"?{params_enc}"
+        req = urllib.request.Request(
+            url,
+            headers={"User-Agent": "Mozilla/5.0"},
+            data=data,
+        )
         try:
-            req = urllib.request.Request(
-                url,
-                headers={"User-Agent": "Mozilla/5.0"},
-                data=data,
-            )
-            self.webrsc = urllib.request.urlopen(req)
-            brep = self.webrsc.read()
+            webrsc = urllib.request.urlopen(req, timeout=12.0)
+            brep = webrsc.read()
             if len(brep) == 64 and brep[0] != ord("{"):
                 brep = b'{"txid":"' + brep + b'"}'
-            self.jsres = json.loads(brep)
+            res = json.loads(brep)
+            if "error" in res:
+                raise Exception(res["error"])
+            if "errors" in res:
+                raise Exception(res["errors"])
+            return res
         except urllib.error.HTTPError as e:
             strerr = e.read()
             raise IOError(f"{e.code}  :  {strerr.decode('utf8')}")
@@ -66,16 +70,13 @@ class blockcypher_api:
         except Exception:
             raise IOError("Error while processing request:\n" f"{url}")
 
-    def checkapiresp(self):
-        if "errors" in self.jsres:
-            logger.error(" !! ERROR : %s", self.jsres["errors"])
-            raise Exception("Error decoding the API endpoint")
-
     def getutxos(self, addr, nconf):  # nconf 0 or 1
-        self.getData("addrs", addr, {"unspentOnly": "true", "confirmations": nconf, "limit": 2000})
-        self.checkapiresp()
-        addrutxos = self.getKey("txrefs")
+        addrutxos = self.getData(
+            "addrs", addr, {"unspentOnly": "true", "confirmations": nconf, "limit": 2000}
+        ).get("txrefs")
         selutxos = []
+        if addrutxos is None:
+            return selutxos
         # translate inputs from blockcypher to pybitcoinlib
         for utxo in addrutxos:
             selutxos.append(
@@ -87,21 +88,11 @@ class blockcypher_api:
         return selutxos
 
     def pushtx(self, txhex):
-        self.getData("txs", "push", data=f'{{"tx": "{txhex}"}}'.encode("ascii"))
-        self.checkapiresp()
-        return self.getKey("tx/hash")
-
-    def getKey(self, keychar):
-        out = self.jsres
-        path = keychar.split("/")
-        for key in path:
-            if key.isdigit():
-                key = int(key)
-            try:
-                out = out[key]
-            except KeyError:
-                out = []
-        return out
+        return (
+            self.getData("txs", "push", data=f'{{"tx": "{txhex}"}}'.encode("ascii"))
+            .get("tx")
+            .get("hash")
+        )
 
     def get_fee(self, priority):
         return priority + 1

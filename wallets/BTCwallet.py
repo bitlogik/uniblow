@@ -2,7 +2,7 @@
 # -*- coding: utf8 -*-
 
 # UNIBLOW BTC wallet with electra API REST
-# Copyright (C) 2021-2022 BitLogiK
+# Copyright (C) 2021-2025 BitLogiK
 
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -37,41 +37,36 @@ class blkhub_api:
             self.url = "https://blockstream.info/testnet/api/"
         else:
             raise Exception("Unknown BTC network name")
-        self.jsres = []
 
     def getData(self, endpoint, params={}, data=None):
         parameters = {key: value for key, value in params.items()}
         params_enc = urllib.parse.urlencode(parameters)
+        req = urllib.request.Request(
+            f"{self.url}{endpoint}?{params_enc}",
+            headers={"User-Agent": "Mozilla/5.0"},
+            data=data,
+        )
         try:
-            req = urllib.request.Request(
-                f"{self.url}{endpoint}?{params_enc}",
-                headers={"User-Agent": "Mozilla/5.0"},
-                data=data,
-            )
-            self.webrsc = urllib.request.urlopen(req)
-            brep = self.webrsc.read()
+            webrsc = urllib.request.urlopen(req, timeout=12.0)
+            brep = webrsc.read()
             if len(brep) == 64 and brep[0] != ord("{"):
                 brep = b'{"txid":"' + brep + b'"}'
-            self.jsres = json.loads(brep)
+            res = json.loads(brep)
+            if "error" in res:
+                raise Exception(res["error"])
+            if "errors" in res:
+                raise Exception(res["errors"])
+            return res
         except urllib.error.HTTPError as e:
             strerr = e.read()
             raise IOError(f"{e.code}  :  {strerr.decode('utf8')}")
         except urllib.error.URLError as e:
             raise IOError(e)
         except Exception:
-            raise IOError(f"Error while processing request:\n{self.url}{endpoint}?{params_enc}")
-
-    def checkapiresp(self):
-        if "error" in self.jsres:
-            print(" !! ERROR :")
-            raise Exception(self.jsres["error"])
-        if "errors" in self.jsres:
-            print(" !! ERRORS :")
-            raise Exception(self.jsres["errors"])
+            raise IOError(f"Error while processing request:\n{req.full_url}")
 
     def getutxos(self, addr, nconf):  # nconf 0 or 1
-        self.getData("address/" + addr + "/utxo")
-        addrutxos = self.jsres
+        addrutxos = self.getData("address/" + addr + "/utxo")
         selutxos = []
         # translate inputs from blkhub to pybitcoinlib
         for utxo in addrutxos:
@@ -84,25 +79,10 @@ class blkhub_api:
         return selutxos
 
     def pushtx(self, txhex):
-        self.getData("tx", data=txhex.encode("ascii"))
-        self.checkapiresp()
-        return self.getKey("txid")
-
-    def getKey(self, keychar):
-        out = self.jsres
-        path = keychar.split("/")
-        for key in path:
-            if key.isdigit():
-                key = int(key)
-            try:
-                out = out[key]
-            except Exception:
-                out = []
-        return out
+        return self.getData("tx", data=txhex.encode("ascii")).get("txid")
 
     def get_fee(self, priority):
-        self.getData("fee-estimates")
-        fees_table = self.jsres
+        fees_table = self.getData("fee-estimates")
         if priority == 0:
             return fees_table["504"]
         if priority == 1:

@@ -2,7 +2,7 @@
 # -*- coding: utf8 -*-
 
 # UNIBLOW SOL wallet with with RPC
-# Copyright (C) 2021-2022 BitLogiK
+# Copyright (C) 2021-2025 BitLogiK
 
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -16,7 +16,6 @@
 
 
 import json
-import urllib.parse
 import urllib.request
 
 from wallets.name_service import resolve
@@ -89,7 +88,6 @@ class sol_api:
         self.url = "https://api.mainnet-beta.solana.com/"
         if network.lower() != "mainnet":
             self.url = f"https://api.{network.lower()}.solana.com/"
-        self.jsres = []
 
     def getData(self, method, params=None):
         if params is None:
@@ -97,14 +95,19 @@ class sol_api:
         if isinstance(params, str):
             params = [params]
         data = {"jsonrpc": "2.0", "method": method, "params": params, "id": 1}
+        req = urllib.request.Request(
+            self.url,
+            headers={"User-Agent": "Uniblow/2", "Content-Type": "application/json"},
+            data=json.dumps(data).encode("utf-8"),
+        )
         try:
-            req = urllib.request.Request(
-                self.url,
-                headers={"User-Agent": "Uniblow/2", "Content-Type": "application/json"},
-                data=json.dumps(data).encode("utf-8"),
-            )
-            self.webrsc = urllib.request.urlopen(req)
-            self.jsres = json.load(self.webrsc)
+            webrsc = urllib.request.urlopen(req, timeout=12.0)
+            res = json.load(webrsc)
+            if "error" in res:
+                raise Exception(res["error"])
+            if "errors" in res:
+                raise Exception(res["errors"])
+            return res
         except urllib.error.HTTPError as exc:
             strerr = exc.read()
             raise IOError(f"{exc.code}  :  {strerr.decode('utf8')}")
@@ -113,41 +116,15 @@ class sol_api:
         except Exception:
             raise IOError(f"Error while processing request:\n {self.url}  :  {method} ,  {params}")
 
-    def checkapiresp(self):
-        if "error" in self.jsres:
-            print(" !! ERROR :")
-            raise Exception(self.jsres["error"])
-        if "errors" in self.jsres:
-            print(" !! ERRORS :")
-            raise Exception(self.jsres["errors"])
-
     def get_balance(self, addr):
-        self.getData("getBalance", [addr])
-        balance = int(self.getKey("result/value"))
-        self.getData("getAccountInfo", [addr])
+        balance = int(self.getData("getBalance", [addr]).get("result").get("value"))
         return balance
 
     def get_recent_block_hash(self):
-        self.getData("getRecentBlockhash")
-        block_hash = self.getKey("result/value/blockhash")
-        return block_hash
+        return self.getData("getRecentBlockhash").get("result").get("value").get("blockhash")
 
     def pushtx(self, txb58):
-        self.getData("sendTransaction", [txb58])
-        self.checkapiresp()
-        return self.getKey("result")
-
-    def getKey(self, keychar):
-        out = self.jsres
-        path = keychar.split("/")
-        for key in path:
-            if key.isdigit():
-                key = int(key)
-            try:
-                out = out[key]
-            except Exception:
-                out = []
-        return out
+        return self.getData("sendTransaction", [txb58]).get("result")
 
 
 def testaddr(sol_addr):
