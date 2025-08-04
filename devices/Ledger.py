@@ -104,7 +104,7 @@ class Ledger(BaseDevice):
         if int.from_bytes(eth_app_info[1:4], "big") < MINIMUM_APP_VERSION:
             raise Exception("The Ethereum app installed in the Ledger must be at least v1.5.0.")
         if self.account is None:
-            raise NotinitException
+            raise NotinitException()
 
     def get_address_index(self):
         """Get the account address index, last BIP44 derivation number as str"""

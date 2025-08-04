@@ -2,7 +2,7 @@
 # -*- coding: utf8 -*-
 
 # UNIBLOW  : a UNIversal BLOckchain Wallet
-# Copyright (C) 2021-2024 BitLogiK
+# Copyright (C) 2021-2025 BitLogiK
 
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -296,7 +296,6 @@ def device_selected(sel_device):
         try:
             device_loaded = the_device()
         except Exception as exc:
-            # app.gui_panel.devices_choice.SetSelection(0)
             logger.error(
                 "Error during device loading : %s", str(exc), exc_info=exc, stack_info=True
             )
@@ -318,7 +317,6 @@ def device_selected(sel_device):
                         if the_device.is_HD:
                             HDwallet_settings = app.hd_setup("")
                             if HDwallet_settings is None:
-                                # app.gui_panel.devices_choice.SetSelection(0)
                                 return
                         raise pwdException
                     # Can raise notinit
@@ -335,7 +333,6 @@ def device_selected(sel_device):
                     # Get settings from the user
                     HDwallet_settings = app.hd_setup(mnemonic)
                     if HDwallet_settings is None:
-                        # app.gui_panel.devices_choice.SetSelection(0)
                         return
                 if the_device.has_admin_password:
                     set_admin_message = (
@@ -357,7 +354,6 @@ def device_selected(sel_device):
                     while True:
                         admin_password = app.get_password(device_sel_name, set_admin_message)
                         if admin_password is None:
-                            # app.gui_panel.devices_choice.SetSelection(0)
                             return
                         if admin_password == "":
                             admin_password = device_loaded.default_admin_password
@@ -386,7 +382,6 @@ def device_selected(sel_device):
                     while True:
                         password = app.get_password(device_sel_name, inp_message)
                         if password is None:
-                            # app.gui_panel.devices_choice.SetSelection(0)
                             return
                         if password == "":
                             password = device_loaded.default_password
@@ -416,7 +411,6 @@ def device_selected(sel_device):
                         device_loaded.initialize_device()
                     break
                 except Exception as exc:
-                    # app.gui_panel.devices_choice.SetSelection(0)
                     logger.error(
                         "Error during device initialization : %s",
                         {str(exc)},
@@ -460,7 +454,6 @@ def device_selected(sel_device):
                     inp_message += f"\nThe {pwd_pin} to provide\nis {lenmsg} {pintype} long."
                     password_default = app.get_password(device_sel_name, inp_message)
                     if password_default is None:
-                        # app.gui_panel.devices_choice.SetSelection(0)
                         return
                     if (
                         len(password_default) >= device_loaded.password_min_len

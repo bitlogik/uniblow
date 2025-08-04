@@ -134,9 +134,7 @@ class CardConnector:
                         self.connection.connect(
                             CardConnection.T1_protocol, mode=SCARD_SHARE_EXCLUSIVE
                         )
-                        logger.debug("Before card_Select...")
                         self.card_select()
-                        logger.debug("After card_Select...")
                         card_present = hasattr(self, "connection")
                     except Exception as ex:
                         logger.debug(f"Failed with this reader: {ex}")
