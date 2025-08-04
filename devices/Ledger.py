@@ -80,6 +80,10 @@ class Ledger(BaseDevice):
         self.aindex = settings["index"]
         self.legacy_derive = settings["legacy_path"]
 
+    def disconnect(self):
+        if self.ledger_device is not None:
+            self.ledger_device.close()
+
     def open_account(self):
         try:
             self.ledger_device = getDongle()

@@ -138,6 +138,10 @@ class CardConnector:
                         card_present = hasattr(self, "connection")
                     except Exception as ex:
                         logger.debug(f"Failed with this reader: {ex}")
+                        try:
+                            self.connection.disconnect()
+                        except:
+                            pass
                         pass
                 if card_present:
                     logger.debug("A Satochip was detected, using %s", r)

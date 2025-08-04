@@ -66,6 +66,9 @@ class OpenPGP(BaseDevice):
                 del self.PGPdevice.connection
             del self.PGPdevice
 
+    def disconnect(self):
+        self.__del__()
+
     def set_key_type(self, ktype):
         if ktype != "K1":
             raise Exception("Incompatible key type. OpenPGP is set to EC 256k1.")

@@ -181,6 +181,10 @@ def watch_messages():
 
 def close_device():
     if hasattr(app, "device"):
+        try:
+            app.device.disconnect()
+        except:
+            pass
         del app.device
 
 
@@ -315,6 +319,10 @@ def device_selected(sel_device):
                         if the_device.is_HD:
                             HDwallet_settings = app.hd_setup("")
                             if HDwallet_settings is None:
+                                try:
+                                    device_loaded.disconnect()
+                                except:
+                                    pass
                                 return
                         raise pwdException
                     # Can raise notinit
@@ -331,6 +339,10 @@ def device_selected(sel_device):
                     # Get settings from the user
                     HDwallet_settings = app.hd_setup(mnemonic)
                     if HDwallet_settings is None:
+                        try:
+                            device_loaded.disconnect()
+                        except:
+                            pass
                         return
                 if the_device.has_admin_password:
                     set_admin_message = (
@@ -352,6 +364,10 @@ def device_selected(sel_device):
                     while True:
                         admin_password = app.get_password(device_sel_name, set_admin_message)
                         if admin_password is None:
+                            try:
+                                device_loaded.disconnect()
+                            except:
+                                pass
                             return
                         if admin_password == "":
                             admin_password = device_loaded.default_admin_password
@@ -380,6 +396,10 @@ def device_selected(sel_device):
                     while True:
                         password = app.get_password(device_sel_name, inp_message)
                         if password is None:
+                            try:
+                                device_loaded.disconnect()
+                            except:
+                                pass
                             return
                         if password == "":
                             password = device_loaded.default_password
@@ -416,6 +436,10 @@ def device_selected(sel_device):
                         stack_info=True,
                     )
                     app.warn_modal(str(exc))
+                    try:
+                        device_loaded.disconnect()
+                    except:
+                        pass
                     return
             except pwdException as excp:
                 if not device_loaded.password_retries_inf:
@@ -423,9 +447,17 @@ def device_selected(sel_device):
                         pin_left = device_loaded.get_pw_left()
                     except Exception as exc:
                         app.device_error(exc)
+                        try:
+                            device_loaded.disconnect()
+                        except:
+                            pass
                         return
                     if pin_left == 0:
                         app.warn_modal(f"Device {pwd_pin} is locked.")
+                        try:
+                            device_loaded.disconnect()
+                        except:
+                            pass
                         return
                     if (
                         the_device.password_softlock > 0
@@ -433,6 +465,10 @@ def device_selected(sel_device):
                         and str(excp) == "0"
                     ):
                         app.warn_modal(f"Device {pwd_pin} is soft locked. Restart it to try again.")
+                        try:
+                            device_loaded.disconnect()
+                        except:
+                            pass
                         return
                 while True:
                     inp_message = f"Input your {device_sel_name} wallet {pwd_pin}.\n"
@@ -452,6 +488,10 @@ def device_selected(sel_device):
                     inp_message += f"\nThe {pwd_pin} to provide\nis {lenmsg} {pintype} long."
                     password_default = app.get_password(device_sel_name, inp_message)
                     if password_default is None:
+                        try:
+                            device_loaded.disconnect()
+                        except:
+                            pass
                         return
                     if (
                         len(password_default) >= device_loaded.password_min_len
