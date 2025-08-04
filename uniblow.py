@@ -55,7 +55,6 @@ SUPPORTED_COINS = [
     "AVAX",
     "LTC",
     "DOGE",
-    "EOS",
     "XTZ",
     "SOL",
 ]
@@ -284,7 +283,6 @@ def device_selected(sel_device):
         coins_list.remove("SOL")
     if device_sel_name == "Satochip":
         coins_list.remove("SOL")
-        coins_list.remove("EOS")
         coins_list.remove("BTC")
         coins_list.remove("LTC")
     if sel_device == 0:

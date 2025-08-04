@@ -6,7 +6,6 @@ from wx import CallAfter
 
 chain_names = {
     "GLMR": "moonbeam",
-    "EOS": "eos",
     "XTZ": "tezos",
     "ARB": "arbitrum-one",
     "BSC": "binance-smart-chain",
@@ -34,7 +33,6 @@ native_tokens = {
     "LTC": "litecoin",
     "TRX": "tron",
     "GLMR": "moonbeam",
-    "EOS": "eos",
     "XTZ": "tezos",
     "ARB/ETH": "ethereum",
     "BSC": "binancecoin",

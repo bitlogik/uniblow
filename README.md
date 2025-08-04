@@ -179,11 +179,6 @@ Compatible with the following blockchains :
   
   - mainnet networks
 
-- EOS
-  
-  - K1 wallet
-  
-  - EOSio and Jungle4 networks
 
 Run Uniblow
 -----------

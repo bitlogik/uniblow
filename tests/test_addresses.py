@@ -2,7 +2,6 @@ from wallets.BTCwallet import testaddr as BTCtestaddr
 from wallets.ETHwallet import testaddr as ETHtestaddr
 from wallets.LTCwallet import testaddr as LTCtestaddr
 from wallets.DOGEwallet import testaddr as DOGEtestaddr
-from wallets.EOSwallet import testaddr as EOStestaddr
 from wallets.XTZwallet import testaddr as XTZtestaddr
 
 
@@ -241,48 +240,6 @@ DOGE_ADDR_TEST_DATA = [
     ["1mrcMUdt7JNdHBPthpFuvtn9wkKam2SZLH", True, False],
 ]
 
-# Accounts (destination adresses)
-# An account is identified by a human readable of 12 characters in length.
-# The characters can include a-z, 1-5, and optional dots (.) except the last character.
-EOS_ADDR_TEST_DATA = [
-    ["12345abcdefg", True],
-    ["hijklmnopqrs", True],
-    ["tuvwxyz.1234", True],
-    ["111111111111", True],
-    ["555555555555", True],
-    ["aaaaaaaaaaaa", True],
-    ["zzzzzzzzzzzz", True],
-    ["eosioaccount", True],
-    ["eosio.ccount", True],
-    [".osioaccount", True],
-    [".osio.ccount", True],
-    ["eosioaccoun.", False],
-    ["eosioaccOunt", False],
-    ["eosioacc?unt", False],
-    ["eosXoaccOunt", False],
-    ["eos oaccount", False],
-    ["", False],
-    ["e", False],
-    ["eo", False],
-    ["eos", False],
-    ["eosi", False],
-    ["eosio", False],
-    ["eosioa", False],
-    ["eosioac", False],
-    ["eosioacc", False],
-    ["eosioacco", False],
-    ["eosioaccou", False],
-    ["eosioaccoun", False],
-    ["eosioaccounta", False],
-    ["eosioaccountab", False],
-    ["-1", False],
-    ["0", False],
-    ["6", False],
-    ["111111111111k", False],
-    ["zzzzzzzzzzzzk", False],
-    ["12345abcdefghj", False],
-]
-
 XTZ_ADDR_TEST_DATA = [
     # Good addresses
     ["tz1cG2jx3W4bZFeVGBjsTxUAG8tdpTXtE8PT", True],
@@ -345,14 +302,6 @@ def test_doge_addresses():
         if res:
             res = doge_addr_test[0]
         assert DOGEtestaddr(doge_addr_test[0], doge_addr_test[1]) == res
-
-
-def test_eos_accounts():
-    for eos_addr_test in EOS_ADDR_TEST_DATA:
-        res = eos_addr_test[1]
-        if res:
-            res = eos_addr_test[0]
-        assert EOStestaddr(eos_addr_test[0]) == res
 
 
 def test_xtz_addresses():

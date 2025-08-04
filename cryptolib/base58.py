@@ -37,12 +37,6 @@ def bin_to_base58(bin_data):
     return base58
 
 
-def bin_to_base58_eos(bin_data, key_type):
-    key_type_bin = bytes(key_type, "ascii")
-    checksum_eos = md160(bin_data + key_type_bin)[:4]
-    return bin_to_base58(bin_data + checksum_eos)
-
-
 def encode_base58(bin_data):
     """Create a Base58Check string"""
     return bin_to_base58(bin_data + b58checksum(bin_data))
