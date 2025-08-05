@@ -748,13 +748,13 @@ class ETH_wallet:
         # Transfer the amount in base unit minus fee, like the receiver paying the fee
         if self.eth.contract:
             gazlimit = ETH_wallet.GAZ_LIMIT_ERC_20_TX
-            if self.chainID == 42161:
-                # Arbitrum : provide 4x more gas
+            if getattr(self, "sendall_notallowed", False):
+                # L2 : provide 4x more gas
                 gazlimit *= 4
         else:
             gazlimit = ETH_wallet.GAZ_LIMIT_SIMPLE_TX
-            if self.chainID == 42161:
-                # Arbitrum : provide 25x more gas
+            if getattr(self, "sendall_notallowed", False):
+                # L2 : provide 25x more gas
                 gazlimit *= 25
         if to_account.startswith("0x"):
             to_account = to_account[2:]
