@@ -16,7 +16,6 @@
 
 
 import json
-import urllib.parse
 import urllib.request
 import re
 from logging import getLogger

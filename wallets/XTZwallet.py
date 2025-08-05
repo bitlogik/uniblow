@@ -16,7 +16,6 @@
 
 
 import json
-import urllib.parse
 import urllib.request
 
 from wallets.name_service import resolve
@@ -25,7 +24,6 @@ from cryptolib.cryptography import compress_pubkey
 from wallets.wallets_utils import balance_string, shift_10, NotEnoughTokens
 
 try:
-    import nacl.signing
     import nacl.encoding
     import nacl.hash
 except Exception:
