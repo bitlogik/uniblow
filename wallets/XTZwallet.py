@@ -381,8 +381,11 @@ class XTZ_wallet:
 
     def transfer(self, amount, to_account, priority_fee):
         # Transfer x unit to an account, pay
+        amnt_int = shift_10(amount, XTZ_units)
+        if amnt_int == 0:
+            raise Exception("Amount is zero.")
         return self.raw_tx(
-            shift_10(amount, XTZ_units),
+            amnt_int,
             XTZ_wallet.OPERATION_FEE,
             XTZ_wallet.GAZ_LIMIT_SIMPLE_TX,
             to_account,
@@ -394,8 +397,11 @@ class XTZ_wallet:
         if not self.xtz.getpublickey():
             # if not revealed
             fee += XTZ_wallet.OPERATION_FEE
+        net_amount = amount - fee
+        if net_amount <= 0:
+            raise Exception("Not enough fund to cover fees.")
         return self.raw_tx(
-            amount - fee,
+            net_amount,
             XTZ_wallet.OPERATION_FEE,
             XTZ_wallet.GAZ_LIMIT_SIMPLE_TX,
             to_account,

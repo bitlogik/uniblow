@@ -270,12 +270,18 @@ class SOL_wallet:
 
     def transfer(self, amount, to_account, priority_fee):
         # Transfer x unit to an account, pay
-        tx_data = self.build_tx(shift_10(amount, self.sol.decimals), to_account)
+        amnt_int = shift_10(amount, self.sol.decimals)
+        if amnt_int == 0:
+            raise Exception("Amount is zero.")
+        tx_data = self.build_tx(amnt_int, to_account)
         return "\nDONE, txID : " + self.broadcast_tx(tx_data)
 
     def transfer_inclfee(self, amount, to_account):
         # Transfer the amount in base unit minus fee, like the receiver paying the fee
-        tx_data = self.build_tx(amount - FEE_LEVEL, to_account)
+        net_amount = amount - FEE_LEVEL
+        if net_amount <= 0:
+            raise Exception("Not enough fund to cover fees.")
+        tx_data = self.build_tx(net_amount, to_account)
         return "\nDONE, txID : " + self.broadcast_tx(tx_data)[2:]
 
     def transfer_all(self, to_account, fee_priority):

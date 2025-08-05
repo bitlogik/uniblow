@@ -384,6 +384,8 @@ class TRX_wallet:
 
     def transfer(self, amount, to_account, fee_priority):
         amnt_int = shift_10(amount, self.get_decimals())
+        if amnt_int == 0:
+            raise Exception("Amount is zero.")
         tx_data = self.build_tx(amnt_int, to_account)
         return "\nDONE, txID : " + self.api.broadcast(tx_data)
 

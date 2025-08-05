@@ -728,9 +728,10 @@ class ETH_wallet:
             gaz_price = int(gaz_price * 1.6)
         else:
             raise Exception("fee_priority must be 0, 1 or 2 (slow, normal, fast)")
-        tx_data = self.build_tx(
-            shift_10(amount, self.eth.decimals), gaz_price, gazlimit, to_account
-        )
+        amnt_int = shift_10(amount, self.eth.decimals)
+        if amnt_int == 0:
+            raise Exception("Amount is zero.")
+        tx_data = self.build_tx(amnt_int, gaz_price, gazlimit, to_account)
         return "\nDONE, txID : " + self.broadcast_tx(tx_data)
 
     def transfer_nft(self, id, to_account):
@@ -770,7 +771,10 @@ class ETH_wallet:
             fee = 0
         else:
             fee = int(gazlimit * gaz_price)
-        tx_data = self.build_tx(amount - fee, gaz_price, gazlimit, to_account)
+        net_amount = amount - fee
+        if net_amount <= 0:
+            raise Exception("Not enough fund to cover fees.")
+        tx_data = self.build_tx(net_amount, gaz_price, gazlimit, to_account)
         return "\nDONE, txID : " + self.broadcast_tx(tx_data)
 
     def transfer_all(self, to_account, fee_priority):

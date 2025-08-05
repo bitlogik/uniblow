@@ -357,13 +357,19 @@ class LTC_wallet:
 
     def transfer(self, amount, to_account, fee_priority):
         # Transfer x base unit to an account, pay
+        amnt_int = shift_10(amount, LTC_units)
+        if amnt_int == 0:
+            raise Exception("Amount is zero.")
         fee = self.assess_fee(fee_priority)
-        return self.raw_tx(shift_10(amount, LTC_units), fee, to_account)
+        return self.raw_tx(amnt_int, fee, to_account)
 
     def transfer_inclfee(self, amount, to_account, fee_priority):
         # Transfer the amount in base unit minus fee, like the receiver paying the fee
         fee = self.assess_fee(fee_priority)
-        return self.raw_tx(amount - fee, fee, to_account)
+        net_amount = amount - fee
+        if net_amount <= 0:
+            raise Exception("Not enough fund to cover fees.")
+        return self.raw_tx(net_amount, fee, to_account)
 
     def transfer_all(self, to_account, fee_priority):
         # Transfer all the wallet to an address (minus fee)
