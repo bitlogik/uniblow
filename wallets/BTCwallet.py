@@ -28,8 +28,8 @@ from wallets.name_service import resolve
 from wallets.wallets_utils import balance_string, shift_10, NotEnoughTokens
 
 
-class blkhub_api:
-    # Electra API
+class esplora_api:
+    # Esplora API
     def __init__(self, network):
         if network == "mainnet":
             self.url = "https://blockstream.info/api/"
@@ -39,6 +39,7 @@ class blkhub_api:
             raise Exception("Unknown BTC network name")
 
     def getData(self, endpoint, params={}, data=None):
+        """REST API Client, GET or POST when data"""
         parameters = {key: value for key, value in params.items()}
         params_enc = urllib.parse.urlencode(parameters)
         req = urllib.request.Request(
@@ -68,7 +69,7 @@ class blkhub_api:
     def getutxos(self, addr, nconf):  # nconf 0 or 1
         addrutxos = self.getData("address/" + addr + "/utxo")
         selutxos = []
-        # translate inputs from blkhub to pybitcoinlib
+        # translate inputs from esplora to pybitcoinlib
         for utxo in addrutxos:
             selutxos.append(
                 {
@@ -280,7 +281,9 @@ class BTC_wallet:
         self.current_device = device
         pubkey = self.current_device.get_public_key()
         network_name = self.networks[network]
-        self.btc = BTCwalletCore(pubkey, network_name, wtype, blkhub_api(network_name), pk_compress)
+        self.btc = BTCwalletCore(
+            pubkey, network_name, wtype, esplora_api(network_name), pk_compress
+        )
 
     @classmethod
     def get_networks(cls):
