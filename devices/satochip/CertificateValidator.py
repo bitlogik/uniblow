@@ -120,8 +120,8 @@ class CertificateValidator:
         cert_txt += f"version: {cert_obj.version} \n"
         cert_txt += f"serial_number: {cert_obj.serial_number} \n"
         cert_txt += f"issuer: {cert_obj.issuer} \n"
-        cert_txt += f"not_valid_before: {cert_obj.not_valid_before} \n"
-        cert_txt += f"not_valid_after: {cert_obj.not_valid_after} \n"
+        cert_txt += f"not_valid_before: {cert_obj.not_valid_before_utc} \n"
+        cert_txt += f"not_valid_after: {cert_obj.not_valid_after_utc} \n"
         cert_txt += f"subject: {cert_obj.subject} \n"
         cert_txt += f"signature_hash_algorithm: {cert_obj.signature_hash_algorithm.name} \n"
         # cert_txt+= f"signature_algorithm_parameters: {cert_obj.signature_algorithm_parameters} \n" # only available in cryptography v41+
