@@ -200,7 +200,8 @@ class CardConnector:
         self.setup_done = None
         self.needs_secure_channel = None
         self.card_type = "card"
-        self.connection.disconnect()
+        if hasattr(self, "connection") and self.connection:
+            self.connection.disconnect()
         # reset authentikey
         self.parser.authentikey = None
         self.parser.authentikey_coordx = None
