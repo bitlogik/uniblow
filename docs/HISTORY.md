@@ -1,5 +1,15 @@
 Uniblow versions history
 
+# 2.7.4
+
+* EOS removed
+* Remove default demo password
+* Allow hardware device reuse
+* Use Blockstream API for BTC
+* Code cleaning / quality improvement
+* Guard from 0-amount tx
+* Small update on Satochip wallet
+
 # 2.7.3
 
 * Watch seed only if there is an input
