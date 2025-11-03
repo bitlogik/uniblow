@@ -1,6 +1,6 @@
 # -*- coding: utf8 -*-
 
-# UNIBLOW  -  HDwallet (BIP39, BIP32)
+# UNIBLOW  -  HDwallet (BIP39, BIP32 / SLIP10)
 # Copyright (C) 2021-2025 BitLogiK
 
 # This program is free software: you can redistribute it and/or modify
@@ -39,7 +39,7 @@ def decode_bip32_path(path_string):
     """Decode a BIP39 string m/../.. into an integer list."""
     if path_string == "" or path_string == "m":
         return []
-    if path_string[:2] != "m/":
+    if not path_string.startswith("m/"):
         raise Exception("Unvalid path string, must start with m/")
     path_list = path_string.lstrip("m/").split("/")
     int_list = []
@@ -174,7 +174,7 @@ def generate_mnemonic(nwords):
     return entropy_to_mnemonic(new_ent)
 
 
-# BIP32 : key derivation tree
+# BIP32 / SLIP10 : key derivation tree
 
 
 class BIP32node:

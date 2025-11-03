@@ -95,10 +95,10 @@ coins_list = [
     {"name": "AVAX", "path": "m/44'/60'/{}'/{}/{}", "wallet_lib": AVAX_wallet},
     {"name": "Litecoin", "path": "m/44'/2'/{}'/{}/{}", "wallet_lib": LTC_wallet},
     {"name": "Dogecoin", "path": "m/44'/3'/{}'/{}/{}", "wallet_lib": DOGE_wallet},
-    {"name": "Tezos tz1", "path": "m/44'/1729'/{0}'/{2}", "wallet_lib": XTZ_wallet, "type": 1},
+    {"name": "Tezos tz1", "path": "m/44'/1729'/{0}'/{2}'", "wallet_lib": XTZ_wallet, "type": 1},
     {"name": "Tezos tz2", "path": "m/44'/1729'/{}'/{}/{}", "wallet_lib": XTZ_wallet, "type": 0},
-    {"name": "Solana", "path": "m/44'/501'/{0}'/{2}", "wallet_lib": SOL_wallet},
-    {"name": "Solana (alt. deriv)", "path": "m/44'/501'/{2}", "wallet_lib": SOL_wallet},
+    {"name": "Solana", "path": "m/44'/501'/{0}'/{2}'", "wallet_lib": SOL_wallet},
+    {"name": "Solana (alt. deriv)", "path": "m/44'/501'/{2}'", "wallet_lib": SOL_wallet},
 ]
 
 WORDSLEN_LIST = ["12 words", "15 words", "18 words", "21 words", "24 words"]
@@ -265,9 +265,6 @@ class SeedWatcherPanel(gui.swgui.MainPanel):
             change_idx = 1
         path = cpath.format(account_idx, change_idx, address_idx)
         key_type = coin["wallet_lib"].get_key_type(coin.get("type", 0))
-        if key_type == "ED":
-            # Only for last, means all the index down to m shall be hardened
-            path += "'"
 
         if derivation_type_code == 3:
             wallet = ElectrumOldWallet.from_seed(seed)

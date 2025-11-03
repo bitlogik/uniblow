@@ -141,8 +141,6 @@ class LocalFile(BaseDevice):
         # elif key_type == "R1":
         # mnode = self.master_node_r1
         elif key_type == "ED":
-            # Needs all the path except last with '
-            pathc += "'"
             mnode = self.master_node_ed
         else:
             raise Exception("LocalFile supports only K1 and Ed derivations.")
