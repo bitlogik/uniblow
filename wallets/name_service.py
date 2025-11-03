@@ -126,7 +126,7 @@ def resolveUD(name, crypto):
 
 def resolveZIL(name, crypto):
     """UnstoppableDomains service ZIL chain resolution"""
-    api = Web3Client("https://api.zilliqa.com/", "Uniblow/2")
+    api = Web3Client("https://api.zq2-mainnet.zilliqa.com/", "Uniblow/2")
     name_id = f"0x{name_hash(name, sha2)}"
     # Call the registry to get the resolver for this node id
     res = get_zil_domain(api, ZILresolver, name_id)
