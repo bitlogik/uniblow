@@ -353,8 +353,8 @@ class BTC_wallet:
         if self.btc.segwit == 2:  # P2WPKH         : -43%
             tx_size = 211
         fee = int(fee_unit * tx_size)
-        if fee < 490:  # set minimum for good relay
-            fee = 490
+        if fee < 750:  # set minimum for good relay
+            fee = 750
         return fee
 
     def transfer(self, amount, to_account, fee_priority):
