@@ -64,7 +64,7 @@ class EC_key_pair:
             raise ValueError("ECkeypair must be K1, R1 or ED")
 
     def pv_int(self):
-        """output private key as a integer, only for 256k1/r1"""
+        """output private key as an integer, only for 256k1/r1"""
         if self.curve == "ED":
             raise ValueError("ECkeypair pv_int can only be used for R1 or K1 key.")
         return self.key_obj.private_numbers().private_value
