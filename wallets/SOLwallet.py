@@ -121,7 +121,7 @@ class sol_api:
         return balance
 
     def get_recent_block_hash(self):
-        return self.getData("getRecentBlockhash").get("result").get("value").get("blockhash")
+        return self.getData("getLatestBlockhash").get("result").get("value").get("blockhash")
 
     def pushtx(self, txb58):
         return self.getData("sendTransaction", [txb58]).get("result")
