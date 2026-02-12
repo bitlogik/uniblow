@@ -27,7 +27,6 @@ from cryptolib.cryptography import (
 )
 from cryptolib.ECKeyPair import EC_key_pair
 
-
 # Common public pairing key
 # The Basic version can't auth the host, only by PIN
 BASIC_PAIRING_SECRET = b"Cryptnox Basic CommonPairingData"

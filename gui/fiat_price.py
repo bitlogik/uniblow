@@ -19,7 +19,6 @@ from urllib.request import urlopen
 
 from wx import CallAfter
 
-
 chain_names = {
     "GLMR": "moonbeam",
     "XTZ": "tezos",

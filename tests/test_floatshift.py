@@ -1,7 +1,6 @@
 import pytest
 from wallets.wallets_utils import shift_10, balance_string
 
-
 SHIFT10_TEST_DATA = [
     ["0.0157", 6, 15700],
     ["0.0157000000000", 6, 15700],

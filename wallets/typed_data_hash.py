@@ -19,13 +19,11 @@
 An EIP-712 wallet implementation for Ethereum typed structured data hashing.
 """
 
-
 from pprint import pformat
 from sys import version_info
 
 from cryptolib.cryptography import sha3
 from cryptolib.coins.ethereum import uint256
-
 
 uint_types = [f"uint{type_len}" for type_len in range(8, 257)]
 int_types = [f"int{type_len}" for type_len in range(8, 257)]

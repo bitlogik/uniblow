@@ -28,7 +28,6 @@ from cryptolib.cryptography import (
 from cryptolib.ECKeyPair import EC_key_pair
 from cryptolib.uintEncode import ser32
 
-
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
 

@@ -31,7 +31,6 @@ from cryptolib.HDwallet import (
 from devices.BaseDevice import BaseDevice
 from devices.file_path import WalletFile
 
-
 FILE_NAME = "HDseed.key"
 
 

@@ -31,7 +31,6 @@ from cryptolib.uintEncode import ser32
 from cryptolib.slip39 import slip39_mnemonic_to_seed
 from cryptolib.ElectrumLegacy import decode_old_mnemonic
 
-
 # BIP39 helpers
 
 

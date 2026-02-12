@@ -17,7 +17,6 @@
 from math import ceil
 from .cryptography import b58checksum
 
-
 BASE58 = 58
 b58chars = "123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz"
 

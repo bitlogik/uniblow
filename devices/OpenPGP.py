@@ -19,7 +19,6 @@ import OpenPGPpy
 from cryptolib.cryptography import encode_der_s
 from devices.BaseDevice import BaseDevice
 
-
 ECDSA_K1 = "132B8104000A"
 
 
@@ -161,7 +160,7 @@ class OpenPGP(BaseDevice):
             pubkey_bin = self.PGPdevice.get_public_key("B600")
         except OpenPGPpy.ConnectionException:
             raise Exception("OpenPGP device was disconnected.")
-        if pubkey_bin[:2] != b"\x7F\x49":
+        if pubkey_bin[:2] != b"\x7f\x49":
             raise Exception("Bad object key from OpenPGP public key")
         if pubkey_bin[4] != 65:
             raise Exception("Bad public key length read")

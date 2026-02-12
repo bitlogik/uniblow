@@ -15,7 +15,6 @@
 
 """Cryptography methods for Uniblow."""
 
-
 import hashlib
 import hmac
 from os import urandom

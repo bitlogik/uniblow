@@ -32,7 +32,6 @@ import base64
 import logging
 from os import urandom
 
-
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
 
@@ -145,7 +144,7 @@ class CardConnector:
                         pass
                 if card_present:
                     logger.debug("A Satochip was detected, using %s", r)
-                    (response, sw1, sw2, self.status) = self.card_get_status()
+                    response, sw1, sw2, self.status = self.card_get_status()
                     if (sw1 != 0x90 or sw2 != 0x00) and (sw1 != 0x9C or sw2 != 0x04):
                         self.card_disconnect()
                         raise Exception("Failed to get Satochip card status")
@@ -173,7 +172,7 @@ class CardConnector:
 
         # transmit apdu
         try:
-            (response, sw1, sw2) = self.connection.transmit(apdu)
+            response, sw1, sw2 = self.connection.transmit(apdu)
         except CardConnectionException as exc:
             logger.warning(f"Error during connection: {repr(exc)}")
             raise SatochipException("Satochip card was disconnected.")
@@ -211,7 +210,7 @@ class CardConnector:
         logger.debug("In card_select")
         SELECT = [0x00, 0xA4, 0x04, 0x00, 0x08]
         apdu = SELECT + CardConnector.SATOCHIP_AID
-        (response, sw1, sw2) = self.connection.transmit(apdu)
+        response, sw1, sw2 = self.connection.transmit(apdu)
 
         if sw1 == 0x90 and sw2 == 0x00:
             self.card_type = "Satochip"
@@ -228,7 +227,7 @@ class CardConnector:
         p1 = 0x00
         p2 = 0x00
         apdu = [cla, ins, p1, p2]
-        (response, sw1, sw2) = self.card_transmit(apdu)
+        response, sw1, sw2 = self.card_transmit(apdu)
         d = {}
         if (sw1 == 0x90) and (sw2 == 0x00):
             d["protocol_major_version"] = response[0]
@@ -275,7 +274,7 @@ class CardConnector:
         p1 = 0x00
         p2 = 0x01  # get
         apdu = [cla, ins, p1, p2]
-        (response, sw1, sw2) = self.card_transmit(apdu)
+        response, sw1, sw2 = self.card_transmit(apdu)
 
         if sw1 == 0x90 and sw2 == 0x00:
             # label_size = response[0]
@@ -303,7 +302,7 @@ class CardConnector:
         data = [len(label_list)] + label_list
         lc = len(data)
         apdu = [cla, ins, p1, p2, lc] + data
-        (response, sw1, sw2) = self.card_transmit(apdu)
+        response, sw1, sw2 = self.card_transmit(apdu)
 
         return (response, sw1, sw2)
 
@@ -361,7 +360,7 @@ class CardConnector:
                 apdu += [(amount_limit >> (8 * i)) & 0xFF]
 
         # send apdu (contains sensitive data!)
-        (response, sw1, sw2) = self.card_transmit(apdu)
+        response, sw1, sw2 = self.card_transmit(apdu)
         if (sw1 == 0x90) and (sw2 == 0x00):
             self.set_pin(0, pin0)  # cache PIN value
             self.setup_done = True
@@ -496,7 +495,7 @@ class CardConnector:
             data = response + [len(coordy) & 0xFF00, len(coordy) & 0x00FF] + coordy
             lc = len(data)
             apdu = [cla, ins, p1, p2, lc] + data
-            (response, sw1, sw2) = self.card_transmit(apdu)
+            response, sw1, sw2 = self.card_transmit(apdu)
         return authentikey
 
     def card_bip32_get_extendedkey(self, path):
@@ -510,7 +509,7 @@ class CardConnector:
         chaincode: bytearray
         """
         if isinstance(path, str):
-            (depth, path) = self.parser.bip32path2bytes(path)
+            depth, path = self.parser.bip32path2bytes(path)
 
         logger.debug("In card_bip32_get_extendedkey")
         cla = JCconstants.CardEdge_CLA
@@ -526,7 +525,7 @@ class CardConnector:
 
         # send apdu
         while True:
-            (response, sw1, sw2) = self.card_transmit(apdu)
+            response, sw1, sw2 = self.card_transmit(apdu)
 
             # if there is no more memory available, erase cache...
             # if self.get_sw12(sw1,sw2)==JCconstants.SW_NO_MEMORY_LEFT:
@@ -543,7 +542,7 @@ class CardConnector:
                 logger.info(
                     "[card_bip32_get_extendedkey] Child Derivation optimization..."
                 )  # debugSatochip
-                (pubkey, chaincode) = self.parser.parse_bip32_get_extendedkey(response)
+                pubkey, chaincode = self.parser.parse_bip32_get_extendedkey(response)
                 coordy = pubkey
                 coordy = list(coordy[33:])
                 authcoordy = self.parser.authentikey
@@ -554,7 +553,7 @@ class CardConnector:
                 response_opt, sw1_opt, sw2_opt = self.card_transmit(apdu_opt)
             # at this point, we have successfully received a response from the card
             else:
-                (key, chaincode) = self.parser.parse_bip32_get_extendedkey(response)
+                key, chaincode = self.parser.parse_bip32_get_extendedkey(response)
                 return (key, chaincode)
 
     def card_bip32_get_xpub(self, path, xtype, is_mainnet):
@@ -573,14 +572,14 @@ class CardConnector:
         # path is of the form 44'/0'/1'
         logger.info(f"card_bip32_get_xpub(): path={str(path)}")  # debugSatochip
         if isinstance(path, str):
-            (depth, bytepath) = self.parser.bip32path2bytes(path)
+            depth, bytepath = self.parser.bip32path2bytes(path)
 
-        (childkey, childchaincode) = self.card_bip32_get_extendedkey(bytepath)
+        childkey, childchaincode = self.card_bip32_get_extendedkey(bytepath)
         if depth == 0:  # masterkey
             fingerprint = bytes([0, 0, 0, 0])
             child_number = bytes([0, 0, 0, 0])
         else:  # get parent info
-            (parentkey, parentchaincode) = self.card_bip32_get_extendedkey(bytepath[0:-4])
+            parentkey, parentchaincode = self.card_bip32_get_extendedkey(bytepath[0:-4])
             fingerprint = Hash160(parentkey)[0:4]
             child_number = bytepath[-4:]
 
@@ -673,7 +672,7 @@ class CardConnector:
             apdu += [(amount_limit >> (8 * i)) & 0xFF]
 
         # send apdu (contains sensitive data!)
-        (response, sw1, sw2) = self.card_transmit(apdu)
+        response, sw1, sw2 = self.card_transmit(apdu)
         if (sw1 == 0x90) and (sw2 == 0x00):
             self.needs_2FA = True
         return (response, sw1, sw2)
@@ -702,7 +701,7 @@ class CardConnector:
         apdu += chalresponse
 
         # send apdu
-        (response, sw1, sw2) = self.card_transmit(apdu)
+        response, sw1, sw2 = self.card_transmit(apdu)
         if (sw1 == 0x90) and (sw2 == 0x00):
             self.needs_2FA = False
         return (response, sw1, sw2)
@@ -728,7 +727,7 @@ class CardConnector:
             padsize = blocksize - (size % blocksize)
             msg = msg + [padsize] * padsize
             # send apdu
-            (response, sw1, sw2) = self.card_transmit(apdu)
+            response, sw1, sw2 = self.card_transmit(apdu)
             if sw1 == 0x90 and sw2 == 0x00:
                 # extract IV & id_2FA
                 IV = response[0:16]
@@ -753,7 +752,7 @@ class CardConnector:
             if len(msg) % blocksize != 0:
                 logger.info("Padding error!")
             # send apdu
-            (response, sw1, sw2) = self.card_transmit(apdu)
+            response, sw1, sw2 = self.card_transmit(apdu)
             if sw1 == 0x90 and sw2 == 0x00:
                 pass
             elif sw1 == 0x9C and sw2 == 0x19:
@@ -1009,7 +1008,7 @@ class CardConnector:
         else:
             logger.debug(f"Plaintext C-APDU: {toHexString(apdu)}")
 
-        (iv, ciphertext, mac) = self.sc.encrypt_secure_channel(bytes(apdu))
+        iv, ciphertext, mac = self.sc.encrypt_secure_channel(bytes(apdu))
         data = (
             list(iv)
             + [len(ciphertext) >> 8, len(ciphertext) & 0xFF]

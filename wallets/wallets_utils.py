@@ -17,7 +17,6 @@
 
 from decimal import DefaultContext, Decimal
 
-
 utils_decimal_ctx = DefaultContext.copy()
 # Setup up to 999'999 billion at 18 decimals
 utils_decimal_ctx.prec = 33

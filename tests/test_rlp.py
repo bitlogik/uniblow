@@ -2,7 +2,6 @@ import pytest
 
 from cryptolib.coins.ethereum import rlp_encode, read_int_array
 
-
 # Testing RLP encoding
 
 

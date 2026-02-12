@@ -35,7 +35,6 @@ from wallets.wallets_utils import (
 from wallets.ETHtokens import tokens_values, nfts_values, ledger_tokens
 from wallets.typed_data_hash import typed_sign_hash, print_text_query
 
-
 ETH_DECIMALS = 18
 GWEI_DECIMALS = 9
 

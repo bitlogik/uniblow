@@ -1,7 +1,6 @@
 from cryptolib.cryptography import sha3
 from wallets.typed_data_hash import encode_data, type_hash, hash_struct, typed_sign_hash
 
-
 # Tests for EIP712 typed structured data hashing
 
 

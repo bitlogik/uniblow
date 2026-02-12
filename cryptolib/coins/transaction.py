@@ -23,7 +23,6 @@ from functools import reduce
 from cryptolib.cryptography import Hash160, dbl_sha2, sha2
 from cryptolib.base58 import encode_base58_header, decode_base58
 
-
 string_or_bytes_types = (str, bytes)
 int_types = (int, float)
 

@@ -8,7 +8,6 @@ from package.build_win_verinfo import fill_version_info
 from uniblow import SUPPORTED_COINS, DEVICES_LIST
 from version import VERSION
 
-
 current_path = os.path.dirname(os.path.abspath("uniblow.spec"))
 sys.path.append(current_path)
 

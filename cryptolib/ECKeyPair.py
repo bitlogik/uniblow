@@ -26,7 +26,6 @@ from nacl.signing import SigningKey
 
 from cryptolib.cryptography import random_generator, makeup_sig
 
-
 K1_CURVE = ec.SECP256K1()
 R1_CURVE = ec.SECP256R1()
 R384_CURVE = ec.SECP384R1()

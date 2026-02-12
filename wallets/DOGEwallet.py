@@ -27,7 +27,6 @@ from cryptolib.cryptography import compress_pubkey, sha2, encode_der_s
 from wallets.name_service import resolve
 from wallets.wallets_utils import balance_string, shift_10, NotEnoughTokens
 
-
 logger = logging.getLogger(__name__)
 
 

@@ -25,7 +25,6 @@ from wallets.name_service import resolve
 from gui.utils import icon_file, file_path
 from gui.gallerygui import GalleryFrame, GalleryPanel
 
-
 logger = getLogger(__name__)
 
 

@@ -122,7 +122,7 @@ class Satochip(BaseDevice):
             create_key_ACL = 0x01  # RFU
             create_pin_ACL = 0x01  # RFU
             # setup
-            (response, sw1, sw2) = self.cc.card_setup(
+            response, sw1, sw2 = self.cc.card_setup(
                 pin_tries_0,
                 ublk_tries_0,
                 pin_0,
@@ -232,7 +232,7 @@ class Satochip(BaseDevice):
             raise Exception("Satochip supports only K1 derivation")
         self.key_type = key_type
         self.path = path
-        (pubkey, chaincode) = self.cc.card_bip32_get_extendedkey(self.path)
+        pubkey, chaincode = self.cc.card_bip32_get_extendedkey(self.path)
         logger.debug(f"pubkey: {pubkey}")
         logger.debug(f"chaincode: {chaincode}")
 
@@ -242,7 +242,7 @@ class Satochip(BaseDevice):
 
     def get_public_key(self, showOnScreenCB=None):
         self.path
-        (self.pubkey, self.chaincode) = self.cc.card_bip32_get_extendedkey(self.path)
+        self.pubkey, self.chaincode = self.cc.card_bip32_get_extendedkey(self.path)
         return self.pubkey
 
     def sign(self, data):
@@ -266,9 +266,9 @@ class Satochip(BaseDevice):
             msg["tx"] = ""
             msg["hash"] = hash_bytes.hex()
             msg["chain"] = ""  #
-            (is_approved, hmac) = self.do_challenge_response(msg)
+            is_approved, hmac = self.do_challenge_response(msg)
         else:
-            (is_approved, hmac) = (True, None)
+            is_approved, hmac = (True, None)
 
         if is_approved:
             try:
@@ -276,7 +276,7 @@ class Satochip(BaseDevice):
                 # we take the pubkey previously recovered from self.get_public_key()
                 # sign hash
                 keynbr = 0xFF
-                (response, sw1, sw2) = self.cc.card_sign_transaction_hash(
+                response, sw1, sw2 = self.cc.card_sign_transaction_hash(
                     keynbr, list(hash_bytes), hmac
                 )
                 logger.debug(f"sign_hash - response= {response}")
@@ -313,9 +313,9 @@ class Satochip(BaseDevice):
             # msg['from']= from_ # TODO
             msg["chain"] = "EVM"
             # msg['chainId']= self.chainId # optional, otherwise taken from tx deserialization...
-            (is_approved, hmac) = self.do_challenge_response(msg)
+            is_approved, hmac = self.do_challenge_response(msg)
         else:
-            (is_approved, hmac) = (True, None)
+            is_approved, hmac = (True, None)
 
         if is_approved:
             logger.debug("tx signature approved in 2FA (if enabled)")
@@ -324,9 +324,7 @@ class Satochip(BaseDevice):
                 # we take the pubkey previously recovered from self.get_public_key()
                 # sign msg hash
                 keynbr = 0xFF
-                (response, sw1, sw2) = self.cc.card_sign_transaction_hash(
-                    keynbr, list(tx_hash), hmac
-                )
+                response, sw1, sw2 = self.cc.card_sign_transaction_hash(keynbr, list(tx_hash), hmac)
                 logger.debug(f"sign_evm - response= {response}")
                 logger.debug(f"sign_evm - response-hex= {bytes(response).hex()}")
                 # parse to DER-sig
@@ -361,13 +359,13 @@ class Satochip(BaseDevice):
             msg["action"] = "sign_msg_hash"
             msg["alt"] = "Ethereum"
             msg["hash"] = msg_hash.hex()
-            msg[
-                "msg"
-            ] = msg_raw  # string in hex format for personal-message, or json-serialized for typed-message
+            msg["msg"] = (
+                msg_raw  # string in hex format for personal-message, or json-serialized for typed-message
+            )
             msg["msg_type"] = "PERSONAL_MESSAGE"
-            (is_approved, hmac) = self.do_challenge_response(msg)
+            is_approved, hmac = self.do_challenge_response(msg)
         else:
-            (is_approved, hmac) = (True, None)
+            is_approved, hmac = (True, None)
 
         if is_approved:
             logger.debug("message signature approved in 2FA (if enabled)")
@@ -376,7 +374,7 @@ class Satochip(BaseDevice):
                 # we take the pubkey previously recovered from self.get_public_key()
                 # sign msg hash
                 keynbr = 0xFF
-                (response, sw1, sw2) = self.cc.card_sign_transaction_hash(
+                response, sw1, sw2 = self.cc.card_sign_transaction_hash(
                     keynbr, list(msg_hash), hmac
                 )
                 logger.debug(f"sign_message - response= {response}")
@@ -424,9 +422,9 @@ class Satochip(BaseDevice):
             msg["hash"] = msg_hash.hex()
             msg["msg"] = json.dumps(msg_obj)  # json-serialized for typed-message
             msg["msg_type"] = "TYPED_MESSAGE"
-            (is_approved, hmac) = self.do_challenge_response(msg)
+            is_approved, hmac = self.do_challenge_response(msg)
         else:
-            (is_approved, hmac) = (True, None)
+            is_approved, hmac = (True, None)
 
         if is_approved:
             logger.debug("EIP712 message signature approved in 2FA (if enabled)")
@@ -435,7 +433,7 @@ class Satochip(BaseDevice):
                 # we take the pubkey previously recovered from self.get_public_key()
                 # sign msg hash
                 keynbr = 0xFF
-                (response, sw1, sw2) = self.cc.card_sign_transaction_hash(
+                response, sw1, sw2 = self.cc.card_sign_transaction_hash(
                     keynbr, list(msg_hash), hmac
                 )
                 logger.debug(f"sign_eip712 - response= {response}")
@@ -458,7 +456,7 @@ class Satochip(BaseDevice):
         logger.debug("in do_challenge_response()")
         is_approved = False
         msg_2FA = json.dumps(msg)
-        (id_2FA, msg_2FA) = self.cc.card_crypt_transaction_2FA(msg_2FA, True)
+        id_2FA, msg_2FA = self.cc.card_crypt_transaction_2FA(msg_2FA, True)
         d = {}
         d["msg_encrypt"] = msg_2FA
         d["id_2FA"] = id_2FA

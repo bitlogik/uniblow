@@ -48,7 +48,7 @@ def test_bech32_valid():
 def test_bech32_invalid():
     bech32_str_invalid = "\x201nwldj5"
     assert bech32_decode(bech32_str_invalid) == (None, None)
-    bech32_str_invalid = "\x7F1axkwrx"
+    bech32_str_invalid = "\x7f1axkwrx"
     assert bech32_decode(bech32_str_invalid) == (None, None)
     bech32_str_invalid = "\x801eym55h"
     assert bech32_decode(bech32_str_invalid) == (None, None)

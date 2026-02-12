@@ -6,7 +6,6 @@ from sys import platform
 from gui.utils import file_path
 from gui.maingui import SendDialog, SendPanel
 
-
 FEES_PRORITY_TEXT = [
     "Economic fee",
     "Normal fee",

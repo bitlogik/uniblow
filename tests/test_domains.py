@@ -2,7 +2,6 @@
 
 from wallets.name_service import name_hash, resolveENS, resolveUD, resolveZIL, resolve
 
-
 # Testing domains resolution
 
 

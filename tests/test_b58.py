@@ -2,7 +2,6 @@ import pytest
 
 from cryptolib import base58
 
-
 # Tests from https://github.com/luke-jr/libbase58/tree/master/tests
 
 

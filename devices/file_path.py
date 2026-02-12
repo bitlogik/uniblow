@@ -7,15 +7,13 @@
 # Copyright (C) 2021-2022 BitLogiK
 
 
-""" Uniblow read/write user data in file.
+"""Uniblow read/write user data in file.
 From AppDirs : Utilities for determining application-specific dirs.
 """
-
 
 import json
 import sys
 import os
-
 
 if sys.platform.startswith("java"):
     import platform

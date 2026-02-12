@@ -23,7 +23,6 @@ from wallets.wallets_utils import balance_string, shift_10, NotEnoughTokens
 from cryptolib.base58 import base58_to_bin, bin_to_base58
 from cryptolib.uintEncode import uint8, uint32, uint64, encode_varuint
 
-
 SOL_units = 9  # 1 SOL = 1 billion lamports
 FEE_LEVEL = 5000  # 1 signature costs 5000 lamports
 

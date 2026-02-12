@@ -4,7 +4,6 @@ from wallets.LTCwallet import testaddr as LTCtestaddr
 from wallets.DOGEwallet import testaddr as DOGEtestaddr
 from wallets.XTZwallet import testaddr as XTZtestaddr
 
-
 # Tests for addresses formatting
 
 BTC_ADDR_TEST_DATA = [
