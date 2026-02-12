@@ -35,6 +35,8 @@ class esplora_api:
             self.url = "https://blockstream.info/api/"
         elif network == "testnet":
             self.url = "https://blockstream.info/testnet/api/"
+        elif network == "testnet4":
+            self.url = "https://mempool.space/testnet4/api/"
         else:
             raise Exception("Unknown BTC network name")
 
@@ -87,7 +89,7 @@ class esplora_api:
         if priority == 0:
             return fees_table["504"]
         if priority == 1:
-            return fees_table["10"]
+            return fees_table["14"]
         if priority == 2:
             return fees_table["2"]
         raise Exception("bad priority argument for get_fee, must be 0, 1 or 2")
@@ -128,7 +130,7 @@ def testaddr(btc_addr, is_testnet):
 class BTCwalletCore:
     def __init__(self, pubkey, network_type, segwit_option, api, pubk_cpr):
         self.testnet = False
-        if network_type == "testnet":
+        if network_type in ("testnet", "testnet4"):
             self.testnet = True
         self.segwit = segwit_option
         self.pubkey = compress_pubkey(pubkey).hex() if pubk_cpr else pubkey.hex()
@@ -254,6 +256,7 @@ class BTC_wallet:
     networks = [
         "mainnet",
         "testnet",
+        "testnet4",
     ]
 
     wtypes = [
@@ -270,6 +273,12 @@ class BTC_wallet:
             "m/84'/0'/{}'/0/{}",
         ],
         # testnet
+        [
+            "m/44'/1'/{}'/0/{}",
+            "m/49'/1'/{}'/0/{}",
+            "m/84'/1'/{}'/0/{}",
+        ],
+        # testnet4
         [
             "m/44'/1'/{}'/0/{}",
             "m/49'/1'/{}'/0/{}",
@@ -322,7 +331,10 @@ class BTC_wallet:
     def history(self):
         # Get history page
         if self.btc.testnet:
-            BTC_EXPLORER_URL = f"https://blockstream.info/testnet/address/{self.btc.address}"
+            if "4" in self.btc.api.url:
+                BTC_EXPLORER_URL = f"https://mempool.space/testnet4/address/{self.btc.address}"
+            else:
+                BTC_EXPLORER_URL = f"https://blockstream.info/testnet/address/{self.btc.address}"
         else:
             BTC_EXPLORER_URL = f"https://blockstream.info/address/{self.btc.address}"
         return BTC_EXPLORER_URL
