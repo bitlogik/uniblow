@@ -57,7 +57,7 @@ class FTM_wallet(ETH_wallet):
         self.network = FTM_wallet.networks[network].lower()
         if self.network == "fantom opera":
             self.chainID = 250
-            rpc_endpoint = "fantom"
+            rpc_endpoint = "https://rpc.fantom.network"
             self.explorer = "https://ftmscan.com/address/0x"
         if self.network == "sonic":
             self.coin = "S"
@@ -67,7 +67,7 @@ class FTM_wallet(ETH_wallet):
         if self.network == "ftm tst":
             self.coin = "tFTM"
             self.chainID = 4002
-            rpc_endpoint = "fantom-testnet"
+            rpc_endpoint = "https://rpc.testnet.fantom.network"
             self.explorer = "https://testnet.ftmscan.com/address/0x"
         if self.network == "sonic blaze":
             self.coin = "tstS"
