@@ -35,7 +35,7 @@ Compatible with the following blockchains :
 
 - BTC
   
-  - mainnet and testnet networks
+  - mainnet, testnet and testnet4 networks
   
   - Standard wallet (P2PKH)
   
@@ -310,9 +310,9 @@ as root/sudo to allow the Ledger device.
 
 ### Cryptnox card
 
-The [Cryptnox card](https://cryptnox.com) is a crypto credit-card sized hardware wallet with advanced functionalities. This device is very secure thanks to its CC EAL6+ security grade central chip. The compatible models are the BG-1 and the B-NFT-1 cards (single or Dual).
+The [Cryptnox card](https://cryptnox.com) is a crypto credit-card sized hardware wallet with advanced functionalities. This device is very secure thanks to its CC EAL6+ security grade central chip. The compatible models are the BG-1, BG-2 and the B-NFT-1 cards (single or Dual).
 
-When a BG-1 card is initialized using Uniblow, it generates a BIP39 mnemonic seed,
+When a BG-1/2 card is initialized using Uniblow, it generates a BIP39 mnemonic seed,
 which is loaded in the the card. This mnemonic seed is displayed to the user
 once during the initialization process, and acts as a backup for the internal
 keys card. By design, there's no way to extract any private key from the card
@@ -328,7 +328,7 @@ method.
 
 Uniblow can setup and initialize a blank BG1 card. The B-NFT-1 model shall be used already initialized.
 
-If the BG1 card was not initialized using Uniblow, the card needs to be in a state :
+If the card was not initialized using Uniblow, the card needs to be in a state :
 
 - PIN enabled
 
@@ -452,7 +452,7 @@ Windows, Debian and MacOS platforms in a dedicated [build document](docs/Build.m
 License
 -------
 
-Copyright (C) 2021-2024 BitLogiK SAS
+Copyright (C) 2021-2025 BitLogiK SAS
 
 This program is free software: you can redistribute it and/or modify it under
 the terms of the GNU General Public License as published by the Free Software
