@@ -144,6 +144,10 @@ class Cryptnox(BaseDevice):
             )
         return isinit
 
+    @property
+    def is_capable_ed25519(self):
+        return self.card.cardtype == Cryptnox.basic_card_id and self.card.applet_version[0] >= 2
+
     def generate_mnemonic(self):
         return generate_mnemonic(12)
 
@@ -170,9 +174,9 @@ class Cryptnox(BaseDevice):
             raise Exception("The Cryptnox NFT manages only K1 key type.")
 
     def derive_key(self, path, key_type):
+        if (not self.is_capable_ed25519) and (key_type not in ["K1", "R1"]):
+            raise Exception("This Cryptnox version only supports only K1 and R1 derivations.")
         self.key_type = key_type
-        if key_type not in ["K1", "R1"]:
-            raise Exception("Cryptnox supports only K1 and R1 derivations.")
         self.card.derive(encode_bip32_string(path), key_type)
 
     def get_public_key(self):

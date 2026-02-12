@@ -517,14 +517,16 @@ class CryptnoxCard:
     def derive(self, path_bin, curve="K1"):
         """Perform in card a BIP32 derivation."""
         # 0 derive from master keys
-        # 1 derive from parent keys
         # 2 derive from current keys
         # + 16 for R1
+        # + 32 for Ed
         derivation = 0
-        deriv_code = derivation << 6
+        # deriv_code = derivation << 6
         if curve.upper() == "R1":
             derivation += 16
-        SELg = [0x80, 0xD1, deriv_code, 0x00]
+        elif curve.upper() == "ED":
+            derivation += 32
+        SELg = [0x80, 0xD1, derivation, 0x00]
         gen_resp = self.send_enc_apdu(SELg, path_bin)
         return gen_resp
 
@@ -589,17 +591,24 @@ class CryptnoxCard:
         # Derivation
         # 0x00 = Current key
         # 0x01 = Derive
+        #  00 from current
+        #  80 from master
         # 0x10 added if R1
+        # 0x20 added if R1
         derivation = 0
         if curve.upper() == "R1":
             derivation += 16
+        elif curve.upper() == "ED":
+            derivation += 32
         SELe = [0x80, 0xC2, derivation, 1]
         if path_bin == b"":
             pubkey = self.send_enc_apdu(SELe, b"")
         else:
             pubkey = self.send_enc_apdu(SELe, path_bin)
-        if pubkey[0] != 0x04:
-            raise CryptnoxInvalidException("Bad data received during public key reading")
+        if derivation & 32 != 32 and pubkey[0] != 0x04:
+            raise CryptnoxInvalidException("Bad data received during EC public key reading")
+        if derivation & 32 == 32 and len(pubkey) != 32:
+            raise ValueError("Bad data received during Ed public key reading")
         return pubkey
 
     def get_xpub(self):
@@ -642,34 +651,40 @@ class CryptnoxCard:
         bytes_result = self.send_enc_apdu([0x80, 0xC4, 0x01, 0x00], PINb + pub_key + data)
         return bytes_result
 
-    def sign(self, hashdata, curve, path_bin=None, sigtype=0, pin=""):
+    def sign(self, hashdata, curve, pin=""):
         """Perform a pre-hashed ECD signature."""
         # Derivation
         #  0x00 = Current key (k1)
         #  0x10 = Current key (r1)
+        #  0x20 = Current key (Ed)
         #  0x01 = Derive (k1)
         #  0x11 = Derive (r1)
+        #  0x21 = Derive (Ed)
         #  0x03 = PIN-less path
         # Sig type
         #  0x00 ECDSA
         #  0x01 ECDSA with EOSIO filtering
+        #  0x02 BIP340
+        #  0x03 Ed25519
+        sigtype = 0
         derivation = 0
         if curve.upper() == "R1":
             derivation += 16
+        elif curve.upper() == "ED":
+            derivation += 32
+            sigtype = 3
+            hashdata = len(hashdata).to_bytes(2, "big") + hashdata
         COMMsig = [0x80, 0xC0, derivation, sigtype]
-        if derivation & 0x0F == 1 and derivation != 3:
-            if path_bin is None:
-                raise ValueError("Should provide a valid path_bin.")
-            path = path_bin
-        else:
-            path = b""
+        path = b""
         if pin:
             while len(pin) < 9:
                 pin += "\0"
             path += pin.encode("ascii")
         data = self.send_enc_apdu(COMMsig, hashdata + path)
-        if sigtype != 2 and data[0] != 0x30:
-            raise CryptnoxInvalidException("Bad data received during signature")
+        if sigtype == 0 and data[0] != 0x30:
+            raise CryptnoxInvalidException("Bad data received during EC signature")
+        if sigtype == 3 and len(data) != 64:
+            raise CryptnoxInvalidException("Bad data received during Ed signature")
         return data
 
     def reset(self, PUK):
