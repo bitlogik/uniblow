@@ -29,7 +29,7 @@ setup(
         "cryptography>=3.3",
         "safe-pysha3==1.0.4",
         "qrcode==6.1",
-        "PyNaCl==1.5.0",
+        "PyNaCl==1.6.2",
         "pyweb3==0.1.7",
         "OpenPGPpy==1.2",
         "hidapi==0.14.0",
