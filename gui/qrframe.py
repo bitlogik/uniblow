@@ -5,19 +5,32 @@ import wx
 from gui.utils import icon_file, file_path
 
 
+def scaleSize(frame, sz):
+    if not hasattr(frame, "GetDPIScaleFactor"):
+        return sz
+    scal_fact = frame.GetDPIScaleFactor()
+    return (int(sz[0] * scal_fact), int(sz[1] * scal_fact))
+
+
 class QRFrame(wx.Frame):
+
+    wsize = (372, 348)
+
     def __init__(self, parent, coin, address, btn):
         super().__init__(
             parent,
             id=wx.ID_ANY,
             title=f"  Receive {coin}",
-            size=wx.Size(372, 348),
+            size=wx.Size(self.wsize),
             style=wx.FRAME_FLOAT_ON_PARENT | wx.DEFAULT_FRAME_STYLE | wx.TAB_TRAVERSAL,
         )
         self.btn = btn
         self.SetIcons(wx.IconBundle(icon_file))
 
         self.SetSizeHints(wx.DefaultSize, wx.DefaultSize)
+        scaled_sz = scaleSize(self, self.wsize)
+        self.SetMinSize(scaled_sz)
+        self.SetSize(scaled_sz)
         self.Centre(wx.BOTH)
         qrpanel = wx.Panel(
             self,

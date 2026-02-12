@@ -33,7 +33,6 @@ from version import VERSION
 
 from cryptolib.HDwallet import bip39_is_checksum_valid
 
-
 logger = getLogger(__name__)
 
 
@@ -68,10 +67,12 @@ def scaleSize(frame, sz):
     if not hasattr(frame, "GetDPIScaleFactor"):
         return sz
     scal_fact = 1
-    if frame.GetDPIScaleFactor() > 1.25:
+    if frame.GetDPIScaleFactor() >= 1.25:
         scal_fact = 1.1
-    if frame.GetDPIScaleFactor() > 1.5:
+    if frame.GetDPIScaleFactor() >= 1.5:
         scal_fact = 1.25
+    if frame.GetDPIScaleFactor() >= 2:
+        scal_fact = 1.5
     return (int(sz[0] * scal_fact), int(sz[1] * scal_fact))
 
 
@@ -96,6 +97,8 @@ class InfoBox(gui.infodialog.InfoDialog):
         self.panel.m_textCtrl.SetBackgroundColour(self.GetBackgroundColour())
         self.panel.m_textCtrl.SetValue(self.message)
         self.panel.m_textCtrl.SelectNone()
+        bsz = self.GetSize()
+        resize(self, scaleSize(self, bsz))
         if self.is_modal:
             self.Layout()
             self.ShowModal()
@@ -342,7 +345,10 @@ class UniblowApp(wx.App):
     def start_wallet_panel(self):
         """Kill devices choice panel and start the wallet panel."""
         self.dev_panel.Destroy()
-        resize(self.gui_frame, (820, 475))
+        panel_width = 820
+        if self.gui_frame.GetDPIScaleFactor() >= 2:
+            panel_width *= 1.1
+        resize(self.gui_frame, (panel_width, 475))
         self.gui_frame.Layout()
         self.gui_panel = gui.maingui.WalletPanel(self.gui_frame)
         self.gui_panel.copy_button.SetBitmap(
@@ -559,6 +565,10 @@ class UniblowApp(wx.App):
         if hasattr(self, "wallet"):
             del self.wallet
         self.gui_panel.account_addr.SetLabel(BLANK_ADDR)
+
+        self.gui_panel.account_addr.SetMaxSize(
+            (wx.Size(scaleSize(self.gui_frame, (525, -1)))[0], -1)
+        )
         self.gui_frame.Refresh()
         self.gui_frame.Layout()
 
@@ -590,6 +600,8 @@ class UniblowApp(wx.App):
             sizer.Add(coin_button, 0, wx.ALIGN_CENTER_HORIZONTAL | wx.BOTTOM | wx.TOP, 3)
         self.coins_list = coins_list
         self.gui_panel.scrolled_coins.SetSizer(sizer)
+        csz = self.gui_panel.scrolled_coins.GetSize()
+        resize(self.gui_panel.scrolled_coins, scaleSize(self.gui_frame, csz))
         self.gui_panel.scrolled_coins.Layout()
         self.gui_panel.Layout()
         self.gui_frame.Layout()
