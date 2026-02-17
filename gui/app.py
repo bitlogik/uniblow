@@ -72,7 +72,7 @@ def scaleSize(frame, sz):
     if frame.GetDPIScaleFactor() >= 1.5:
         scal_fact = 1.25
     if frame.GetDPIScaleFactor() >= 2:
-        scal_fact = 1.5
+        scal_fact = 1.48
     return (int(sz[0] * scal_fact), int(sz[1] * scal_fact))
 
 
@@ -80,6 +80,11 @@ def resize(frame, new_size):
     scaled_sz = scaleSize(frame, new_size)
     frame.SetMinSize(scaled_sz)
     frame.SetSize(scaled_sz)
+
+
+def autoHdiResize(element):
+    bsz = element.GetSize()
+    resize(element, scaleSize(element, bsz))
 
 
 class InfoBox(gui.infodialog.InfoDialog):
@@ -97,8 +102,7 @@ class InfoBox(gui.infodialog.InfoDialog):
         self.panel.m_textCtrl.SetBackgroundColour(self.GetBackgroundColour())
         self.panel.m_textCtrl.SetValue(self.message)
         self.panel.m_textCtrl.SelectNone()
-        bsz = self.GetSize()
-        resize(self, scaleSize(self, bsz))
+        autoHdiResize(self)
         if self.is_modal:
             self.Layout()
             self.ShowModal()
@@ -147,6 +151,7 @@ class HDsetting_panel(gui.maingui.HDPanel):
         self.m_butCancel.SetBitmap(
             wx.Bitmap(file_path("gui/images/btns/cancel.png"), wx.BITMAP_TYPE_PNG)
         )
+        autoHdiResize(self)
 
     def hdmnemo_changed(self, evt):
         evt.Skip()
@@ -600,8 +605,7 @@ class UniblowApp(wx.App):
             sizer.Add(coin_button, 0, wx.ALIGN_CENTER_HORIZONTAL | wx.BOTTOM | wx.TOP, 3)
         self.coins_list = coins_list
         self.gui_panel.scrolled_coins.SetSizer(sizer)
-        csz = self.gui_panel.scrolled_coins.GetSize()
-        resize(self.gui_panel.scrolled_coins, scaleSize(self.gui_frame, csz))
+        autoHdiResize(self.gui_panel.scrolled_coins)
         self.gui_panel.scrolled_coins.Layout()
         self.gui_panel.Layout()
         self.gui_frame.Layout()
@@ -786,6 +790,7 @@ class UniblowApp(wx.App):
             resize(self.gui_hdframe, (580, 380))
         self.gui_hdpanel.m_butOK.SetCursor(self.HAND_CURSOR)
         self.gui_hdpanel.m_butCancel.SetCursor(self.HAND_CURSOR)
+        autoHdiResize(self.gui_hdframe)
         ret = self.gui_hdframe.ShowModal()
         if ret == wx.ID_OK:
             wallet_settings = self.gui_hdpanel.hd_wallet_settings

@@ -425,9 +425,10 @@ class SeedWatcherPanel(gui.swgui.MainPanel):
 
 
 def start_seedwatcher(app, cb_wallet):
+    default_sw_frame_size = (650, 720)
     app.frame_sw = SeedWatcherFrame(app.gui_frame)
-    app.frame_sw.SetMinSize(scaleSize(app.frame_sw, (650, 720)))
-    app.frame_sw.SetSize(scaleSize(app.frame_sw, (650, 720)))
+    app.frame_sw.SetMinSize(scaleSize(app.frame_sw, default_sw_frame_size))
+    app.frame_sw.SetSize(scaleSize(app.frame_sw, default_sw_frame_size))
     app.gui_frame.swrun = True
     app.frame_sw.SetIcons(IconBundle(file_path("gui/uniblow.ico")))
     HAND_CURSOR = Cursor(CURSOR_HAND)
