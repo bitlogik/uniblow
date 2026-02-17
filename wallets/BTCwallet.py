@@ -85,14 +85,23 @@ class esplora_api:
         return self.getData("tx", data=txhex.encode("ascii")).get("txid")
 
     def get_fee(self, priority):
-        fees_table = self.getData("fee-estimates")
-        if priority == 0:
-            return fees_table["504"]
-        if priority == 1:
-            return fees_table["14"]
-        if priority == 2:
-            return fees_table["2"]
-        raise Exception("bad priority argument for get_fee, must be 0, 1 or 2")
+        if "4" in self.url:
+            fees_table = self.getData("v1/fees/recommended")
+            if priority == 0:
+                return fees_table["economyFee"]
+            if priority == 1:
+                return fees_table["halfHourFee"]
+            if priority == 2:
+                return fees_table["fastestFee"]
+        else:
+            fees_table = self.getData("fee-estimates")
+            if priority == 0:
+                return fees_table["504"]
+            if priority == 1:
+                return fees_table["10"]
+            if priority == 2:
+                return fees_table["2"]
+        raise Exception("Bad priority argument for get_fee, must be 0, 1 or 2")
 
 
 def testaddr(btc_addr, is_testnet):
