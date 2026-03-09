@@ -1,5 +1,18 @@
 Uniblow versions history
 
+# 2.7.6
+
+* Add testnet4 chain for BTC
+* Raise BTC minimum fee
+* GUI improvement for high DPI screen
+* Update ZIL API for domain resolution
+* Update SOL getLastBlock method
+* Update Fantom RPC
+* Update BSC explorer
+* Update PyNaCl library
+* Support Cryptnox BG2
+* Some code cleanups
+
 # 2.7.4
 
 * EOS removed
