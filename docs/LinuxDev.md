@@ -60,7 +60,7 @@ source unibenv/bin/activate
 
 #### Install uniblow dependencies
 ```
-python -m install .
+python -m pip install .
 ```
 
 #### Run uniblow
