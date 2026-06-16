@@ -1,5 +1,11 @@
 Uniblow versions history
 
+# 2.7.7
+
+* Allow EIP712 domain chainId as hex string
+* Use Shadownet testnet for Tezos
+* Add USDT on Sepolia
+
 # 2.7.6
 
 * Add testnet4 chain for BTC
