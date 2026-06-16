@@ -136,7 +136,7 @@ class XTZwalletCore:
 
     chain_ids = {
         "mainnet": "NetXdQprcVkpaWU",
-        "ghostnet": "NetXnHfVqm9iesp",
+        "shadownet": "NetXsqzbfFenSTS",
     }
 
     SIGED_HEADER = bytes([9, 245, 205, 134, 18])  # edsig
@@ -287,7 +287,7 @@ class XTZ_wallet:
 
     networks = [
         "Mainnet",
-        "Ghostnet",
+        "Shadownet",
     ]
 
     wtypes = [
@@ -350,12 +350,11 @@ class XTZ_wallet:
 
     def history(self):
         # Get history page
+        base_page = f"tzkt.io/{self.xtz.address}#transfers"
         if self.network == "mainnet":
-            XTZ_EXPLORER_URL = f"https://tzstats.com/{self.xtz.address}#transfers"
+            XTZ_EXPLORER_URL = f"https://{base_page}"
         else:
-            XTZ_EXPLORER_URL = (
-                f"https://{self.network[:-3]}.tzstats.com/{self.xtz.address}#transfers"
-            )
+            XTZ_EXPLORER_URL = f"https://{self.network}.{base_page}"
         return XTZ_EXPLORER_URL
 
     def raw_tx(self, amount, fee, gazlimit, account):
