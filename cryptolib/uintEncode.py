@@ -63,3 +63,15 @@ def encode_varuint(varuint):
             return bytes(buf)
         bufi |= 0x80
         buf.append(bufi)
+
+
+def decode_int(integer_value: str) -> int:
+    """Helper to load a string into int"""
+    try:
+        if integer_value.startswith("0x"):
+            value = int(integer_value[2:], 16)
+        else:
+            value = int(integer_value, 10)
+        return value
+    except ValueError:
+        raise ValueError("Integer has invalid string.")

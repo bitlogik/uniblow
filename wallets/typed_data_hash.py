@@ -23,6 +23,7 @@ from pprint import pformat
 from sys import version_info
 
 from cryptolib.cryptography import sha3
+from cryptolib.uintEncode import decode_int
 from cryptolib.coins.ethereum import uint256
 
 uint_types = [f"uint{type_len}" for type_len in range(8, 257)]
@@ -97,10 +98,7 @@ def encode_value(vtype, value, go):
     if vtype in int_types or vtype in uint_types:
         if isinstance(value, str):
             # Fallback for dapp encoding uint as string
-            try:
-                value = int(value, 10)
-            except ValueError:
-                raise ValueError(vtype + " is not a valid string.")
+            value = decode_int(value)
         if not isinstance(value, int):
             raise ValueError(vtype + " type is not a int nor str value.")
         if value >= 0:

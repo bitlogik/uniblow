@@ -23,6 +23,7 @@ from pyweb3 import Web3Client
 from pywalletconnect import WCClient, WCClientInvalidOption, WCClientException
 
 from cryptolib.cryptography import public_key_recover, sha2, sha3
+from cryptolib.uintEncode import decode_int
 from cryptolib.coins.ethereum import rlp_encode, int2bytearray, uint256, read_string
 from wallets.name_service import resolve
 from wallets.wallets_utils import (
@@ -534,7 +535,14 @@ class ETH_wallet:
                 tx_hash = self.broadcast_tx(tx_data)
                 self.wc_client.reply(id_request, tx_hash)
             elif method == "wallet_switchEthereumChain" and len(parameters) > 0:
-                if hex(self.chainID) == parameters[0].get("chainId"):
+                rcvd_chain_id = parameters[0].get("chainId")
+                if not rcvd_chain_id:
+                    # Request must have a chain id
+                    self.wc_client.reject(id_request)
+                rcvd_chain_id = str(rcvd_chain_id)
+                if rcvd_chain_id.startswith("eip155:"):
+                    rcvd_chain_id = rcvd_chain_id[7:]
+                if self.chainID == decode_int(rcvd_chain_id):
                     self.wc_client.reply(id_request, None)
                 else:
                     # Chain change not supported
@@ -639,10 +647,10 @@ class ETH_wallet:
         chain_id = None
         if "domain" in data_obj and "chainId" in data_obj["domain"]:
             chain_id = str(data_obj["domain"]["chainId"])
-            if isinstance(chain_id, str) and chain_id.startswith("eip155:"):
+            if chain_id.startswith("eip155:"):
                 chain_id = chain_id[7:]
         # Send user rejected when chain ids mismatch
-        if chain_id is not None and str(self.chainID) != chain_id:
+        if chain_id is not None and self.chainID != decode_int(chain_id):
             logger.debug("Wrong chain id in signedTypedData")
             return None
         hash_domain, hash_data = typed_sign_hash(data_obj)

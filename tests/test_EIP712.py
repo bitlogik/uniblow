@@ -243,6 +243,12 @@ def test_eip712_B():
         full_message_digest(dom_sep, hash_primary).hex()
         == "a85c2e2b118698e88db68a8105b794a8cc7cec074e89ef991cb4f5f533819cc2"
     )
+    typed_data3["domain"]["chainId"] = "1"
+    d3, _ = typed_sign_hash(typed_data3)
+    assert d3.hex() == "f2cee375fa42b42143804025fc449deafd50cc031ca257e0b194a650a912090f"
+    typed_data3["domain"]["chainId"] = "0x1"
+    d3, _ = typed_sign_hash(typed_data3)
+    assert d3.hex() == "f2cee375fa42b42143804025fc449deafd50cc031ca257e0b194a650a912090f"
 
     # Test encoding 4
     typed_data4 = {
@@ -287,6 +293,7 @@ def test_real_dapp():
                 {"name": "name", "type": "string"},
                 {"name": "version", "type": "string"},
                 {"name": "verifyingContract", "type": "address"},
+                {"name": "chainId", "type": "uint256"},
             ],
             "RelayRequest": [
                 {"name": "target", "type": "address"},
@@ -331,4 +338,8 @@ def test_real_dapp():
             },
         },
     }
-    typed_sign_hash(data)
+    r1 = typed_sign_hash(data)
+    data["domain"]["chainId"] = "42"
+    assert typed_sign_hash(data) == r1
+    data["domain"]["chainId"] = "0x2a"
+    assert typed_sign_hash(data) == r1
