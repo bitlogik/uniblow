@@ -107,6 +107,7 @@ tokens_values = [
     # Sepolia
     {
         "USD Coin (USDC)": "0x1c7D4B196Cb0C7B01d743Fbc6116a902379C7238",
+        "Tether USD (USDT)": "0xE02d1640dcaB494327DbE4B63fBcD441b92c8205",
         "EUR Coin (EURC)": "0x08210F9170F89Ab7658F0B5E3fF39b0E03C594D4",
     },
 ]
